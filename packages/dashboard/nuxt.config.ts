@@ -1,0 +1,25 @@
+export default defineNuxtConfig({
+  modules: ['nuxt-icon', '@nuxt/ui', '@pinia/nuxt'],
+  runtimeConfig: {
+    auth: {
+      name: 'nuxt-session',
+      password: 'my-super-secret-password-is-minimum-32-characters-long',
+    },
+    public: {},
+  },
+  ui: {
+    icons: ['mdi', 'simple-icons', 'heroicons', 'ion'],
+  },
+  app: {
+    head: {
+      title: 'Lagoss',
+      // link: [
+      //   { rel: 'alternate icon', type: 'image/png', href: '/logo.png' },
+      //   { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
+      // ],
+    },
+  },
+  // nitro: {
+  //   preset: 'node',
+  // },
+});

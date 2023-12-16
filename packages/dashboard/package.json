@@ -1,0 +1,42 @@
+{
+  "name": "@lagon/dashboard",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "start": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "push": "NITRO_PRESET=lagon nuxt build && lagon deploy -p .output/public/ .output/server/index.mjs"
+  },
+  "devDependencies": {
+    "@iconify/json": "^2.2.158",
+    "@lagon/cli": "workspace:^",
+    "@nuxt/devtools": "latest",
+    "@pinia/nuxt": "^0.5.1",
+    "@types/nodemailer": "^6.4.7",
+    "nuxt": "^3.8.2",
+    "nuxt-icon": "^0.6.7",
+    "vue": "^3.3.10",
+    "vue-router": "^4.2.5"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.186.0",
+    "@aws-sdk/s3-request-presigner": "^3.186.0",
+    "@nuxt/ui": "^2.11.1",
+    "@planetscale/database": "^1.13.0",
+    "@scaleway/use-random-name": "^0.3.0",
+    "@trpc/client": "^10.18.0",
+    "@trpc/next": "^10.18.0",
+    "@trpc/server": "^10.18.0",
+    "clickhouse": "^2.6.0",
+    "cron-parser": "^4.8.1",
+    "cronstrue": "^2.27.0",
+    "drizzle-orm": "^0.29.1",
+    "is-in-subnet": "^4.0.1",
+    "nodemailer": "^6.9.0",
+    "redis": "^4.6.5",
+    "zod": "^3.17.3"
+  }
+}
