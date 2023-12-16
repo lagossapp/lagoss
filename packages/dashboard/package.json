@@ -8,16 +8,20 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "push": "NITRO_PRESET=lagon nuxt build && lagon deploy -p .output/public/ .output/server/index.mjs"
+    "push": "NITRO_PRESET=lagon nuxt build && lagon deploy -p .output/public/ .output/server/index.mjs",
+    "db:ui": "drizzle-kit studio"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.158",
     "@lagon/cli": "workspace:^",
-    "@nuxt/devtools": "latest",
     "@pinia/nuxt": "^0.5.1",
     "@types/nodemailer": "^6.4.7",
+    "dotenv": "^16.3.1",
+    "drizzle-kit": "^0.20.6",
+    "monaco-editor": "^0.45.0",
+    "mysql2": "^3.6.5",
     "nuxt": "^3.8.2",
-    "nuxt-icon": "^0.6.7",
+    "nuxt-monaco-editor": "^1.2.6",
     "vue": "^3.3.10",
     "vue-router": "^4.2.5"
   },
@@ -33,6 +37,7 @@
     "clickhouse": "^2.6.0",
     "cron-parser": "^4.8.1",
     "cronstrue": "^2.27.0",
+    "dayjs": "^1.11.10",
     "drizzle-orm": "^0.29.1",
     "is-in-subnet": "^4.0.1",
     "nodemailer": "^6.9.0",

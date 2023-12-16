@@ -1,26 +1,6 @@
 export default defineAppConfig({
   ui: {
     primary: 'zinc',
-    input: {
-      default: {
-        size: 'lg',
-      },
-    },
-    select: {
-      default: {
-        size: 'lg',
-      },
-    },
-    selectMenu: {
-      default: {
-        size: 'lg',
-      },
-    },
-    button: {
-      default: {
-        size: 'lg',
-      },
-    },
     card: {
       background: 'bg-white dark:bg-zinc-900',
       ring: 'ring-1 ring-zinc-200 dark:ring-zinc-800',

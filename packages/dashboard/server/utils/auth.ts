@@ -19,7 +19,7 @@ export async function getUser(event: H3Event): Promise<User | undefined> {
     return undefined;
   }
 
-  return (await db.select().from(userSchema).where(eq(userSchema.id, session.data.userId))).at(0);
+  return (await db.select().from(userSchema).where(eq(userSchema.id, session.data.userId)).execute())?.[0];
 }
 
 export async function requireUser(event: H3Event): Promise<User> {
