@@ -52,12 +52,7 @@
           </button>
         </div>
 
-        <div v-if="!logsPending" class="flex min-h-0 flex-col overflow-y-auto p-2">
-          <div v-for="log in logs" :key="log.timestamp" class="flex gap-2 rounded-sm px-1 text-sm hover:bg-gray-200">
-            <span class="text-gray-500">{{ dayjs(log.timestamp).format('HH:mm:ss') }}</span>
-            <span class="">{{ log.message }}</span>
-          </div>
-        </div>
+        <ProjectLogs :project="project" />
       </div>
     </div>
     <div class="relative h-full w-1/2 border-l border-gray-300/70">
@@ -79,7 +74,6 @@
 </template>
 
 <script setup lang="ts">
-import { dayjs } from '~/lib/dayjs';
 import type * as monaco from 'monaco-editor';
 
 const route = useRoute();
@@ -140,14 +134,6 @@ async function saveAndDeploy() {
   changed.value = false;
   isDeploying.value = false;
 }
-
-// TODO: auto update logs
-// TODO: auto scroll to bottom
-const { data: logs, pending: logsPending } = useFetch(`/api/projects/${projectName}/logs`, {
-  query: {
-    level: 'all',
-  },
-});
 
 // TODO: dynamic base domain
 const url = computed(() => project.value && getFullCurrentDomain({ name: project.value.name }));

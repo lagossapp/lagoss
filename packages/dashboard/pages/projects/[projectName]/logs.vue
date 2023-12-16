@@ -3,7 +3,7 @@
     <ProjectHeader :project="project" />
 
     <div class="mx-auto flex w-full max-w-4xl">
-      <pre>{{ project }}</pre>
+      <ProjectLogs :project="project" class="w-full" />
     </div>
   </div>
 </template>
