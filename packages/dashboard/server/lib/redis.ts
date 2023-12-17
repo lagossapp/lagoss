@@ -19,6 +19,4 @@ if (!redis) {
   redis = redisClient as RedisClientType;
 }
 
-if (process.env.NODE_ENV === 'development') global.redis = redis;
-
-export default redis;
+export { redis };

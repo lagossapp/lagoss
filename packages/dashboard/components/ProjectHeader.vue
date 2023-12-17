@@ -5,7 +5,7 @@
 
       <div class="flex gap-4">
         <a :href="getFullCurrentDomain({ name: project.name })" rel="noopener noreferrer" target="_blank">
-          <UButton label="View" size="md" icon="i-ion-ios-globe" />
+          <UButton label="Visit" size="md" icon="i-ion-ios-globe" />
         </a>
         <UButton
           label="Playground"

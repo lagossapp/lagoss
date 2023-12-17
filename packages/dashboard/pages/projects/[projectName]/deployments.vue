@@ -4,9 +4,9 @@
 
     <div class="mx-auto flex max-w-4xl flex-col gap-4">
       <div
-        v-for="deployment in deployments"
+        v-for="deployment in deployments?.sort((a, b) => dayjs(b.createdAt).diff(dayjs(a.createdAt)))"
         :id="deployment.id"
-        class="flex w-full items-center justify-between rounded-md border border-gray-300 p-4"
+        class="flex w-full items-center rounded-md border border-gray-300 p-4"
       >
         <div class="flex flex-col">
           <div>
@@ -21,11 +21,18 @@
             <span v-if="deployment.isProduction" class="ml-2">(Production)</span>
           </div>
           <span class="text-gray-500">{{ dayjs().to(deployment.createdAt) }}</span>
+          <span v-if="promotingDeploymentId === deployment.id">promoting deployment to production ...</span>
+          <span v-if="deletingDeploymentId === deployment.id">deleting deployment ...</span>
         </div>
-        <div class="flex flex-col">
+
+        <div class="ml-auto flex flex-col">
           <span class="text-gray-500">{{ deployment.commit ?? 'No commit linked' }}</span>
           <span class="text-gray-500">By {{ deployment.triggerer }}</span>
         </div>
+
+        <UDropdown :items="getDeploymentDropdownItems(deployment)" class="ml-4">
+          <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+        </UDropdown>
       </div>
     </div>
   </div>
@@ -33,11 +40,94 @@
 
 <script setup lang="ts">
 import { dayjs } from '~/lib/dayjs';
+import type { Deployment } from '~/server/db/schema';
 
 const route = useRoute();
 const { projectName } = route.params;
 
 const { data: project } = useFetch(`/api/projects/${projectName}`);
 
-const { data: deployments } = useFetch(`/api/projects/${projectName}/deployments`);
+const { data: deployments, refresh: refreshDeployments } = useFetch(`/api/projects/${projectName}/deployments`);
+
+const promotingDeploymentId = ref<string>();
+async function promoteDeployment(deployment: Deployment) {
+  if (promotingDeploymentId.value) return;
+  if (!confirm('Are you sure you want to promote this deployment to production?')) return;
+
+  promotingDeploymentId.value = deployment.id;
+  try {
+    await $fetch(`/api/projects/${projectName}/deployments/${deployment.id}/deploy`, {
+      method: 'POST',
+      body: {
+        isProduction: true,
+      },
+    });
+
+    await refreshDeployments();
+  } catch (error) {
+    throw error;
+  } finally {
+    promotingDeploymentId.value = undefined;
+  }
+}
+
+const deletingDeploymentId = ref<string>();
+async function deleteDeployment(deployment: Deployment) {
+  if (deletingDeploymentId.value) return;
+  if (!confirm('Are you sure you want to delete this deployment?')) return;
+
+  deletingDeploymentId.value = deployment.id;
+  try {
+    await $fetch(`/api/projects/${projectName}/deployments/${deployment.id}`, {
+      method: 'DELETE',
+    });
+
+    await refreshDeployments();
+  } catch (error) {
+    throw error;
+  } finally {
+    deletingDeploymentId.value = undefined;
+  }
+}
+
+function getDeploymentDropdownItems(deployment: Deployment) {
+  const items = [];
+
+  if (!deployment.isProduction) {
+    items.push({
+      label: 'Promote to Production',
+      icon: 'i-ion-arrow-up-circle-outline',
+      click() {
+        promoteDeployment(deployment);
+      },
+    });
+  }
+
+  // {
+  //   label: 'Copy Url',
+  //   icon: 'i-heroicons-arrow-right-circle-20-solid',
+  //   click() {
+  //     // TODO:
+  //   },
+  // },
+  items.push({
+    label: 'Visit',
+    icon: 'i-ion-open-outline',
+    click() {
+      window.open(getFullCurrentDomain({ name: deployment.id }), '_blank');
+    },
+  });
+
+  if (!deployment.isProduction) {
+    items.push({
+      label: 'Delete',
+      icon: 'i-ion-trash-outline',
+      click() {
+        deleteDeployment(deployment);
+      },
+    });
+  }
+
+  return [items];
+}
 </script>

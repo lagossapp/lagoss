@@ -1,4 +1,4 @@
-import { functionSchema } from '~/server/db/schema';
+import { projectSchema } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 export default defineEventHandler(async event => {
@@ -10,8 +10,8 @@ export default defineEventHandler(async event => {
 
   const projects = await db
     .select()
-    .from(functionSchema)
-    .where(eq(functionSchema.organizationId, user.currentOrganizationId))
+    .from(projectSchema)
+    .where(eq(projectSchema.organizationId, user.currentOrganizationId))
     // .leftJoin(domainSchema, eq(domainSchema.functionId, functionSchema.id))
     .execute();
 

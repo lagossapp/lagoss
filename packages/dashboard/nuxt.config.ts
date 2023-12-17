@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-  modules: ['@nuxt/ui', '@pinia/nuxt', 'nuxt-monaco-editor'],
+  modules: ['@nuxt/ui'],
   runtimeConfig: {
     auth: {
       name: 'nuxt-session',

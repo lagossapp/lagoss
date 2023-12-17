@@ -27,7 +27,7 @@ const { data: logs, refresh: refreshLogs } = useFetch(`/api/projects/${props.pro
 onMounted(() => {
   setInterval(() => {
     refreshLogs();
-  }, 1000 * 3);
+  }, 1000 * 15);
 });
 
 const logsView = ref<HTMLDivElement>();

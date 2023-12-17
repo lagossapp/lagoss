@@ -18,7 +18,7 @@ export const deploymentSchema = mysqlTable('Deployment', {
   updatedAt: datetime('updatedAt').notNull(),
   functionId: varchar('functionId', { length: 191 })
     .notNull()
-    .references(() => functionSchema.id),
+    .references(() => projectSchema.id),
   triggerer: varchar('triggerer', { length: 191 }).default('Lagon'),
   commit: varchar('commit', { length: 191 }),
   isProduction: tinyint('isProduction').default(0).notNull(),
@@ -33,7 +33,7 @@ export const domainSchema = mysqlTable('Domain', {
   domain: varchar('domain', { length: 191 }).notNull(),
   functionId: varchar('functionId', { length: 191 })
     .notNull()
-    .references(() => functionSchema.id),
+    .references(() => projectSchema.id),
 });
 export type Domain = InferSelectModel<typeof domainSchema>;
 
@@ -45,11 +45,12 @@ export const envVariableSchema = mysqlTable('EnvVariable', {
   value: varchar('value', { length: 5120 }).notNull(),
   functionId: varchar('functionId', { length: 191 })
     .notNull()
-    .references(() => functionSchema.id),
+    .references(() => projectSchema.id),
 });
 export type EnvVariable = InferSelectModel<typeof envVariableSchema>;
 
-export const functionSchema = mysqlTable('Function', {
+// TODO: rename to project
+export const projectSchema = mysqlTable('Function', {
   id: varchar('id', { length: 191 }).notNull().primaryKey(),
   createdAt: datetime('createdAt').notNull(),
   updatedAt: datetime('updatedAt').notNull(),
@@ -63,7 +64,7 @@ export const functionSchema = mysqlTable('Function', {
   cronRegion: varchar('cronRegion', { length: 191 }),
   totalTimeout: int('totalTimeout').notNull().default(5000),
 });
-export type Function = InferSelectModel<typeof functionSchema>;
+export type Function = InferSelectModel<typeof projectSchema>;
 
 export const organizationSchema = mysqlTable('Organization', {
   id: varchar('id', { length: 191 }).notNull().primaryKey(),

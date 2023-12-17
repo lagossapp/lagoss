@@ -17,6 +17,4 @@ const s3 =
     forcePathStyle: config.s3.forcePathStyle,
   });
 
-if (process.env.NODE_ENV === 'development') global.s3 = s3;
-
 export { s3 };

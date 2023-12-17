@@ -25,17 +25,7 @@
       </header>
 
       <div class="relative flex" style="height: calc(100vh - 15rem)">
-        <ClientOnly>
-          <MonacoEditor
-            v-model="code"
-            @update:model-value="updateCode"
-            lang="typescript"
-            :options="options"
-            class="flex-grow"
-          >
-            <span>Loading ...</span>
-          </MonacoEditor>
-        </ClientOnly>
+        <Editor v-model="code" class="flex-grow" />
       </div>
 
       <div class="relative flex h-44 flex-shrink-0 flex-col border-t border-gray-200">
@@ -59,11 +49,15 @@
       <header class="flex h-16 items-center justify-between gap-4 border-b border-gray-200 bg-white px-4 py-2">
         <UInput :model-value="url || ''" size="lg" class="flex-grow" disabled />
 
-        <UButton label="Open" size="lg" color="white" />
+        <a v-if="url" :href="url" rel="noopener noreferrer" target="_blank">
+          <UButton label="Open" size="lg" color="white" />
+        </a>
+        <UButton icon="i-ion-ios-refresh" size="lg" color="white" @click="reloadIframe" />
       </header>
 
       <iframe
         v-if="url"
+        ref="iframeEl"
         class="w-full flex-grow border-0"
         style="height: calc(100vh - 4rem)"
         sandbox="allow-forms allow-modals allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
@@ -74,8 +68,6 @@
 </template>
 
 <script setup lang="ts">
-import type * as monaco from 'monaco-editor';
-
 const route = useRoute();
 const { projectName } = route.params;
 
@@ -83,58 +75,80 @@ definePageMeta({
   layout: 'borderless',
 });
 
+const iframeEl = ref<HTMLIFrameElement>();
+
 const { data: project } = useFetch(`/api/projects/${projectName}`);
 
-const options: monaco.editor.IEditorConstructionOptions = {
-  bracketPairColorization: {
-    enabled: true,
-  },
-  automaticLayout: true,
-  minimap: {
-    enabled: false,
-  },
-  fontSize: 14,
-  overviewRulerBorder: false,
-
-  // if (monaco) {
-  //     monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-  //       noSemanticValidation: false,
-  //       noSyntaxValidation: false,
-  //     });
-
-  //     monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-  //       lib: ['esnext', 'dom', 'dom.iterable'],
-  //       allowNonTsExtensions: true,
-  //     });
-  //   }
-};
-
-const changed = ref(false);
 const code = ref('');
-function updateCode() {
+const changed = ref(false);
+watch(code, () => {
   changed.value = true;
-}
+});
 
-const { data: _code } = useFetch(`/api/projects/${projectName}/code`);
-watch(_code, __code => {
-  if (__code?.code) {
-    code.value = __code.code;
+const { data: codeFromDB } = useFetch(`/api/projects/${projectName}/code`);
+watch(
+  codeFromDB,
+  _code => {
+    if (!_code) return;
+
+    code.value = _code.code;
     nextTick(() => {
       changed.value = false;
     });
+  },
+  { immediate: true },
+);
+
+function reloadIframe() {
+  if (iframeEl.value) {
+    iframeEl.value.src += '';
   }
-});
+}
 
 const isDeploying = ref(false);
 async function saveAndDeploy() {
   isDeploying.value = true;
 
-  // TODO: save code
+  if (!project.value) return;
 
-  changed.value = false;
-  isDeploying.value = false;
+  try {
+    // create deployment
+    const deployment = await $fetch(`/api/projects/${projectName}/deployments`, {
+      method: 'POST',
+      body: {
+        functionId: project.value.id,
+        functionSize: new TextEncoder().encode(code.value).length,
+        assets: [],
+      },
+    });
+    if (iframeEl.value) {
+      iframeEl.value.src += '';
+    }
+
+    // upload code
+    await $fetch(deployment.codeUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'text/javascript',
+      },
+      body: code.value,
+    });
+
+    // deploy
+    await $fetch(`/api/projects/${projectName}/deployments/${deployment.deploymentId}/deploy`, {
+      method: 'POST',
+      body: { isProduction: true },
+    });
+
+    reloadIframe();
+
+    changed.value = false;
+  } catch (e) {
+    throw e;
+  } finally {
+    isDeploying.value = false;
+  }
 }
 
-// TODO: dynamic base domain
 const url = computed(() => project.value && getFullCurrentDomain({ name: project.value.name }));
 </script>

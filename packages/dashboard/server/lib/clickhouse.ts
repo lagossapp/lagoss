@@ -16,4 +16,4 @@ const clickhouse =
 
 if (process.env.NODE_ENV === 'development') global.clickhouse = clickhouse;
 
-export default clickhouse;
+export { clickhouse };

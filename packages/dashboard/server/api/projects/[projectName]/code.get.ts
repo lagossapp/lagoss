@@ -1,7 +1,7 @@
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { Readable } from 'node:stream';
 
-import { deploymentSchema, functionSchema } from '~/server/db/schema';
+import { deploymentSchema } from '~/server/db/schema';
 import { s3 } from '~/server/lib/s3';
 import { and, eq } from 'drizzle-orm';
 
@@ -32,29 +32,7 @@ async function getDeploymentCode(deploymentId: string) {
 }
 
 export default defineEventHandler(async event => {
-  const user = await requireUser(event);
-
-  if (!user.currentOrganizationId) {
-    return null;
-  }
-
-  const projectName = getRouterParam(event, 'projectName');
-  if (!projectName) {
-    throw createError({
-      message: 'Missing projectName',
-      status: 400,
-    });
-  }
-
-  // TODO: Check if user can query function
-
-  const project = (
-    await db
-      .select()
-      .from(functionSchema)
-      .where(and(eq(functionSchema.organizationId, user.currentOrganizationId), eq(functionSchema.name, projectName)))
-      .execute()
-  )?.[0];
+  const project = await requireProject(event);
 
   const deployment = (
     await db

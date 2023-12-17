@@ -15,7 +15,7 @@
         >
           <div>
             <p>{{ project.name }}</p>
-            <p>Edited 1 month ago</p>
+            <p>{{ dayjs().to(project.updatedAt) }}</p>
           </div>
 
           <router-link :to="`/projects/${project.name}`">
@@ -28,5 +28,7 @@
 </template>
 
 <script setup lang="ts">
+import { dayjs } from '~/lib/dayjs';
+
 const { data: projects } = useFetch('/api/projects');
 </script>
