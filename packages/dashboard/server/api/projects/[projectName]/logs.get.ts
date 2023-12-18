@@ -5,8 +5,6 @@ export default defineEventHandler(async event => {
 
   const { level, timeframe } = getQuery<{ level?: string; timeframe?: string }>(event);
 
-  // TODO: Check if user can query function
-
   const result = (await clickhouse
     .query(
       `SELECT

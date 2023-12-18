@@ -3,7 +3,8 @@
     <div class="bg mx-auto flex w-full max-w-4xl flex-col">
       <h1 class="text-3xl font-bold">Projects</h1>
       <p class="mt-2 flex gap-1">
-        <span class="font-bold text-gray-600">1</span><span class="text-gray-500">projects</span>
+        <span class="font-bold text-gray-600">{{ projects?.length }}</span>
+        <span class="text-gray-500">projects</span>
       </p>
 
       <div class="mt-4 flex flex-row flex-wrap gap-4">
