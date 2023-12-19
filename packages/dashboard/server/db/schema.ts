@@ -72,7 +72,7 @@ export const organizationSchema = mysqlTable('Organization', {
   updatedAt: datetime('updatedAt').notNull(),
   name: varchar('name', { length: 64 }).notNull(),
   description: varchar('description', { length: 256 }),
-  ownerId: varchar('userId', { length: 191 }).notNull(),
+  ownerId: varchar('ownerId', { length: 191 }).notNull(),
   stripeCustomerId: varchar('stripe_customer_id', { length: 191 }).unique(),
   stripeSubscriptionId: varchar('stripe_subscription_id', { length: 191 }).unique(),
   stripePriceId: varchar('stripe_price_id', { length: 191 }),

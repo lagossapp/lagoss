@@ -1,5 +1,5 @@
 export async function useAuth() {
-  const { data: user, refresh: updateSession } = await useFetch('/api/user');
+  const { data: user, refresh: updateAuthSession } = await useFetch('/api/user');
 
   const isAuthenticated = computed(() => !!user.value?.id);
 
@@ -16,6 +16,6 @@ export async function useAuth() {
     user,
     login,
     logout,
-    updateSession,
+    updateAuthSession,
   };
 }
