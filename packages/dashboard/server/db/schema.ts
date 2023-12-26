@@ -1,5 +1,5 @@
 import { mysqlTable, tinyint, varchar, datetime, json, int } from 'drizzle-orm/mysql-core';
-import { InferSelectModel } from 'drizzle-orm';
+import { InferSelectModel, relations } from 'drizzle-orm';
 
 export const userSchema = mysqlTable('User', {
   id: varchar('id', { length: 191 }).notNull().primaryKey(),
@@ -65,6 +65,11 @@ export const projectSchema = mysqlTable('Function', {
   totalTimeout: int('totalTimeout').notNull().default(5000),
 });
 export type Function = InferSelectModel<typeof projectSchema>;
+
+export const projectRelations = relations(projectSchema, ({ many }) => ({
+  domains: many(domainSchema),
+  envVariables: many(envVariableSchema),
+}));
 
 export const organizationSchema = mysqlTable('Organization', {
   id: varchar('id', { length: 191 }).notNull().primaryKey(),

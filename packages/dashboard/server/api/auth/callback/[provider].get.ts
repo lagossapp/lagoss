@@ -3,6 +3,7 @@ import { User, userSchema } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { Github } from '~/server/oauth/github';
 import { randomBytes } from 'crypto';
+import { generateId } from '~/server/utils/db';
 
 async function loginUser(event: H3Event, userId: User['id']) {
   const session = await useAuthSession(event);
@@ -58,7 +59,7 @@ export default defineEventHandler(async event => {
   const result = await db
     .insert(userSchema)
     .values({
-      id: randomBytes(64).toString('hex'),
+      id: generateId(),
       image: oauthUser.avatarUrl,
       name: oauthUser.name,
       email: oauthUser.email,

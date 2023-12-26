@@ -9,20 +9,16 @@
 
       <div class="mt-4 flex flex-row flex-wrap gap-4">
         <router-link
-          :to="`/projects/${project.name}`"
           v-for="project in projects"
           :key="project.id"
+          :to="`/projects/${project.name}`"
           class="w-full max-w-sm"
         >
           <Card class="flex w-full cursor-pointer items-center justify-between hover:border-gray-500">
             <div>
               <p>{{ project.name }}</p>
-              <p>{{ dayjs().to(project.updatedAt) }}</p>
+              <p class="text-gray-500">{{ dayjs().to(project.updatedAt) }}</p>
             </div>
-
-            <router-link :to="`/projects/${project.name}`">
-              <UButton label="View" size="xs" color="white" />
-            </router-link>
           </Card>
         </router-link>
       </div>

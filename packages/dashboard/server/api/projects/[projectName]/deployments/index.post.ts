@@ -5,7 +5,6 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { PRESIGNED_URL_EXPIRES_SECONDS } from '~/server/lib/constants';
 import { s3 } from '~/server/lib/s3';
 import { z } from 'zod';
-import { randomBytes } from 'crypto';
 
 export default defineEventHandler(async event => {
   const user = await requireUser(event);
@@ -37,7 +36,7 @@ export default defineEventHandler(async event => {
   //   plan,
   // });
 
-  const id = randomBytes(16).toString('hex');
+  const id = generateId();
   await db
     .insert(deploymentSchema)
     .values({
