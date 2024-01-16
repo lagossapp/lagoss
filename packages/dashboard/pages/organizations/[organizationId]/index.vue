@@ -34,5 +34,5 @@ const organizationId = computed(() => route.params.organizationId as string);
 
 const { data: organization } = useFetch(() => `/api/organizations/${organizationId.value}`);
 
-const { data: projects } = useFetch('/api/projects');
+const { data: projects } = useFetch(`/api/organizations/${organizationId.value}/projects`);
 </script>
