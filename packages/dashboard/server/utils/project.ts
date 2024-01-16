@@ -1,16 +1,9 @@
 import type { H3Event } from 'h3';
-import { projectSchema } from '~/server/db/schema';
-import { and, eq } from 'drizzle-orm';
+import { organizationMemberSchema, organizationSchema, projectSchema } from '~/server/db/schema';
+import { and, eq, or } from 'drizzle-orm';
 
 export async function requireProject(event: H3Event) {
   const user = await requireUser(event);
-
-  if (!user.currentOrganizationId) {
-    throw createError({
-      message: 'Please select an organization first',
-      status: 400,
-    });
-  }
 
   const projectName = getRouterParam(event, 'projectName');
   if (!projectName) {
@@ -24,7 +17,14 @@ export async function requireProject(event: H3Event) {
     db
       .select()
       .from(projectSchema)
-      .where(and(eq(projectSchema.organizationId, user.currentOrganizationId), eq(projectSchema.name, projectName)))
+      .leftJoin(organizationSchema, eq(projectSchema.organizationId, organizationSchema.id))
+      .leftJoin(organizationMemberSchema, eq(projectSchema.organizationId, organizationMemberSchema.organizationId))
+      .where(
+        and(
+          eq(projectSchema.name, projectName),
+          or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id)),
+        ),
+      )
       .execute(),
   );
 

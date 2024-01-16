@@ -64,7 +64,7 @@ export const projectSchema = mysqlTable('Function', {
   cronRegion: varchar('cronRegion', { length: 191 }),
   totalTimeout: int('totalTimeout').notNull().default(5000),
 });
-export type Function = InferSelectModel<typeof projectSchema>;
+export type Project = InferSelectModel<typeof projectSchema>;
 
 export const projectRelations = relations(projectSchema, ({ many }) => ({
   domains: many(domainSchema),

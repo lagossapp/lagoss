@@ -38,13 +38,13 @@
 </template>
 
 <script setup lang="ts">
-import type { Function } from '~/server/db/schema';
+import type { Project } from '~/server/db/schema';
 
 const props = defineProps<{
-  project: Function;
+  project: Project;
 }>();
 
-const tabs = [
+const tabs = computed(() => [
   {
     to: `/projects/${props.project.name}`,
     label: 'Overview',
@@ -65,5 +65,5 @@ const tabs = [
     to: `/projects/${props.project.name}/settings`,
     label: 'Settings',
   },
-];
+]);
 </script>

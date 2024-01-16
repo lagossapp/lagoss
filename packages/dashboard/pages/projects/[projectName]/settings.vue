@@ -280,6 +280,6 @@ async function deleteProject() {
     description: `The project "${projectName}" was deleted.`,
   });
 
-  await router.push(`/organization/${user.value?.currentOrganizationId}`);
+  await router.push(`/`);
 }
 </script>

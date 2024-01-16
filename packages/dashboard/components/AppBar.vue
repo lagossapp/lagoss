@@ -20,10 +20,10 @@
                 :key="organization.id"
                 :label="organization.name"
                 size="md"
+                :to="`/organizations/${organization.id}`"
                 color="white"
                 class="w-full justify-between"
-                :trailing-icon="organization.id === user?.currentOrganizationId ? 'i-heroicons-check-20-solid' : ''"
-                @click="selectOrganization(organization.id)"
+                :trailing-icon="organization.id === $route.params.organizationId ? 'i-heroicons-check-20-solid' : ''"
               />
               <UButton
                 label="Create organization"
@@ -48,11 +48,11 @@
         <UAvatar :src="user?.image || ''" alt="User avatar" size="sm" :initials="user?.name" />
 
         <template #panel>
-          <div class="min-w-md flex w-full flex-col p-4">
+          <div class="flex w-48 flex-col items-center p-4">
             <UAvatar :src="user?.image || ''" alt="User avatar" size="xl" :initials="user?.name" />
-            <p>{{ user.name }}</p>
+            <p class="mb-8">{{ user.name }}</p>
 
-            <UButton label="Settings" size="xs" color="white" class="w-full" />
+            <UButton label="Settings" size="xs" color="white" class="mb-2 w-full" />
             <UButton label="Logout" size="xs" color="white" class="w-full" @click="logout" />
           </div>
         </template>
@@ -62,17 +62,15 @@
 </template>
 
 <script setup lang="ts">
-const { user, logout, updateAuthSession } = await useAuth();
+const { user, logout } = await useAuth();
 
-const router = useRouter();
-
-const { data: selectedOrganization } = useFetch(() => `/api/organizations/${user.value?.currentOrganizationId}`, {
-  watch: [() => user.value?.currentOrganizationId],
+const route = useRoute();
+const { data: selectedOrganization } = useFetch(() => `/api/organizations/${route.params.organizationId}`, {
+  watch: [() => route],
 });
 
 const { data: organizations } = useFetch('/api/organizations');
 
-const route = useRoute();
 const links = computed(() => {
   const _links: { id: string; label: string; to?: string }[] = [
     // {
@@ -81,11 +79,13 @@ const links = computed(() => {
     // },
   ];
 
-  _links.push({
-    id: 'org',
-    label: `${selectedOrganization.value?.name}`,
-    to: `/organizations/${selectedOrganization.value?.id}`,
-  });
+  if (selectedOrganization.value) {
+    _links.push({
+      id: 'org',
+      label: `${selectedOrganization.value?.name}`,
+      to: `/organizations/${selectedOrganization.value?.id}`,
+    });
+  }
 
   if (route.path.startsWith('/projects')) {
     _links.push({
@@ -97,19 +97,4 @@ const links = computed(() => {
 
   return _links;
 });
-
-async function selectOrganization(organizationId: string) {
-  if (organizationId !== user.value?.currentOrganizationId) {
-    await $fetch(`/api/user`, {
-      method: 'PATCH',
-      body: {
-        currentOrganizationId: organizationId,
-      },
-    });
-
-    await updateAuthSession();
-  }
-
-  await router.push(`/organizations/${organizationId}`);
-}
 </script>
