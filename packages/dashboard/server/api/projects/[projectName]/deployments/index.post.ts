@@ -36,7 +36,7 @@ export default defineEventHandler(async event => {
   //   plan,
   // });
 
-  const id = generateId();
+  const id = await generateId();
   await db
     .insert(deploymentSchema)
     .values({

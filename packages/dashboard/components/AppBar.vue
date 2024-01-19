@@ -8,7 +8,7 @@
     </router-link>
 
     <UBreadcrumb :links="links">
-      <template #default="{ link, isActive, index }">
+      <template #default="{ link, isActive }">
         <UBadge :color="isActive ? 'primary' : 'gray'" class="rounded-full">{{ link.label }}</UBadge>
         <UPopover v-if="link.id === 'org'">
           <UButton color="white" icon="i-heroicons-chevron-down-20-solid" size="xs" />
@@ -40,6 +40,20 @@
     </UBreadcrumb>
 
     <div class="ml-auto flex items-center gap-2">
+      <ClientOnly>
+        <UButton
+          :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
+          color="gray"
+          variant="ghost"
+          aria-label="Theme"
+          @click="isDark = !isDark"
+        />
+
+        <template #fallback>
+          <div class="h-8 w-8" />
+        </template>
+      </ClientOnly>
+
       <a href="https://docs.lagon.app" rel="noopener noreferrer" target="_blank">
         <UButton label="Docs" size="xs" color="white" />
       </a>
@@ -62,14 +76,22 @@
 </template>
 
 <script setup lang="ts">
-const { user, logout } = await useAuth();
+const colorMode = useColorMode();
 
-const route = useRoute();
-const { data: selectedOrganization } = useFetch(() => `/api/organizations/${route.params.organizationId}`, {
-  watch: [() => route],
+const isDark = computed({
+  get() {
+    return colorMode.value === 'dark';
+  },
+  set() {
+    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
+  },
 });
 
+const { user, logout } = await useAuth();
+
 const { data: organizations } = useFetch('/api/organizations');
+
+const breadCrumbsStore = useBreadCrumbsStore();
 
 const links = computed(() => {
   const _links: { id: string; label: string; to?: string }[] = [
@@ -79,19 +101,19 @@ const links = computed(() => {
     // },
   ];
 
-  if (selectedOrganization.value) {
+  if (breadCrumbsStore.selectedOrganization) {
     _links.push({
       id: 'org',
-      label: `${selectedOrganization.value?.name}`,
-      to: `/organizations/${selectedOrganization.value?.id}`,
+      label: `${breadCrumbsStore.selectedOrganization.name}`,
+      to: `/organizations/${breadCrumbsStore.selectedOrganization.id}`,
     });
   }
 
-  if (route.path.startsWith('/projects')) {
+  if (breadCrumbsStore.selectedProject) {
     _links.push({
       id: 'project',
-      label: `${route.params.projectName}`,
-      to: `/projects/${route.params.projectName}`,
+      label: `${breadCrumbsStore.selectedProject.name}`,
+      to: `/projects/${breadCrumbsStore.selectedProject.name}`,
     });
   }
 
