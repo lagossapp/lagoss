@@ -22,13 +22,14 @@
         v-for="tab in tabs"
         :key="tab.label"
         :to="tab.to"
-        class="cursor-pointer rounded-md px-2 py-1 hover:bg-gray-100 hover:text-gray-900"
+        class="cursor-pointer rounded-md px-2 py-1 hover:bg-gray-100 hover:text-gray-900 hover:dark:bg-zinc-700 hover:dark:text-gray-100"
       >
         <span
           class="pb-1"
           :class="{
-            'text-gray-500': $route.path !== tab.to,
-            'border-b-2 border-gray-900 text-gray-900 hover:rounded-b-none': $route.path === tab.to,
+            'text-gray-500 dark:text-gray-300': $route.path !== tab.to,
+            'border-b-2 border-gray-900 text-gray-900 hover:rounded-b-none dark:border-gray-200 dark:text-gray-100':
+              $route.path === tab.to,
           }"
           >{{ tab.label }}</span
         >

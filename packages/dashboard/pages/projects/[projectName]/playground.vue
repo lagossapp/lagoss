@@ -46,7 +46,9 @@
       </div>
     </div>
     <div class="relative h-full w-1/2 border-l border-gray-300/70">
-      <header class="flex h-16 items-center justify-between gap-4 border-b border-gray-200 bg-white px-4 py-2">
+      <header
+        class="flex h-16 items-center justify-between gap-4 border-b border-gray-200 bg-white px-4 py-2 dark:bg-zinc-900"
+      >
         <UInput :model-value="url || ''" size="lg" class="flex-grow" disabled />
 
         <a v-if="url" :href="url" rel="noopener noreferrer" target="_blank">

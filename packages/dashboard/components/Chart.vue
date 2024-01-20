@@ -2,7 +2,7 @@
   <div>
     <div className="relative" ref="uPlotRef">
       <div
-        className="pointer-events-none absolute z-[10000] hidden whitespace-pre rounded bg-white px-2 py-1 text-sm text-stone-800 shadow-md dark:bg-stone-900 dark:text-stone-200"
+        className="pointer-events-none absolute z-[10000] whitespace-pre hidden rounded bg-white  px-2 py-1 text-sm text-stone-800 shadow-md dark:bg-stone-900 dark:text-stone-200"
         :id="tooltipId"
       >
         <p className="mb-1 text-xs text-stone-500 dark:text-stone-400" :id="`${tooltipId}-date`" />
