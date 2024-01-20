@@ -26,5 +26,5 @@ export default defineEventHandler(async event => {
         )
         .execute(),
     )
-  )?.Organization;
+  )?.organizations;
 });

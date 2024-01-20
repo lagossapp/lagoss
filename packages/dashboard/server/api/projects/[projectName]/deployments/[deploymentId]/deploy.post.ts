@@ -35,33 +35,33 @@ export default defineEventHandler(async event => {
     db
       .select()
       .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.functionId, project.id), eq(deploymentSchema.isProduction, 1)))
+      .where(and(eq(deploymentSchema.projectId, project.id), eq(deploymentSchema.isProduction, true)))
       .execute(),
   );
 
   if (input.isProduction && hasProductionDeployment) {
     await db
       .update(deploymentSchema)
-      .set({ isProduction: 0 })
-      .where(eq(deploymentSchema.functionId, deployment.functionId))
+      .set({ isProduction: false })
+      .where(eq(deploymentSchema.projectId, deployment.projectId))
       .execute();
   }
 
   await db
     .update(deploymentSchema)
     .set({
-      isProduction: !hasProductionDeployment || input.isProduction ? 1 : 0,
+      isProduction: !hasProductionDeployment || input.isProduction,
     })
     .where(eq(deploymentSchema.id, deploymentId))
     .execute();
 
-  const domains = await db.select().from(domainSchema).where(eq(domainSchema.functionId, project.id)).execute();
-  const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.functionId, project.id)).execute();
+  const domains = await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id)).execute();
+  const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.projectId, project.id)).execute();
 
   await redis.publish(
     'deploy',
     JSON.stringify({
-      functionId: project.id,
+      projectId: project.id,
       functionName: project.name,
       deploymentId: deployment.id,
       domains: domains.map(({ domain }) => domain),

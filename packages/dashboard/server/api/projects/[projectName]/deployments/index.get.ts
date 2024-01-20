@@ -7,7 +7,7 @@ export default defineEventHandler(async event => {
   const deployments = await db
     .select()
     .from(deploymentSchema)
-    .where(eq(deploymentSchema.functionId, project.id))
+    .where(eq(deploymentSchema.projectId, project.id))
     .execute();
 
   return deployments;

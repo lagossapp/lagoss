@@ -21,6 +21,13 @@ export default defineNuxtConfig({
       },
       forcePathStyle: !!process.env.S3_ENDPOINT,
     },
+    db: {
+      turso: {
+        url: process.env.TURSO_DB_URL,
+        authToken: process.env.TURSO_DB_TOKEN,
+      },
+      file: process.env.DB_FILE_PATH,
+    },
     public: {
       root: {
         schema: 'http',

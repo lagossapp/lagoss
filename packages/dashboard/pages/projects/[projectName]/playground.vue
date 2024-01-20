@@ -118,7 +118,7 @@ async function saveAndDeploy() {
     const deployment = await $fetch(`/api/projects/${projectName}/deployments`, {
       method: 'POST',
       body: {
-        functionId: project.value.id,
+        projectId: project.value.id,
         functionSize: new TextEncoder().encode(code.value).length,
         assets: [],
       },

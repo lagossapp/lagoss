@@ -35,5 +35,5 @@ export async function requireProject(event: H3Event) {
     });
   }
 
-  return project.Function;
+  return project.projects;
 }

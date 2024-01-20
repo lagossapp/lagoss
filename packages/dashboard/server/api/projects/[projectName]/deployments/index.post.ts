@@ -12,7 +12,7 @@ export default defineEventHandler(async event => {
 
   const input = await z
     .object({
-      functionId: z.string(),
+      projectId: z.string(),
       functionSize: z.number(),
       assets: z
         .object({
@@ -31,7 +31,7 @@ export default defineEventHandler(async event => {
 
   // await checkCanCreateDeployment({
   //   assets: input.assets.length,
-  //   functionId: input.functionId,
+  //   projectId: input.projectId,
   //   userId: ctx.session.user.id,
   //   plan,
   // });
@@ -41,11 +41,11 @@ export default defineEventHandler(async event => {
     .insert(deploymentSchema)
     .values({
       id,
-      functionId: project.id,
+      projectId: project.id,
       createdAt: new Date(),
       updatedAt: new Date(),
       triggerer: user.email,
-      isProduction: 0,
+      isProduction: false,
       assets: input.assets.map(({ name }) => name),
     })
     .execute();

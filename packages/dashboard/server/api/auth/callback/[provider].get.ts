@@ -2,7 +2,6 @@ import type { H3Event } from 'h3';
 import { User, userSchema } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { Github } from '~/server/oauth/github';
-import { randomBytes } from 'crypto';
 import { generateId } from '~/server/utils/db';
 
 async function loginUser(event: H3Event, userId: User['id']) {
@@ -59,14 +58,13 @@ export default defineEventHandler(async event => {
   const result = await db
     .insert(userSchema)
     .values({
-      id: generateId(),
+      id: await generateId(),
       image: oauthUser.avatarUrl,
       name: oauthUser.name,
       email: oauthUser.email,
-      emailVerified: new Date(),
     })
-    .execute();
+    .returning();
 
   console.log('result', result);
-  return loginUser(event, result.insertId);
+  return loginUser(event, result[0].id);
 });

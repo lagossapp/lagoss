@@ -11,5 +11,5 @@ export default defineEventHandler(async event => {
       .leftJoin(organizationMemberSchema, eq(organizationSchema.id, organizationMemberSchema.organizationId))
       .where(or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id)))
       .execute()
-  ).map(org => org.Organization);
+  ).map(org => org.organizations);
 });
