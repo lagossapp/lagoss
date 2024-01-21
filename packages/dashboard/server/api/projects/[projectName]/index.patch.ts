@@ -1,9 +1,9 @@
 import { domainSchema, envVariableSchema, projectSchema } from '~/server/db/schema';
 import { eq, and, notInArray } from 'drizzle-orm';
 import { z } from 'zod';
-import { generateId, db } from '~/server/utils/db';
 
 export default defineEventHandler(async event => {
+  const db = useDB();
   const project = await requireProject(event);
 
   const input = await z

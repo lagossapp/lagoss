@@ -2,6 +2,8 @@ import { domainSchema, envVariableSchema } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 export default defineEventHandler(async event => {
+  const db = useDB();
+
   const project = await requireProject(event);
 
   const domains = (await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id)).execute()).map(

@@ -5,6 +5,7 @@ import { PROJECT_MEMORY } from '~/server/lib/constants';
 import { getPlanOfOrganization } from '~/server/lib/plans';
 
 export default defineEventHandler(async event => {
+  const db = useDB();
   const user = await requireUser(event);
 
   const input = await readValidatedBody(event, body =>

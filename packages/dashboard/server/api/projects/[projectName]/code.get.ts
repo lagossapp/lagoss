@@ -32,6 +32,7 @@ async function getDeploymentCode(deploymentId: string) {
 }
 
 export default defineEventHandler(async event => {
+  const db = useDB();
   const project = await requireProject(event);
 
   const deployment = (

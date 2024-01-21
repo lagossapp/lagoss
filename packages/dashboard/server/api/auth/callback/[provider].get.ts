@@ -5,6 +5,7 @@ import { Github } from '~/server/oauth/github';
 import { generateId } from '~/server/utils/db';
 
 async function loginUser(event: H3Event, userId: User['id']) {
+  const db = useDB();
   const session = await useAuthSession(event);
 
   await session.update({

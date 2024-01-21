@@ -2,6 +2,7 @@ import { organizationMemberSchema, organizationSchema } from '~/server/db/schema
 import { eq, or } from 'drizzle-orm';
 
 export default defineEventHandler(async event => {
+  const db = useDB();
   const user = await requireUser(event);
 
   return (

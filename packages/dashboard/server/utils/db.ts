@@ -25,7 +25,15 @@ function getDB() {
   throw new Error('Missing database configuration');
 }
 
-export const db = getDB();
+let _db: ReturnType<typeof getDB>;
+
+export function useDB() {
+  if (!_db) {
+    _db = getDB();
+  }
+
+  return _db;
+}
 
 export async function getFirst<T>(query: Promise<T[]>): Promise<T | undefined> {
   return (await query)?.[0] ?? undefined;
