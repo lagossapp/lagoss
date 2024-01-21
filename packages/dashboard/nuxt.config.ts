@@ -31,7 +31,7 @@ export default defineNuxtConfig({
     projects: {
       blacklistedNames: process.env.BLACKLISTED_PROJECT_NAMES
         ? process.env.BLACKLISTED_PROJECT_NAMES.split(',')
-        : ['lagoss', 'api', 'dash', 'www', 'docs'],
+        : ['lagoss', 'api', 'dash', 'www', 'docs', 'app'],
     },
     public: {
       root: {
