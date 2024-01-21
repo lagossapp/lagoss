@@ -16,7 +16,7 @@ export const deploymentSchema = sqliteTable('deployments', {
   projectId: text('projectId', { length: 191 })
     .notNull()
     .references(() => projectSchema.id),
-  triggerer: text('triggerer', { length: 191 }).default('Lagon'),
+  triggerer: text('triggerer', { length: 191 }).default('Lagoss'),
   commit: text('commit', { length: 191 }),
   isProduction: integer('isProduction', { mode: 'boolean' }).default(false).notNull(),
   assets: text('assets', { mode: 'json' }).notNull(),
@@ -34,7 +34,7 @@ export const domainSchema = sqliteTable('domains', {
 });
 export type Domain = InferSelectModel<typeof domainSchema>;
 
-export const envVariableSchema = sqliteTable('env_variables', {
+export const envVariableSchema = sqliteTable('envVariables', {
   id: text('id', { length: 191 }).notNull().primaryKey(),
   createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
   updatedAt: integer('updatedAt', { mode: 'timestamp' }).notNull(),
@@ -46,7 +46,6 @@ export const envVariableSchema = sqliteTable('env_variables', {
 });
 export type EnvVariable = InferSelectModel<typeof envVariableSchema>;
 
-// TODO: rename to project
 export const projectSchema = sqliteTable('projects', {
   id: text('id', { length: 191 }).notNull().primaryKey(),
   createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
@@ -60,6 +59,7 @@ export const projectSchema = sqliteTable('projects', {
     .references(() => organizationSchema.id),
   cronRegion: text('cronRegion', { length: 191 }),
   totalTimeout: integer('totalTimeout').notNull().default(5000),
+  playground: integer('playground', { mode: 'boolean' }).notNull().default(false),
 });
 export type Project = InferSelectModel<typeof projectSchema>;
 
@@ -75,10 +75,12 @@ export const organizationSchema = sqliteTable('organizations', {
   name: text('name', { length: 64 }).notNull(),
   description: text('description', { length: 256 }),
   ownerId: text('ownerId', { length: 191 }).notNull(),
+  plan: text('plan', { length: 191 }).notNull().default('free'),
+  currentPeriodEnd: integer('currentPeriodEnd', { mode: 'timestamp' }),
 });
 export type Organization = InferSelectModel<typeof organizationSchema>;
 
-export const organizationMemberSchema = sqliteTable('organization_members', {
+export const organizationMemberSchema = sqliteTable('organizationMembers', {
   id: text('id', { length: 191 }).notNull().primaryKey(),
   createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
   updatedAt: integer('updatedAt', { mode: 'timestamp' }).notNull(),

@@ -28,6 +28,11 @@ export default defineNuxtConfig({
       },
       file: process.env.DB_FILE_PATH,
     },
+    projects: {
+      blacklistedNames: process.env.BLACKLISTED_PROJECT_NAMES
+        ? process.env.BLACKLISTED_PROJECT_NAMES.split(',')
+        : ['lagoss', 'api', 'dash', 'www', 'docs'],
+    },
     public: {
       root: {
         schema: 'http',

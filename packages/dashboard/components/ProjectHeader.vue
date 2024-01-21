@@ -8,6 +8,7 @@
           <UButton label="Visit" size="md" icon="i-ion-ios-globe" />
         </a>
         <UButton
+          v-if="project.playground"
           label="Playground"
           size="md"
           color="blue"

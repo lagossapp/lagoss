@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3';
-import { User, userSchema } from '~/server/db/schema';
+import { User, organizationSchema, userSchema } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { Github } from '~/server/oauth/github';
 import { generateId } from '~/server/utils/db';
@@ -65,6 +65,18 @@ export default defineEventHandler(async event => {
     })
     .returning();
 
-  console.log('result', result);
+  // create user organization
+  await db
+    .insert(organizationSchema)
+    .values({
+      id: await generateId(),
+      name: oauthUser.name,
+      description: `${oauthUser.name}'s default organization`,
+      ownerId: result[0].id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+    .execute();
+
   return loginUser(event, result[0].id);
 });

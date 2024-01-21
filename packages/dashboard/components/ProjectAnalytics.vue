@@ -106,7 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import { PERSONAL_PLAN } from '~/server/lib/plans';
+import { FREE_PLAN } from '~/server/lib/plans';
 import type { AnalyticsTimeframe } from '~/server/lib/types';
 
 const route = useRoute();
@@ -116,8 +116,8 @@ defineProps<{
   showGraphs?: boolean;
 }>();
 
-// TODO: use the plan from the project
-const plan = computed(() => PERSONAL_PLAN);
+// TODO: use the plan from the project / organization
+const plan = computed(() => FREE_PLAN);
 
 function formatBytes(bytes = 0) {
   if (bytes === 0) return '0 bytes';

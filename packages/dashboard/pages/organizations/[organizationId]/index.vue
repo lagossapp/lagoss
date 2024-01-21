@@ -1,7 +1,31 @@
 <template>
   <div class="flex w-full flex-col">
     <div class="bg mx-auto flex w-full max-w-4xl flex-col">
-      <h1 class="text-3xl font-bold">{{ organization?.name }}</h1>
+      <div class="flex items-start gap-2">
+        <div>
+          <h1 class="text-3xl font-bold">{{ organization?.name }}</h1>
+          <p class="text-gray-600">{{ organization?.description }}</p>
+        </div>
+
+        <UButton
+          icon="i-ion-ios-play"
+          label="New playground"
+          color="blue"
+          class="ml-auto"
+          :loading="creatingProject === 'playground'"
+          :disabled="creatingProject === 'normal'"
+          @click="createProject(true)"
+        />
+
+        <UButton
+          icon="i-ion-plus"
+          label="New project"
+          :loading="creatingProject === 'normal'"
+          :disabled="creatingProject === 'playground'"
+          @click="createProject"
+        />
+      </div>
+
       <p class="mt-2 flex gap-1">
         <span class="font-bold text-gray-600">{{ projects?.length }}</span>
         <span class="text-gray-500">projects</span>
@@ -30,9 +54,30 @@
 import { dayjs } from '~/lib/dayjs';
 
 const route = useRoute();
+const router = useRouter();
 const organizationId = computed(() => route.params.organizationId as string);
 
 const { data: organization } = useFetch(() => `/api/organizations/${organizationId.value}`);
 
 const { data: projects } = useFetch(`/api/organizations/${organizationId.value}/projects`);
+
+const creatingProject = ref<'playground' | 'normal'>();
+async function createProject(playground = false) {
+  creatingProject.value = playground ? 'playground' : 'normal';
+
+  try {
+    const project = await $fetch(`/api/organizations/${organizationId.value}/projects`, {
+      method: 'POST',
+      body: {
+        playground,
+      },
+    });
+
+    await router.push(`/projects/${project.name}`);
+  } catch (error) {
+    throw error;
+  } finally {
+    creatingProject.value = undefined;
+  }
+}
 </script>
