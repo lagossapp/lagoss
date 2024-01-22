@@ -56,4 +56,7 @@ export default defineNuxtConfig({
   //   preset: 'node',
   // },
   devtools: { enabled: true },
+  build: {
+    transpile: ['trpc-nuxt'],
+  },
 });

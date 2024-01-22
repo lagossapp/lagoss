@@ -44,7 +44,10 @@
   "dependencies": {
     "@libsql/client": "0.4.0-pre.7",
     "@pinia/nuxt": "^0.5.1",
+    "@trpc/client": "^10.18.0",
+    "@trpc/server": "^10.18.0",
     "better-sqlite3": "^9.3.0",
-    "pinia": "^2.1.7"
+    "pinia": "^2.1.7",
+    "trpc-nuxt": "^0.10.17"
   }
 }
