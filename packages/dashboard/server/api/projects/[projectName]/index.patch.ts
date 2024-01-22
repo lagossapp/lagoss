@@ -36,10 +36,10 @@ export default defineEventHandler(async event => {
   if (input.domains && input.domains.length > 0) {
     await db
       .delete(domainSchema)
-      .where(and(eq(domainSchema.projectId, project.id), notInArray(domainSchema.domain, input.domains)))
+      .where(and(eq(domainSchema.functionId, project.id), notInArray(domainSchema.domain, input.domains)))
       .execute();
 
-    const domains = await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id)).execute();
+    const domains = await db.select().from(domainSchema).where(eq(domainSchema.functionId, project.id)).execute();
     await Promise.all(
       input.domains
         .filter(domain => !domains.find(({ domain: existingDomain }) => existingDomain === domain))
@@ -49,7 +49,7 @@ export default defineEventHandler(async event => {
             .values({
               id: await generateId(),
               domain,
-              projectId: project.id,
+              functionId: project.id,
               createdAt: new Date(),
               updatedAt: new Date(),
             })
@@ -65,7 +65,7 @@ export default defineEventHandler(async event => {
       .delete(envVariableSchema)
       .where(
         and(
-          eq(envVariableSchema.projectId, project.id),
+          eq(envVariableSchema.functionId, project.id),
           notInArray(
             envVariableSchema.key,
             input.envVariables.map(({ key }) => key.toLocaleUpperCase()),
@@ -77,7 +77,7 @@ export default defineEventHandler(async event => {
     const envVariables = await db
       .select()
       .from(envVariableSchema)
-      .where(eq(envVariableSchema.projectId, project.id))
+      .where(eq(envVariableSchema.functionId, project.id))
       .execute();
 
     const changes: Promise<unknown>[] = [];
@@ -100,7 +100,7 @@ export default defineEventHandler(async event => {
               id: await generateId(),
               key: key.toLocaleUpperCase(),
               value,
-              projectId: project.id,
+              functionId: project.id,
               createdAt: new Date(),
               updatedAt: new Date(),
             })
@@ -113,11 +113,11 @@ export default defineEventHandler(async event => {
     // TODO: update deployments
   }
 
-  const domains = await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id)).execute();
+  const domains = await db.select().from(domainSchema).where(eq(domainSchema.functionId, project.id)).execute();
   const envVariables = await db
     .select()
     .from(envVariableSchema)
-    .where(eq(envVariableSchema.projectId, project.id))
+    .where(eq(envVariableSchema.functionId, project.id))
     .execute();
 
   return { ...project, envVariables, domains };

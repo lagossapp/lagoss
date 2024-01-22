@@ -34,8 +34,8 @@ export default defineEventHandler(async event => {
       .where(
         and(
           eq(deploymentSchema.id, deploymentId),
-          eq(deploymentSchema.projectId, project.id),
-          eq(deploymentSchema.isProduction, true),
+          eq(deploymentSchema.functionId, project.id),
+          eq(deploymentSchema.isProduction, 1),
         ),
       )
       .execute(),
@@ -76,13 +76,13 @@ export default defineEventHandler(async event => {
 
   await Promise.all(deletePromises);
 
-  const domains = await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id)).execute();
-  const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.projectId, project.id)).execute();
+  const domains = await db.select().from(domainSchema).where(eq(domainSchema.functionId, project.id)).execute();
+  const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.functionId, project.id)).execute();
 
   await redis.publish(
     'undeploy',
     JSON.stringify({
-      projectId: project.id,
+      functionId: project.id,
       functionName: project.name,
       deploymentId: deployment.id,
       domains: domains.map(({ domain }) => domain),

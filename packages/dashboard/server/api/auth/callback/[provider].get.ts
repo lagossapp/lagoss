@@ -63,8 +63,11 @@ export default defineEventHandler(async event => {
       image: oauthUser.avatarUrl,
       name: oauthUser.name,
       email: oauthUser.email,
+      emailVerified: new Date(),
     })
-    .returning();
+    .execute();
+
+  const userId = result.insertId;
 
   // create user organization
   await db
@@ -73,11 +76,11 @@ export default defineEventHandler(async event => {
       id: await generateId(),
       name: oauthUser.name,
       description: `${oauthUser.name}'s default organization`,
-      ownerId: result[0].id,
+      ownerId: userId,
       createdAt: new Date(),
       updatedAt: new Date(),
     })
     .execute();
 
-  return loginUser(event, result[0].id);
+  return loginUser(event, userId);
 });

@@ -6,11 +6,11 @@ export default defineEventHandler(async event => {
 
   const project = await requireProject(event);
 
-  const domains = (await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id)).execute()).map(
+  const domains = (await db.select().from(domainSchema).where(eq(domainSchema.functionId, project.id)).execute()).map(
     ({ domain }) => domain,
   );
   const envVariables = (
-    await db.select().from(envVariableSchema).where(eq(envVariableSchema.projectId, project.id)).execute()
+    await db.select().from(envVariableSchema).where(eq(envVariableSchema.functionId, project.id)).execute()
   ).map(({ key, value }) => ({ key, value }));
 
   return { ...project, envVariables, domains };

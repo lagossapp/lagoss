@@ -39,7 +39,7 @@ export async function requireProject(event: H3Event) {
     });
   }
 
-  return project.projects;
+  return project.Function;
 }
 
 async function isProjectNameUnique(name: string): Promise<boolean> {

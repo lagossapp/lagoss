@@ -1,65 +1,69 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { mysqlTable, tinyint, varchar, datetime, json, int } from 'drizzle-orm/mysql-core';
 import { InferSelectModel, relations } from 'drizzle-orm';
 
-export const userSchema = sqliteTable('users', {
-  id: text('id', { length: 191 }).notNull().primaryKey(),
-  name: text('name', { length: 191 }),
-  email: text('email', { length: 191 }).unique(),
-  image: text('image', { length: 191 }),
+export const userSchema = mysqlTable('User', {
+  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  name: varchar('name', { length: 191 }),
+  email: varchar('email', { length: 191 }).unique(),
+  emailVerified: datetime('emailVerified'),
+  image: varchar('image', { length: 191 }),
+  verificationCode: varchar('verificationCode', { length: 191 }), // TODO: needed?
+  currentOrganizationId: varchar('currentOrganizationId', { length: 191 }).references(() => organizationSchema.id),
 });
 export type User = InferSelectModel<typeof userSchema>;
 
-export const deploymentSchema = sqliteTable('deployments', {
-  id: text('id', { length: 191 }).notNull().primaryKey(),
-  createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
-  updatedAt: integer('updatedAt', { mode: 'timestamp' }).notNull(),
-  projectId: text('projectId', { length: 191 })
+export const deploymentSchema = mysqlTable('Deployment', {
+  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  createdAt: datetime('createdAt').notNull(),
+  updatedAt: datetime('updatedAt').notNull(),
+  functionId: varchar('functionId', { length: 191 })
     .notNull()
     .references(() => projectSchema.id),
-  triggerer: text('triggerer', { length: 191 }).default('Lagoss'),
-  commit: text('commit', { length: 191 }),
-  isProduction: integer('isProduction', { mode: 'boolean' }).default(false).notNull(),
-  assets: text('assets', { mode: 'json' }).notNull(),
+  triggerer: varchar('triggerer', { length: 191 }).default('Lagon'),
+  commit: varchar('commit', { length: 191 }),
+  isProduction: tinyint('isProduction').default(0).notNull(),
+  assets: json('assets').notNull(),
 });
 export type Deployment = InferSelectModel<typeof deploymentSchema>;
 
-export const domainSchema = sqliteTable('domains', {
-  id: text('id', { length: 191 }).notNull().primaryKey(),
-  createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
-  updatedAt: integer('updatedAt', { mode: 'timestamp' }).notNull(),
-  domain: text('domain', { length: 191 }).notNull(),
-  projectId: text('projectId', { length: 191 })
+export const domainSchema = mysqlTable('Domain', {
+  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  createdAt: datetime('createdAt').notNull(),
+  updatedAt: datetime('updatedAt').notNull(),
+  domain: varchar('domain', { length: 191 }).notNull(),
+  functionId: varchar('functionId', { length: 191 })
     .notNull()
     .references(() => projectSchema.id),
 });
 export type Domain = InferSelectModel<typeof domainSchema>;
 
-export const envVariableSchema = sqliteTable('envVariables', {
-  id: text('id', { length: 191 }).notNull().primaryKey(),
-  createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
-  updatedAt: integer('updatedAt', { mode: 'timestamp' }).notNull(),
-  key: text('key', { length: 64 }).notNull(),
-  value: text('value', { length: 5120 }).notNull(),
-  projectId: text('projectId', { length: 191 })
+export const envVariableSchema = mysqlTable('EnvVariable', {
+  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  createdAt: datetime('createdAt').notNull(),
+  updatedAt: datetime('updatedAt').notNull(),
+  key: varchar('key', { length: 64 }).notNull(),
+  value: varchar('value', { length: 5120 }).notNull(),
+  projectId: varchar('functionId', { length: 191 })
     .notNull()
     .references(() => projectSchema.id),
 });
 export type EnvVariable = InferSelectModel<typeof envVariableSchema>;
 
-export const projectSchema = sqliteTable('projects', {
-  id: text('id', { length: 191 }).notNull().primaryKey(),
-  createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
-  updatedAt: integer('updatedAt', { mode: 'timestamp' }).notNull(),
-  name: text('name', { length: 64 }).notNull().unique(),
-  memory: integer('memory').notNull(),
-  tickTimeout: integer('tickTimeout').notNull().default(500),
-  cron: text('cron', { length: 191 }),
-  organizationId: text('organizationId', { length: 191 })
+// TODO: rename to project
+export const projectSchema = mysqlTable('Function', {
+  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  createdAt: datetime('createdAt').notNull(),
+  updatedAt: datetime('updatedAt').notNull(),
+  name: varchar('name', { length: 64 }).notNull().unique(),
+  memory: int('memory').notNull(),
+  tickTimeout: int('tickTimeout').notNull().default(500),
+  cron: varchar('cron', { length: 191 }),
+  organizationId: varchar('organizationId', { length: 191 })
     .notNull()
     .references(() => organizationSchema.id),
-  cronRegion: text('cronRegion', { length: 191 }),
-  totalTimeout: integer('totalTimeout').notNull().default(5000),
-  playground: integer('playground', { mode: 'boolean' }).notNull().default(false),
+  cronRegion: varchar('cronRegion', { length: 191 }),
+  totalTimeout: int('totalTimeout').notNull().default(5000),
+  playground: tinyint('playground').notNull().default(0),
 });
 export type Project = InferSelectModel<typeof projectSchema>;
 
@@ -68,37 +72,41 @@ export const projectRelations = relations(projectSchema, ({ many }) => ({
   envVariables: many(envVariableSchema),
 }));
 
-export const organizationSchema = sqliteTable('organizations', {
-  id: text('id', { length: 191 }).notNull().primaryKey(),
-  createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
-  updatedAt: integer('updatedAt', { mode: 'timestamp' }).notNull(),
-  name: text('name', { length: 64 }).notNull(),
-  description: text('description', { length: 256 }),
-  ownerId: text('ownerId', { length: 191 }).notNull(),
-  plan: text('plan', { length: 191 }).notNull().default('free'),
-  currentPeriodEnd: integer('currentPeriodEnd', { mode: 'timestamp' }),
+export const organizationSchema = mysqlTable('Organization', {
+  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  createdAt: datetime('createdAt').notNull(),
+  updatedAt: datetime('updatedAt').notNull(),
+  name: varchar('name', { length: 64 }).notNull(),
+  description: varchar('description', { length: 256 }),
+  ownerId: varchar('ownerId', { length: 191 }).notNull(),
+  stripeCustomerId: varchar('stripe_customer_id', { length: 191 }).unique(),
+  stripeSubscriptionId: varchar('stripe_subscription_id', { length: 191 }).unique(),
+  stripePriceId: varchar('stripe_price_id', { length: 191 }),
+  stripeCurrentPeriodEnd: datetime('stripe_current_period_end'),
+  plan: varchar('plan', { length: 191 }).notNull().default('free'),
+  currentPeriodEnd: datetime('currentPeriodEnd'),
 });
 export type Organization = InferSelectModel<typeof organizationSchema>;
 
-export const organizationMemberSchema = sqliteTable('organizationMembers', {
-  id: text('id', { length: 191 }).notNull().primaryKey(),
-  createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
-  updatedAt: integer('updatedAt', { mode: 'timestamp' }).notNull(),
-  organizationId: text('organizationId', { length: 191 })
+export const organizationMemberSchema = mysqlTable('OrganizationMember', {
+  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  createdAt: datetime('createdAt').notNull(),
+  updatedAt: datetime('updatedAt').notNull(),
+  organizationId: varchar('organizationId', { length: 191 })
     .notNull()
     .references(() => organizationSchema.id),
-  userId: text('userId', { length: 191 })
+  userId: varchar('userId', { length: 191 })
     .notNull()
     .references(() => userSchema.id),
 });
 export type OrganizationMember = InferSelectModel<typeof organizationMemberSchema>;
 
-export const tokenSchema = sqliteTable('tokens', {
-  id: text('id', { length: 191 }).notNull().primaryKey(),
-  createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
-  updatedAt: integer('updatedAt', { mode: 'timestamp' }).notNull(),
-  value: text('value', { length: 191 }).notNull(),
-  userId: text('userId', { length: 191 })
+export const tokenSchema = mysqlTable('Token', {
+  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  createdAt: datetime('createdAt').notNull(),
+  updatedAt: datetime('updatedAt').notNull(),
+  value: varchar('value', { length: 191 }).notNull(),
+  userId: varchar('userId', { length: 191 })
     .notNull()
     .references(() => userSchema.id),
 });

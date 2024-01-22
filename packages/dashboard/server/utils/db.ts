@@ -1,28 +1,29 @@
-import { createClient as createLibSQLClient } from '@libsql/client/http';
-import Database from 'better-sqlite3';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
-import { drizzle as drizzleLibSQL } from 'drizzle-orm/libsql';
+import { drizzle } from 'drizzle-orm/planetscale-serverless';
+import { connect } from '@planetscale/database';
 import * as schema from '~/server/db/schema';
 import { randomBytes } from 'crypto';
-import path from 'path';
 
 function getDB() {
-  const config = useRuntimeConfig();
+  const connection = connect({
+    url: process.env['DATABASE_URL'],
+  });
 
-  if (config.db.turso.url && config.db.turso.authToken) {
-    const connection = createLibSQLClient({
-      url: config.db.turso.url,
-      authToken: config.db.turso.authToken,
-    });
-    return drizzleLibSQL(connection, { schema });
-  }
+  return drizzle(connection, { schema });
 
-  if (process.dev) {
-    const connection = new Database(config.db.file || path.join(process.cwd(), './db.sqlite'));
-    return drizzle(connection, { schema });
-  }
+  // if (config.db.turso.url && config.db.turso.authToken) {
+  //   const connection = createLibSQLClient({
+  //     url: config.db.turso.url,
+  //     authToken: config.db.turso.authToken,
+  //   });
+  //   return drizzleLibSQL(connection, { schema });
+  // }
 
-  throw new Error('Missing database configuration');
+  // if (process.dev) {
+  //   const connection = new Database(config.db.file || path.join(process.cwd(), './db.sqlite'));
+  //   return drizzle(connection, { schema });
+  // }
+
+  // throw new Error('Missing database configuration');
 }
 
 let _db: ReturnType<typeof getDB>;

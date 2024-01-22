@@ -8,11 +8,13 @@ export default defineEventHandler(async event => {
 
   const input = await z
     .object({
-      // TODO:
+      currentOrganizationId: z.string(),
     })
     .parseAsync(await readBody(event));
 
-  const result = await db.update(userSchema).set({}).where(eq(userSchema.id, user.id)).returning();
-
-  return result[0];
+  await db
+    .update(userSchema)
+    .set({ currentOrganizationId: input.currentOrganizationId })
+    .where(eq(userSchema.id, user.id))
+    .execute();
 });
