@@ -111,14 +111,11 @@
 </template>
 
 <script setup lang="ts">
-const { user } = await useAuth();
-const route = useRoute();
 const router = useRouter();
 const toast = useToast();
 
-const { projectName } = route.params;
-
-const { data: dbProject, refresh: refreshProject } = useFetch(`/api/projects/${projectName}`);
+const projectsStore = useProjectsStore();
+const dbProject = computed(() => projectsStore.project);
 
 const project = ref<typeof dbProject.value>();
 watch(
@@ -171,7 +168,7 @@ async function removeDomain(domain: string) {
   if (!project.value) return;
   if (!confirm(`Are you sure you want to remove the domain "${domain}"?`)) return;
 
-  await $fetch(`/api/projects/${projectName}`, {
+  await $fetch(`/api/projects/${project.value.name}`, {
     method: 'PATCH',
     body: {
       domains: project.value.domains.filter(_domain => _domain !== domain),
@@ -184,13 +181,13 @@ async function removeDomain(domain: string) {
     color: 'green',
   });
 
-  await refreshProject();
+  await projectsStore.refreshProject();
 }
 
 async function saveName() {
   if (!project.value) return;
 
-  await $fetch(`/api/projects/${projectName}`, {
+  await $fetch(`/api/projects/${project.value.name}`, {
     method: 'PATCH',
     body: {
       name: project.value.name,
@@ -205,13 +202,13 @@ async function saveName() {
 
   await router.push(`/projects/${project.value.name}`);
 
-  await refreshProject();
+  await projectsStore.refreshProject();
 }
 
 async function saveEnvironmentVariables() {
   if (!project.value) return;
 
-  await $fetch(`/api/projects/${projectName}`, {
+  await $fetch(`/api/projects/${project.value.name}`, {
     method: 'PATCH',
     body: {
       envVariables: project.value.envVariables.filter(({ key, value }) => key && value),
@@ -224,7 +221,7 @@ async function saveEnvironmentVariables() {
     color: 'green',
   });
 
-  await refreshProject();
+  await projectsStore.refreshProject();
 }
 
 const newDomain = ref('');
@@ -235,7 +232,7 @@ async function addDomain() {
   newDomain.value = '';
   if (project.value.domains.some(domain => domain === _newDomain)) return;
 
-  await $fetch(`/api/projects/${projectName}`, {
+  await $fetch(`/api/projects/${project.value.name}`, {
     method: 'PATCH',
     body: {
       domains: [...project.value.domains, _newDomain],
@@ -248,13 +245,13 @@ async function addDomain() {
     color: 'green',
   });
 
-  await refreshProject();
+  await projectsStore.refreshProject();
 }
 
 async function saveCron() {
   if (!project.value) return;
 
-  await $fetch(`/api/projects/${projectName}`, {
+  await $fetch(`/api/projects/${project.value.name}`, {
     method: 'PATCH',
     body: {
       cron: project.value.cron,
@@ -267,17 +264,17 @@ async function saveCron() {
     color: 'green',
   });
 
-  await refreshProject();
+  await projectsStore.refreshProject();
 }
 
 async function deleteProject() {
   if (prompt('Are you sure you want to delete this project? Type "DELETE" to confirm.') !== 'DELETE') return;
 
-  await $fetch(`/api/projects/${projectName}`, { method: 'DELETE' });
+  await $fetch(`/api/projects/${project.value.name}`, { method: 'DELETE' });
 
   toast.add({
     title: 'Project deleted',
-    description: `The project "${projectName}" was deleted.`,
+    description: `The project "${project.value.name}" was deleted.`,
   });
 
   await router.push(`/`);

@@ -8,7 +8,7 @@
             <img src="/icon-white.png" alt="Dark icon" class="hidden w-6 dark:block" />
           </router-link>
 
-          <router-link :to="`/projects/${projectName}`" class="font-bold hover:underline" title="Back to project">{{
+          <router-link :to="`/projects/${project.name}`" class="font-bold hover:underline" title="Back to project">{{
             project.name
           }}</router-link>
         </div>
@@ -70,16 +70,14 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute();
-const { projectName } = route.params;
-
 definePageMeta({
   layout: 'borderless',
 });
 
 const iframeEl = ref<HTMLIFrameElement>();
 
-const { data: project } = useFetch(`/api/projects/${projectName}`);
+const projectsStore = useProjectsStore();
+const project = computed(() => projectsStore.project);
 
 const code = ref('');
 const changed = ref(false);
@@ -87,7 +85,7 @@ watch(code, () => {
   changed.value = true;
 });
 
-const { data: codeFromDB } = useFetch(`/api/projects/${projectName}/code`);
+const { data: codeFromDB } = await useFetch(() => `/api/projects/${project.value.name}/code`);
 watch(
   codeFromDB,
   _code => {
@@ -115,7 +113,7 @@ async function saveAndDeploy() {
 
   try {
     // create deployment
-    const deployment = await $fetch(`/api/projects/${projectName}/deployments`, {
+    const deployment = await $fetch(`/api/projects/${project.value.name}/deployments`, {
       method: 'POST',
       body: {
         projectId: project.value.id,
@@ -137,7 +135,7 @@ async function saveAndDeploy() {
     });
 
     // deploy
-    await $fetch(`/api/projects/${projectName}/deployments/${deployment.deploymentId}/deploy`, {
+    await $fetch(`/api/projects/${project.value.name}/deployments/${deployment.deploymentId}/deploy`, {
       method: 'POST',
       body: { isProduction: true },
     });

@@ -9,8 +9,6 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute();
-const { projectName } = route.params;
-
-const { data: project } = useFetch(`/api/projects/${projectName}`);
+const projectsStore = useProjectsStore();
+const project = computed(() => projectsStore.project);
 </script>

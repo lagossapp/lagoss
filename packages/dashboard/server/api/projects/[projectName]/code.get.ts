@@ -35,13 +35,18 @@ export default defineEventHandler(async event => {
   const db = useDB();
   const project = await requireProject(event);
 
-  const deployment = (
-    await db
-      .select()
-      .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.projectId, project.id), eq(deploymentSchema.isProduction, true)))
-      .execute()
-  )?.[0];
+  const deployment = await db
+    .select()
+    .from(deploymentSchema)
+    .where(and(eq(deploymentSchema.projectId, project.id), eq(deploymentSchema.isProduction, true)))
+    .get();
+
+  if (!deployment) {
+    throw createError({
+      status: 404,
+      message: 'No production deployment found',
+    });
+  }
 
   const code = await getDeploymentCode(deployment.id);
 

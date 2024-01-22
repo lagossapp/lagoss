@@ -42,12 +42,12 @@
 import { dayjs } from '~/lib/dayjs';
 import type { Deployment } from '~/server/db/schema';
 
-const route = useRoute();
-const { projectName } = route.params;
+const projectsStore = useProjectsStore();
+const project = computed(() => projectsStore.project);
 
-const { data: project } = useFetch(`/api/projects/${projectName}`);
-
-const { data: deployments, refresh: refreshDeployments } = useFetch(`/api/projects/${projectName}/deployments`);
+const { data: deployments, refresh: refreshDeployments } = await useFetch(
+  `/api/projects/${project.value.name}/deployments`,
+);
 
 const promotingDeploymentId = ref<string>();
 async function promoteDeployment(deployment: Deployment) {
@@ -56,7 +56,7 @@ async function promoteDeployment(deployment: Deployment) {
 
   promotingDeploymentId.value = deployment.id;
   try {
-    await $fetch(`/api/projects/${projectName}/deployments/${deployment.id}/deploy`, {
+    await $fetch(`/api/projects/${project.value.name}/deployments/${deployment.id}/deploy`, {
       method: 'POST',
       body: {
         isProduction: true,
@@ -78,7 +78,7 @@ async function deleteDeployment(deployment: Deployment) {
 
   deletingDeploymentId.value = deployment.id;
   try {
-    await $fetch(`/api/projects/${projectName}/deployments/${deployment.id}`, {
+    await $fetch(`/api/projects/${project.value.name}/deployments/${deployment.id}`, {
       method: 'DELETE',
     });
 
