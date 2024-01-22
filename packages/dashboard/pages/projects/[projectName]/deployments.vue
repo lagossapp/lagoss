@@ -2,7 +2,14 @@
   <div v-if="project" class="w-full">
     <ProjectHeader :project="project" />
 
+
     <div class="mx-auto flex max-w-4xl flex-col gap-4">
+      <UContainer v-if="deployments.length === 0" class="w-full mt-4 py-16 border border-gray-200 text-center rounded hover:shadow">
+        <p class="text-gray-600">No deployments yet! Please create a deployment using the CLI!</p>
+        <!-- <a href="https://docs.lagoss.io" target="_blank" class="text-blue-500">
+          Quickstart guide!
+        </a> -->
+      </UContainer>
       <div
         v-for="deployment in deployments?.sort((a, b) => dayjs(b.createdAt).diff(dayjs(a.createdAt)))"
         :id="deployment.id"

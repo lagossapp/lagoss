@@ -22,7 +22,7 @@
           label="New project"
           :loading="creatingProject === 'normal'"
           :disabled="creatingProject === 'playground'"
-          @click="createProject"
+          @click="createProject(false)"
         />
       </div>
 
@@ -30,6 +30,13 @@
         <span class="font-bold text-gray-600">{{ projects?.length }}</span>
         <span class="text-gray-500">projects</span>
       </p>
+
+      <UContainer v-if="projects?.length === 0" class="w-full mt-4 py-16 border border-gray-200 text-center rounded hover:shadow">
+        <p class="text-gray-600">No projects yet! Please create a playground or a new project.</p>
+        <!-- <a href="https://docs.lagoss.io" target="_blank" class="text-blue-500">
+          Quickstart guide!
+        </a> -->
+      </UContainer>
 
       <div class="mt-4 flex flex-row flex-wrap gap-4">
         <router-link
