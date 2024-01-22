@@ -38,18 +38,19 @@
         </a> -->
       </UContainer>
 
-      <div class="mt-4 flex flex-row flex-wrap gap-4">
+      <div class="mt-4 grid gap-4 grid-cols-2">
         <router-link
           v-for="project in projects"
           :key="project.id"
           :to="`/projects/${project.name}`"
-          class="w-full max-w-sm"
+          class="w-full"
         >
-          <Card class="flex w-full cursor-pointer items-center justify-between hover:border-gray-500">
+          <Card class="relative flex w-full cursor-pointer items-center justify-between hover:border-gray-500">
             <div>
               <p>{{ project.name }}</p>
-              <p class="text-gray-500">{{ dayjs().to(project.updatedAt) }}</p>
+              <p class="text-gray-500 text-xs">{{ dayjs().to(project.updatedAt) }}</p>
             </div>
+            <UBadge class="absolute top-2 right-2" color="primary" variant="soft">{{ project.playground ? "Playground" : "Project" }}</UBadge>
           </Card>
         </router-link>
       </div>
