@@ -12,7 +12,7 @@ pub fn build(
     let (index, assets) = bundle_function(&function_config, &root, true)?;
 
     let end_progress = print_progress("Writting files");
-    let root = root.join(".lagon");
+    let root = root.join(".lagoss");
 
     fs::create_dir_all(&root)?;
     fs::write(root.join("index.js"), index)?;
