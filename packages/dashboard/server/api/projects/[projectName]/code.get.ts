@@ -43,7 +43,7 @@ export default defineEventHandler(async event => {
 
   if (!deployment) {
     throw createError({
-      status: 404,
+      statusCode: 404,
       message: 'No production deployment found',
     });
   }
