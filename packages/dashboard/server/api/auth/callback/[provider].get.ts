@@ -1,11 +1,10 @@
 import type { H3Event } from 'h3';
-import { User, organizationSchema, userSchema } from '~/server/db/schema';
+import { type User, organizationSchema, userSchema } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { Github } from '~/server/oauth/github';
 import { generateId } from '~/server/utils/db';
 
 async function loginUser(event: H3Event, userId: User['id']) {
-  const db = useDB();
   const session = await useAuthSession(event);
 
   await session.update({
@@ -16,6 +15,7 @@ async function loginUser(event: H3Event, userId: User['id']) {
 }
 
 export default defineEventHandler(async event => {
+  const db = useDB();
   const { state, code } = getQuery(event);
   if (!state) {
     throw new Error('State is undefined');
