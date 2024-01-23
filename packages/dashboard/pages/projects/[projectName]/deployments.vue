@@ -2,10 +2,12 @@
   <div v-if="project" class="w-full">
     <ProjectHeader :project="project" />
 
-
     <div class="mx-auto flex max-w-4xl flex-col gap-4">
-      <UContainer v-if="deployments.length === 0" class="w-full mt-4 py-16 border border-gray-200 text-center rounded hover:shadow">
-        <p class="text-gray-600">No deployments yet! Please create a deployment using the CLI!</p>
+      <UContainer
+        v-if="deployments?.length === 0"
+        class="mt-4 w-full rounded border border-gray-200 py-16 text-center hover:shadow"
+      >
+        <p class="text-gray-500">No deployments yet! Please create a deployment using the CLI!</p>
         <!-- <a href="https://docs.lagoss.io" target="_blank" class="text-blue-500">
           Quickstart guide!
         </a> -->
@@ -49,8 +51,7 @@
 import { dayjs } from '~/lib/dayjs';
 import type { Deployment } from '~/server/db/schema';
 
-const projectsStore = useProjectsStore();
-const project = computed(() => projectsStore.project);
+const project = useProject();
 
 const { data: deployments, refresh: refreshDeployments } = await useFetch(
   `/api/projects/${project.value.name}/deployments`,
@@ -85,7 +86,7 @@ async function deleteDeployment(deployment: Deployment) {
 
   deletingDeploymentId.value = deployment.id;
   try {
-    await $fetch(`/api/projects/${project.value.name}/deployments/${deployment.id}`, {
+    await $fetch(`/api/projects/${projectName.value}/deployments/${deployment.id}`, {
       method: 'DELETE',
     });
 

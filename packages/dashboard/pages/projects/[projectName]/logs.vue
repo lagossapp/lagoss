@@ -9,6 +9,5 @@
 </template>
 
 <script setup lang="ts">
-const projectsStore = useProjectsStore();
-const project = computed(() => projectsStore.project);
+const project = useProject();
 </script>

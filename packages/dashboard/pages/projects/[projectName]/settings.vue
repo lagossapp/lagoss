@@ -8,7 +8,7 @@
           <h2 class="text-xl">Name</h2>
 
           <p class="text-gray-500">
-            Change the name of this Function. Note that changing the name also changes the default domain.
+            Change the name of this project. Note that changing the name also changes the default domain.
           </p>
 
           <UFormGroup label="Name" required>
@@ -114,8 +114,7 @@
 const router = useRouter();
 const toast = useToast();
 
-const projectsStore = useProjectsStore();
-const dbProject = computed(() => projectsStore.project);
+const dbProject = useProject();
 
 const project = ref<typeof dbProject.value>();
 watch(

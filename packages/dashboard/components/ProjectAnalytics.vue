@@ -106,15 +106,15 @@
 </template>
 
 <script setup lang="ts">
+import type { Project } from '~/server/db/schema';
 import { FREE_PLAN } from '~/server/lib/plans';
 import type { AnalyticsTimeframe } from '~/server/lib/types';
 
-const route = useRoute();
-const { projectName } = route.params;
-
-defineProps<{
+const props = defineProps<{
+  project: Project;
   showGraphs?: boolean;
 }>();
+const project = toRef(props, 'project');
 
 // TODO: use the plan from the project / organization
 const plan = computed(() => FREE_PLAN);
@@ -152,7 +152,7 @@ function formatNumber(number = 0) {
 const timeframe = ref('Last 24 hours');
 
 // TODO: refresh data every 10 seconds
-const { data: usage } = useFetch(`/api/projects/${projectName}/usage`, {
+const { data: usage } = useFetch(`/api/projects/${project.value.name}/usage`, {
   query: computed(() => ({ timeframe: timeframe.value })),
 });
 

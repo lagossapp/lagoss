@@ -1,14 +1,15 @@
 <template>
   <div class="flex h-full w-full">
-    <NuxtPage v-if="projectStore.project" />
-    <span v-else>loading ...</span>
+    <span v-if="pending">loading ...</span>
+    <NuxtPage v-else-if="project" />
+    <span v-else>Project not found!</span>
   </div>
 </template>
 
 <script setup lang="ts">
 const route = useRoute();
 const projectName = computed(() => route.params.projectName as string);
+const { data: project, pending, refresh: refreshProject } = await useFetch(`/api/projects/${projectName.value}`);
 
-const projectStore = useProjectsStore();
-await projectStore.fetchProject(projectName.value);
+provide('project', project);
 </script>

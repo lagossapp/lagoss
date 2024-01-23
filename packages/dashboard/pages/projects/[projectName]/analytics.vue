@@ -3,12 +3,11 @@
     <ProjectHeader :project="project" />
 
     <div class="mx-auto flex w-full max-w-4xl flex-col gap-4 p-2">
-      <ProjectAnalytics show-graphs />
+      <ProjectAnalytics :project="project" show-graphs />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const projectsStore = useProjectsStore();
-const project = computed(() => projectsStore.project);
+const project = useProject();
 </script>

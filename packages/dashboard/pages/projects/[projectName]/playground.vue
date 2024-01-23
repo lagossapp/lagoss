@@ -30,7 +30,7 @@
 
       <div class="relative flex h-44 flex-shrink-0 flex-col border-t border-gray-200">
         <div class="flex h-10 items-center justify-between px-5">
-          <div class="flex h-full items-center gap-1 text-sm text-gray-600">
+          <div class="flex h-full items-center gap-1 text-sm text-gray-500">
             <UIcon name="document" />
             Logs
           </div>
@@ -76,8 +76,7 @@ definePageMeta({
 
 const iframeEl = ref<HTMLIFrameElement>();
 
-const projectsStore = useProjectsStore();
-const project = computed(() => projectsStore.project);
+const project = useProject();
 
 const code = ref('');
 const changed = ref(false);

@@ -22,6 +22,7 @@
             >
               <div>
                 <p>{{ organization.name }}</p>
+                <p class="text-sm text-gray-500">{{ organization.description }}</p>
               </div>
             </Card>
           </router-link>

@@ -1,21 +1,11 @@
-import { defineStore } from 'pinia';
 import type { Project } from '~/server/db/schema';
 
-export const useProjectsStore = defineStore('projects', () => {
-  const project = ref<Project>();
+export function useProject() {
+  const project = inject<Ref<Project>>('project');
 
-  async function fetchProject(projectName: string) {
-    project.value = await $fetch(`/api/projects/${projectName}`);
+  if (!project) {
+    throw new Error('useProject() is called without provider.');
   }
 
-  async function refreshProject() {
-    if (!project.value?.name) return;
-    await fetchProject(project.value.name);
-  }
-
-  return {
-    project,
-    fetchProject,
-    refreshProject,
-  };
-});
+  return project;
+}
