@@ -16,10 +16,10 @@ export const deploymentSchema = mysqlTable('Deployment', {
   id: varchar('id', { length: 191 }).notNull().primaryKey(),
   createdAt: datetime('createdAt').notNull(),
   updatedAt: datetime('updatedAt').notNull(),
-  functionId: varchar('functionId', { length: 191 })
+  projectId: varchar('functionId', { length: 191 })
     .notNull()
     .references(() => projectSchema.id),
-  triggerer: varchar('triggerer', { length: 191 }).default('Lagon'),
+  triggerer: varchar('triggerer', { length: 191 }).default('Lagoss'),
   commit: varchar('commit', { length: 191 }),
   isProduction: tinyint('isProduction').default(0).notNull(),
   assets: json('assets').notNull(),
@@ -31,7 +31,7 @@ export const domainSchema = mysqlTable('Domain', {
   createdAt: datetime('createdAt').notNull(),
   updatedAt: datetime('updatedAt').notNull(),
   domain: varchar('domain', { length: 191 }).notNull(),
-  functionId: varchar('functionId', { length: 191 })
+  projectId: varchar('functionId', { length: 191 })
     .notNull()
     .references(() => projectSchema.id),
 });
@@ -63,7 +63,7 @@ export const projectSchema = mysqlTable('Function', {
     .references(() => organizationSchema.id),
   cronRegion: varchar('cronRegion', { length: 191 }),
   totalTimeout: int('totalTimeout').notNull().default(5000),
-  playground: tinyint('playground').notNull().default(0),
+  // playground: tinyint('playground').notNull().default(0),
 });
 export type Project = InferSelectModel<typeof projectSchema>;
 
@@ -83,8 +83,8 @@ export const organizationSchema = mysqlTable('Organization', {
   stripeSubscriptionId: varchar('stripe_subscription_id', { length: 191 }).unique(),
   stripePriceId: varchar('stripe_price_id', { length: 191 }),
   stripeCurrentPeriodEnd: datetime('stripe_current_period_end'),
-  plan: varchar('plan', { length: 191 }).notNull().default('free'),
-  currentPeriodEnd: datetime('currentPeriodEnd'),
+  // plan: varchar('plan', { length: 191 }).notNull().default('free'),
+  // currentPeriodEnd: datetime('currentPeriodEnd'),
 });
 export type Organization = InferSelectModel<typeof organizationSchema>;
 

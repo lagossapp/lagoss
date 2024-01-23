@@ -24,7 +24,7 @@ export default defineEventHandler(async event => {
         or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id)),
       ),
     )
-    // .leftJoin(domainSchema, eq(domainSchema.functionId, functionSchema.id))
+    // .leftJoin(domainSchema, eq(domainSchema.projectId, projectSchema.id))
     .execute();
 
   // return projects.map(project => ({ ...project.Function, domains: [project.Domain] }));

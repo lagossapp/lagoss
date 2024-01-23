@@ -36,7 +36,7 @@ export default defineEventHandler(async event => {
     db
       .select()
       .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.functionId, project.id), eq(deploymentSchema.isProduction, 1)))
+      .where(and(eq(deploymentSchema.projectId, project.id), eq(deploymentSchema.isProduction, 1)))
       .execute(),
   );
 
@@ -44,7 +44,7 @@ export default defineEventHandler(async event => {
     await db
       .update(deploymentSchema)
       .set({ isProduction: 0 })
-      .where(eq(deploymentSchema.functionId, deployment.functionId))
+      .where(eq(deploymentSchema.projectId, deployment.projectId))
       .execute();
   }
 
@@ -56,14 +56,14 @@ export default defineEventHandler(async event => {
     .where(eq(deploymentSchema.id, deploymentId))
     .execute();
 
-  const domains = await db.select().from(domainSchema).where(eq(domainSchema.functionId, project.id)).execute();
-  const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.functionId, project.id)).execute();
+  const domains = await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id)).execute();
+  const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.projectId, project.id)).execute();
 
   await redis.publish(
     'deploy',
     JSON.stringify({
-      functionId: project.id,
-      functionName: project.name,
+      functionId: project.id, // TODO: rename to projectId
+      functionName: project.name, // TODO: rename to projectName
       deploymentId: deployment.id,
       domains: domains.map(({ domain }) => domain),
       memory: project.memory,

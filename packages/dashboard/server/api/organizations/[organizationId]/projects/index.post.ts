@@ -25,12 +25,10 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const organization = await db
-    .select()
-    .from(organizationSchema)
-    .where(eq(organizationSchema.id, organizationId))
+  const organization = await getFirst(
+    db.select().from(organizationSchema).where(eq(organizationSchema.id, organizationId)),
     // TODO: where user is owner or member
-    .get();
+  );
 
   if (!organization) {
     throw createError({
@@ -49,12 +47,12 @@ export default defineEventHandler(async event => {
     plan,
   });
 
-  const result = await db
+  await db
     .insert(projectSchema)
     .values({
       id: await generateId(),
       organizationId,
-      playground: input.playground,
+      // playground: input.playground, // TODO: set playground
       name,
       cron: undefined,
       cronRegion: 'us-east-1', // TODO: set default region
@@ -64,9 +62,9 @@ export default defineEventHandler(async event => {
       tickTimeout: plan.tickTimeout,
       totalTimeout: plan.totalTimeout,
     })
-    .returning();
+    .execute();
 
   // TODO: create first deployment (at least for playground projects) with default code
 
-  return result[0];
+  return 'ok';
 });
