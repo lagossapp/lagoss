@@ -1,7 +1,6 @@
 packages:
   - 'packages/*'
   - 'packages/integrations/*'
-  - 'www'
   - 'crates/cli'
   - 'crates/runtime'
   - 'crates/serverless'
