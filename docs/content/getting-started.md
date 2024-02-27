@@ -118,4 +118,4 @@ lagoss dev hello.ts
 
 Running the above code will start a local server on port `1234` by default. You can now access your Function at [http://localhost:1234](http://localhost:1234).
 
-You can also use the [`console` API](./runtime-apis.md#console) to log messages, objects and more. When using [`lagoss dev`](./cli.md#lagoss-dev), the logs are displayed in your terminal. When the Function is deployed, the logs are accessible in the Dashboard. [Learn more about logs](./cloud/logs.md).
+You can also use the [`console` API](./runtime-apis.md#console) to log messages, objects and more. When using [`lagoss dev`](./cli.md#lagoss-dev), the logs are displayed in your terminal. When the Function is deployed, the logs are accessible in the Dashboard. [Learn more about logs](./usage/logs.md).

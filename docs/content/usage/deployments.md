@@ -1,6 +1,6 @@
 ## Deploying a new Function
 
-A Function is bound to Deployments: **Production** and **Preview** deployments. [Default and custom Domains](./cloud/domains.md) always points to the current production Deployment.
+A Function is bound to Deployments: **Production** and **Preview** deployments. [Default and custom Domains](./usage/domains.md) always points to the current production Deployment.
 
 Your Function always has a single production Deployment and typically has multiple preview Deployments. Each Deployment is immutable, and always accessible via a unique URL.
 
@@ -45,6 +45,6 @@ You can now edit the code in the Playground, and click on the "Deploy" button to
 
 ## Cold starts
 
-When a Deployment is requested for the first time in a [region](./cloud/regions.md), Lagoss will spin up a new V8 Isolate, triggering a cold start. This might take a few milliseconds, depending on the size of your Deployment.
+When a Deployment is requested for the first time in a [region](./usage/regions.md), Lagoss will spin up a new V8 Isolate, triggering a cold start. This might take a few milliseconds, depending on the size of your Deployment.
 
 On subsequent requests, the same Isolate will be reused, allowing for much faster response times. After 15 minutes without any requests, the Isolate is spun down, and the next request will trigger a new cold start.

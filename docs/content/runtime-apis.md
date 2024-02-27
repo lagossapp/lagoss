@@ -16,7 +16,7 @@ Starting from this simple code, you can do whatever you wish, using the Web APIs
 
 The `Request` object coming from the `handler` function also contains additional headers:
 
-- `X-Lagon-Region`: the [region](./cloud/regions.md) where this Function is executing
+- `X-Lagon-Region`: the [region](./usage/regions.md) where this Function is executing
 - `X-Forwarded-For`: the IP address of the client that made the request
 
 You can access them the same as any other header:
@@ -87,7 +87,7 @@ Similar to the standard `console` object on the browser and Node.js, except that
 - `warn`
 - `error`
 
-You can log multiple objects, and use string substitution. [See the documentation on MDN](https://developer.mozilla.org/en-US/docs/Web/API/console#outputting_text_to_the_console). See the [Logs](./cloud/logs.md) documentation to learn more.
+You can log multiple objects, and use string substitution. [See the documentation on MDN](https://developer.mozilla.org/en-US/docs/Web/API/console#outputting_text_to_the_console). See the [Logs](./usage/logs.md) documentation to learn more.
 
 ### `crypto`
 
@@ -195,7 +195,7 @@ The standard `FormData` object. [See the documentation on MDN](https://developer
 
 The only usage of `process` is to access environment variables. By default, it will only contain the `NODE_ENV` variable, which is set to `"production"` when deployed, and to `"development"` when using [`lagoss dev`](./cli.md#lagoss-dev).
 
-[Learn more about environment variables](./cloud/environment-variables.md).
+[Learn more about environment variables](./usage/environment-variables.md).
 
 ### `ProgressEvent`
 
@@ -254,7 +254,7 @@ The standard `clearTimeout` method. [See the documentation on MDN](https://devel
 The standard `fetch` method. [See the documentation on MDN](https://developer.mozilla.org/en-US/docs/Web/API/fetch).
 
 ::: info
-`fetch()` supports both HTTP/1.1 and HTTP/2. Additionally, there are [some limits](./cloud/limits.md#functions) in place to prevent abuses.
+`fetch()` supports both HTTP/1.1 and HTTP/2. Additionally, there are [some limits](./usage/limits.md#functions) in place to prevent abuses.
 :::
 
 ### `queueMicrotask()`

@@ -25,7 +25,7 @@ Once installed, execute the `lagoss` CLI to see all the commands available.
 
 ### `lagoss login`
 
-Before being able to deploy and manage Functions, you will need to log in. Make sure you have already [created an account](./cloud/account.md). If you try to execute a command that requires being logged in, you will be warned and the command will be aborted.
+Before being able to deploy and manage Functions, you will need to log in. Make sure you have already [created an account](./usage/account.md). If you try to execute a command that requires being logged in, you will be warned and the command will be aborted.
 
 To proceed, run `lagoss login` and follow the instructions.
 
@@ -143,7 +143,7 @@ This command accepts the following arguments and options:
 - `--public, -p <<PUBLIC_DIR>>` allows you to specify a path to a directory containing assets to be served statically.
 - `--hostname <HOSTNAME>` allows you to specify a custom hostname to start the server on. (Default: `127.0.0.1`)
 - `--port <PORT>` allows you to specify a custom port to start the server on. (Default: `1234`)
-- `--env <FILE>` allows you to specify a custom path to an environment file to inject [environment variables](./cloud/environment-variables.md). (Default: `.env`)
+- `--env <FILE>` allows you to specify a custom path to an environment file to inject [environment variables](./usage/environment-variables.md). (Default: `.env`)
 - `--allow-code-generation` allows you to enable code generation from strings (`eval` / `new Function`)
 - `--prod` allows you to set `process.env.NODE_ENV` to `"production"` instead of `"development"`
 
