@@ -40,7 +40,6 @@ Current status:
 - **[serverless](./crates/serverless)** HTTP entrypoint for Functions, using the Runtime and exporting metrics
 - **[ui](./packages/ui)** Design system
 - **[wpt-runner](./crates/wpt-runner)** Run web-platform-tests on Lagon
-- **[www](./www)** Public website
 
 ## Features
 
