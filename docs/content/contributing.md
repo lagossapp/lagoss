@@ -1,13 +1,8 @@
-import { Callout } from 'nextra-theme-docs';
-
 Thanks for wanting to contribute! That means a lot to us. You can contribute in many ways, with or without any coding required.
 
-If you encounter any issues, you can join [our Discord](https://discord.lagon.dev/) so we can help you.
-
-<Callout type="info">
-  Need some good first issues to start with? Check out the [good first issue
-  label](https://github.com/lagonapp/lagon/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) on GitHub!
-</Callout>
+::: info
+Need some good first issues to start with? Check out the [good first issue label](https://github.com/lagossapp/lagoss/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) on GitHub!
+:::
 
 ## Non-code contributions
 

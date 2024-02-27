@@ -1,10 +1,8 @@
-import { Callout, Collapse } from 'nextra-theme-docs';
-
 The easiest way to deploy and manage Functions is through our [Command-line interface](https://en.wikipedia.org/wiki/Command-line_interface).
 
 ## Installation
 
-Lagon CLI is available for the following operating systems:
+Lagoss CLI is available for the following operating systems:
 
 - macOS (Intel and M1)
 - Linux (x64 and arm64)
@@ -14,32 +12,32 @@ We recommend installing the CLI globally, using the package manager of your choi
 
 ```bash
 # NPM
-npm install --global @lagon/cli esbuild
+npm install --global @lagoss/cli esbuild
 # Yarn
-yarn global add @lagon/cli esbuild
+yarn global add @lagoss/cli esbuild
 # PNPM
-pnpm install --global @lagon/cli esbuild
+pnpm install --global @lagoss/cli esbuild
 ```
 
 ## Usage
 
-Once installed, execute the `lagon` CLI to see all the commands available.
+Once installed, execute the `lagoss` CLI to see all the commands available.
 
-### `lagon login`
+### `lagoss login`
 
-Before being able to deploy and manage Functions, you will need to log in. Make sure you have already [created an account](/cloud/account). If you try to execute a command that requires being logged in, you will be warned and the command will be aborted.
+Before being able to deploy and manage Functions, you will need to log in. Make sure you have already [created an account](./cloud/account.md). If you try to execute a command that requires being logged in, you will be warned and the command will be aborted.
 
-To proceed, run `lagon login` and follow the instructions.
+To proceed, run `lagoss login` and follow the instructions.
 
-### `lagon logout`
+### `lagoss logout`
 
 If you want, you can log out at any time. For security, you will be asked to confirm that you want to log out.
 
-To proceed, run `lagon logout` and follow the instructions.
+To proceed, run `lagoss logout` and follow the instructions.
 
-### `lagon deploy`
+### `lagoss deploy`
 
-Create a new Function or a new Deployment in the given directory. Make sure you are [logged in](#lagon-login) before proceeding. If you are executing the command for the first time:
+Create a new Function or a new Deployment in the given directory. Make sure you are [logged in](#lagoss-login) before proceeding. If you are executing the command for the first time:
 
 1. You will be prompted to select an Organization
 2. You will be able to link to an existing Function, or create a new one by specifying a name
@@ -57,16 +55,16 @@ Examples:
 
 ```bash
 # Deploy the current directory to Production
-lagon deploy --prod
+lagoss deploy --prod
 # Deploy the index.ts file
-lagon deploy ./index.ts
+lagoss deploy ./index.ts
 # Deploy the my-project directory and override the public directory
-lagon deploy ./my-project --public ./my-project/assets
+lagoss deploy ./my-project --public ./my-project/assets
 ```
 
-### `lagon ls`
+### `lagoss ls`
 
-List all the Deployments of the given directory. Make sure you are [logged in](#lagon-login) before proceeding. This command accepts only one argument:
+List all the Deployments of the given directory. Make sure you are [logged in](#lagoss-login) before proceeding. This command accepts only one argument:
 
 - `[DIRECTORY]` is an optional path to a directory containing the Function. (Default: `.`)
 
@@ -74,14 +72,14 @@ Example:
 
 ```bash
 # List Deployments in the current directory
-lagon ls
+lagoss ls
 # List Deployments of the my-project directory
-lagon ls ./my-project
+lagoss ls ./my-project
 ```
 
-### `lagon promote`
+### `lagoss promote`
 
-Promote the given Deployment to production. Make sure you are [logged in](#lagon-login) before proceeding. This command accepts the following arguments:
+Promote the given Deployment to production. Make sure you are [logged in](#lagoss-login) before proceeding. This command accepts the following arguments:
 
 - `<DEPLOYMENT_ID>` the ID of the Deployment to promote.
 - `[DIRECTORY]` is an optional path to a directory containing the Function. (Default: `.`)
@@ -90,14 +88,14 @@ Example:
 
 ```bash
 # Promote the cl...km Deployment in the current directory
-lagon promote claxnlc230738q5pa7iximskm
+lagoss promote claxnlc230738q5pa7iximskm
 # Promote the cl...km Deployment of the my-project directory
-lagon promote claxnlc230738q5pa7iximskm ./my-project
+lagoss promote claxnlc230738q5pa7iximskm ./my-project
 ```
 
-### `lagon undeploy`
+### `lagoss undeploy`
 
-Un-deploy a Deployment. Make sure you are [logged in](#lagon-login) before proceeding. This command accepts the following arguments:
+Un-deploy a Deployment. Make sure you are [logged in](#lagoss-login) before proceeding. This command accepts the following arguments:
 
 - `<DEPLOYMENT_ID>` the ID of the Deployment to undeploy.
 - `[DIRECTORY]` is an optional path to a directory containing the Function. (Default: `.`)
@@ -106,18 +104,18 @@ Example:
 
 ```bash
 # Undeploy the cl...km Deployment in the current directory
-lagon undeploy claxnlc230738q5pa7iximskm
+lagoss undeploy claxnlc230738q5pa7iximskm
 # Undeploy the cl...km Deployment of the my-project directory
-lagon undeploy claxnlc230738q5pa7iximskm ./my-project
+lagoss undeploy claxnlc230738q5pa7iximskm ./my-project
 ```
 
-### `lagon rm`
+### `lagoss rm`
 
-<Callout type="error">
-  Deleting a Function also deletes permanently all of its Deployments, statistics and logs.
-</Callout>
+::: danger
+Deleting a Function also deletes permanently all of its Deployments, statistics and logs.
+:::
 
-Delete completely a Function. You'll be asked to confirm before proceeding. Make sure you are [logged in](#lagon-login) before proceeding. This command accepts only one argument:
+Delete completely a Function. You'll be asked to confirm before proceeding. Make sure you are [logged in](#lagoss-login) before proceeding. This command accepts only one argument:
 
 - `[DIRECTORY]` is an optional path to a directory containing the Function. (Default: `.`)
 
@@ -125,12 +123,12 @@ Example:
 
 ```bash
 # Delete the current directory's Function
-lagon rm
+lagoss rm
 # Delete the my-project directory's Function
-lagon rm ./my-project
+lagoss rm ./my-project
 ```
 
-### `lagon dev`
+### `lagoss dev`
 
 Launch a local dev server, using the same Runtime as when deployed to the Cloud. You can either:
 
@@ -145,7 +143,7 @@ This command accepts the following arguments and options:
 - `--public, -p <<PUBLIC_DIR>>` allows you to specify a path to a directory containing assets to be served statically.
 - `--hostname <HOSTNAME>` allows you to specify a custom hostname to start the server on. (Default: `127.0.0.1`)
 - `--port <PORT>` allows you to specify a custom port to start the server on. (Default: `1234`)
-- `--env <FILE>` allows you to specify a custom path to an environment file to inject [environment variables](/cloud/environment-variables). (Default: `.env`)
+- `--env <FILE>` allows you to specify a custom path to an environment file to inject [environment variables](./cloud/environment-variables.md). (Default: `.env`)
 - `--allow-code-generation` allows you to enable code generation from strings (`eval` / `new Function`)
 - `--prod` allows you to set `process.env.NODE_ENV` to `"production"` instead of `"development"`
 
@@ -153,21 +151,21 @@ Examples:
 
 ```bash
 # Run a local dev server in the current directory
-lagon dev
+lagoss dev
 # Run a local dev server with a file entrypoint and some assets
-lagon dev ./server.tsx --public ./assets
+lagoss dev ./server.tsx --public ./assets
 # Run a local dev server inside the my-project directory using a custom port
-lagon dev ./my-project --port 56565
+lagoss dev ./my-project --port 56565
 ```
 
-<Callout type="warning">
-  Although the `dev` command uses the same Runtime as when deployed, the local HTTP server itself doesn't have the same
-  optimizations. As such, you shouldn't run any production environment on it, or run any kind of load tests/benchmarks.
-</Callout>
+::: warning
+Although the `dev` command uses the same Runtime as when deployed, the local HTTP server itself doesn't have the same
+optimizations. As such, you shouldn't run any production environment on it, or run any kind of load tests/benchmarks.
+:::
 
-### `lagon build`
+### `lagoss build`
 
-For debugging purposes, you can build a Function and see its output without deploying it. Under the hood, `lagon build` does the same steps as `lagon deploy`, but skips the deployment part and instead writes the output to a local `.lagon` folder.
+For debugging purposes, you can build a Function and see its output without deploying it. Under the hood, `lagoss build` does the same steps as `lagoss deploy`, but skips the deployment part and instead writes the output to a local `.lagoss` folder.
 
 This command accepts the following arguments and options:
 
@@ -178,35 +176,35 @@ This command accepts the following arguments and options:
 Examples:
 
 ```bash
-lagon build ./server.tsx --client App.tsx --public ./assets
-tree .lagon/
-# .lagon/
+lagoss build ./server.tsx --client App.tsx --public ./assets
+tree .lagoss/
+# .lagoss/
 #   index.js
 #   App.js
 #   assets/
 ```
 
-### `lagon link`
+### `lagoss link`
 
-Link a local Function to a deployed one, without triggering a new Deployment. Make sure you are [logged in](#lagon-login) before proceeding. This command accepts only one argument:
+Link a local Function to a deployed one, without triggering a new Deployment. Make sure you are [logged in](#lagoss-login) before proceeding. This command accepts only one argument:
 
 - `[DIRECTORY]` is an optional path to a directory containing the Function. (Default: `.`)
 
 Example:
 
 ```bash
-lagon link ./index.ts
+lagoss link ./index.ts
 ```
 
 ## Self-hosting configuration
 
-If you are [self-hosting](/self-hosted/installation) Lagon, you will need to update the default site URL to the one used by your installation. To do so, find the configuration file located in `~/.lagon/config.json`:
+If you are [self-hosting](./self-hosting/installation.md) Lagoss, you will need to update the default site URL to the one used by your installation. To do so, find the configuration file located in `~/.lagoss/config.json`:
 
 ```json
 {
   "token": "**************",
-  "site_url": "https://dash.lagon.app" // Replace this field
+  "site_url": "https://app.lagoss.com" // Replace this field
 }
 ```
 
-Replace the `site_url` field with the one configured during the installation. To verify if it's working correctly, log in to your installation using `lagon login`.
+Replace the `site_url` field with the one configured during the installation. To verify if it's working correctly, log in to your installation using `lagoss login`.

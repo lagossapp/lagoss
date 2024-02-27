@@ -1,6 +1,4 @@
-import { Callout } from 'nextra-theme-docs';
-
-The following APIs are the same as the native Web APIS you already know. We also follow the [WinterCG](https://wintercg.org/) conventions. Lagon's Runtime uses the V8 engine and is written in both Rust and TypeScript.
+The following APIs are the same as the native Web APIS you already know. We also follow the [WinterCG](https://wintercg.org/) conventions. Lagoss's Runtime uses the V8 engine and is written in both Rust and TypeScript.
 
 ## Handler
 
@@ -18,7 +16,7 @@ Starting from this simple code, you can do whatever you wish, using the Web APIs
 
 The `Request` object coming from the `handler` function also contains additional headers:
 
-- `X-Lagon-Region`: the [region](/cloud/regions) where this Function is executing
+- `X-Lagon-Region`: the [region](./cloud/regions.md) where this Function is executing
 - `X-Forwarded-For`: the IP address of the client that made the request
 
 You can access them the same as any other header:
@@ -34,13 +32,13 @@ export function handler(request: Request) {
 
 The `X-Lagon-Region` header is also automatically added to each response, making it easy to identify which Region served the request.
 
-<Callout type="info">
-  When developing locally using [`lagon dev`](/cli#lagon-dev), the `X-Lagon-Region` header will be set to `local`.
-</Callout>
+::: info
+When developing locally using [`lagoss dev`](./cli.md#lagoss-dev), the `X-Lagon-Region` header will be set to `local`.
+:::
 
 ## NPM support
 
-Lagon's Runtime supports any NPM package. The only requirement is that the package must not use Node.js-specific APIs (e.g `Buffer`, `fs`, `path`, etc.). This is because Lagon's Runtime **is not Node.js**, but a browser-like environment.
+Lagoss's Runtime supports any NPM package. The only requirement is that the package must not use Node.js-specific APIs (e.g `Buffer`, `fs`, `path`, etc.). This is because Lagoss's Runtime **is not Node.js**, but a browser-like environment.
 
 ## Global objects
 
@@ -69,7 +67,7 @@ The standard `Blob` object. [See the documentation on MDN](https://developer.moz
 
 ### Compression Stream APIs
 
-Lagon supports all three compression formats: `gzip`, `deflate` and `deflate-raw`.
+Lagoss supports all three compression formats: `gzip`, `deflate` and `deflate-raw`.
 
 #### `CompressionStream`
 
@@ -89,7 +87,7 @@ Similar to the standard `console` object on the browser and Node.js, except that
 - `warn`
 - `error`
 
-You can log multiple objects, and use string substitution. [See the documentation on MDN](https://developer.mozilla.org/en-US/docs/Web/API/console#outputting_text_to_the_console). See the [Logs](/cloud/logs) documentation to learn more.
+You can log multiple objects, and use string substitution. [See the documentation on MDN](https://developer.mozilla.org/en-US/docs/Web/API/console#outputting_text_to_the_console). See the [Logs](./cloud/logs.md) documentation to learn more.
 
 ### `crypto`
 
@@ -107,8 +105,9 @@ The standard `getRandomValues()` method. [See the documentation on MDN](https://
 
 The standard `CryptoSubtle` object. [See the documentation on MDN](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto).
 
-<Callout type="info">
-  The following table summarizes the supported algorithms on each method:
+::: info
+
+The following table summarizes the supported algorithms on each method:
 
 |                   | `sign()`, `verify()` | `encrypt()`, `decrypt()` | `digest()` | `deriveBits()`, `deriveKey()` | `wrapKey()`, `unwrapKey()` |
 | ----------------- | -------------------- | ------------------------ | ---------- | ----------------------------- | -------------------------- |
@@ -129,7 +128,7 @@ The standard `CryptoSubtle` object. [See the documentation on MDN](https://devel
 | PBKDF2            |                      |                          |            | ✅                            |                            |
 | AES-KW            |                      |                          |            |                               | ❌                         |
 
-</Callout>
+:::
 
 ### `CustomEvent`
 
@@ -145,7 +144,9 @@ The standard `EventTarget` object. [See the documentation on MDN](https://develo
 
 ### Fetch APIs
 
-<Callout type="info">Looking for the `fetch()` method? [Jump to fetch()](#fetch).</Callout>
+::: info
+Looking for the `fetch()` method? [Jump to fetch()](#fetch).
+:::
 
 #### `Headers`
 
@@ -166,7 +167,9 @@ You can pass a [`ReadableStream`](#readablestream) object as the `body` of a `Re
 
 The standard `URL` object. [See the documentation on MDN](https://developer.mozilla.org/en-US/docs/Web/API/URL).
 
-<Callout type="warning">This URL implementation only supports URLs with a scheme.</Callout>
+::: warning
+This URL implementation only supports URLs with a scheme.
+:::
 
 #### `URLSearchParams`
 
@@ -186,13 +189,13 @@ The standard `FormData` object. [See the documentation on MDN](https://developer
 
 ### `navigator.userAgent`
 
-`navigator.userAgent` is a fixed string that can be used to detect the current runtime. Its value is always `Lagon/VERSION`, where `VERSION` is the current version of the Lagon Runtime.
+`navigator.userAgent` is a fixed string that can be used to detect the current runtime. Its value is always `Lagoss/VERSION`, where `VERSION` is the current version of the Lagoss Runtime.
 
 ### `process.env`
 
-The only usage of `process` is to access environment variables. By default, it will only contain the `NODE_ENV` variable, which is set to `"production"` when deployed, and to `"development"` when using [`lagon dev`](/cli#lagon-dev).
+The only usage of `process` is to access environment variables. By default, it will only contain the `NODE_ENV` variable, which is set to `"production"` when deployed, and to `"development"` when using [`lagoss dev`](./cli.md#lagoss-dev).
 
-[Learn more about environment variables](/cloud/environment-variables).
+[Learn more about environment variables](./cloud/environment-variables.md).
 
 ### `ProgressEvent`
 
@@ -250,9 +253,9 @@ The standard `clearTimeout` method. [See the documentation on MDN](https://devel
 
 The standard `fetch` method. [See the documentation on MDN](https://developer.mozilla.org/en-US/docs/Web/API/fetch).
 
-<Callout type="info">
-  `fetch()` supports both HTTP/1.1 and HTTP/2. Additionally, there are [some limits](/cloud/limits#functions) in place to prevent abuses.
-</Callout>
+::: info
+`fetch()` supports both HTTP/1.1 and HTTP/2. Additionally, there are [some limits](./cloud/limits.md#functions) in place to prevent abuses.
+:::
 
 ### `queueMicrotask()`
 

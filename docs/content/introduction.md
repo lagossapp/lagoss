@@ -1,7 +1,11 @@
-Lagon is an open-source runtime and platform that allows developers to run TypeScript and JavaScript Serverless Functions close to users.
+Lagoss is an open-source runtime and platform that allows developers to run TypeScript and JavaScript Serverless Functions close to users.
 
-::: warning
-Lagoss is in Alpha. Get access to Lagon Cloud via the TODO ...
+::: info
+The project was forked from [Lagoss](https://github.com/lagossapp/lagoss) with the
+intention to continue development. There is currently a public testing instance
+deployed at <https://app.lagoss.com>. However it should be only used for basic
+testing and data might be deleted at any point. If you want a proper setup,
+please deploy your own instance => [Install my own instance](./self-hosting/installation.md).
 :::
 
 ## Features
@@ -15,6 +19,6 @@ Lagoss is in Alpha. Get access to Lagon Cloud via the TODO ...
 
 ## How it works
 
-Lagon uses V8 Isolates, which are sandboxed environments used to run plain JavaScript. That means each Function's memory is isolated from each others, and you can run a lot of them at the same time with very few resources. [Node.js](https://nodejs.org/), [Electron](https://www.electronjs.org/), [Deno](https://deno.land/) (and [Deno Deploy](https://deno.com/deploy)), [Cloudflare Workers](https://workers.cloudflare.com/) are also using V8 Isolates to execute JavaScript.
+Lagoss uses V8 Isolates, which are sandboxed environments used to run plain JavaScript. That means each Function's memory is isolated from each others, and you can run a lot of them at the same time with very few resources. [Node.js](https://nodejs.org/), [Electron](https://www.electronjs.org/), [Deno](https://deno.land/) (and [Deno Deploy](https://deno.com/deploy)), [Cloudflare Workers](https://workers.cloudflare.com/) are also using V8 Isolates to execute JavaScript.
 
 Starting an Isolate is a lot faster than starting a whole Node.js process, which allows for almost free cold starts.

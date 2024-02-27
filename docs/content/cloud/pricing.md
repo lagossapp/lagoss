@@ -1,4 +1,4 @@
-A plan belongs to an Organization. Additionally, [limits](/cloud/limits) apply to each plan.
+A plan belongs to an Organization. Additionally, [limits](./cloud/limits.md) apply to each plan.
 
 ## Personal
 
@@ -25,4 +25,4 @@ You get access to all of the features in the Personal plan, plus:
 
 ## Enterprise
 
-This plan is designed for customers that require custom limits and/or need a large volume of requests. [Contact us](mailto:contact@lagon.app) to learn more.
+This plan is designed for customers that require custom limits and/or need a large volume of requests. TODO

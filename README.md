@@ -22,7 +22,7 @@ Lagoss is a fork of [Lagon](https://github.com/lagonapp/lagon) an open-source ru
 > intention to continue development. There is currently a public testing instance
 > deployed at <https://app.lagoss.com>. However it should be only used for basic
 > testing and data might be deleted at any point. If you want a proper setup,
-> please deploy your own instance => [Install my own instance](./docs/installation.md).
+> please deploy your own instance => [Install my own instance](https://docs.lagoss.com).
 
 ## Packages
 
@@ -52,7 +52,7 @@ Starting an Isolate is a lot faster than starting a whole Node.js process, which
 
 ## Installation
 
-Learn how you can [install](./docs/installation.md) your own Lagoss instance.
+Learn how you can [install](https://docs.lagoss.com) your own Lagoss instance.
 
 ## License
 
