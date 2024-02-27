@@ -15,13 +15,13 @@ Deploying your own instance of Lagoss is straightforward and only requires some 
 
 ```bash
 # download docker-compose.yml
-wget https://raw.githubusercontent.com/lagossapp/lagoss/main/docs/docker-compose.yml
+wget https://docs.lagoss.com/install/docker-compose.yml
 
 # download .env file
-wget https://raw.githubusercontent.com/lagossapp/lagoss/main/docs/.env.example -O .env
+wget https://docs.lagoss.com/install/.env.example -O .env
 
 # download Caddyfile
-wget https://raw.githubusercontent.com/lagossapp/lagoss/main/docs/Caddyfile
+wget https://docs.lagoss.com/install/Caddyfile
 ```
 
 ### Create Github OAuth app
@@ -32,7 +32,8 @@ TODO describe creating a OAuth app
 
 ### Configure your settings in `.env`
 
-TODO
+Inside the `.env` file are all necessary options needed to deploy a basic
+Lagoss instance. For more advanced options checkout [all configuration options](configuration.md).
 
 ### Start setup
 

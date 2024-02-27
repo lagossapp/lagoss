@@ -46,7 +46,7 @@ services:
     restart: unless-stopped
 
   dashboard:
-    image: lagon/dashboard:${VERSION:-latest}
+    image: ghcr.io/lagoss/dashboard:${LAGOSS_VERSION:-latest}
     environment:
       DATABASE_URL: mysql://lagoss:${MYSQL_ROOT_PASSWORD}@mariadb/lagoss
       REDIS_URL: redis://redis:6379
@@ -68,7 +68,7 @@ services:
     restart: unless-stopped
 
   serverless:
-    image: lagon/serverless:${VERSION:-latest}
+    image: ghcr.io/lagoss/serverless:${LAGOSS_VERSION:-latest}
     environment:
       DATABASE_URL: mysql://lagoss:${MYSQL_ROOT_PASSWORD}@mariadb/lagoss
       REDIS_URL: redis://redis:6379
@@ -92,14 +92,12 @@ services:
     restart: unless-stopped
 
   caddy:
-    build:
-      context: .
-      dockerfile: dockerfile.caddy
+    image: caddy
     ports:
       - 80:80
       # - 443:443
     volumes:
-      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
     restart: unless-stopped
 
 volumes:
