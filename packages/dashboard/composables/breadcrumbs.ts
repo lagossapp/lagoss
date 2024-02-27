@@ -5,7 +5,7 @@ export const useBreadCrumbsStore = defineStore('bread-crumbs', () => {
   const { data: selectedProject } = useAsyncData(
     '/api/projects/xxx',
     async () => {
-      console.log('fetching project', projectName.value);
+      // console.log('fetching project', projectName.value);
       if (projectName.value) {
         return $fetch(`/api/projects/${projectName.value}`);
       }
@@ -20,7 +20,7 @@ export const useBreadCrumbsStore = defineStore('bread-crumbs', () => {
   const { data: selectedOrganization } = useAsyncData(
     '/api/organizations/xxx',
     async () => {
-      console.log('fetching organization', organizationId.value);
+      // console.log('fetching organization', organizationId.value);
       if (organizationId.value) {
         return $fetch(`/api/organizations/${organizationId.value}`);
       }
@@ -45,7 +45,7 @@ export const useBreadCrumbsStore = defineStore('bread-crumbs', () => {
       if (/^\/organizations\//.test(route.path)) {
         organizationId.value = route.params.organizationId as string;
         projectName.value = undefined;
-        console.log('organizationId changed', organizationId.value);
+        // console.log('organizationId changed', organizationId.value);
         return;
       }
 
@@ -61,7 +61,7 @@ export const useBreadCrumbsStore = defineStore('bread-crumbs', () => {
     _selectedProject => {
       if (_selectedProject) {
         organizationId.value = _selectedProject.organizationId;
-        console.log('selectedProject changed', _selectedProject, _selectedProject.organizationId);
+        // console.log('selectedProject changed', _selectedProject, _selectedProject.organizationId);
       }
     },
     { immediate: true },
