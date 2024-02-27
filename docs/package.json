@@ -1,0 +1,15 @@
+{
+  "name": "@lagoss/docs",
+  "type": "module",
+  "devDependencies": {
+    "vitepress": "^1.0.0-rc.44"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  }
+}

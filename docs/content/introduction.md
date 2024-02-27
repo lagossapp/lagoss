@@ -1,17 +1,8 @@
-import { Callout } from 'nextra-theme-docs';
-
 Lagon is an open-source runtime and platform that allows developers to run TypeScript and JavaScript Serverless Functions close to users.
 
-<Callout type="info">
-  Lagon is in Alpha. Get access to Lagon Cloud via the [waitlist](https://tally.so/r/n9q1Rp)
-</Callout>
-
-Current status:
-
-- Dev: In heavy development, features are being added and APIs have breaking changes
-- **Alpha**: Missing features and bugs to fix, progressive access to Lagon Cloud ([waitlist](https://tally.so/r/n9q1Rp))
-- ~Beta~: Stable APIs, last features are being added, Lagon Cloud available without a waitlist
-- ~General Availability~: Cloud and self-hosted versions available for production usage
+::: warning
+Lagoss is in Alpha. Get access to Lagon Cloud via the TODO ...
+:::
 
 ## Features
 
@@ -22,20 +13,8 @@ Current status:
 - CLI to manage Functions and develop locally
 - Deploy at the Edge using the Cloud version, or self-host it
 
-## Roadmap
-
-The roadmap is accessible to anyone on GitHub. Feel free to open an issue to discuss new features that you would like to see implemented.
-
-[See the roadmap on GitHub](https://github.com/orgs/lagonapp/projects/1)
-
 ## How it works
 
 Lagon uses V8 Isolates, which are sandboxed environments used to run plain JavaScript. That means each Function's memory is isolated from each others, and you can run a lot of them at the same time with very few resources. [Node.js](https://nodejs.org/), [Electron](https://www.electronjs.org/), [Deno](https://deno.land/) (and [Deno Deploy](https://deno.com/deploy)), [Cloudflare Workers](https://workers.cloudflare.com/) are also using V8 Isolates to execute JavaScript.
 
 Starting an Isolate is a lot faster than starting a whole Node.js process, which allows for almost free cold starts.
-
-## Sponsors ❤️
-
-Thanks a lot to every current and past sponsor!
-
-![Sponsors list](../../../assets/sponsors.png)

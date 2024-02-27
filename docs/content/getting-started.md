@@ -1,5 +1,3 @@
-import { Tab, Tabs } from 'nextra-theme-docs';
-
 This page will guide you through creating a simple JavaScript/TypeScript Edge Function and deploying it on Lagon Cloud using the CLI. The Function will be deployed globally in [multiple regions](/cloud/regions), and will be accessible through a unique URL.
 
 <div className="steps-container">
@@ -23,28 +21,23 @@ We will now create a new Function, that listens for `Request`s and replies with 
 
 Create a new file called `hello.js` / `hello.ts` and add the following code:
 
-<Tabs items={['JavaScript', 'TypeScript']}>
-  <Tab>
-    ```javascript
-    // hello.js
-    export function handler(request) {
-      return new Response('Hello, <b>World!</b>', {
-        headers: { 'content-type': 'text/html' }
-      })
-    }
-    ```
-  </Tab>
-  <Tab>
-    ```typescript
-    // hello.ts
-    export function handler(request: Request) {
-      return new Response('Hello, <b>World!</b>', {
-        headers: { 'content-type': 'text/html' }
-      })
-    }
-    ```
-  </Tab>
-</Tabs>
+```javascript
+// hello.js
+export function handler(request) {
+  return new Response('Hello, <b>World!</b>', {
+    headers: { 'content-type': 'text/html' }
+  })
+}
+```
+
+```typescript
+// hello.ts
+export function handler(request: Request) {
+  return new Response('Hello, <b>World!</b>', {
+    headers: { 'content-type': 'text/html' }
+  })
+}
+```
 
 ## Deploy the Function
 
@@ -79,36 +72,30 @@ Wait a few seconds, and you should now see a message with an URL, indicating tha
 
 Now that we have a Function deployed, we would like to add a new feature and return the name of the user that is making the request. To do so, we will need to update the Function's code:
 
-<Tabs items={['JavaScript', 'TypeScript']}>
-  <Tab>
-    ```javascript {3-4,6}
-    // hello.js
-    export function handler(request) {
-      const url = new URL(request.url)
-      const name = url.searchParams.get('name') || 'World'
 
-      return new Response(`Hello, <b>${name}!</b>`, {
-        headers: { 'content-type': 'text/html' }
-      })
-    }
-    ```
+```javascript {3-4,6}
+// hello.js
+export function handler(request) {
+  const url = new URL(request.url)
+  const name = url.searchParams.get('name') || 'World'
 
-  </Tab>
-  <Tab>
-    ```typescript {3-4,6}
-    // hello.ts
-    export function handler(request: Request) {
-      const url = new URL(request.url)
-      const name = url.searchParams.get('name') || 'World'
+  return new Response(`Hello, <b>${name}!</b>`, {
+    headers: { 'content-type': 'text/html' }
+  })
+}
+```
 
-      return new Response(`Hello, <b>${name}!</b>`, {
-        headers: { 'content-type': 'text/html' }
-      })
-    }
-    ```
+```typescript {3-4,6}
+// hello.ts
+export function handler(request: Request) {
+  const url = new URL(request.url)
+  const name = url.searchParams.get('name') || 'World'
 
-  </Tab>
-</Tabs>
+  return new Response(`Hello, <b>${name}!</b>`, {
+    headers: { 'content-type': 'text/html' }
+  })
+}
+```
 
 We can now re-deploy the Function with the same command as before, and append `--prod` to automatically promote this new Deployment to Production:
 
