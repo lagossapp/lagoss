@@ -1,0 +1,109 @@
+version: '3'
+
+services:
+  redis:
+    image: redis
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - redis:/data
+    restart: unless-stopped
+
+  mysql:
+    image: mariadb
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: true
+      MYSQL_DATABASE: lagoss
+      MYSQL_USER: lagoss
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql:/var/lib/mysql
+    restart: unless-stopped
+
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    environment:
+      CLICKHOUSE_DB: lagoss
+      CLICKHOUSE_USER: lagoss
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+    volumes:
+      - clickhouse:/var/lib/clickhouse
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio
+    volumes:
+      - minio:/data
+    environment:
+      MINIO_ROOT_USER: lagoss
+      MINIO_ROOT_PASSWORD: ${S3_ROOT_SECRET_ACCESS_KEY}
+    entrypoint: sh
+    command: -c 'mkdir -p /data/lagon && minio server /data --console-address ":9001" --address ":9002"'
+    restart: unless-stopped
+
+  dashboard:
+    image: lagon/dashboard:${VERSION:-latest}
+    environment:
+      DATABASE_URL: mysql://lagoss:${MYSQL_ROOT_PASSWORD}@mariadb/lagoss
+      REDIS_URL: redis://redis:6379
+      S3_ENDPOINT: http://minio:9002
+      S3_REGION: unknown
+      S3_ACCESS_KEY_ID: lagoss
+      S3_SECRET_ACCESS_KEY: ${S3_ROOT_SECRET_ACCESS_KEY}
+      CLICKHOUSE_URL: http://clickhouse:8123
+      CLICKHOUSE_USER: lagoss
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_DATABASE: lagoss
+      LAGON_REGION: local
+    env_file: .env
+    depends_on:
+      - redis
+      - mysql
+      - clickhouse
+      - minio
+    restart: unless-stopped
+
+  serverless:
+    image: lagon/serverless:${VERSION:-latest}
+    environment:
+      DATABASE_URL: mysql://lagoss:${MYSQL_ROOT_PASSWORD}@mariadb/lagoss
+      REDIS_URL: redis://redis:6379
+      S3_ENDPOINT: http://minio:9002
+      S3_REGION: unknown
+      S3_ACCESS_KEY_ID: lagoss
+      S3_SECRET_ACCESS_KEY: ${S3_ROOT_SECRET_ACCESS_KEY}
+      CLICKHOUSE_URL: http://clickhouse:8123
+      CLICKHOUSE_USER: lagoss
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_DATABASE: lagoss
+      LAGON_REGION: local
+      LAGON_ISOLATES_CACHE_SECONDS: 60
+      LAGON_LISTEN_ADDR: 0.0.0.0:4000
+    env_file: .env
+    depends_on:
+      - redis
+      - mysql
+      - clickhouse
+      - minio
+    restart: unless-stopped
+
+  caddy:
+    build:
+      context: .
+      dockerfile: dockerfile.caddy
+    ports:
+      - 80:80
+      # - 443:443
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+    restart: unless-stopped
+
+volumes:
+  redis:
+  mysql:
+  clickhouse:
+  minio:

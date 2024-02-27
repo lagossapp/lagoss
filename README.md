@@ -1,15 +1,11 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./assets/logo-white.png">
-    <source media="(prefers-color-scheme: light)" srcset="./assets/logo-black.png">
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/icon-white.png">
+    <source media="(prefers-color-scheme: light)" srcset="./assets/icon-black.png">
     <img alt="Lagoss logo" height="60px" src="./assets/logo-white.png">
   </picture>
   <p align="center">
     Deploy Serverless Functions at the Edge
-    <br />
-    <br />
-    <a align="center" href="https://discord.lagon.dev" alt="Discord"><img src="https://img.shields.io/discord/996005154753093713" /></a>
-    <a href="https://github.com/lagonapp/lagon/actions/workflows/wpt.yml" alt="web-platform-tests"><img src="https://wpt.lagon.dev" /></a>
   </p>
 </p>
 
@@ -21,14 +17,12 @@
 
 Lagoss is a fork of [Lagon](https://github.com/lagonapp/lagon) an open-source runtime and platform that allows developers to run TypeScript and JavaScript Serverless Functions.
 
-> [!WARNING]
-> **Current status:**
->
+> [!NOTE]
 > The project was forked from [Lagon](https://github.com/lagonapp/lagon) with the
 > intention to continue development. There is currently a public testing instance
 > deployed at <https://app.lagoss.com>. However it should be only used for basic
 > testing and data might be deleted at any point. If you want a proper setup,
-> please deploy your own instance.
+> please deploy your own instance => [Install my own instance](./docs/installation.md).
 
 ## Packages
 
@@ -40,7 +34,6 @@ Lagoss is a fork of [Lagon](https://github.com/lagonapp/lagon) an open-source ru
 - **[serverless](./crates/serverless)** HTTP entrypoint for Functions, using the Runtime and exporting metrics
 - **[ui](./packages/ui)** Design system
 - **[wpt-runner](./crates/wpt-runner)** Run web-platform-tests on Lagoss
-- **[www](./www)** Public website
 
 ## Features
 

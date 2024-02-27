@@ -1,0 +1,10 @@
+{
+	# debug
+	# email you@your-domain.com
+	# admin :2019
+}
+
+*.your-domain.com {
+#  encode zstd gzip
+  reverse_proxy serverless:4000
+}
