@@ -5,7 +5,6 @@
   "private": true,
   "scripts": {
     "start:docs": "pnpm --filter @lagon/docs dev",
-    "start:www": "pnpm --filter @lagon/www dev",
     "test": "turbo test --continue --filter=!@lagon/example-*",
     "build": "turbo build --continue --filter=!@lagon/example-*",
     "lint": "turbo lint --continue",
