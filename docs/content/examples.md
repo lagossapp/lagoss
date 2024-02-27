@@ -1,3 +1,5 @@
+# Examples
+
 We have set up many examples using different libraries and frameworks. Each example has a `lagoss-dev` script that uses [`lagoss dev`](./cli.md#lagoss-dev) to start the example locally, in a few seconds.
 
 ## Basics

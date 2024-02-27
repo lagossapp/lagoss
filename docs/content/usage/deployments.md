@@ -1,3 +1,5 @@
+# Deployments
+
 ## Deploying a new Function
 
 A Function is bound to Deployments: **Production** and **Preview** deployments. [Default and custom Domains](./domains.md) always points to the current production Deployment.

@@ -1,3 +1,5 @@
+# Limits
+
 We have several limits in place to ensure that our service is available to everyone. Some limits depend on the plan you're subscribed to, while others are the same for everyone.
 
 You can contact us if you need to increase some limits.

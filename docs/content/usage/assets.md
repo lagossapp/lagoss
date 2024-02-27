@@ -1,3 +1,5 @@
+# Assets
+
 Lagoss can host and serve assets such as images, CSS files, and JavaScript files. These assets are static files that are not generated dynamically by your Function.
 
 When deploying a Function, you can specify an assets directory using the [`--public` or `-p`](../cli.md#lagoss-deploy) flag. This directory will be served by Lagoss at the root of your Function's URL.

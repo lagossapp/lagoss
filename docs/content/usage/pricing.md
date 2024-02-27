@@ -1,3 +1,5 @@
+# Pricing
+
 A plan belongs to an Organization. Additionally, [limits](./limits.md) apply to each plan.
 
 ## Personal

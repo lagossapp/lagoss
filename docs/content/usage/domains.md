@@ -1,3 +1,5 @@
+# Domains
+
 By default, all Functions are assigned a unique URL, which is a subdomain of `lagoss.com`, pointing to the current production Deployment. The subdomain is always the name of the Function: if your Function is named `my-function`, your unique URL will be `my-function.lagoss.com`.
 
 All domains (default and custom) are automatically assigned an SSL certificate, provided by [Let's Encrypt](https://letsencrypt.org/). They are also automatically renewed before they expire. As such, the first request to a Function using a brand-new custom domain may take a few seconds to generate the SSL certificate.

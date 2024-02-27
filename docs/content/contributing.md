@@ -1,3 +1,5 @@
+# Contributing
+
 Thanks for wanting to contribute! That means a lot to us. You can contribute in many ways, with or without any coding required.
 
 ::: info

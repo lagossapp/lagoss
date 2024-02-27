@@ -1,3 +1,5 @@
+# CLI
+
 The easiest way to deploy and manage Functions is through our [Command-line interface](https://en.wikipedia.org/wiki/Command-line_interface).
 
 ## Installation

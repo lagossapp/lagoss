@@ -1,3 +1,5 @@
+# Cron
+
 Instead of providing an HTTP endpoint, you can create a [Cron expression](https://en.wikipedia.org/wiki/Cron) to automatically execute your Function at the given interval.
 
 ## How it works

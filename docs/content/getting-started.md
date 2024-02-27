@@ -1,3 +1,5 @@
+# Getting started
+
 This page will guide you through creating a simple JavaScript/TypeScript Edge Function and deploying it to Lagoss using the CLI. The Function will be accessible through a unique URL.
 
 ## Installation

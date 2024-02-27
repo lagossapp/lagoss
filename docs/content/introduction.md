@@ -1,3 +1,5 @@
+# Introduction
+
 Lagoss is an open-source runtime and platform that allows developers to run TypeScript and JavaScript Serverless Functions close to users.
 
 ::: info

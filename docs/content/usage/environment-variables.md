@@ -1,3 +1,5 @@
+# Environment variables
+
 You can use Environment Variables to store configuration options, or sensitive information such as API keys, passwords, and tokens.
 
 Environment variables are injected to [`process.env`](http://localhost:3000/runtime-apis#processenv) when your Function is executed. You can access them the same way you would access them in Node.js:

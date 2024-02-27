@@ -1,3 +1,5 @@
+# Logs
+
 You can use the [`console` API](../runtime-apis.md#console) to log messages, objects, errors, warnings, debug information and more.
 
 Four levels of logs are accepted:
