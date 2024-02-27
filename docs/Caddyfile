@@ -1,10 +1,12 @@
 {
 	# debug
 	# email you@your-domain.com
-	# admin :2019
 }
 
 *.your-domain.com {
-#  encode zstd gzip
   reverse_proxy serverless:4000
+}
+
+app.your-domain.com {
+  reverse_proxy dashboard:4000
 }
