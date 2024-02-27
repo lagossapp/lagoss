@@ -12,7 +12,7 @@ export function handler(request: Request): Response {
 }
 ```
 
-By default, it will only contain the `NODE_ENV` variable, which is set to `"production"` when deployed, and to `"development"` when using [`lagoss dev`](./cli.md#lagoss-dev).
+By default, it will only contain the `NODE_ENV` variable, which is set to `"production"` when deployed, and to `"development"` when using [`lagoss dev`](../cli.md#lagoss-dev).
 
 ## Development
 

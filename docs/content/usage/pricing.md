@@ -1,4 +1,4 @@
-A plan belongs to an Organization. Additionally, [limits](./usage/limits.md) apply to each plan.
+A plan belongs to an Organization. Additionally, [limits](./limits.md) apply to each plan.
 
 ## Personal
 

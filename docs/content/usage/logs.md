@@ -1,4 +1,4 @@
-You can use the [`console` API](./runtime-apis.md#console) to log messages, objects, errors, warnings, debug information and more.
+You can use the [`console` API](../runtime-apis.md#console) to log messages, objects, errors, warnings, debug information and more.
 
 Four levels of logs are accepted:
 
@@ -9,7 +9,7 @@ Four levels of logs are accepted:
 
 ## When developing
 
-Using [`lagoss dev`](./cli.md#lagoss-dev), logs are displayed in the terminal.
+Using [`lagoss dev`](../cli.md#lagoss-dev), logs are displayed in the terminal.
 
 ## When deployed
 

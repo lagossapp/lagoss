@@ -1,6 +1,6 @@
 Lagoss can host and serve assets such as images, CSS files, and JavaScript files. These assets are static files that are not generated dynamically by your Function.
 
-When deploying a Function, you can specify an assets directory using the [`--public` or `-p`](./cli.md#lagoss-deploy) flag. This directory will be served by Lagoss at the root of your Function's URL.
+When deploying a Function, you can specify an assets directory using the [`--public` or `-p`](../cli.md#lagoss-deploy) flag. This directory will be served by Lagoss at the root of your Function's URL.
 
 ## Automatic assets serving
 
@@ -37,4 +37,4 @@ In your HTML, you can reference these files using relative paths:
 
 ## Limits
 
-The number of assets per Deployment is limited to 100 for Personal plans, and 1000 for Pro plans. The size of each asset is also limited to prevent abuses. [Learn more about the assets limits](./usage/limits.md).
+The number of assets per Deployment is limited to 100 for Personal plans, and 1000 for Pro plans. The size of each asset is also limited to prevent abuses. [Learn more about the assets limits](./limits.md).

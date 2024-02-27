@@ -8,6 +8,11 @@ export default defineConfig({
 
   srcDir: 'content',
 
+  ignoreDeadLinks: [
+    // ignore all localhost links
+    /^https?:\/\/localhost/,
+  ],
+
   themeConfig: {
     logo: '/icon-white.png',
 

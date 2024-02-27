@@ -38,7 +38,7 @@ Lagoss accepts Cron expressions in the following format:
  0 6 * * Mon            Run every Monday at 06:00
 ```
 
-You can then click "Update" and your Function will be automatically executed at the given interval. Cron Functions only run in a single [region](./usage/regions.md). You can select your preferred region:
+You can then click "Update" and your Function will be automatically executed at the given interval. Cron Functions only run in a single [region](./regions.md). You can select your preferred region:
 
 ![Cron region](/images/cron-region.png)
 
