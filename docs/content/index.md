@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: "Lagoss"
-  text: "An open-source runtime and platform for running JS serverless functions."
-  tagline: "An open-source runtime and platform for running JS serverless functions."
+  text: "serverless JS / TS functions."
+  tagline: "Lagoss is a for of Langon an open-source runtime and platform for running JS / TS serverless functions."
   actions:
     - theme: brand
       text: Get started
