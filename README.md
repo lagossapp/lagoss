@@ -6,6 +6,9 @@
   </picture>
   <p align="center">
     Deploy Serverless Functions at the Edge
+    <br />
+    <br />
+    <a href="https://github.com/lagossapp/lagoss/actions/workflows/wpt.yml" alt="web-platform-tests"><img src="https://wpt.lagoss.com" /></a>
   </p>
 </p>
 
@@ -43,6 +46,10 @@ Lagoss is a fork of [Lagon](https://github.com/lagonapp/lagon) an open-source ru
 - Deploy APIs, SSR(ed) websites, Webhooks endpoints, Cron jobs...
 - CLI to manage Functions and develop locally
 - Deploy at the Edge using the Cloud version, or self-host it
+
+## Contributing
+
+[See the contributing guide](https://docs.lagoss.com/contributing)
 
 ## How it works
 

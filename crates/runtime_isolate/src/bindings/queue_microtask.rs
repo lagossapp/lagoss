@@ -1,4 +1,4 @@
-use lagon_runtime_v8_utils::v8_exception;
+use lagoss_runtime_v8_utils::v8_exception;
 
 pub fn queue_microtask_binding(
     scope: &mut v8::HandleScope,

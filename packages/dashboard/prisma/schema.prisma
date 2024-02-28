@@ -139,7 +139,7 @@ model Deployment {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   functionId   String
-  triggerer    String   @default("Lagon")
+  triggerer    String   @default("Lagoss")
   commit       String?
   isProduction Boolean  @default(false)
   function     Function @relation(fields: [functionId], references: [id])

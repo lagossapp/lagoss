@@ -2,10 +2,10 @@ use anyhow::Result;
 use dashmap::DashMap;
 use futures::StreamExt;
 use hyper::body::Bytes;
-use lagon_runtime_utils::Deployment;
-use lagon_serverless::serverless::start;
-use lagon_serverless_downloader::FakeDownloader;
-use lagon_serverless_pubsub::FakePubSub;
+use lagoss_runtime_utils::Deployment;
+use lagoss_serverless::serverless::start;
+use lagoss_serverless_downloader::FakeDownloader;
+use lagoss_serverless_pubsub::FakePubSub;
 use serial_test::serial;
 use std::{
     collections::{HashMap, HashSet},

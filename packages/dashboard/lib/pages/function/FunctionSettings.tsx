@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { Button, Card, Form, Input, Text, Dialog, Menu, Divider, Dot } from '@lagon/ui';
+import { Button, Card, Form, Input, Text, Dialog, Menu, Divider, Dot } from '@lagoss/ui';
 import { getCurrentDomain, getFullDomain } from 'lib/utils';
 import {
   alphaNumUnderscoreValidator,
@@ -24,7 +24,7 @@ import { trpc } from 'lib/trpc';
 import useFunction from 'lib/hooks/useFunction';
 import { QueryObserverBaseResult } from '@tanstack/react-query';
 import { useScopedI18n } from 'locales';
-import { Copiable, Link } from '@lagon/ui';
+import { Copiable, Link } from '@lagoss/ui';
 import { ComponentProps, ReactNode, useEffect, useState } from 'react';
 import { getHumanFriendlyCron } from 'lib/utils';
 import { isInSubnet } from 'is-in-subnet';
@@ -221,7 +221,7 @@ const FunctionSettings = ({ func, refetch }: FunctionSettingsProps) => {
           description={
             <>
               {t('domains.description')}&nbsp;
-              <Link inline href="https://docs.lagon.app/cloud/domains" target="_blank">
+              <Link inline href="https://docs.lagoss.com/usage/domains" target="_blank">
                 {t('domains.doc')}
               </Link>
             </>
@@ -260,7 +260,7 @@ const FunctionSettings = ({ func, refetch }: FunctionSettingsProps) => {
                     ),
                   })}
                   &nbsp;
-                  <Link href="https://docs.lagon.app/cloud/domains#pointing-your-domain-to-lagon" target="_blank">
+                  <Link href="https://docs.lagoss.com/usage/domains#pointing-your-domain-to-lagoss" target="_blank">
                     {t('domains.add.modal.doc')}
                   </Link>
                 </Text>
@@ -340,7 +340,7 @@ const FunctionSettings = ({ func, refetch }: FunctionSettingsProps) => {
             description={
               <>
                 {t('cron.description')}&nbsp;
-                <Link inline href="https://docs.lagon.app/cloud/cron" target="_blank">
+                <Link inline href="https://docs.lagoss.com/usage/cron" target="_blank">
                   {t('cron.doc')}
                 </Link>
               </>
@@ -414,7 +414,7 @@ const FunctionSettings = ({ func, refetch }: FunctionSettingsProps) => {
             description={
               <>
                 {t('env.description')}&nbsp;
-                <Link inline href="https://docs.lagon.app/cloud/environment-variables" target="_blank">
+                <Link inline href="https://docs.lagoss.com/usage/environment-variables" target="_blank">
                   {t('env.doc')}
                 </Link>
               </>

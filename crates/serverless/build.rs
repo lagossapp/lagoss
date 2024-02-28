@@ -1,5 +1,5 @@
-use lagon_runtime::{options::RuntimeOptions, Runtime};
-use lagon_runtime_isolate::{options::IsolateOptions, Isolate};
+use lagoss_runtime::{options::RuntimeOptions, Runtime};
+use lagoss_runtime_isolate::{options::IsolateOptions, Isolate};
 
 fn main() {
     let runtime = Runtime::new(RuntimeOptions::default());

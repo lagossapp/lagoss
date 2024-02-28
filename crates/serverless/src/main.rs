@@ -1,12 +1,12 @@
 use anyhow::Result;
-use lagon_runtime::{options::RuntimeOptions, Runtime};
-use lagon_serverless::clickhouse::{create_client, run_migrations};
-use lagon_serverless::deployments::get_deployments;
-use lagon_serverless::get_region;
-use lagon_serverless::serverless::start;
-use lagon_serverless_downloader::{get_bucket, S3BucketDownloader};
-use lagon_serverless_logger::init_logger;
-use lagon_serverless_pubsub::RedisPubSub;
+use lagoss_runtime::{options::RuntimeOptions, Runtime};
+use lagoss_serverless::clickhouse::{create_client, run_migrations};
+use lagoss_serverless::deployments::get_deployments;
+use lagoss_serverless::get_region;
+use lagoss_serverless::serverless::start;
+use lagoss_serverless_downloader::{get_bucket, S3BucketDownloader};
+use lagoss_serverless_logger::init_logger;
+use lagoss_serverless_pubsub::RedisPubSub;
 use log::info;
 use metrics_exporter_prometheus::PrometheusBuilder;
 use mysql::{Opts, Pool};
@@ -34,8 +34,8 @@ async fn main() -> Result<()> {
     let _flush_guard = init_logger(get_region().clone()).expect("Failed to init logger");
 
     let runtime = Runtime::new(RuntimeOptions::default());
-    let addr: SocketAddr = env::var("LAGON_LISTEN_ADDR")
-        .expect("LAGON_LISTEN_ADDR must be set")
+    let addr: SocketAddr = env::var("LAGOSS_LISTEN_ADDR")
+        .expect("LAGOSS_LISTEN_ADDR must be set")
         .parse()?;
     let prometheus_addr: SocketAddr = env::var("PROMETHEUS_LISTEN_ADDR")
         .expect("PROMETHEUS_LISTEN_ADDR must be set")

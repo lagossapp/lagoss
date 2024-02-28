@@ -1,4 +1,4 @@
-use lagon_runtime_v8_utils::v8_string;
+use lagoss_runtime_v8_utils::v8_string;
 use std::{collections::HashMap, rc::Rc, time::Duration};
 
 const JS_RUNTIME: &str = include_str!("../runtime.js");

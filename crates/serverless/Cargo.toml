@@ -1,5 +1,5 @@
 [package]
-name = "lagon-serverless"
+name = "lagoss-serverless"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,13 +7,13 @@ edition = "2021"
 hyper = { version = "0.14.27", features = ["server", "http1", "runtime", "stream"] }
 tokio = { version = "1", features = ["rt-multi-thread", "sync", "time", "macros", "signal"] }
 tokio-util = { version = "0.7.8", features = ["rt"] }
-lagon-runtime = { path = "../runtime" }
-lagon-runtime-http = { path = "../runtime_http" }
-lagon-runtime-isolate = { path = "../runtime_isolate" }
-lagon-runtime-utils = { path = "../runtime_utils" }
-lagon-serverless-logger = { path = "../serverless_logger" }
-lagon-serverless-downloader = { path = "../serverless_downloader" }
-lagon-serverless-pubsub = { path = "../serverless_pubsub" }
+lagoss-runtime = { path = "../runtime" }
+lagoss-runtime-http = { path = "../runtime_http" }
+lagoss-runtime-isolate = { path = "../runtime_isolate" }
+lagoss-runtime-utils = { path = "../runtime_utils" }
+lagoss-serverless-logger = { path = "../serverless_logger" }
+lagoss-serverless-downloader = { path = "../serverless_downloader" }
+lagoss-serverless-pubsub = { path = "../serverless_pubsub" }
 flume = "0.10.14"
 mysql = { version = "24.0.0", default-features = false, features = ["default-rustls"] }
 dotenv = "0.15.0"
@@ -36,8 +36,8 @@ uuid = { version = "1.4.0", features = ["v4", "fast-rng"] }
 tikv-jemallocator = "0.5"
 
 [build-dependencies]
-lagon-runtime = { path = "../runtime" }
-lagon-runtime-isolate = { path = "../runtime_isolate" }
+lagoss-runtime = { path = "../runtime" }
+lagoss-runtime-isolate = { path = "../runtime_isolate" }
 flume = "0.10.14"
 
 [dev-dependencies]
@@ -47,4 +47,4 @@ clickhouse = { version = "0.11.5", features = ["test-util"] }
 
 [features]
 default = []
-test = ["lagon-runtime-utils/test"]
+test = ["lagoss-runtime-utils/test"]

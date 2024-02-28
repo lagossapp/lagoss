@@ -10,14 +10,14 @@
     if (init?.body || (isInputRequest && (input as Request).body)) {
       const paramBody = init?.body || (input as Request).body;
 
-      if (globalThis.__lagon__.isIterable(paramBody)) {
-        body = globalThis.__lagon__.TEXT_DECODER.decode(paramBody);
+      if (globalThis.__lagoss__.isIterable(paramBody)) {
+        body = globalThis.__lagoss__.TEXT_DECODER.decode(paramBody);
       } else if (paramBody instanceof ReadableStream) {
         body = '';
 
         // @ts-expect-error iterate over the stream
         for await (const chunk of paramBody) {
-          body += globalThis.__lagon__.TEXT_DECODER.decode(chunk);
+          body += globalThis.__lagoss__.TEXT_DECODER.decode(chunk);
         }
       } else {
         if (typeof paramBody !== 'string') {
@@ -54,7 +54,7 @@
     try {
       checkAborted();
 
-      const response = await LagonAsync.fetch({
+      const response = await LagossAsync.fetch({
         m: method,
         u: url,
         b: body,

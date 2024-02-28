@@ -20,7 +20,7 @@ export const StatusBadge = () => {
   const [status, setStatus] = useState<Status>('up');
 
   useEffect(() => {
-    fetch('https://status.lagon.app/status.json')
+    fetch('https://status.lagoss.com/status.json')
       .then(res => res.json())
       .then(data => {
         setStatus(data.indicator);
@@ -32,7 +32,7 @@ export const StatusBadge = () => {
 
   return (
     <a
-      href="https://status.lagon.app"
+      href="https://status.lagoss.com"
       target="_blank"
       className="mr-auto flex items-center gap-2 transition hover:text-stone-800 dark:hover:text-stone-200"
     >

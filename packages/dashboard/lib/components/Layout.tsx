@@ -2,7 +2,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { HTMLAttributeAnchorTarget, ReactNode, Suspense, useCallback, useMemo } from 'react';
-import { Button, Menu, Divider, EmptyState } from '@lagon/ui';
+import { Button, Menu, Divider, EmptyState } from '@lagoss/ui';
 import {
   ChevronDownIcon,
   CogIcon,
@@ -105,7 +105,7 @@ const Layout = ({ title, anonymous, children }: LayoutProps) => {
   return (
     <>
       <Head>
-        <title>{title} - Lagon</title>
+        <title>{title} - Lagoss</title>
         {theme === 'Dark' ? (
           <link rel="icon" href="/favicon-white.ico" />
         ) : (
@@ -124,7 +124,7 @@ const Layout = ({ title, anonymous, children }: LayoutProps) => {
                     <Link href="/">
                       <Image
                         src={`/icon-${theme === 'Dark' ? 'white' : 'black'}.png`}
-                        alt="Lagon logo"
+                        alt="Lagoss logo"
                         width="24"
                         height="24"
                       />
@@ -135,7 +135,7 @@ const Layout = ({ title, anonymous, children }: LayoutProps) => {
                     <HeaderLink href="/settings" selected={asPath.startsWith('/settings')}>
                       {t('header.settings')}
                     </HeaderLink>
-                    <HeaderLink href="https://docs.lagon.app" target="_blank" selected={false}>
+                    <HeaderLink href="https://docs.lagoss.com" target="_blank" selected={false}>
                       {t('header.documentation')}
                       <ArrowTopRightOnSquareIcon className="h-4 w-4" />
                     </HeaderLink>

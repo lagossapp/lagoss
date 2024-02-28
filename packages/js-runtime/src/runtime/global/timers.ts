@@ -15,7 +15,7 @@
       repeat,
     });
 
-    LagonAsync.sleep(timeout).then(() => {
+    LagossAsync.sleep(timeout).then(() => {
       const timer = timers.get(id);
 
       if (timer) {
@@ -46,6 +46,6 @@
   };
 
   globalThis.queueMicrotask = callback => {
-    LagonSync.queueMicrotask(AsyncContext.wrap(callback));
+    LagossSync.queueMicrotask(AsyncContext.wrap(callback));
   };
 })(globalThis);

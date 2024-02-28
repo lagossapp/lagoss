@@ -9,7 +9,7 @@
       if (blobParts) {
         const chunks = blobParts.map(blobPart => {
           if (typeof blobPart === 'string') {
-            return globalThis.__lagon__.TEXT_ENCODER.encode(blobPart);
+            return globalThis.__lagoss__.TEXT_ENCODER.encode(blobPart);
           } else if (blobPart instanceof ArrayBuffer || blobPart instanceof Uint8Array) {
             return new Uint8Array(blobPart);
           } else if (blobPart instanceof Blob) {
@@ -64,7 +64,7 @@
     }
 
     text(): Promise<string> {
-      return Promise.resolve(globalThis.__lagon__.TEXT_DECODER.decode(this.buffer));
+      return Promise.resolve(globalThis.__lagoss__.TEXT_DECODER.decode(this.buffer));
     }
   };
 })(globalThis);

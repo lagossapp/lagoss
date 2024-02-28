@@ -1,8 +1,8 @@
 use anyhow::Result;
-use lagon_runtime_crypto::{
+use lagoss_runtime_crypto::{
     extract_algorithm_object, extract_cryptokey_key_value, methods::decrypt, Algorithm,
 };
-use lagon_runtime_v8_utils::extract_v8_uint8array;
+use lagoss_runtime_v8_utils::extract_v8_uint8array;
 
 use crate::bindings::{BindingResult, PromiseResult};
 

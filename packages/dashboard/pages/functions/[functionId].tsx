@@ -4,7 +4,7 @@ import FunctionOverview from 'lib/pages/function/FunctionOverview';
 import FunctionSettings from 'lib/pages/function/FunctionSettings';
 import FunctionDeployments from 'lib/pages/function/FunctionDeployments';
 import FunctionLogs from 'lib/pages/function/FunctionLogs';
-import { Button, Nav } from '@lagon/ui';
+import { Button, Nav } from '@lagoss/ui';
 import { PlayIcon } from '@heroicons/react/24/outline';
 import Head from 'next/head';
 import LayoutTitle from 'lib/components/LayoutTitle';
@@ -34,7 +34,7 @@ const Function = () => {
     >
       {func?.name ? (
         <Head>
-          <title>{func.name} - Lagon</title>
+          <title>{func.name} - Lagoss</title>
         </Head>
       ) : null}
       <Nav defaultValue="overview">

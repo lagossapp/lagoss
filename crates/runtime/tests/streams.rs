@@ -1,6 +1,6 @@
 use hyper::{Request, Response};
-use lagon_runtime_http::{RunResult, StreamResult};
-use lagon_runtime_isolate::options::IsolateOptions;
+use lagoss_runtime_http::{RunResult, StreamResult};
+use lagoss_runtime_isolate::options::IsolateOptions;
 
 mod utils;
 
@@ -89,7 +89,7 @@ async fn custom_response() {
         {
             status: 201,
             headers: {
-                'x-lagon': 'test',
+                'x-lagoss': 'test',
             },
         },
     );
@@ -109,7 +109,7 @@ async fn custom_response() {
     utils::assert_run_result(
         &receiver,
         RunResult::Stream(StreamResult::Start(
-            Response::builder().status(201).header("x-lagon", "test"),
+            Response::builder().status(201).header("x-lagoss", "test"),
         )),
     )
     .await;

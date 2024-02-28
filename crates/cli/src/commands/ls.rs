@@ -30,7 +30,7 @@ pub async fn ls(directory: Option<PathBuf>) -> Result<()> {
 
     if config.token.is_none() {
         return Err(anyhow!(
-            "You are not logged in. Please log in with `lagon login`",
+            "You are not logged in. Please log in with `lagoss login`",
         ));
     }
 
@@ -63,7 +63,7 @@ pub async fn ls(directory: Option<PathBuf>) -> Result<()> {
                 println!(
                     "{} Production: {} {}",
                     style("●").black().bright(),
-                    style(format!("https://{}.lagon.dev", deployment.id))
+                    style(format!("https://{}.lagoss.com", deployment.id))
                         .blue()
                         .underlined(),
                     style(format!("({})", deployment.created_at))
@@ -74,7 +74,7 @@ pub async fn ls(directory: Option<PathBuf>) -> Result<()> {
                 println!(
                     "{} Preview: {} {}",
                     style("○").black().bright(),
-                    style(format!("https://{}.lagon.dev", deployment.id))
+                    style(format!("https://{}.lagoss.com", deployment.id))
                         .blue()
                         .underlined(),
                     style(format!("({})", deployment.created_at))

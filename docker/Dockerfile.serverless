@@ -18,7 +18,7 @@ COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
 COPY . .
 COPY --from=js-runtime /app/dist/index.js /app/crates/runtime_isolate/runtime.js
-RUN cargo build --release --bin lagon-serverless
+RUN cargo build --release --bin lagoss-serverless
 
 FROM chef AS runtime
 WORKDIR /app
@@ -27,6 +27,6 @@ RUN apt-get update -y \
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
-COPY --from=builder /app/target/release/lagon-serverless /usr/local/bin
+COPY --from=builder /app/target/release/lagoss-serverless /usr/local/bin
 
-ENTRYPOINT ["/usr/local/bin/lagon-serverless"]
+ENTRYPOINT ["/usr/local/bin/lagoss-serverless"]

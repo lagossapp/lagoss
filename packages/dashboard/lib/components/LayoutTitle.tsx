@@ -1,5 +1,5 @@
 import { ComponentProps, ReactElement, ReactNode } from 'react';
-import { Dot, Text } from '@lagon/ui';
+import { Dot, Text } from '@lagoss/ui';
 
 type LayoutTitleProps = {
   title: string;

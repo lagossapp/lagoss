@@ -3,7 +3,7 @@ use std::io::Write;
 use super::CompressionInner;
 use crate::Isolate;
 use anyhow::Result;
-use lagon_runtime_v8_utils::{extract_v8_uint8array, v8_exception, v8_uint8array};
+use lagoss_runtime_v8_utils::{extract_v8_uint8array, v8_exception, v8_uint8array};
 
 fn compression_write(
     scope: &mut v8::HandleScope,

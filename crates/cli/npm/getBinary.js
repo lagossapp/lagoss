@@ -9,36 +9,36 @@ function getPlatform() {
 
   if (type === 'Windows_NT') {
     return {
-      platform: 'lagon-win-x64',
-      name: 'lagon.exe',
+      platform: 'lagoss-win-x64',
+      name: 'lagoss.exe',
     };
   }
 
   if (type === 'Linux' && arch === 'x64') {
     return {
-      platform: 'lagon-linux-x64',
-      name: 'lagon',
+      platform: 'lagoss-linux-x64',
+      name: 'lagoss',
     };
   }
 
   if (type === 'Linux' && arch === 'arm64') {
     return {
-      platform: 'lagon-linux-arm64',
-      name: 'lagon',
+      platform: 'lagoss-linux-arm64',
+      name: 'lagoss',
     };
   }
 
   if (type === 'Darwin' && arch === 'x64') {
     return {
-      platform: 'lagon-darwin-x64',
-      name: 'lagon',
+      platform: 'lagoss-darwin-x64',
+      name: 'lagoss',
     };
   }
 
   if (type === 'Darwin' && arch === 'arm64') {
     return {
-      platform: 'lagon-darwin-arm64',
-      name: 'lagon',
+      platform: 'lagoss-darwin-arm64',
+      name: 'lagoss',
     };
   }
 
@@ -51,8 +51,8 @@ export function getBinary() {
 
   const { name: packageName, version } = customRequire('../package.json');
 
-  const url = `https://github.com/lagonapp/lagon/releases/download/${packageName}@${version}/${platform}.tar.gz`;
-  const installDirectory = path.join(os.homedir(), '.lagon');
+  const url = `https://github.com/lagossapp/lagoss/releases/download/${packageName}@${version}/${platform}.tar.gz`;
+  const installDirectory = path.join(os.homedir(), '.lagoss');
 
   return new Binary(url, { name, installDirectory });
 }
