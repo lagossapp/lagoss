@@ -1,5 +1,5 @@
 [package]
-name = "lagon-serverless-pubsub"
+name = "lagoss-serverless-pubsub"
 version = "0.1.0"
 edition = "2021"
 

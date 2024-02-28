@@ -1,5 +1,5 @@
-use lagon_runtime_crypto::methods::random_values;
-use lagon_runtime_v8_utils::{v8_exception, v8_integer};
+use lagoss_runtime_crypto::methods::random_values;
+use lagoss_runtime_v8_utils::{v8_exception, v8_integer};
 
 pub fn random_values_binding(
     scope: &mut v8::HandleScope,

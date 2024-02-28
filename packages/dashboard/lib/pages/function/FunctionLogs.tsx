@@ -23,7 +23,7 @@ const Content = ({ func, level, timeframe }: ContentProps) => {
         title={t('empty.title')}
         description={t('empty.description')}
         action={
-          <Button href="https://docs.lagon.app/cloud/logs" target="_blank">
+          <Button href="https://docs.lagoss.com/usage/logs" target="_blank">
             {t('empty.action')}
           </Button>
         }

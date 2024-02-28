@@ -7,6 +7,6 @@
     "test": "cargo test -F test",
     "build": "cargo build",
     "lint": "cargo clippy -- -Dwarnings --no-deps",
-    "debug": "cargo build && rust-lldb ../../target/debug/lagon-serverless"
+    "debug": "cargo build && rust-lldb ../../target/debug/lagoss-serverless"
   }
 }

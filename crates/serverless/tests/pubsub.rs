@@ -1,9 +1,9 @@
 use anyhow::Result;
 use dashmap::DashMap;
-use lagon_runtime_utils::response::{PAGE_403, PAGE_404};
-use lagon_serverless::serverless::start;
-use lagon_serverless_downloader::FakeDownloader;
-use lagon_serverless_pubsub::{FakePubSub, PubSubMessage, PubSubMessageKind};
+use lagoss_runtime_utils::response::{PAGE_403, PAGE_404};
+use lagoss_serverless::serverless::start;
+use lagoss_serverless_downloader::FakeDownloader;
+use lagoss_serverless_pubsub::{FakePubSub, PubSubMessage, PubSubMessageKind};
 use serial_test::serial;
 use std::{sync::Arc, time::Duration};
 
@@ -134,7 +134,7 @@ async fn assign_correct_domains_prod() -> Result<()> {
 
     let response = client
         .get("http://127.0.0.1:4000")
-        .header("host", "simple.lagon.dev")
+        .header("host", "simple.lagoss.com")
         .send()
         .await?;
     assert_eq!(response.status(), 200);
@@ -195,7 +195,7 @@ async fn assign_correct_domains_dev() -> Result<()> {
 
     let response = client
         .get("http://127.0.0.1:4000")
-        .header("host", "simple.lagon.dev")
+        .header("host", "simple.lagoss.com")
         .send()
         .await?;
     assert_eq!(response.status(), 200);

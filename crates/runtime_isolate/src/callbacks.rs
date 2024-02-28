@@ -1,4 +1,4 @@
-use lagon_runtime_v8_utils::v8_string;
+use lagoss_runtime_v8_utils::v8_string;
 
 use crate::get_exception_message;
 

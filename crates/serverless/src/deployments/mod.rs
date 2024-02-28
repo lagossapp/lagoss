@@ -2,8 +2,8 @@ use crate::get_region;
 use anyhow::{anyhow, Result};
 use dashmap::DashMap;
 use futures::{stream::FuturesUnordered, StreamExt};
-use lagon_runtime_utils::{Deployment, DEPLOYMENTS_DIR};
-use lagon_serverless_downloader::Downloader;
+use lagoss_runtime_utils::{Deployment, DEPLOYMENTS_DIR};
+use lagoss_serverless_downloader::Downloader;
 use log::{error, info, warn};
 use mysql::{prelude::Queryable, PooledConn};
 use serde::Deserialize;
@@ -110,7 +110,7 @@ INNER JOIN Function
     ON Deployment.functionId = Function.id
 LEFT JOIN Domain
     ON Function.id = Domain.functionId
-LEFT JOIN EnvVariable 
+LEFT JOIN EnvVariable
     ON Function.id = EnvVariable.functionId
 WHERE
     Function.cron IS NULL

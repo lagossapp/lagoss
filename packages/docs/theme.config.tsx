@@ -4,9 +4,9 @@ import { DocsThemeConfig, useTheme } from 'nextra-theme-docs';
 
 const config: DocsThemeConfig = {
   project: {
-    link: 'https://github.com/lagonapp/lagon',
+    link: 'https://github.com/lagossapp/lagoss',
   },
-  docsRepositoryBase: 'https://github.com/lagonapp/lagon/blob/main/packages/docs',
+  docsRepositoryBase: 'https://github.com/lagossapp/lagoss/blob/main/packages/docs',
   banner: {
     key: 'alpha',
     text: '🚧 This documentation is not complete yet as Lagoss is in Alpha.',
@@ -32,7 +32,7 @@ const config: DocsThemeConfig = {
         name="description"
         content="Lagoss is an open-source runtime and platform that allows developers to run TypeScript and JavaScript Functions at the Edge, close to users."
       />
-      <meta property="og:url" content="https://lagon.app" />
+      <meta property="og:url" content="https://lagoss.app" />
       <meta property="og:type" content="website" />
       <meta property="og:title" content="Lagoss" />
       <meta
@@ -47,7 +47,7 @@ const config: DocsThemeConfig = {
     </>
   ),
   chat: {
-    link: 'https://discord.lagon.dev/',
+    link: 'https://discord.lagoss.dev/',
   },
 };
 

@@ -12,7 +12,7 @@ export default function (): Adapter {
       const bucket = 'build/public';
 
       const files = fileURLToPath(new URL('../files', import.meta.url).href);
-      const tmp = builder.getBuildDirectory('lagon-tmp');
+      const tmp = builder.getBuildDirectory('lagoss-tmp');
 
       builder.rimraf(tmp);
       builder.mkdirp(tmp);

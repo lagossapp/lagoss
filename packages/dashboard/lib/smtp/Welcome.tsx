@@ -22,7 +22,7 @@ export function Welcome({ name }: WelcomeProps) {
       </Preview>
       <Section style={main}>
         <Container style={container}>
-          <Img src="https://dash.lagon.app/images/logo-black.png" width="170" height="50" alt="Lagoss" style={logo} />
+          <Img src="https://app.lagoss.com/images/logo-black.png" width="170" height="50" alt="Lagoss" style={logo} />
           <Text style={paragraph}>Hi {name},</Text>
           <Text style={paragraph}>
             Welcome to Lagoss, an open-source runtime and platform that allows developers to run TypeScript and
@@ -32,7 +32,7 @@ export function Welcome({ name }: WelcomeProps) {
             We are excited to have you on board! Start your journey by deploying your first Function:
           </Text>
           <Section style={btnContainer}>
-            <Button pX={14} pY={10} style={button} href="https://docs.lagon.app/get-started">
+            <Button pX={14} pY={10} style={button} href="https://docs.lagoss.com/get-started">
               Get started guide
             </Button>
           </Section>

@@ -107,7 +107,7 @@ export default function createIntegration(args?: Options): AstroIntegration {
         }
 
         console.log();
-        console.log('Run `lagon dev` / `lagon deploy` to start your app!');
+        console.log('Run `lagoss dev` / `lagoss deploy` to start your app!');
         console.log();
       },
     },

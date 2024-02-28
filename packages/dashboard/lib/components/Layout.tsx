@@ -135,7 +135,7 @@ const Layout = ({ title, anonymous, children }: LayoutProps) => {
                     <HeaderLink href="/settings" selected={asPath.startsWith('/settings')}>
                       {t('header.settings')}
                     </HeaderLink>
-                    <HeaderLink href="https://docs.lagon.app" target="_blank" selected={false}>
+                    <HeaderLink href="https://docs.lagoss.com" target="_blank" selected={false}>
                       {t('header.documentation')}
                       <ArrowTopRightOnSquareIcon className="h-4 w-4" />
                     </HeaderLink>

@@ -20,7 +20,7 @@ const FunctionsList = () => {
           description={t('empty.description')}
           image="/images/functions-empty.png"
           action={
-            <Button variant="primary" size="lg" href="https://docs.lagon.app/get-started" target="_blank">
+            <Button variant="primary" size="lg" href="https://docs.lagoss.com/get-started" target="_blank">
               {t('empty.action')}
             </Button>
           }

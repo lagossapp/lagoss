@@ -11,11 +11,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lagonapp/lagon"
+    "url": "https://github.com/lagossapp/lagoss"
   },
-  "homepage": "https://github.com/lagonapp/lagon/tree/main/packages/integrations/sveltekit",
+  "homepage": "https://github.com/lagossapp/lagoss/tree/main/packages/integrations/sveltekit",
   "keywords": [
-    "lagon",
+    "lagoss",
     "serverless",
     "edge",
     "integration",

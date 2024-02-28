@@ -6,7 +6,7 @@ use hyper::{
     http::response::Builder,
     Body, Response,
 };
-use lagon_runtime_http::{RunResult, StreamResult};
+use lagoss_runtime_http::{RunResult, StreamResult};
 use std::{future::Future, sync::Arc};
 
 pub const PAGE_404: &str = include_str!("../public/404.html");

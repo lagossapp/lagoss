@@ -8,8 +8,8 @@
     Deploy Serverless Functions at the Edge
     <br />
     <br />
-    <a align="center" href="https://discord.lagon.dev" alt="Discord"><img src="https://img.shields.io/discord/996005154753093713" /></a>
-    <a href="https://github.com/lagonapp/lagon/actions/workflows/wpt.yml" alt="web-platform-tests"><img src="https://wpt.lagon.dev" /></a>
+    <a align="center" href="https://discord.lagoss.com" alt="Discord"><img src="https://img.shields.io/discord/996005154753093713" /></a>
+    <a href="https://github.com/lagossapp/lagoss/actions/workflows/wpt.yml" alt="web-platform-tests"><img src="https://wpt.lagoss.com" /></a>
   </p>
 </p>
 
@@ -54,11 +54,11 @@ Current status:
 
 The roadmap is accessible to anyone on GitHub. Feel free to open an issue to discuss new features that you would like to see implemented.
 
-[See the roadmap on GitHub](https://github.com/orgs/lagonapp/projects/1)
+[See the roadmap on GitHub](https://github.com/orgs/lagossapp/projects/1)
 
 ## Contributing
 
-[See the contributing guide](https://docs.lagon.app/contributing)
+[See the contributing guide](https://docs.lagoss.com/contributing)
 
 ## How it works
 

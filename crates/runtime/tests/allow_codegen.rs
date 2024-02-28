@@ -1,5 +1,5 @@
 use hyper::{header::CONTENT_TYPE, Body, Request, Response};
-use lagon_runtime_isolate::options::IsolateOptions;
+use lagoss_runtime_isolate::options::IsolateOptions;
 
 mod utils;
 

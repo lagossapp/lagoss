@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
         return false;
       }
 
-      if (process.env.LAGON_RESTRICT_LOGIN === 'false') {
+      if (process.env.LAGOSS_RESTRICT_LOGIN === 'false') {
         return true;
       }
 

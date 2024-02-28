@@ -24,7 +24,7 @@ const FunctionDeployments = ({ func, refetch }: FunctionDeploymentsProps) => {
           title={t('empty.title')}
           description={t('empty.description')}
           action={
-            <Button href="https://docs.lagon.app/cloud/deployments" target="_blank">
+            <Button href="https://docs.lagoss.com/cloud/deployments" target="_blank">
               {t('empty.action')}
             </Button>
           }

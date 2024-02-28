@@ -1,6 +1,6 @@
 use hyper::Request;
-use lagon_runtime_http::RunResult;
-use lagon_runtime_isolate::options::IsolateOptions;
+use lagoss_runtime_http::RunResult;
+use lagoss_runtime_isolate::options::IsolateOptions;
 
 mod utils;
 

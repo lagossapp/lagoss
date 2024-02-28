@@ -111,7 +111,7 @@ declare global {
     ): Promise<ArrayBuffer>;
     sleep: (ms: number) => Promise<void>;
   };
-  var __lagon__: {
+  var __lagoss__: {
     isIterable: (value: unknown) => value is ArrayBuffer;
     parseMultipart: (headers: Headers, body?: string) => FormData;
     TEXT_ENCODER: TextEncoder;

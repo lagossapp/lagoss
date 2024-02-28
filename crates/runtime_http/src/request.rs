@@ -1,6 +1,6 @@
 use anyhow::{anyhow, Result};
 use hyper::{body::Bytes, http::request::Parts, Body, Method, Request};
-use lagon_runtime_v8_utils::{
+use lagoss_runtime_v8_utils::{
     extract_v8_headers_object, extract_v8_string, v8_headers_object, v8_string,
 };
 

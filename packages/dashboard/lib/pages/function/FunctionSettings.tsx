@@ -221,7 +221,7 @@ const FunctionSettings = ({ func, refetch }: FunctionSettingsProps) => {
           description={
             <>
               {t('domains.description')}&nbsp;
-              <Link inline href="https://docs.lagon.app/cloud/domains" target="_blank">
+              <Link inline href="https://docs.lagoss.com/cloud/domains" target="_blank">
                 {t('domains.doc')}
               </Link>
             </>
@@ -260,7 +260,7 @@ const FunctionSettings = ({ func, refetch }: FunctionSettingsProps) => {
                     ),
                   })}
                   &nbsp;
-                  <Link href="https://docs.lagon.app/cloud/domains#pointing-your-domain-to-lagon" target="_blank">
+                  <Link href="https://docs.lagoss.com/usage/domains#pointing-your-domain-to-lagoss" target="_blank">
                     {t('domains.add.modal.doc')}
                   </Link>
                 </Text>
@@ -340,7 +340,7 @@ const FunctionSettings = ({ func, refetch }: FunctionSettingsProps) => {
             description={
               <>
                 {t('cron.description')}&nbsp;
-                <Link inline href="https://docs.lagon.app/cloud/cron" target="_blank">
+                <Link inline href="https://docs.lagoss.com/cloud/cron" target="_blank">
                   {t('cron.doc')}
                 </Link>
               </>
@@ -414,7 +414,7 @@ const FunctionSettings = ({ func, refetch }: FunctionSettingsProps) => {
             description={
               <>
                 {t('env.description')}&nbsp;
-                <Link inline href="https://docs.lagon.app/cloud/environment-variables" target="_blank">
+                <Link inline href="https://docs.lagoss.com/cloud/environment-variables" target="_blank">
                   {t('env.doc')}
                 </Link>
               </>
