@@ -46,7 +46,7 @@ services:
     restart: unless-stopped
 
   dashboard:
-    image: ghcr.io/lagoss/dashboard:${LAGOSS_VERSION:-latest}
+    image: ghcr.io/lagossapp/dashboard:${LAGOSS_VERSION:-latest}
     environment:
       DATABASE_URL: mysql://lagoss:${MYSQL_ROOT_PASSWORD}@mariadb/lagoss
       REDIS_URL: redis://redis:6379
@@ -68,7 +68,7 @@ services:
     restart: unless-stopped
 
   serverless:
-    image: ghcr.io/lagoss/serverless:${LAGOSS_VERSION:-latest}
+    image: ghcr.io/lagossapp/serverless:${LAGOSS_VERSION:-latest}
     environment:
       DATABASE_URL: mysql://lagoss:${MYSQL_ROOT_PASSWORD}@mariadb/lagoss
       REDIS_URL: redis://redis:6379
