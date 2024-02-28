@@ -1,5 +1,5 @@
 use anyhow::Result;
-use lagon_runtime_crypto::{
+use lagoss_runtime_crypto::{
     extract_generate_key_algorithm, methods::generate_key, KeyGenAlgorithm,
 };
 

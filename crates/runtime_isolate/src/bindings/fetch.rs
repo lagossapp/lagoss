@@ -1,6 +1,6 @@
 use anyhow::{anyhow, Result};
 use hyper::{Body, Request};
-use lagon_runtime_http::request_from_v8;
+use lagoss_runtime_http::request_from_v8;
 use reqwest::{redirect::Policy, Client, ClientBuilder};
 use std::sync::OnceLock;
 

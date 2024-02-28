@@ -1804,7 +1804,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "lagon-cli"
+name = "lagoss-cli"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -1816,10 +1816,10 @@ dependencies = [
  "flume",
  "hyper",
  "indicatif",
- "lagon-runtime",
- "lagon-runtime-http",
- "lagon-runtime-isolate",
- "lagon-runtime-utils",
+ "lagoss-runtime",
+ "lagoss-runtime-http",
+ "lagoss-runtime-isolate",
+ "lagoss-runtime-utils",
  "notify",
  "pathdiff",
  "reqwest",
@@ -1832,14 +1832,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "lagon-runtime"
+name = "lagoss-runtime"
 version = "0.1.0"
 dependencies = [
  "flume",
  "httptest",
  "hyper",
- "lagon-runtime-http",
- "lagon-runtime-isolate",
+ "lagoss-runtime-http",
+ "lagoss-runtime-isolate",
  "log",
  "serial_test",
  "tokio",
@@ -1847,7 +1847,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "lagon-runtime-crypto"
+name = "lagoss-runtime-crypto"
 version = "0.1.0"
 dependencies = [
  "aes",
@@ -1856,7 +1856,7 @@ dependencies = [
  "cbc",
  "ctr",
  "hmac",
- "lagon-runtime-v8-utils",
+ "lagoss-runtime-v8-utils",
  "num-traits",
  "p256",
  "p384",
@@ -1870,17 +1870,17 @@ dependencies = [
 ]
 
 [[package]]
-name = "lagon-runtime-http"
+name = "lagoss-runtime-http"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "hyper",
- "lagon-runtime-v8-utils",
+ "lagoss-runtime-v8-utils",
  "v8",
 ]
 
 [[package]]
-name = "lagon-runtime-isolate"
+name = "lagoss-runtime-isolate"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -1888,9 +1888,9 @@ dependencies = [
  "flume",
  "futures",
  "hyper",
- "lagon-runtime-crypto",
- "lagon-runtime-http",
- "lagon-runtime-v8-utils",
+ "lagoss-runtime-crypto",
+ "lagoss-runtime-http",
+ "lagoss-runtime-v8-utils",
  "linked-hash-map",
  "log",
  "reqwest",
@@ -1900,18 +1900,18 @@ dependencies = [
 ]
 
 [[package]]
-name = "lagon-runtime-utils"
+name = "lagoss-runtime-utils"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "flume",
  "hyper",
- "lagon-runtime-http",
+ "lagoss-runtime-http",
  "tokio",
 ]
 
 [[package]]
-name = "lagon-runtime-v8-utils"
+name = "lagoss-runtime-v8-utils"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -1920,7 +1920,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "lagon-serverless"
+name = "lagoss-serverless"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -1931,13 +1931,13 @@ dependencies = [
  "flume",
  "futures",
  "hyper",
- "lagon-runtime",
- "lagon-runtime-http",
- "lagon-runtime-isolate",
- "lagon-runtime-utils",
- "lagon-serverless-downloader",
- "lagon-serverless-logger",
- "lagon-serverless-pubsub",
+ "lagoss-runtime",
+ "lagoss-runtime-http",
+ "lagoss-runtime-isolate",
+ "lagoss-runtime-utils",
+ "lagoss-serverless-downloader",
+ "lagoss-serverless-logger",
+ "lagoss-serverless-pubsub",
  "log",
  "metrics",
  "metrics-exporter-prometheus",
@@ -1954,17 +1954,17 @@ dependencies = [
 ]
 
 [[package]]
-name = "lagon-serverless-downloader"
+name = "lagoss-serverless-downloader"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "async-trait",
- "lagon-runtime-utils",
+ "lagoss-runtime-utils",
  "rust-s3",
 ]
 
 [[package]]
-name = "lagon-serverless-logger"
+name = "lagoss-serverless-logger"
 version = "0.1.0"
 dependencies = [
  "axiom-rs",
@@ -1976,7 +1976,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "lagon-serverless-pubsub"
+name = "lagoss-serverless-pubsub"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -1988,15 +1988,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "lagon-wpt-runner"
+name = "lagoss-wpt-runner"
 version = "0.1.0"
 dependencies = [
  "console",
  "flume",
  "hyper",
- "lagon-runtime",
- "lagon-runtime-http",
- "lagon-runtime-isolate",
+ "lagoss-runtime",
+ "lagoss-runtime-http",
+ "lagoss-runtime-isolate",
  "tokio",
 ]
 

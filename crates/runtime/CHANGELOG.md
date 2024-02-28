@@ -1,4 +1,4 @@
-# @lagon/runtime
+# @lagoss/runtime
 
 ## 0.3.19
 

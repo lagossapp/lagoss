@@ -2,9 +2,9 @@ use super::{download_deployment, filesystem::rm_deployment, Deployment, Deployme
 use crate::{cronjob::Cronjob, get_region, serverless::Workers};
 use anyhow::Result;
 use futures::StreamExt;
-use lagon_runtime_isolate::IsolateEvent;
-use lagon_serverless_downloader::Downloader;
-use lagon_serverless_pubsub::{PubSubListener, PubSubMessage, PubSubMessageKind};
+use lagoss_runtime_isolate::IsolateEvent;
+use lagoss_serverless_downloader::Downloader;
+use lagoss_serverless_pubsub::{PubSubListener, PubSubMessage, PubSubMessageKind};
 use log::{error, warn};
 use metrics::increment_counter;
 use serde_json::Value;
@@ -84,7 +84,7 @@ where
                 match download_deployment(&deployment, Arc::clone(&downloader)).await {
                     Ok(_) => {
                         increment_counter!(
-                            "lagon_deployments",
+                            "lagoss_deployments",
                             "status" => "success",
                             "deployment" => deployment.id.clone(),
                             "function" => deployment.function_id.clone(),
@@ -108,7 +108,7 @@ where
                     }
                     Err(error) => {
                         increment_counter!(
-                            "lagon_deployments",
+                            "lagoss_deployments",
                             "status" => "error",
                             "deployment" => deployment.id.clone(),
                             "function" => deployment.function_id.clone(),
@@ -124,7 +124,7 @@ where
                 match rm_deployment(&deployment.id) {
                     Ok(_) => {
                         increment_counter!(
-                            "lagon_undeployments",
+                            "lagoss_undeployments",
                             "status" => "success",
                             "deployment" => deployment.id.clone(),
                             "function" => deployment.function_id.clone(),
@@ -149,7 +149,7 @@ where
                     }
                     Err(error) => {
                         increment_counter!(
-                            "lagon_undeployments",
+                            "lagoss_undeployments",
                             "status" => "error",
                             "deployment" => deployment.id.clone(),
                             "function" => deployment.function_id.clone(),
@@ -160,7 +160,7 @@ where
             }
             PubSubMessageKind::Promote => {
                 increment_counter!(
-                    "lagon_promotion",
+                    "lagoss_promotion",
                     "deployment" => deployment.id.clone(),
                     "function" => deployment.function_id.clone(),
                 );

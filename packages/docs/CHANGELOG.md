@@ -1,4 +1,4 @@
-# @lagon/docs
+# @lagoss/docs
 
 ## 1.0.3
 

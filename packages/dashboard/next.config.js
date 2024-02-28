@@ -6,7 +6,7 @@ module.exports = {
     locales: ['en', 'fr'],
     defaultLocale: 'en',
   },
-  transpilePackages: ['@lagon/ui'],
+  transpilePackages: ['@lagoss/ui'],
   eslint: {
     ignoreDuringBuilds: true,
   },

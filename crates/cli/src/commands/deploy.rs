@@ -60,7 +60,7 @@ pub async fn deploy(
 
     if config.token.is_none() {
         return Err(anyhow!(
-            "You are not logged in. Please log in with `lagon login`",
+            "You are not logged in. Please log in with `lagoss login`",
         ));
     }
 

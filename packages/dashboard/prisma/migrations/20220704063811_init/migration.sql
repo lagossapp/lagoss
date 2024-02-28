@@ -110,7 +110,7 @@ CREATE TABLE `Deployment` (
     `updatedAt` DATETIME(3) NOT NULL,
     `isCurrent` BOOLEAN NOT NULL,
     `functionId` VARCHAR(191) NOT NULL,
-    `triggerer` VARCHAR(191) NOT NULL DEFAULT 'Lagon',
+    `triggerer` VARCHAR(191) NOT NULL DEFAULT 'Lagoss',
     `commit` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)

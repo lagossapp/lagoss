@@ -1,4 +1,4 @@
-# @lagon/remix
+# @lagoss/remix
 
 ## 0.1.2
 

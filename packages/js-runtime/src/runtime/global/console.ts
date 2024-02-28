@@ -77,7 +77,7 @@
 
   types.forEach(type => {
     globalThis.console[type] = (input, ...args) => {
-      LagonSync.log(type, format(input, ...args));
+      LagossSync.log(type, format(input, ...args));
     };
   });
 })(globalThis);

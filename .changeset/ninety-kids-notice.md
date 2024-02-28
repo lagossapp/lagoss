@@ -1,5 +1,5 @@
 ---
-'@lagon/docs': patch
+'@lagoss/docs': patch
 ---
 
 Add Neon example

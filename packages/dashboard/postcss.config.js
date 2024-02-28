@@ -1,1 +1,1 @@
-module.exports = require('@lagon/ui/postcss.config');
+module.exports = require('@lagoss/ui/postcss.config');

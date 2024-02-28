@@ -3,12 +3,12 @@ use bytes::Bytes;
 use clickhouse::inserter::Inserter;
 use futures::lock::Mutex;
 use hyper::{body, Request};
-use lagon_runtime_http::RunResult;
-use lagon_runtime_isolate::{
+use lagoss_runtime_http::RunResult;
+use lagoss_runtime_isolate::{
     options::{IsolateOptions, Metadata},
     Isolate, IsolateEvent, IsolateRequest,
 };
-use lagon_runtime_utils::Deployment;
+use lagoss_runtime_utils::Deployment;
 use log::{error, info, warn};
 use metrics::{decrement_gauge, histogram, increment_gauge};
 use std::{
@@ -87,7 +87,7 @@ impl Cronjob {
                             handle.block_on(async move {
                                 let deployment  = deployment_handle;
 
-                                increment_gauge!("lagon_isolates", 1.0, &labels);
+                                increment_gauge!("lagoss_isolates", 1.0, &labels);
                                 info!(deployment = deployment.id.clone(), function = deployment.function_id.clone(); "Creating new cron isolate");
 
                                 let options = IsolateOptions::new(code)
@@ -108,7 +108,7 @@ impl Cronjob {
                                                 ("function", metadata.1.clone()),
                                             ];
 
-                                            decrement_gauge!("lagon_isolates", 1.0, &labels);
+                                            decrement_gauge!("lagoss_isolates", 1.0, &labels);
                                             info!(deployment = metadata.0, function = metadata.1; "Dropping cron isolate");
                                         }
                                     }))
@@ -120,7 +120,7 @@ impl Cronjob {
                                             ];
 
                                             histogram!(
-                                                "lagon_isolate_memory_usage",
+                                                "lagoss_isolate_memory_usage",
                                                 statistics as f64,
                                                 &labels
                                             );

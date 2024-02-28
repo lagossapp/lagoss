@@ -67,7 +67,7 @@
   // @ts-expect-error Workers have a global `self` property, which we assign
   // to `globalThis` because we don't implement all the Workers APIs
   globalThis.self = globalThis;
-  globalThis.__lagon__ = {
+  globalThis.__lagoss__ = {
     isIterable,
     parseMultipart,
     TEXT_ENCODER,

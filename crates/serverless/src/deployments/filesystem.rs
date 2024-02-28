@@ -1,7 +1,7 @@
 use std::{fs, path::Path};
 
 use anyhow::Result;
-use lagon_runtime_utils::DEPLOYMENTS_DIR;
+use lagoss_runtime_utils::DEPLOYMENTS_DIR;
 use log::info;
 
 pub fn create_deployments_folder() -> Result<()> {

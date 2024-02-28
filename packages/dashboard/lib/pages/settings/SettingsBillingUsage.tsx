@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
-import { Banner, Button, Card, Description, Skeleton, Text } from '@lagon/ui';
+import { Banner, Button, Card, Description, Skeleton, Text } from '@lagoss/ui';
 import { trpc } from 'lib/trpc';
 import { useScopedI18n } from 'locales';
 import { getPlanFromPriceId } from 'lib/plans';

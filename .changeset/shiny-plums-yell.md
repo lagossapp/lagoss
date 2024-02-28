@@ -1,5 +1,5 @@
 ---
-'@lagon/serverless': patch
+'@lagoss/serverless': patch
 ---
 
 Properly remove Cron functions

@@ -53,11 +53,11 @@ export class RequestResponseBody {
     if (this.theBody instanceof ArrayBuffer || this.theBody instanceof Uint8Array) {
       writer.write(this.theBody);
     } else if (this.theBody instanceof FormData || this.theBody instanceof URLSearchParams) {
-      writer.write(globalThis.__lagon__.TEXT_ENCODER.encode(this.theBody.toString()));
+      writer.write(globalThis.__lagoss__.TEXT_ENCODER.encode(this.theBody.toString()));
     } else if (this.theBody instanceof Blob) {
       writer.write(this.theBody.buffer);
     } else {
-      writer.write(globalThis.__lagon__.TEXT_ENCODER.encode(this.theBody ?? ''));
+      writer.write(globalThis.__lagoss__.TEXT_ENCODER.encode(this.theBody ?? ''));
     }
 
     writer.close();
@@ -76,7 +76,7 @@ export class RequestResponseBody {
 
     if (typeof this.theBody === 'string') {
       this.bodyUsed = true;
-      return globalThis.__lagon__.TEXT_ENCODER.encode(this.theBody);
+      return globalThis.__lagoss__.TEXT_ENCODER.encode(this.theBody);
     }
 
     if (this.theBody instanceof ArrayBuffer || this.theBody instanceof Uint8Array) {
@@ -86,7 +86,7 @@ export class RequestResponseBody {
 
     if (this.theBody instanceof FormData || this.theBody instanceof URLSearchParams) {
       this.bodyUsed = true;
-      return globalThis.__lagon__.TEXT_ENCODER.encode(this.theBody.toString());
+      return globalThis.__lagoss__.TEXT_ENCODER.encode(this.theBody.toString());
     }
 
     if (this.theBody instanceof Blob) {
@@ -138,7 +138,7 @@ export class RequestResponseBody {
 
     const body = await this.text();
 
-    return globalThis.__lagon__.parseMultipart(this.headers, body);
+    return globalThis.__lagoss__.parseMultipart(this.headers, body);
   }
 
   async json<T>(): Promise<T> {
@@ -161,7 +161,7 @@ export class RequestResponseBody {
 
     if (this.theBody instanceof ArrayBuffer || this.theBody instanceof Uint8Array) {
       this.bodyUsed = true;
-      return globalThis.__lagon__.TEXT_DECODER.decode(this.theBody);
+      return globalThis.__lagoss__.TEXT_DECODER.decode(this.theBody);
     }
 
     const isFormData = this.theBody instanceof FormData;
@@ -195,8 +195,8 @@ export class RequestResponseBody {
             return resolve(result);
           }
 
-          if (globalThis.__lagon__.isIterable(value)) {
-            result += globalThis.__lagon__.TEXT_DECODER.decode(value);
+          if (globalThis.__lagoss__.isIterable(value)) {
+            result += globalThis.__lagoss__.TEXT_DECODER.decode(value);
           } else {
             result += value;
           }

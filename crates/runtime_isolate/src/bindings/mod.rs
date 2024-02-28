@@ -13,8 +13,8 @@ use crypto::{
 };
 use fetch::{fetch_binding, fetch_init};
 use hyper::{body::Bytes, HeaderMap};
-use lagon_runtime_http::response_to_v8;
-use lagon_runtime_v8_utils::{v8_boolean, v8_string, v8_uint8array};
+use lagoss_runtime_http::response_to_v8;
+use lagoss_runtime_v8_utils::{v8_boolean, v8_string, v8_uint8array};
 use pull_stream::pull_stream_binding;
 use queue_microtask::queue_microtask_binding;
 use sleep::{sleep_binding, sleep_init};
@@ -60,8 +60,8 @@ pub enum BindStrategy {
 }
 
 macro_rules! binding {
-    ($scope: ident, $lagon_object: ident, $name: literal, $binding: ident) => {
-        $lagon_object.set(
+    ($scope: ident, $lagoss_object: ident, $name: literal, $binding: ident) => {
+        $lagoss_object.set(
             v8_string($scope, $name).into(),
             v8::FunctionTemplate::new($scope, $binding).into(),
         );
@@ -69,7 +69,7 @@ macro_rules! binding {
 }
 
 macro_rules! async_binding {
-    ($scope: ident, $lagon_object: ident, $name: literal, $init: expr, $binding: expr) => {
+    ($scope: ident, $lagoss_object: ident, $name: literal, $init: expr, $binding: expr) => {
         let binding = |scope: &mut v8::HandleScope,
                        args: v8::FunctionCallbackArguments,
                        mut retval: v8::ReturnValue| {
@@ -100,7 +100,7 @@ macro_rules! async_binding {
             }
         };
 
-        $lagon_object.set(
+        $lagoss_object.set(
             v8_string($scope, $name).into(),
             v8::FunctionTemplate::new($scope, binding).into(),
         );
@@ -113,83 +113,83 @@ pub fn bind<'a>(
 ) -> v8::Local<'a, v8::Context> {
     let global = v8::ObjectTemplate::new(scope);
 
-    let lagon_object = v8::ObjectTemplate::new(scope);
+    let lagoss_object = v8::ObjectTemplate::new(scope);
 
     if bind_strategy == BindStrategy::All || bind_strategy == BindStrategy::Sync {
-        binding!(scope, lagon_object, "log", console_binding);
-        binding!(scope, lagon_object, "pullStream", pull_stream_binding);
-        binding!(scope, lagon_object, "uuid", uuid_binding);
-        binding!(scope, lagon_object, "randomValues", random_values_binding);
-        binding!(scope, lagon_object, "getKeyValue", get_key_value_binding);
+        binding!(scope, lagoss_object, "log", console_binding);
+        binding!(scope, lagoss_object, "pullStream", pull_stream_binding);
+        binding!(scope, lagoss_object, "uuid", uuid_binding);
+        binding!(scope, lagoss_object, "randomValues", random_values_binding);
+        binding!(scope, lagoss_object, "getKeyValue", get_key_value_binding);
         binding!(
             scope,
-            lagon_object,
+            lagoss_object,
             "queueMicrotask",
             queue_microtask_binding
         );
 
         binding!(
             scope,
-            lagon_object,
+            lagoss_object,
             "compressionCreate",
             compression_create_binding
         );
 
         binding!(
             scope,
-            lagon_object,
+            lagoss_object,
             "compressionWrite",
             compression_write_binding
         );
 
         binding!(
             scope,
-            lagon_object,
+            lagoss_object,
             "compressionFinish",
             compression_finish_binding
         );
 
-        global.set(v8_string(scope, "LagonSync").into(), lagon_object.into());
+        global.set(v8_string(scope, "LagossSync").into(), lagoss_object.into());
     }
 
     if bind_strategy == BindStrategy::All || bind_strategy == BindStrategy::Async {
-        let lagon_object = v8::ObjectTemplate::new(scope);
+        let lagoss_object = v8::ObjectTemplate::new(scope);
 
-        async_binding!(scope, lagon_object, "fetch", fetch_init, fetch_binding);
-        async_binding!(scope, lagon_object, "sign", sign_init, sign_binding);
-        async_binding!(scope, lagon_object, "verify", verify_init, verify_binding);
-        async_binding!(scope, lagon_object, "digest", digest_init, digest_binding);
+        async_binding!(scope, lagoss_object, "fetch", fetch_init, fetch_binding);
+        async_binding!(scope, lagoss_object, "sign", sign_init, sign_binding);
+        async_binding!(scope, lagoss_object, "verify", verify_init, verify_binding);
+        async_binding!(scope, lagoss_object, "digest", digest_init, digest_binding);
         async_binding!(
             scope,
-            lagon_object,
+            lagoss_object,
             "deriveBits",
             derive_bits_init,
             derive_bits_binding
         );
         async_binding!(
             scope,
-            lagon_object,
+            lagoss_object,
             "encrypt",
             encrypt_init,
             encrypt_binding
         );
         async_binding!(
             scope,
-            lagon_object,
+            lagoss_object,
             "decrypt",
             decrypt_init,
             decrypt_binding
         );
-        async_binding!(scope, lagon_object, "sleep", sleep_init, sleep_binding);
+        async_binding!(scope, lagoss_object, "sleep", sleep_init, sleep_binding);
         async_binding!(
             scope,
-            lagon_object,
+            lagoss_object,
             "generateKey",
             generate_key_init,
             generate_key_binding
         );
 
-        global.set(v8_string(scope, "LagonAsync").into(), lagon_object.into());
+        global.set(v8_string(scope, "LagossAsync").into(), lagoss_object.into());
     }
 
     v8::Context::new_from_template(scope, global)

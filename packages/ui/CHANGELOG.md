@@ -1,4 +1,4 @@
-# @lagon/ui
+# @lagoss/ui
 
 ## 0.2.5
 

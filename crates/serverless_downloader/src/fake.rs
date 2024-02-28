@@ -1,6 +1,6 @@
 use anyhow::Result;
 use async_trait::async_trait;
-use lagon_runtime_utils::DEPLOYMENTS_DIR;
+use lagoss_runtime_utils::DEPLOYMENTS_DIR;
 use std::{fs, path::Path};
 
 use super::Downloader;

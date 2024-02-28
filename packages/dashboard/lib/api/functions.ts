@@ -4,7 +4,7 @@ import { TRPCError } from '@trpc/server';
 import type { Plan } from 'lib/plans';
 import { FUNCTION_NAME_REGEX } from 'lib/constants';
 
-const LAGON_BLACKLISTED_FUNCTIONS_NAMES = process.env.LAGON_BLACKLISTED_NAMES?.split(',') ?? [];
+const LAGOSS_BLACKLISTED_FUNCTIONS_NAMES = process.env.LAGOSS_BLACKLISTED_NAMES?.split(',') ?? [];
 
 export async function isFunctionNameUnique(name: string): Promise<boolean> {
   const result = await prisma.function.findFirst({
@@ -32,7 +32,7 @@ export function isFunctionNameAllowed(name: string): boolean {
 }
 
 export function isFunctionNameBlacklisted(name: string): boolean {
-  return LAGON_BLACKLISTED_FUNCTIONS_NAMES.includes(name.toLowerCase());
+  return LAGOSS_BLACKLISTED_FUNCTIONS_NAMES.includes(name.toLowerCase());
 }
 
 export async function checkCanCreateFunction({

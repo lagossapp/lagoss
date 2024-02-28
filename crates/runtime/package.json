@@ -1,7 +1,7 @@
 {
-  "name": "@lagon/runtime",
+  "name": "@lagoss/runtime",
   "version": "0.3.19",
-  "description": "JavaScript Serverless Runtime for Lagon",
+  "description": "JavaScript Serverless Runtime for Lagoss",
   "private": true,
   "scripts": {
     "build": "cargo build",

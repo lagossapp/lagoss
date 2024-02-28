@@ -1,6 +1,6 @@
 use hyper::{header::CONTENT_TYPE, Body, Request, Response};
-use lagon_runtime_http::RunResult;
-use lagon_runtime_isolate::options::IsolateOptions;
+use lagoss_runtime_http::RunResult;
+use lagoss_runtime_isolate::options::IsolateOptions;
 use std::time::Duration;
 
 mod utils;

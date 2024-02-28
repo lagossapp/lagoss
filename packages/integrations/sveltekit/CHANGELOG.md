@@ -1,4 +1,4 @@
-# @lagon/sveltekit
+# @lagoss/sveltekit
 
 ## 0.1.1
 

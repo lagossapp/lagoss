@@ -39,7 +39,7 @@ impl Deployment {
         domains.push(format!(
             "{}.{}",
             self.id,
-            env::var("LAGON_ROOT_DOMAIN").expect("LAGON_ROOT_DOMAIN must be set")
+            env::var("LAGOSS_ROOT_DOMAIN").expect("LAGOSS_ROOT_DOMAIN must be set")
         ));
 
         // Default domain (function's name) and custom domains are only set in production deployments
@@ -47,7 +47,7 @@ impl Deployment {
             domains.push(format!(
                 "{}.{}",
                 self.function_name,
-                env::var("LAGON_ROOT_DOMAIN").expect("LAGON_ROOT_DOMAIN must be set")
+                env::var("LAGOSS_ROOT_DOMAIN").expect("LAGOSS_ROOT_DOMAIN must be set")
             ));
 
             domains.extend(self.domains.clone());
@@ -108,7 +108,7 @@ mod tests {
 
     #[test]
     fn deployment_default_domains() {
-        env::set_var("LAGON_ROOT_DOMAIN", "lagon.test");
+        env::set_var("LAGOSS_ROOT_DOMAIN", "lagoss.test");
 
         let deployment = Deployment {
             id: "123".into(),
@@ -124,18 +124,18 @@ mod tests {
             cron: None,
         };
 
-        assert_eq!(deployment.get_domains(), vec!["123.lagon.test".to_owned()]);
+        assert_eq!(deployment.get_domains(), vec!["123.lagoss.test".to_owned()]);
     }
 
     #[test]
     fn deployment_domains() {
-        env::set_var("LAGON_ROOT_DOMAIN", "lagon.test");
+        env::set_var("LAGOSS_ROOT_DOMAIN", "lagoss.test");
 
         let deployment = Deployment {
             id: "123".into(),
             function_id: "456".into(),
             function_name: "hello".into(),
-            domains: HashSet::from_iter(vec!["lagon.app".to_owned()]),
+            domains: HashSet::from_iter(vec!["lagoss.com".to_owned()]),
             assets: HashSet::new(),
             environment_variables: HashMap::new(),
             memory: 128,
@@ -145,18 +145,21 @@ mod tests {
             cron: None,
         };
 
-        assert_eq!(deployment.get_domains(), vec!["123.lagon.test".to_owned(),]);
+        assert_eq!(
+            deployment.get_domains(),
+            vec!["123.lagoss.test".to_owned(),]
+        );
     }
 
     #[test]
     fn deployment_domains_production() {
-        env::set_var("LAGON_ROOT_DOMAIN", "lagon.test");
+        env::set_var("LAGOSS_ROOT_DOMAIN", "lagoss.test");
 
         let deployment = Deployment {
             id: "123".into(),
             function_id: "456".into(),
             function_name: "hello".into(),
-            domains: HashSet::from_iter(vec!["lagon.app".to_owned()]),
+            domains: HashSet::from_iter(vec!["lagoss.com".to_owned()]),
             assets: HashSet::new(),
             environment_variables: HashMap::new(),
             memory: 128,
@@ -169,9 +172,9 @@ mod tests {
         assert_eq!(
             deployment.get_domains(),
             vec![
-                "123.lagon.test".to_owned(),
-                "hello.lagon.test".to_owned(),
-                "lagon.app".to_owned()
+                "123.lagoss.test".to_owned(),
+                "hello.lagoss.test".to_owned(),
+                "lagoss.com".to_owned()
             ]
         );
     }

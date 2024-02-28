@@ -20,8 +20,8 @@ const createContext = async ({
   res: NextApiResponse<unknown>;
   session: Session;
 }> => {
-  const tokenValue = req.headers['x-lagon-token'] as string;
-  const organizationId = req.headers['x-lagon-organization-id'] as string | undefined;
+  const tokenValue = req.headers['x-lagoss-token'] as string;
+  const organizationId = req.headers['x-lagoss-organization-id'] as string | undefined;
 
   // tokensAuthenticate needs to skip authentication
   if (req.query.trpc === 'tokensAuthenticate') {

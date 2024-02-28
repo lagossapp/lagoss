@@ -1,4 +1,4 @@
-import { Card, Text, Input, Button, Form, Dialog, Divider, Skeleton } from '@lagon/ui';
+import { Card, Text, Input, Button, Form, Dialog, Divider, Skeleton } from '@lagoss/ui';
 import { composeValidators, emailValidator, requiredValidator } from 'lib/form/validators';
 import useOrganizationMembers from 'lib/hooks/useOrganizationMembers';
 import { trpc } from 'lib/trpc';

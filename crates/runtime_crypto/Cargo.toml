@@ -1,5 +1,5 @@
 [package]
-name = "lagon-runtime-crypto"
+name = "lagoss-runtime-crypto"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,7 +8,7 @@ v8 = "0.74.3"
 anyhow = "1.0.72"
 rand = "0.8.5"
 uuid = { version = "1.4.1", features = ["v4", "fast-rng"] }
-lagon-runtime-v8-utils = { path = "../runtime_v8_utils" }
+lagoss-runtime-v8-utils = { path = "../runtime_v8_utils" }
 # Crypto
 hmac = "0.12.1"
 sha1 = "0.10.5"

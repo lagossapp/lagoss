@@ -1,7 +1,7 @@
 use std::time::Duration;
 
-use lagon_runtime_http::StreamResult;
-use lagon_runtime_v8_utils::{extract_v8_uint8array, v8_exception};
+use lagoss_runtime_http::StreamResult;
+use lagoss_runtime_v8_utils::{extract_v8_uint8array, v8_exception};
 
 use crate::Isolate;
 
