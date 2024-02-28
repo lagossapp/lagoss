@@ -2,8 +2,6 @@ name: Container
 
 on:
   push:
-    branches:
-      - main
     tags:
       - '@lagoss/serverless@*'
       - '@lagoss/dashboard@*'

@@ -1,15 +1,16 @@
 name: web-platform-tests
+
 on:
-  push:
-    branches:
-      - main
   pull_request:
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
 jobs:
   wpt:
     name: web-platform-tests

@@ -1,15 +1,16 @@
-name: CI
+name: Test
+
 on:
-  push:
-    branches:
-      - main
   pull_request:
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
 jobs:
   lint:
     name: Lint
@@ -31,6 +32,7 @@ jobs:
         run: pnpm install
       - name: Lint
         run: pnpm lint
+
   test:
     name: Test
     runs-on: ubuntu-20.04
@@ -53,6 +55,7 @@ jobs:
         run: pnpm install
       - name: Test
         run: pnpm test
+
   typecheck:
     name: Typecheck
     runs-on: ubuntu-20.04
@@ -70,6 +73,7 @@ jobs:
         run: pnpm install
       - name: Typecheck
         run: pnpm typecheck
+
   build:
     name: Build
     runs-on: ubuntu-20.04
