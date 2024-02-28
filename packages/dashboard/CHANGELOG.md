@@ -1,4 +1,4 @@
-# @lagon/dashboard
+# @lagoss/dashboard
 
 ## 0.3.13
 

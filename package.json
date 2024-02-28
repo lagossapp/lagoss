@@ -1,19 +1,17 @@
 {
-  "name": "lagon",
+  "name": "lagoss",
   "version": "0.0.1",
   "description": "Deploy Serverless Functions at the Edge",
   "private": true,
   "scripts": {
-    "start:docs": "pnpm --filter @lagon/docs dev",
-    "test": "turbo test --continue --filter=!@lagon/example-*",
-    "build": "turbo build --continue --filter=!@lagon/example-*",
+    "start:docs": "pnpm --filter @lagoss/docs dev",
+    "test": "turbo test --continue --filter=!@lagoss/example-*",
+    "build": "turbo build --continue --filter=!@lagoss/example-*",
     "lint": "turbo lint --continue",
     "typecheck": "turbo typecheck --continue",
-    "docker:serverless:build": "docker build -t lagon/serverless -f docker/Dockerfile.serverless .",
-    "docker:serverless:start": "docker run --rm -p 4000:4000 --env-file crates/serverless/.env lagon/serverless",
-    "docker:dashboard:build": "docker build -t lagon/dashboard -f docker/Dockerfile.dashboard .",
-    "docker:dashboard:start": "docker run --rm -p 3000:3000 --env-file packages/dashboard/.env lagon/dashboard",
-    "release": "pnpm build --filter=@lagon/astro --filter=@lagon/remix && pnpm changeset publish"
+    "docker:serverless:build": "docker build -t ghcr.io/lagossapp/serverless -f docker/Dockerfile.serverless .",
+    "docker:dashboard:build": "docker build -t ghcr.io/lagossapp/dashboard -f docker/Dockerfile.dashboard .",
+    "release": "pnpm build --filter=@lagoss/astro --filter=@lagoss/remix && pnpm changeset publish"
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix"

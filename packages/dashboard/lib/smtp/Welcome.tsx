@@ -17,15 +17,15 @@ export function Welcome({ name }: WelcomeProps) {
     <Html>
       <Head />
       <Preview>
-        Welcome to Lagon, an open-source runtime and platform that allows developers to run TypeScript and JavaScript
+        Welcome to Lagoss, an open-source runtime and platform that allows developers to run TypeScript and JavaScript
         Serverless Functions at the Edge, close to users.
       </Preview>
       <Section style={main}>
         <Container style={container}>
-          <Img src="https://dash.lagon.app/images/logo-black.png" width="170" height="50" alt="Lagon" style={logo} />
+          <Img src="https://dash.lagon.app/images/logo-black.png" width="170" height="50" alt="Lagoss" style={logo} />
           <Text style={paragraph}>Hi {name},</Text>
           <Text style={paragraph}>
-            Welcome to Lagon, an open-source runtime and platform that allows developers to run TypeScript and
+            Welcome to Lagoss, an open-source runtime and platform that allows developers to run TypeScript and
             JavaScript Serverless Functions at the Edge, close to users.
           </Text>
           <Text style={paragraph}>
@@ -39,7 +39,7 @@ export function Welcome({ name }: WelcomeProps) {
           <Text style={paragraph}>
             See you soon,
             <br />
-            Tom from Lagon
+            Tom from Lagoss
           </Text>
         </Container>
       </Section>

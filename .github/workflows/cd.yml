@@ -2,7 +2,7 @@ name: CD
 on:
   push:
     tags:
-      - '@lagon/cli@*'
+      - '@lagoss/cli@*'
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -74,7 +74,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Build js-runtime
-        run: pnpm turbo build --filter=@lagon/js-runtime
+        run: pnpm turbo build --filter=@lagoss/js-runtime
       - name: Build CLI
         run: |
           cd crates/cli && cargo build --release --target ${{ matrix.target }}

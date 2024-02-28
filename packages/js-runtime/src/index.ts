@@ -54,7 +54,7 @@ declare global {
 
   var AsyncLocalStorage: AsyncLocalStorageConstructor;
 
-  var LagonSync: {
+  var LagossSync: {
     log: (level: string, message: string) => void;
     pullStream: (id: number, done: boolean, chunk?: Uint8Array) => void;
     uuid: () => `${string}-${string}-${string}-${string}-${string}`;
@@ -66,7 +66,7 @@ declare global {
     compressionFinish: (id: string) => Uint8Array;
   };
 
-  var LagonAsync: {
+  var LagossAsync: {
     fetch: ({ h, m, b, u }: { h?: Map<string, string>; m: string; b?: string; u: string }) => Promise<{
       b: Uint8Array;
       s: number;
@@ -175,12 +175,12 @@ globalThis.masterHandler = async (id, handler, request) => {
     const read = () => {
       reader.read().then(({ done, value }) => {
         if (done) {
-          LagonSync.pullStream(id, done);
+          LagossSync.pullStream(id, done);
           return;
         }
 
         if (value.byteLength !== 0) {
-          LagonSync.pullStream(id, done, value);
+          LagossSync.pullStream(id, done, value);
         }
 
         read();

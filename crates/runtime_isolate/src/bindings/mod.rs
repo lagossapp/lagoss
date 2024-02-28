@@ -149,7 +149,7 @@ pub fn bind<'a>(
             compression_finish_binding
         );
 
-        global.set(v8_string(scope, "LagonSync").into(), lagon_object.into());
+        global.set(v8_string(scope, "LagossSync").into(), lagon_object.into());
     }
 
     if bind_strategy == BindStrategy::All || bind_strategy == BindStrategy::Async {
@@ -189,7 +189,7 @@ pub fn bind<'a>(
             generate_key_binding
         );
 
-        global.set(v8_string(scope, "LagonAsync").into(), lagon_object.into());
+        global.set(v8_string(scope, "LagossAsync").into(), lagon_object.into());
     }
 
     v8::Context::new_from_template(scope, global)

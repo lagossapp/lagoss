@@ -6,7 +6,7 @@ import { posix, dirname } from 'node:path';
 
 export default function (): Adapter {
   return {
-    name: '@lagon/sveltekit',
+    name: '@lagoss/sveltekit',
     async adapt(builder) {
       const main = 'build/index.js';
       const bucket = 'build/public';

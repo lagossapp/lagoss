@@ -1,4 +1,4 @@
-# @lagon/cli
+# @lagoss/cli
 
 ## 0.7.8
 

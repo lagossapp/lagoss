@@ -1,4 +1,4 @@
-# @lagon/wpt-runner
+# @lagoss/wpt-runner
 
 ## 0.1.6
 

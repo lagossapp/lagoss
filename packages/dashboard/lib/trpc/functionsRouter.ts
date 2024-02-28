@@ -11,7 +11,7 @@ import {
   FUNCTION_NAME_MAX_LENGTH,
   FUNCTION_NAME_MIN_LENGTH,
 } from 'lib/constants';
-import { LOGS_LEVELS } from '@lagon/ui';
+import { LOGS_LEVELS } from '@lagoss/ui';
 import { TRPCError } from '@trpc/server';
 import { T } from 'pages/api/trpc/[trpc]';
 import {

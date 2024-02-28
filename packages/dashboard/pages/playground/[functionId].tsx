@@ -6,7 +6,7 @@ import FunctionLinks from 'lib/components/FunctionLinks';
 import Playground from 'lib/components/Playground';
 import useFunction from 'lib/hooks/useFunction';
 import { getFullCurrentDomain } from 'lib/utils';
-import { Text, Button, Form } from '@lagon/ui';
+import { Text, Button, Form } from '@lagoss/ui';
 import { PlayIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import useFunctionCode from 'lib/hooks/useFunctionCode';
 import { useScopedI18n } from 'locales';

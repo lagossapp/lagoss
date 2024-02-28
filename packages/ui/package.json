@@ -1,7 +1,7 @@
 {
-  "name": "@lagon/ui",
+  "name": "@lagoss/ui",
   "version": "0.2.5",
-  "description": "Lagon Design System",
+  "description": "Lagoss Design System",
   "private": true,
   "main": "src/index.ts",
   "scripts": {

@@ -1,4 +1,4 @@
-# @lagon/runtime-utils
+# @lagoss/runtime-utils
 
 ## 0.2.2
 

@@ -54,7 +54,7 @@
     try {
       checkAborted();
 
-      const response = await LagonAsync.fetch({
+      const response = await LagossAsync.fetch({
         m: method,
         u: url,
         b: body,

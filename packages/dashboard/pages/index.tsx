@@ -1,7 +1,7 @@
 import { Suspense, useState } from 'react';
 import FunctionsList from 'lib/pages/functions/FunctionsList';
 import LayoutTitle from 'lib/components/LayoutTitle';
-import { Button, Skeleton } from '@lagon/ui';
+import { Button, Skeleton } from '@lagoss/ui';
 import { trpc } from 'lib/trpc';
 import { useRouter } from 'next/router';
 import { getLocaleProps, useScopedI18n } from 'locales';

@@ -22,15 +22,15 @@ This example uses [Drizzle](https://github.com/drizzle-team/drizzle-orm), a Type
 
 ### HatTip
 
-This example uses [HatTip](https://github.com/hattipjs/hattip), a minimalist express-like library that runs anywhere, via Lagon's adapter. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/hattip)
+This example uses [HatTip](https://github.com/hattipjs/hattip), a minimalist express-like library that runs anywhere, via Lagoss's adapter. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/hattip)
 
 ### Hono
 
-This example uses [Hono](https://honojs.dev), a small, simple, and ultrafast web framework, via Lagon's adapter. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/hono)
+This example uses [Hono](https://honojs.dev), a small, simple, and ultrafast web framework, via Lagoss's adapter. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/hono)
 
 ### Nitro
 
-This example uses [Nitro](https://nitro.unjs.io/), a library to build and deploy universal JavaScript servers, via Lagon's preset. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/nitro)
+This example uses [Nitro](https://nitro.unjs.io/), a library to build and deploy universal JavaScript servers, via Lagoss's preset. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/nitro)
 
 
 ### Neon
@@ -97,11 +97,11 @@ This example uses [Xata](https://xata.io), a modern serverless type-safe databas
 
 ### Astro
 
-This example uses [Astro](https://astro.build), a static site generator, with both SSR via Lagon's adapter and prerendering. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/astro)
+This example uses [Astro](https://astro.build), a static site generator, with both SSR via Lagoss's adapter and prerendering. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/astro)
 
 ### Nuxt
 
-This example uses [Nuxt](https://nuxt.com), the intuitive web framework for Vue, with SSR via Lagon's preset. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/nuxt)
+This example uses [Nuxt](https://nuxt.com), the intuitive web framework for Vue, with SSR via Lagoss's preset. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/nuxt)
 
 ### Nuxt Complex
 
@@ -109,12 +109,12 @@ This example uses [Nuxt](https://nuxt.com) with multiple pages, layouts, api rou
 
 ### Rakkas
 
-This example uses [Rakkas](https://rakkasjs.org), a React framework powered by Vite, with SSR via Lagon's adapter. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/rakkas)
+This example uses [Rakkas](https://rakkasjs.org), a React framework powered by Vite, with SSR via Lagoss's adapter. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/rakkas)
 
 ### Remix
 
-This example uses [Remix](https://remix.run), a full-stack React framework, with SSR via Lagon's integration. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/remix)
+This example uses [Remix](https://remix.run), a full-stack React framework, with SSR via Lagoss's integration. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/remix)
 
 ### SvelteKit
 
-This example uses [SvelteKit](https://kit.svelte.dev), the Svelte framework, with SSR via Lagon's adapter. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/sveltekit)
+This example uses [SvelteKit](https://kit.svelte.dev), the Svelte framework, with SSR via Lagoss's adapter. [See the code](https://github.com/lagonapp/lagon/tree/main/examples/sveltekit)

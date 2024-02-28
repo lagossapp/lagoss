@@ -9,12 +9,12 @@ const config: DocsThemeConfig = {
   docsRepositoryBase: 'https://github.com/lagonapp/lagon/blob/main/packages/docs',
   banner: {
     key: 'alpha',
-    text: '🚧 This documentation is not complete yet as Lagon is in Alpha.',
+    text: '🚧 This documentation is not complete yet as Lagoss is in Alpha.',
   },
-  useNextSeoProps: () => ({ titleTemplate: '%s – Lagon' }),
+  useNextSeoProps: () => ({ titleTemplate: '%s - Lagoss' }),
   darkMode: true,
   footer: {
-    text: `${new Date().getFullYear()} © Lagon.`,
+    text: `${new Date().getFullYear()} © Lagoss.`,
   },
   logo: () => {
     const { resolvedTheme } = useTheme();
@@ -30,18 +30,18 @@ const config: DocsThemeConfig = {
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta
         name="description"
-        content="Lagon is an open-source runtime and platform that allows developers to run TypeScript and JavaScript Functions at the Edge, close to users."
+        content="Lagoss is an open-source runtime and platform that allows developers to run TypeScript and JavaScript Functions at the Edge, close to users."
       />
       <meta property="og:url" content="https://lagon.app" />
       <meta property="og:type" content="website" />
-      <meta property="og:title" content="Lagon" />
+      <meta property="og:title" content="Lagoss" />
       <meta
         name="twitter:card"
-        content="Lagon is an open-source runtime and platform that allows developers to run TypeScript and JavaScript Functions at the Edge, close to users."
+        content="Lagoss is an open-source runtime and platform that allows developers to run TypeScript and JavaScript Functions at the Edge, close to users."
       />
       <meta
         property="og:description"
-        content="Lagon is an open-source runtime and platform that allows developers to run TypeScript and JavaScript Functions at the Edge, close to users."
+        content="Lagoss is an open-source runtime and platform that allows developers to run TypeScript and JavaScript Functions at the Edge, close to users."
       />
       <meta property="og:image" content="https://i.imgur.com/lqVcA5Y.png" />
     </>

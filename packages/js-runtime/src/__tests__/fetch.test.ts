@@ -151,8 +151,8 @@ describe('Headers', () => {
 
 describe('fetch', () => {
   beforeEach(() => {
-    globalThis.LagonAsync = {
-      ...globalThis.LagonAsync,
+    globalThis.LagossAsync = {
+      ...globalThis.LagossAsync,
       fetch: vi.fn(),
     };
   });
@@ -161,16 +161,16 @@ describe('fetch', () => {
     vi.resetAllMocks();
   });
 
-  it('should call LagonAsync.fetch', async () => {
-    // @ts-expect-error LagonAsync is not defined
-    globalThis.LagonAsync.fetch.mockReturnValueOnce({
+  it('should call LagossAsync.fetch', async () => {
+    // @ts-expect-error LagossAsync is not defined
+    globalThis.LagossAsync.fetch.mockReturnValueOnce({
       b: 'Hello',
       s: 200,
     });
 
     await fetch('https://google.com');
 
-    expect(globalThis.LagonAsync.fetch).toHaveBeenCalledWith({
+    expect(globalThis.LagossAsync.fetch).toHaveBeenCalledWith({
       b: undefined,
       h: [],
       m: 'GET',
@@ -178,9 +178,9 @@ describe('fetch', () => {
     });
   });
 
-  it('should call LagonAsync.fetch with options', async () => {
-    // @ts-expect-error LagonAsync is not defined
-    globalThis.LagonAsync.fetch.mockReturnValueOnce({
+  it('should call LagossAsync.fetch with options', async () => {
+    // @ts-expect-error LagossAsync is not defined
+    globalThis.LagossAsync.fetch.mockReturnValueOnce({
       b: 'Hello',
       s: 200,
     });
@@ -190,7 +190,7 @@ describe('fetch', () => {
       body: 'A body',
     });
 
-    expect(globalThis.LagonAsync.fetch).toHaveBeenCalledWith({
+    expect(globalThis.LagossAsync.fetch).toHaveBeenCalledWith({
       m: 'POST',
       h: [],
       u: 'https://google.com',

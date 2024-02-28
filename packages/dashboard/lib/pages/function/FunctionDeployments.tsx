@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast';
 import { getCurrentDomain, getFullCurrentDomain, getFullDomain } from 'lib/utils';
-import { Button, Card, EmptyState, Link, Text, Dialog } from '@lagon/ui';
+import { Button, Card, EmptyState, Link, Text, Dialog } from '@lagoss/ui';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { trpc } from 'lib/trpc';
 import useFunction from 'lib/hooks/useFunction';

@@ -1,6 +1,6 @@
 import FunctionLinks from 'lib/components/FunctionLinks';
 import useFunctions from 'lib/hooks/useFunctions';
-import { Card, Dot, Text, Button, EmptyState } from '@lagon/ui';
+import { Card, Dot, Text, Button, EmptyState } from '@lagoss/ui';
 import { useScopedI18n } from 'locales';
 import { getHumanFriendlyCron } from 'lib/utils';
 

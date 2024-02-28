@@ -1,4 +1,4 @@
-# @lagon/js-runtime
+# @lagoss/js-runtime
 
 ## 0.3.19
 

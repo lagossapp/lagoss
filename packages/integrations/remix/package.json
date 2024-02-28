@@ -1,7 +1,7 @@
 {
-  "name": "@lagon/remix",
+  "name": "@lagoss/remix",
   "version": "0.1.2",
-  "description": "Remix integration to deploy your site to Lagon",
+  "description": "Remix integration to deploy your site to Lagoss",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

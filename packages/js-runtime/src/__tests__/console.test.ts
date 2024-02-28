@@ -2,8 +2,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import '../';
 
 beforeEach(() => {
-  globalThis.LagonSync = {
-    ...globalThis.LagonSync,
+  globalThis.LagossSync = {
+    ...globalThis.LagossSync,
     log: vi.fn(),
   };
 });
@@ -16,7 +16,7 @@ describe('Console', () => {
   it('should log', () => {
     console.log('Hello World');
 
-    expect(LagonSync.log).toHaveBeenCalledWith('log', 'Hello World');
+    expect(LagossSync.log).toHaveBeenCalledWith('log', 'Hello World');
   });
 
   it('should receive all logs type', () => {
@@ -25,7 +25,7 @@ describe('Console', () => {
     for (const type of types) {
       console[type](`Hello ${type}`);
 
-      expect(LagonSync.log).toHaveBeenCalledWith(type, `Hello ${type}`);
+      expect(LagossSync.log).toHaveBeenCalledWith(type, `Hello ${type}`);
     }
   });
 
@@ -37,37 +37,37 @@ describe('Console', () => {
       },
     });
 
-    expect(LagonSync.log).toHaveBeenCalledWith('log', '{"hello":"world","nested":{"hello":"world"}}');
+    expect(LagossSync.log).toHaveBeenCalledWith('log', '{"hello":"world","nested":{"hello":"world"}}');
   });
 
   it('should log numbers', () => {
     console.log(42);
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', '42');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', '42');
 
     console.log(42.42);
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', '42.42');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', '42.42');
   });
 
   it('should log booleans', () => {
     console.log(true);
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'true');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'true');
 
     console.log(false);
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'false');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'false');
   });
 
   it('should log undefined and null', () => {
     console.log(undefined);
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'undefined');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'undefined');
 
     console.log(null);
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'null');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'null');
   });
 
   it('should log arrays', () => {
     console.log(['hello', 'world']);
 
-    expect(LagonSync.log).toHaveBeenCalledWith('log', '["hello","world"]');
+    expect(LagossSync.log).toHaveBeenCalledWith('log', '["hello","world"]');
   });
 
   it('should log functions', () => {
@@ -75,7 +75,7 @@ describe('Console', () => {
       return 'Hello World';
     });
 
-    expect(LagonSync.log).toHaveBeenCalledWith('log', '[Function]');
+    expect(LagossSync.log).toHaveBeenCalledWith('log', '[Function]');
   });
 
   it('should log callbacks', () => {
@@ -83,12 +83,12 @@ describe('Console', () => {
       return 'Hello World';
     });
 
-    expect(LagonSync.log).toHaveBeenCalledWith('log', '[Function]');
+    expect(LagossSync.log).toHaveBeenCalledWith('log', '[Function]');
   });
 
   it('should log objects with toString', () => {
     console.log(new Error('Hello World'));
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Error: Hello World');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Error: Hello World');
 
     class Empty {
       toString() {
@@ -97,20 +97,20 @@ describe('Console', () => {
     }
 
     console.log(new Empty());
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Hello World');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Hello World');
   });
 
   it('should format multiple strings', () => {
     console.log('Hello', 'World');
 
-    expect(LagonSync.log).toHaveBeenCalledWith('log', 'Hello World');
+    expect(LagossSync.log).toHaveBeenCalledWith('log', 'Hello World');
   });
 
   it('should format multiple strings and objects', () => {
     console.log('Hello', {
       value: 'World',
     });
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Hello {"value":"World"}');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Hello {"value":"World"}');
 
     console.log(
       'Hello',
@@ -120,54 +120,54 @@ describe('Console', () => {
       42,
       undefined,
     );
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Hello {"value":"World"} 42 undefined');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Hello {"value":"World"} 42 undefined');
   });
 
   it('should format printf like string', () => {
     console.log('Hello %s', 'World');
 
-    expect(LagonSync.log).toHaveBeenCalledWith('log', 'Hello World');
+    expect(LagossSync.log).toHaveBeenCalledWith('log', 'Hello World');
   });
 
   it('should format printf like numbers', () => {
     console.log('Hello %d', 42);
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Hello 42');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Hello 42');
 
     console.log('Hello %d', 42.42);
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Hello 42.42');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Hello 42.42');
   });
 
   it('should format printf like integers', () => {
     console.log('Hello %i', 42);
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Hello 42');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Hello 42');
 
     console.log('Hello %i', 42.42);
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Hello 42');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Hello 42');
   });
 
   it('should format printf like floats', () => {
     console.log('Hello %f', 42);
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Hello 42');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Hello 42');
 
     console.log('Hello %f', 42.42);
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Hello 42.42');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Hello 42.42');
   });
 
   it('should format printf like objects', () => {
     console.log('Hello %o', {
       value: 'World',
     });
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Hello {"value":"World"}');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Hello {"value":"World"}');
 
     console.log('Hello %O', {
       value: 'World',
     });
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Hello {"value":"World"}');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Hello {"value":"World"}');
 
     console.log('Hello %j', {
       value: 'World',
     });
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Hello {"value":"World"}');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Hello {"value":"World"}');
   });
 
   it('should format print like multiple times', () => {
@@ -175,14 +175,17 @@ describe('Console', () => {
       value: 'World',
     });
 
-    expect(LagonSync.log).toHaveBeenCalledWith('log', 'Hello World, this is the 42 test of printing {"value":"World"}');
+    expect(LagossSync.log).toHaveBeenCalledWith(
+      'log',
+      'Hello World, this is the 42 test of printing {"value":"World"}',
+    );
   });
 
   it('should format print like with fallback', () => {
     console.log('Hello %s, this is the %i test of printing %j', 'World');
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Hello World, this is the %i test of printing %j');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Hello World, this is the %i test of printing %j');
 
     console.log('Hello %s, this is the %i test of printing %j');
-    expect(LagonSync.log).toHaveBeenLastCalledWith('log', 'Hello %s, this is the %i test of printing %j');
+    expect(LagossSync.log).toHaveBeenLastCalledWith('log', 'Hello %s, this is the %i test of printing %j');
   });
 });

@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/router';
 import { Suspense, useEffect, useState } from 'react';
-import { Button, Card, Divider, EmptyState, LOGS_LEVELS, LogLine, LogsLevel, Menu, Skeleton } from '@lagon/ui';
+import { Button, Card, Divider, EmptyState, LOGS_LEVELS, LogLine, LogsLevel, Menu, Skeleton } from '@lagoss/ui';
 import useFunctionLogs from 'lib/hooks/useFunctionLogs';
 import { LOGS_TIMEFRAMES, LogsTimeframe } from 'lib/types';
 import useFunction from 'lib/hooks/useFunction';

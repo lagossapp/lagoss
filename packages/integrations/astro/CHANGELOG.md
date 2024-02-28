@@ -1,4 +1,4 @@
-# @lagon/astro
+# @lagoss/astro
 
 ## 0.3.0
 

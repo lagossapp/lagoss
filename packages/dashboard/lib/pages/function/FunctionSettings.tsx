@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { Button, Card, Form, Input, Text, Dialog, Menu, Divider, Dot } from '@lagon/ui';
+import { Button, Card, Form, Input, Text, Dialog, Menu, Divider, Dot } from '@lagoss/ui';
 import { getCurrentDomain, getFullDomain } from 'lib/utils';
 import {
   alphaNumUnderscoreValidator,
@@ -24,7 +24,7 @@ import { trpc } from 'lib/trpc';
 import useFunction from 'lib/hooks/useFunction';
 import { QueryObserverBaseResult } from '@tanstack/react-query';
 import { useScopedI18n } from 'locales';
-import { Copiable, Link } from '@lagon/ui';
+import { Copiable, Link } from '@lagoss/ui';
 import { ComponentProps, ReactNode, useEffect, useState } from 'react';
 import { getHumanFriendlyCron } from 'lib/utils';
 import { isInSubnet } from 'is-in-subnet';

@@ -1,4 +1,4 @@
-# @lagon/serverless
+# @lagoss/serverless
 
 ## 0.2.4
 

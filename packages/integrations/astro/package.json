@@ -1,7 +1,7 @@
 {
-  "name": "@lagon/astro",
+  "name": "@lagoss/astro",
   "version": "0.3.0",
-  "description": "Astro integration to deploy your site to Lagon",
+  "description": "Astro integration to deploy your site to Lagoss",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
