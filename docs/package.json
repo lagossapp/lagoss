@@ -1,5 +1,7 @@
 {
   "name": "@lagoss/docs",
+  "version": "1.0.3",
+  "private": true,
   "type": "module",
   "devDependencies": {
     "vitepress": "^1.0.0-rc.44"
