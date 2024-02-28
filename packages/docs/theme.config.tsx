@@ -32,7 +32,7 @@ const config: DocsThemeConfig = {
         name="description"
         content="Lagoss is an open-source runtime and platform that allows developers to run TypeScript and JavaScript Functions at the Edge, close to users."
       />
-      <meta property="og:url" content="https://lagoss.app" />
+      <meta property="og:url" content="https://lagoss.com" />
       <meta property="og:type" content="website" />
       <meta property="og:title" content="Lagoss" />
       <meta
@@ -47,7 +47,7 @@ const config: DocsThemeConfig = {
     </>
   ),
   chat: {
-    link: 'https://discord.lagoss.dev/',
+    link: 'https://discord.lagoss.com/',
   },
 };
 

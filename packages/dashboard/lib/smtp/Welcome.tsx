@@ -32,7 +32,7 @@ export function Welcome({ name }: WelcomeProps) {
             We are excited to have you on board! Start your journey by deploying your first Function:
           </Text>
           <Section style={btnContainer}>
-            <Button pX={14} pY={10} style={button} href="https://docs.lagoss.com/get-started">
+            <Button pX={14} pY={10} style={button} href="https://docs.lagoss.com/getting-started">
               Get started guide
             </Button>
           </Section>

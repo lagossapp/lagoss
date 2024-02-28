@@ -221,7 +221,7 @@ const FunctionSettings = ({ func, refetch }: FunctionSettingsProps) => {
           description={
             <>
               {t('domains.description')}&nbsp;
-              <Link inline href="https://docs.lagoss.com/cloud/domains" target="_blank">
+              <Link inline href="https://docs.lagoss.com/usage/domains" target="_blank">
                 {t('domains.doc')}
               </Link>
             </>
@@ -340,7 +340,7 @@ const FunctionSettings = ({ func, refetch }: FunctionSettingsProps) => {
             description={
               <>
                 {t('cron.description')}&nbsp;
-                <Link inline href="https://docs.lagoss.com/cloud/cron" target="_blank">
+                <Link inline href="https://docs.lagoss.com/usage/cron" target="_blank">
                   {t('cron.doc')}
                 </Link>
               </>
@@ -414,7 +414,7 @@ const FunctionSettings = ({ func, refetch }: FunctionSettingsProps) => {
             description={
               <>
                 {t('env.description')}&nbsp;
-                <Link inline href="https://docs.lagoss.com/cloud/environment-variables" target="_blank">
+                <Link inline href="https://docs.lagoss.com/usage/environment-variables" target="_blank">
                   {t('env.doc')}
                 </Link>
               </>
