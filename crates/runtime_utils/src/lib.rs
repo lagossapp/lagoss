@@ -174,7 +174,7 @@ mod tests {
             vec![
                 "123.lagoss.test".to_owned(),
                 "hello.lagoss.test".to_owned(),
-                "lagoss.app".to_owned()
+                "lagoss.com".to_owned()
             ]
         );
     }
