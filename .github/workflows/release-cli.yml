@@ -1,15 +1,19 @@
-name: CD
+name: Release cli
+
 on:
   push:
     tags:
       - '@lagoss/cli@*'
   workflow_dispatch:
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
 jobs:
   artifacts:
     name: Create Artifact ${{ matrix.target }} (${{ matrix.os }})

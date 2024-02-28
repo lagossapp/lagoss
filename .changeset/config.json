@@ -3,7 +3,7 @@
   "changelog": [
     "@changesets/changelog-github",
     {
-      "repo": "lagosapp/lagoss"
+      "repo": "lagossapp/lagoss"
     }
   ],
   "commit": false,
