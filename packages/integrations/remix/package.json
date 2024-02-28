@@ -1,6 +1,6 @@
 {
   "name": "@lagoss/remix",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Remix integration to deploy your site to Lagoss",
   "type": "module",
   "main": "dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "@lagoss/runtime-utils",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "JavaScript Serverless Runtime for Lagoss",
   "private": true,
   "scripts": {
