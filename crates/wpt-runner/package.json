@@ -1,6 +1,6 @@
 {
   "name": "@lagoss/wpt-runner",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "web-platform-tests runner for Lagoss Runtime",
   "private": true,
   "scripts": {

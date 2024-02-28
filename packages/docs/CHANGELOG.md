@@ -1,5 +1,17 @@
 # @lagoss/docs
 
+## 1.1.0
+
+### Minor Changes
+
+- [#14](https://github.com/lagossapp/lagoss/pull/14) [`7a9b7da`](https://github.com/lagossapp/lagoss/commit/7a9b7daef8d11137f7e7b6b954ab0d6f0a37d443) Thanks [@anbraten](https://github.com/anbraten)! - Renamed from lagon to lagoss
+
+### Patch Changes
+
+- [#1018](https://github.com/lagonapp/lagon/pull/1018) [`3806cbb`](https://github.com/lagossapp/lagoss/commit/3806cbb7fc824721783147bba2f93f8de743f8f7) Thanks [@QuiiBz](https://github.com/QuiiBz)! - Add Neon example
+
+- [#15](https://github.com/lagossapp/lagoss/pull/15) [`55eee53`](https://github.com/lagossapp/lagoss/commit/55eee53d29aacf7134e1efced4dcac3ff5450585) Thanks [@anbraten](https://github.com/anbraten)! - Fix release workflow
+
 ## 1.0.3
 
 ### Patch Changes
