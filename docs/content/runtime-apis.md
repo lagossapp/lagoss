@@ -18,24 +18,24 @@ Starting from this simple code, you can do whatever you wish, using the Web APIs
 
 The `Request` object coming from the `handler` function also contains additional headers:
 
-- `X-Lagon-Region`: the [region](./usage/regions.md) where this Function is executing
+- `X-Lagoss-Region`: the [region](./usage/regions.md) where this Function is executing
 - `X-Forwarded-For`: the IP address of the client that made the request
 
 You can access them the same as any other header:
 
 ```typescript {2-3}
 export function handler(request: Request) {
-  const region = request.headers.get('x-lagon-region');
+  const region = request.headers.get('x-lagoss-region');
   const ip = request.headers.get('x-forwarded-for');
 
   return new Response(`Region: ${region}, User IP: ${ip}`);
 }
 ```
 
-The `X-Lagon-Region` header is also automatically added to each response, making it easy to identify which Region served the request.
+The `X-Lagoss-Region` header is also automatically added to each response, making it easy to identify which Region served the request.
 
 ::: info
-When developing locally using [`lagoss dev`](./cli.md#lagoss-dev), the `X-Lagon-Region` header will be set to `local`.
+When developing locally using [`lagoss dev`](./cli.md#lagoss-dev), the `X-Lagoss-Region` header will be set to `local`.
 :::
 
 ## NPM support

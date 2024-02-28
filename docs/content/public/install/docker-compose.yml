@@ -42,7 +42,7 @@ services:
       MINIO_ROOT_USER: lagoss
       MINIO_ROOT_PASSWORD: ${S3_ROOT_SECRET_ACCESS_KEY}
     entrypoint: sh
-    command: -c 'mkdir -p /data/lagon && minio server /data --console-address ":9001" --address ":9002"'
+    command: -c 'mkdir -p /data/lagoss && minio server /data --console-address ":9001" --address ":9002"'
     restart: unless-stopped
 
   dashboard:
@@ -58,7 +58,7 @@ services:
       CLICKHOUSE_USER: lagoss
       CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
       CLICKHOUSE_DATABASE: lagoss
-      LAGON_REGION: local
+      LAGOSS_REGION: local
     env_file: .env
     depends_on:
       - redis
@@ -80,9 +80,9 @@ services:
       CLICKHOUSE_USER: lagoss
       CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
       CLICKHOUSE_DATABASE: lagoss
-      LAGON_REGION: local
-      LAGON_ISOLATES_CACHE_SECONDS: 60
-      LAGON_LISTEN_ADDR: 0.0.0.0:4000
+      LAGOSS_REGION: local
+      LAGOSS_ISOLATES_CACHE_SECONDS: 60
+      LAGOSS_LISTEN_ADDR: 0.0.0.0:4000
     env_file: .env
     depends_on:
       - redis
