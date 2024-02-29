@@ -9,8 +9,8 @@ use flate2::write::GzEncoder;
 use flate2::write::ZlibDecoder;
 use flate2::write::ZlibEncoder;
 use flate2::Compression;
-use lagon_runtime_v8_utils::v8_exception;
-use lagon_runtime_v8_utils::v8_string;
+use lagoss_runtime_v8_utils::v8_exception;
+use lagoss_runtime_v8_utils::v8_string;
 use uuid::Uuid;
 
 fn compression_create(

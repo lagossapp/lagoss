@@ -1,6 +1,6 @@
 use clickhouse::{test::handlers, Client};
-use lagon_runtime::{options::RuntimeOptions, Runtime};
-use lagon_serverless::clickhouse::{LogRow, RequestRow};
+use lagoss_runtime::{options::RuntimeOptions, Runtime};
+use lagoss_serverless::clickhouse::{LogRow, RequestRow};
 use std::sync::Once;
 
 use crate::utils::mock::Mock;

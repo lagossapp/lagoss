@@ -83,7 +83,7 @@ export default {
   'settings.transfer.success': 'Ownership of this Organization transferred successfully.',
   'settings.transfer.notAvailable': 'Not available yet.',
   'settings.transfer.notAvailable.description':
-    'Please email contact@lagon.app if you want to transfer your Organization.',
+    'Please email lagoss[at]ju60.de if you want to transfer your Organization.',
 
   'settings.usage.title': 'Usage',
   'settings.usage.description':
@@ -133,7 +133,7 @@ export default {
   'profile.delete.modal.confirm': 'Confirm with your email',
   'profile.delete.modal.submit': 'Delete Account',
   'profile.delete.notAvailable': 'Not available yet.',
-  'profile.delete.notAvailable.description': 'Please email contact@lagon.app if you want to delete your Account.',
+  'profile.delete.notAvailable.description': 'Please email lagoss[at]ju60.de if you want to delete your Account.',
 
   'cli.title': 'Log in to the CLI',
   'cli.description': 'This is your verification code to login in the CLI. Copy it and paste it in your terminal.',

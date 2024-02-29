@@ -14,18 +14,18 @@ use hyper::{
     service::{make_service_fn, service_fn},
     Body, Request, Response, Server,
 };
-use lagon_runtime_http::{RunResult, X_LAGON_ID};
-use lagon_runtime_isolate::{
+use lagoss_runtime_http::{RunResult, X_LAGOSS_ID};
+use lagoss_runtime_isolate::{
     options::{IsolateOptions, Metadata},
     Isolate, IsolateEvent, IsolateRequest,
 };
-use lagon_runtime_utils::{
+use lagoss_runtime_utils::{
     assets::{find_asset, handle_asset},
     response::{handle_response, ResponseEvent, FAVICON_URL, PAGE_403, PAGE_404},
     DEPLOYMENTS_DIR,
 };
-use lagon_serverless_downloader::Downloader;
-use lagon_serverless_pubsub::PubSubListener;
+use lagoss_serverless_downloader::Downloader;
+use lagoss_serverless_pubsub::PubSubListener;
 use log::{as_debug, error, info, warn};
 use metrics::{decrement_gauge, histogram, increment_counter, increment_gauge};
 use std::{
@@ -51,7 +51,7 @@ async fn handle_error(
 ) {
     let (level, message) = match result {
         RunResult::Timeout => {
-            increment_counter!("lagon_isolate_timeouts", "deployment" => deployment_id.clone(), "function" => function_id.clone());
+            increment_counter!("lagoss_isolate_timeouts", "deployment" => deployment_id.clone(), "function" => function_id.clone());
 
             let message = "Function execution timed out";
             warn!(deployment = deployment_id, function = function_id, request = request_id; "{}", message);
@@ -59,7 +59,7 @@ async fn handle_error(
             ("warn", message.into())
         }
         RunResult::MemoryLimit => {
-            increment_counter!("lagon_isolate_memory_limits", "deployment" => deployment_id.clone(), "function" => function_id.clone());
+            increment_counter!("lagoss_isolate_memory_limits", "deployment" => deployment_id.clone(), "function" => function_id.clone());
 
             let message = "Function execution memory limit reached";
             warn!(deployment = deployment_id, function = function_id, request = request_id; "{}", message);
@@ -67,7 +67,7 @@ async fn handle_error(
             ("warn", message.into())
         }
         RunResult::Error(error) => {
-            increment_counter!("lagon_isolate_errors", "deployment" => deployment_id.clone(), "function" => function_id.clone());
+            increment_counter!("lagoss_isolate_errors", "deployment" => deployment_id.clone(), "function" => function_id.clone());
 
             let message = format!("Function execution error: {}", error);
             error!(deployment = deployment_id, function = function_id, request = request_id; "{}", message);
@@ -103,8 +103,8 @@ async fn handle_request(
     inserters: Arc<Mutex<(Inserter<RequestRow>, Inserter<LogRow>)>>,
     log_sender: flume::Sender<(String, String, Metadata)>,
 ) -> Result<Response<Body>> {
-    let request_id = match req.headers().get(X_LAGON_ID) {
-        Some(x_lagon_id) => x_lagon_id.to_str().unwrap_or("").to_string(),
+    let request_id = match req.headers().get(X_LAGOSS_ID) {
+        Some(x_lagoss_id) => x_lagoss_id.to_str().unwrap_or("").to_string(),
         None => String::new(),
     };
 
@@ -112,7 +112,7 @@ async fn handle_request(
         Some(hostname) => hostname.to_str()?.to_string(),
         None => {
             increment_counter!(
-                "lagon_ignored_requests",
+                "lagoss_ignored_requests",
                 "reason" => "No hostname",
             );
             warn!(req = as_debug!(req), request = request_id; "No Host header found in request");
@@ -125,7 +125,7 @@ async fn handle_request(
         Some(entry) => Arc::clone(entry.value()),
         None => {
             increment_counter!(
-                "lagon_ignored_requests",
+                "lagoss_ignored_requests",
                 "reason" => "No deployment",
                 "hostname" => hostname.clone(),
             );
@@ -137,7 +137,7 @@ async fn handle_request(
 
     if deployment.cron.is_some() {
         increment_counter!(
-            "lagon_ignored_requests",
+            "lagoss_ignored_requests",
             "reason" => "Cron",
             "hostname" => hostname.clone(),
         );
@@ -194,7 +194,7 @@ async fn handle_request(
 
             std::thread::Builder::new().name(String::from("isolate-") + deployment.id.as_str()).spawn(move || {
                 handle.block_on(async move {
-                    increment_gauge!("lagon_isolates", 1.0, "deployment" => deployment.id.clone(), "function" => deployment.function_id.clone());
+                    increment_gauge!("lagoss_isolates", 1.0, "deployment" => deployment.id.clone(), "function" => deployment.function_id.clone());
                     info!(deployment = deployment.id, function = deployment.function_id, request = request_id_handle; "Creating new isolate");
 
                     let code = deployment.get_code().unwrap_or_else(|error| {
@@ -220,7 +220,7 @@ async fn handle_request(
                                     ("function", metadata.1.clone()),
                                 ];
 
-                                decrement_gauge!("lagon_isolates", 1.0, &labels);
+                                decrement_gauge!("lagoss_isolates", 1.0, &labels);
                                 info!(deployment = metadata.0, function = metadata.1; "Dropping isolate");
                             }
                         }))
@@ -232,7 +232,7 @@ async fn handle_request(
                                 ];
 
                                 histogram!(
-                                    "lagon_isolate_memory_usage",
+                                    "lagoss_isolate_memory_usage",
                                     statistics as f64,
                                     &labels
                                 );

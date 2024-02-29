@@ -54,7 +54,7 @@
         </template>
       </ClientOnly>
 
-      <a href="https://docs.lagon.app" rel="noopener noreferrer" target="_blank">
+      <a href="https://docs.lagoss.com" rel="noopener noreferrer" target="_blank">
         <UButton label="Docs" size="xs" color="white" />
       </a>
 

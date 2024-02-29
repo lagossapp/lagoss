@@ -25,9 +25,9 @@ struct Cli {
 
 #[derive(Subcommand, Debug)]
 enum Commands {
-    /// Log in to Lagon
+    /// Log in to Lagoss
     Login,
-    /// Log out of Lagon
+    /// Log out of Lagoss
     Logout,
     /// Deploy a new or existing Function
     Deploy {

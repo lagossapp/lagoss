@@ -2,9 +2,9 @@ use hyper::{
     http::{response::Builder, Request},
     Body,
 };
-use lagon_runtime::{options::RuntimeOptions, Runtime};
-use lagon_runtime_http::{RunResult, StreamResult};
-use lagon_runtime_isolate::{options::IsolateOptions, Isolate, IsolateEvent, IsolateRequest};
+use lagoss_runtime::{options::RuntimeOptions, Runtime};
+use lagoss_runtime_http::{RunResult, StreamResult};
+use lagoss_runtime_isolate::{options::IsolateOptions, Isolate, IsolateEvent, IsolateRequest};
 use std::sync::Once;
 use tokio::runtime::Handle;
 

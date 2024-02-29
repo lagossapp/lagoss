@@ -1,30 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Function errored</title>
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <title>Function errored</title>
-</head>
+  <body>
+    <section class="flex h-screen w-screen flex-col items-center justify-center dark:bg-stone-800">
+      <h1 class="mb-1 text-3xl font-semibold text-gray-900 dark:text-gray-200">Function errored</h1>
+      <span class="mb-6 text-lg uppercase text-blue-500">500</span>
+      <p class="text-center text-base text-gray-800 dark:text-gray-300">
+        An error occurred while running this Function.
+        <br />
+        If you are the owner, check the logs.
+      </p>
+    </section>
 
-<body>
-  <section class="w-screen h-screen flex items-center justify-center flex-col dark:bg-stone-800">
-    <h1 class="font-semibold text-3xl text-gray-900 dark:text-gray-200 mb-1">Function errored</h1>
-    <span class="uppercase text-lg text-blue-500 mb-6">500</span>
-    <p class="text-base text-gray-800 dark:text-gray-300 text-center">
-      An error occurred while running this Function.
-      <br />
-      If you are the owner, check the logs.
-    </p>
-  </section>
-
-  <footer class="absolute bottom-4 left-[50%] transform -translate-x-[50%]">
-    <a href="https://lagon.app" target="_blank">
-      <img class="h-6 dark:hidden" alt="Lagon logo" src="https://github.com/lagonapp/lagon/blob/main/assets/logo-black.png?raw=true" />
-      <img class="h-6 hidden dark:block" alt="Lagon logo for dark mode" src="https://github.com/lagonapp/lagon/blob/main/assets/logo-white.png?raw=true" />
-    </a>
-  </footer>
-</body>
-
+    <footer class="absolute bottom-4 left-[50%] -translate-x-[50%] transform">
+      <a href="https://lagoss.com" target="_blank">
+        <img
+          class="h-6 dark:hidden"
+          alt="Lagoss logo"
+          src="https://github.com/lagossapp/lagoss/blob/main/assets/logo-black.png?raw=true"
+        />
+        <img
+          class="hidden h-6 dark:block"
+          alt="Lagoss logo for dark mode"
+          src="https://github.com/lagossapp/lagoss/blob/main/assets/logo-white.png?raw=true"
+        />
+      </a>
+    </footer>
+  </body>
 </html>

@@ -1,15 +1,16 @@
 name: web-platform-tests
+
 on:
-  push:
-    branches:
-      - main
   pull_request:
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
 jobs:
   wpt:
     name: web-platform-tests
@@ -28,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Build runtime
-        run: pnpm turbo build --filter=@lagon/js-runtime
+        run: pnpm turbo build --filter=@lagoss/js-runtime
       - name: Run wpt-runner
         run: cd crates/wpt-runner && pnpm start
       - name: Check if results have changed

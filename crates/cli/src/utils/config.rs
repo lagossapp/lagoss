@@ -10,13 +10,13 @@ fn get_site_url() -> String {
 
 #[cfg(not(debug_assertions))]
 fn get_site_url() -> String {
-    "https://dash.lagon.app".to_string()
+    "https://app.lagoss.com".to_string()
 }
 
 fn get_config_path() -> Result<PathBuf> {
     Ok(dirs::home_dir()
         .ok_or_else(|| anyhow!("Could not find home directory"))?
-        .join(".lagon")
+        .join(".lagoss")
         .join("config.json"))
 }
 

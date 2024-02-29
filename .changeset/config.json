@@ -3,16 +3,11 @@
   "changelog": [
     "@changesets/changelog-github",
     {
-      "repo": "lagonapp/lagon"
+      "repo": "lagossapp/lagoss"
     }
   ],
   "commit": false,
-  "fixed": [
-    [
-      "@lagon/runtime",
-      "@lagon/js-runtime"
-    ]
-  ],
+  "fixed": [["@lagoss/runtime", "@lagoss/js-runtime"]],
   "linked": [],
   "access": "public",
   "baseBranch": "main",

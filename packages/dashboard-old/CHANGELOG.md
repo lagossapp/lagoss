@@ -1,4 +1,19 @@
-# @lagon/dashboard
+# @lagoss/dashboard
+
+## 0.4.0
+
+### Minor Changes
+
+- [#14](https://github.com/lagossapp/lagoss/pull/14) [`7a9b7da`](https://github.com/lagossapp/lagoss/commit/7a9b7daef8d11137f7e7b6b954ab0d6f0a37d443) Thanks [@anbraten](https://github.com/anbraten)! - Renamed from lagon to lagoss
+
+### Patch Changes
+
+- [#1048](https://github.com/lagonapp/lagon/pull/1048) [`aee172d`](https://github.com/lagossapp/lagoss/commit/aee172d548fb70d47083165f7b80867574c284e1) Thanks [@QuiiBz](https://github.com/QuiiBz)! - Fix organization members check
+
+- [#15](https://github.com/lagossapp/lagoss/pull/15) [`55eee53`](https://github.com/lagossapp/lagoss/commit/55eee53d29aacf7134e1efced4dcac3ff5450585) Thanks [@anbraten](https://github.com/anbraten)! - Fix release workflow
+
+- Updated dependencies [[`55eee53`](https://github.com/lagossapp/lagoss/commit/55eee53d29aacf7134e1efced4dcac3ff5450585), [`7a9b7da`](https://github.com/lagossapp/lagoss/commit/7a9b7daef8d11137f7e7b6b954ab0d6f0a37d443)]:
+  - @lagoss/ui@0.3.0
 
 ## 0.3.13
 

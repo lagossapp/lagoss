@@ -11,7 +11,7 @@ pub fn build(
     let (root, function_config) = resolve_path(path, client, public_dir)?;
     let (index, assets) = bundle_function(&function_config, &root, true)?;
 
-    let end_progress = print_progress("Writting files");
+    let end_progress = print_progress("Writing files");
     let root = root.join(".lagoss");
 
     fs::create_dir_all(&root)?;
@@ -33,7 +33,9 @@ pub fn build(
     println!(" {} Build successful!", style("◼").magenta());
     println!(
         "   {}",
-        style(format!("You can find it in {:?}", root)).black().bright()
+        style(format!("You can find it in {:?}", root))
+            .black()
+            .bright()
     );
 
     Ok(())

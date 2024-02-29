@@ -1,4 +1,4 @@
-import { Text, Card, Button } from '@lagon/ui';
+import { Text, Card, Button } from '@lagoss/ui';
 import { GitHubIcon } from 'lib/components/GitHubIcon';
 // import { GoogleIcon } from 'lib/components/GoogleIcon';
 import { useScopedI18n } from 'locales';

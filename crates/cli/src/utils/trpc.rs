@@ -63,10 +63,10 @@ impl TrpcClient {
                 format!("{}/api/trpc/{}{}", self.config.site_url.clone(), key, input,),
             )
             .header("content-type", "application/json")
-            .header("x-lagon-token", self.config.token.as_ref().unwrap());
+            .header("x-lagoss-token", self.config.token.as_ref().unwrap());
 
         if let Some(organization_id) = &self.organization_id {
-            builder = builder.header("x-lagon-organization-id", organization_id);
+            builder = builder.header("x-lagoss-organization-id", organization_id);
         }
 
         let response = builder.send().await?;
@@ -95,10 +95,10 @@ impl TrpcClient {
                 format!("{}/api/trpc/{}", self.config.site_url.clone(), key),
             )
             .header("content-type", "application/json")
-            .header("x-lagon-token", self.config.token.as_ref().unwrap());
+            .header("x-lagoss-token", self.config.token.as_ref().unwrap());
 
         if let Some(organization_id) = &self.organization_id {
-            builder = builder.header("x-lagon-organization-id", organization_id);
+            builder = builder.header("x-lagoss-organization-id", organization_id);
         }
 
         let response = builder.body(body).send().await?;

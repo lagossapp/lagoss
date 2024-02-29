@@ -1,8 +1,8 @@
 use bindings::compression::CompressionInner;
 use futures::{future::poll_fn, stream::FuturesUnordered, Future, StreamExt};
 use hyper::{body::Bytes, http::request::Parts};
-use lagon_runtime_http::{request_to_v8, response_from_v8, RunResult, StreamResult};
-use lagon_runtime_v8_utils::v8_string;
+use lagoss_runtime_http::{request_to_v8, response_from_v8, RunResult, StreamResult};
+use lagoss_runtime_v8_utils::v8_string;
 use linked_hash_map::LinkedHashMap;
 use std::{
     cell::{RefCell, RefMut},

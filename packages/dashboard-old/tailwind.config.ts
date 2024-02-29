@@ -1,1 +1,1 @@
-module.exports = require('@lagon/ui/tailwind.config');
+module.exports = require('@lagoss/ui/tailwind.config');

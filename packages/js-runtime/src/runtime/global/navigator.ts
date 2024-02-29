@@ -7,6 +7,6 @@ import { version } from '../../../package.json';
 (globalThis => {
   globalThis.navigator = {
     ...globalThis.navigator,
-    userAgent: `Lagon/${version}`,
+    userAgent: `Lagoss/${version}`,
   };
 })(globalThis);

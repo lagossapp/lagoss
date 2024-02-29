@@ -1,5 +1,6 @@
 {
-  "name": "@lagon/dashboard",
+  "name": "@lagoss/dashboard",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,7 +9,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "push": "NITRO_PRESET=lagon nuxt build && lagon deploy -p .output/public/ .output/server/index.mjs",
+    "push": "NITRO_PRESET=lagon nuxt build && lagoss deploy -p .output/public/ .output/server/index.mjs",
     "db:ui": "drizzle-kit studio"
   },
   "devDependencies": {
@@ -16,7 +17,7 @@
     "@aws-sdk/s3-request-presigner": "^3.186.0",
     "@aws-sdk/signature-v4-crt": "^3.474.0",
     "@iconify/json": "^2.2.158",
-    "@lagon/cli": "workspace:^",
+    "@lagoss/cli": "workspace:^",
     "@nuxt/ui": "^2.12.0",
     "@planetscale/database": "^1.13.0",
     "@scaleway/use-random-name": "^0.3.0",

@@ -1,10 +1,10 @@
 [package]
-name = "lagon-serverless-downloader"
+name = "lagoss-serverless-downloader"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-lagon-runtime-utils = { path = "../runtime_utils" }
+lagoss-runtime-utils = { path = "../runtime_utils" }
 anyhow = "1.0.72"
 async-trait = "0.1.72"
 rust-s3 = "0.33"

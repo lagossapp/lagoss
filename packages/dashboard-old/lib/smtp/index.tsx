@@ -35,6 +35,6 @@ const sendEmail = async ({ to, subject, email }: { to: string; subject: string; 
 export const sendWelcomeEmail = async ({ to, name }: { to: string; name: string }) =>
   sendEmail({
     to,
-    subject: 'Welcome to Lagon',
+    subject: 'Welcome to Lagoss',
     email: <Welcome name={name} />,
   });

@@ -11,10 +11,10 @@ const CACHE_TASK_INTERVAL: Duration = Duration::from_secs(5);
 
 pub fn run_cache_clear_task(last_requests: Arc<DashMap<String, Instant>>, workers: Workers) {
     let isolates_cache_seconds = Duration::from_secs(
-        env::var("LAGON_ISOLATES_CACHE_SECONDS")
-            .expect("LAGON_ISOLATES_CACHE_SECONDS is not set")
+        env::var("LAGOSS_ISOLATES_CACHE_SECONDS")
+            .expect("LAGOSS_ISOLATES_CACHE_SECONDS is not set")
             .parse()
-            .expect("LAGON_ISOLATES_CACHE_SECONDS is not a valid number"),
+            .expect("LAGOSS_ISOLATES_CACHE_SECONDS is not a valid number"),
     );
 
     tokio::spawn(async move {

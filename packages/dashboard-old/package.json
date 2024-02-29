@@ -1,5 +1,5 @@
 {
-  "name": "@lagon/dashboard-old",
+  "name": "@lagoss/dashboard-old",
   "version": "0.3.13",
   "private": true,
   "scripts": {
@@ -17,7 +17,7 @@
     "@aws-sdk/s3-request-presigner": "^3.186.0",
     "@headlessui/react": "^1.6.4",
     "@heroicons/react": "^2.0.0",
-    "@lagon/ui": "workspace:*",
+    "@lagoss/ui": "workspace:*",
     "@monaco-editor/react": "^4.5.1",
     "@next-auth/prisma-adapter": "^1.0.6",
     "@prisma/client": "^5.0.0",

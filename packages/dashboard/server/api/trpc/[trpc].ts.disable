@@ -12,8 +12,8 @@ import { eq } from 'drizzle-orm';
 
 async function createContext(event: H3Event) {
   const db = useDB();
-  const tokenValue = getHeader(event, 'x-lagon-token');
-  const organizationId = getHeader(event, 'x-lagon-organization-id');
+  const tokenValue = getHeader(event, 'x-lagoss-token');
+  const organizationId = getHeader(event, 'x-lagoss-organization-id');
 
   const query = getQuery<{ trpc: string }>(event);
 

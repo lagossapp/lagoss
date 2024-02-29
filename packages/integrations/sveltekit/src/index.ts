@@ -6,13 +6,13 @@ import { posix, dirname } from 'node:path';
 
 export default function (): Adapter {
   return {
-    name: '@lagon/sveltekit',
+    name: '@lagoss/sveltekit',
     async adapt(builder) {
       const main = 'build/index.js';
       const bucket = 'build/public';
 
       const files = fileURLToPath(new URL('../files', import.meta.url).href);
-      const tmp = builder.getBuildDirectory('lagon-tmp');
+      const tmp = builder.getBuildDirectory('lagoss-tmp');
 
       builder.rimraf(tmp);
       builder.mkdirp(tmp);

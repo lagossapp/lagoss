@@ -1,12 +1,12 @@
 {
-  "name": "@lagon/serverless",
-  "version": "0.2.4",
-  "description": "Serverless software using Lagon Runtime",
+  "name": "@lagoss/serverless",
+  "version": "0.3.0",
+  "description": "Serverless software using Lagoss Runtime",
   "private": true,
   "scripts": {
     "test": "cargo test -F test",
     "build": "cargo build",
     "lint": "cargo clippy -- -Dwarnings --no-deps",
-    "debug": "cargo build && rust-lldb ../../target/debug/lagon-serverless"
+    "debug": "cargo build && rust-lldb ../../target/debug/lagoss-serverless"
   }
 }
