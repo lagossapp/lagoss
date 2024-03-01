@@ -1,5 +1,15 @@
 # @lagoss/cli
 
+## 0.9.0
+
+### Minor Changes
+
+- [#17](https://github.com/lagossapp/lagoss/pull/17) [`d248a67`](https://github.com/lagossapp/lagoss/commit/d248a67c6f90a278700c3147ee815bbbb553fa49) Thanks [@anbraten](https://github.com/anbraten)! - Add auto-installation for cli binary
+
+### Patch Changes
+
+- [#18](https://github.com/lagossapp/lagoss/pull/18) [`0066bcf`](https://github.com/lagossapp/lagoss/commit/0066bcf7e24c81d2778c5c39fd05493afb985bd3) Thanks [@anbraten](https://github.com/anbraten)! - Create tags for private packages
+
 ## 0.8.0
 
 ### Minor Changes
