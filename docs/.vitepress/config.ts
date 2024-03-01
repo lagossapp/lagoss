@@ -19,6 +19,7 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Docs', link: '/introduction' },
+      { text: 'Dashboard', link: 'https://app.lagoss.com' },
     ],
 
     sidebar: [
