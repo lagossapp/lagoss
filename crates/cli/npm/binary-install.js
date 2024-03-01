@@ -53,7 +53,11 @@ export class Binary {
     return this.binaryPath;
   }
 
-  install() {
+  _isInstalled() {
+    return existsSync(this._getBinaryPath());
+  }
+
+  async install() {
     const dir = this._getInstallDirectory();
     if (!existsSync(dir)) {
       mkdirSync(dir, { recursive: true });
@@ -69,30 +73,29 @@ export class Binary {
 
     console.log(`Downloading release from ${this.url}`);
 
-    return axios({ url: this.url, responseType: 'stream' })
-      .then(res => {
-        const writer = tar.x({ strip: 1, C: this.binaryDirectory });
+    try {
+      const res = await axios({ url: this.url, responseType: 'stream' });
 
-        return new Promise((resolve, reject) => {
-          res.data.pipe(writer);
-          let error = null;
-          writer.on('error', err => {
-            error = err;
-            reject(err);
-          });
-          writer.on('close', () => {
-            if (!error) {
-              resolve(true);
-            }
-          });
+      const writer = tar.x({ strip: 1, C: this.binaryDirectory });
+
+      await new Promise((resolve, reject) => {
+        res.data.pipe(writer);
+        let error = null;
+        writer.on('error', err => {
+          error = err;
+          reject(err);
         });
-      })
-      .then(() => {
-        console.log(`${this.name} has been installed!`);
-      })
-      .catch(e => {
-        error(`Error fetching release: ${e.message}`);
+        writer.on('close', () => {
+          if (!error) {
+            resolve(true);
+          }
+        });
       });
+
+      console.log(`${this.name} has been installed!`);
+    } catch (e) {
+      error(`Error fetching release: ${e.message}`);
+    }
   }
 
   uninstall() {
@@ -102,7 +105,11 @@ export class Binary {
     }
   }
 
-  run() {
+  async run(shouldInstall = true) {
+    if (!this._isInstalled() && shouldInstall) {
+      await this.install();
+    }
+
     const binaryPath = this._getBinaryPath();
     const [, , ...args] = process.argv;
 
