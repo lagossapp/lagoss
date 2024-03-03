@@ -57,6 +57,15 @@ export default defineConfig({
           // { text: 'Regions', link: '/usage/regions' },
           { text: 'Limits', link: '/usage/limits' },
           { text: 'Security', link: '/usage/security' },
+          {
+            text: 'CI',
+            collapsed: true,
+            items: [
+              { text: 'Github Actions', link: '/ci/github-actions' },
+              { text: 'Gitlab CI', link: '/ci/gitlab-ci' },
+              { text: 'Woodpecker', link: '/ci/woodpecker' },
+            ],
+          },
         ],
       },
       {
