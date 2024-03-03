@@ -38,6 +38,8 @@ jobs:
           title: 'ci: release'
           publish: pnpm release
         env:
+          # secrets.GITHUB_TOKEN doesn't trigger workflow on automated release
+          # https://github.com/orgs/community/discussions/26875
           GITHUB_TOKEN: ${{ secrets.PAT }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true

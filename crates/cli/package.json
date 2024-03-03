@@ -1,6 +1,6 @@
 {
   "name": "@lagoss/cli",
-  "version": "0.8.0",
+  "version": "0.9.1",
   "description": "CLI for Lagoss",
   "type": "module",
   "files": [

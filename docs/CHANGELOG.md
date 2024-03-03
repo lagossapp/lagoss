@@ -1,5 +1,11 @@
 # @lagoss/docs
 
+## 1.1.1
+
+### Patch Changes
+
+- [#18](https://github.com/lagossapp/lagoss/pull/18) [`0066bcf`](https://github.com/lagossapp/lagoss/commit/0066bcf7e24c81d2778c5c39fd05493afb985bd3) Thanks [@anbraten](https://github.com/anbraten)! - Create tags for private packages
+
 ## 1.1.0
 
 ### Minor Changes
