@@ -3,15 +3,16 @@
   "version": "1.1.0",
   "private": true,
   "type": "module",
-  "devDependencies": {
-    "vitepress": "^1.0.0-rc.44"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
     "preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "^1.0.0-rc.44",
+    "@lagoss/cli": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
   }
 }
