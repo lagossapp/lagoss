@@ -1,5 +1,11 @@
 # @lagoss/cli
 
+## 0.9.1
+
+### Patch Changes
+
+- [#20](https://github.com/lagossapp/lagoss/pull/20) [`64e0037`](https://github.com/lagossapp/lagoss/commit/64e0037105f27fdedacda8f16125fa5fb796a342) Thanks [@anbraten](https://github.com/anbraten)! - Fix release
+
 ## 0.9.0
 
 ### Minor Changes
