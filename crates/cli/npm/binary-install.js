@@ -58,6 +58,11 @@ export class Binary {
   }
 
   async install() {
+    if (this._isInstalled()) {
+      console.log(`${this.name} is already installed`);
+      return;
+    }
+
     const dir = this._getInstallDirectory();
     if (!existsSync(dir)) {
       mkdirSync(dir, { recursive: true });
@@ -105,11 +110,7 @@ export class Binary {
     }
   }
 
-  async run(shouldInstall = true) {
-    if (!this._isInstalled() && shouldInstall) {
-      await this.install();
-    }
-
+  async run() {
     const binaryPath = this._getBinaryPath();
     const [, , ...args] = process.argv;
 
