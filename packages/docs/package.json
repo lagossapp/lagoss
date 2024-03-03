@@ -1,33 +1,18 @@
 {
   "name": "@lagoss/docs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "postbuild": "next-sitemap",
-    "start": "next start",
-    "lint": "next lint",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "next": "13.4.12",
-    "next-sitemap": "^4.0.5",
-    "nextra": "2.10.0",
-    "nextra-theme-docs": "2.10.0",
-    "posthog-js": "^1.55.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
   },
   "devDependencies": {
-    "@types/node": "^18.0.0",
-    "@types/react": "^18.0.9",
-    "@types/react-dom": "^18.0.5",
-    "autoprefixer": "^10.4.7",
-    "eslint": "^8.16.0",
-    "eslint-config-next": "13.4.12",
-    "postcss": "^8.4.22",
-    "tailwindcss": "^3.3.1",
-    "typescript": "^5.1.3"
+    "vitepress": "^1.0.0-rc.44",
+    "@lagoss/cli": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
   }
 }
