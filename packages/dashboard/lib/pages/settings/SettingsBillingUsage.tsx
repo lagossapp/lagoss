@@ -9,6 +9,7 @@ import useFunctions from 'lib/hooks/useFunctions';
 import useFunctionsUsage from 'lib/hooks/useFunctionsUsage';
 import useOrganizationMembers from 'lib/hooks/useOrganizationMembers';
 import { useRouter } from 'next/router';
+import getConfig from 'next/config';
 
 function formatNumber(number = 0) {
   return number.toLocaleString();
@@ -100,6 +101,8 @@ const SettingsBillingUsage = () => {
     currentPeriodEnd: session?.organization?.stripeCurrentPeriodEnd,
   });
 
+  const { publicRuntimeConfig } = getConfig();
+
   return (
     <div className="flex flex-col gap-8">
       <Card title={t('usage.title')} description={t('usage.description')}>
@@ -145,8 +148,8 @@ const SettingsBillingUsage = () => {
               disabled={isLoadingPlan || !isOrganizationOwner}
               onClick={() =>
                 checkout(
-                  process.env.NEXT_PUBLIC_STRIPE_PRO_PLAN_PRICE_ID as string,
-                  process.env.NEXT_PUBLIC_STRIPE_PRO_PLAN_PRICE_ID_METERED as string,
+                  publicRuntimeConfig.STRIPE_PRO_PLAN_PRICE_ID as string,
+                  publicRuntimeConfig.STRIPE_PRO_PLAN_PRICE_ID_METERED as string,
                 )
               }
             >

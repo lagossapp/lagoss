@@ -1,24 +1,30 @@
 import cronstrue from 'cronstrue';
+import getConfig from 'next/config';
 
 /**
  * Example:
  *
- * NEXT_PUBLIC_LAGOSS_ROOT_SCHEM=https
- * NEXT_PUBLIC_LAGOSS_ROOT_DOMAIN=lagoss.com
+ * LAGOSS_ROOT_SCHEM=https
+ * LAGOSS_ROOT_DOMAIN=lagoss.com
  * name=hello-world
  *
  * -> https://hello-world.lagoss.com
  */
+
 export function getFullCurrentDomain({ name }: { name: string }): string {
-  return `${process.env.NEXT_PUBLIC_LAGOSS_ROOT_SCHEM}://${getCurrentDomain({ name })}`;
+  const { publicRuntimeConfig } = getConfig();
+  return `${publicRuntimeConfig.LAGOSS_ROOT_SCHEM}://${getCurrentDomain({ name })}`;
 }
 
 export function getCurrentDomain({ name }: { name: string }): string {
-  return `${name}.${process.env.NEXT_PUBLIC_LAGOSS_ROOT_DOMAIN}`;
+  const { publicRuntimeConfig } = getConfig();
+  return `${name}.${publicRuntimeConfig.LAGOSS_ROOT_DOMAIN}`;
 }
 
 export function getFullDomain(domain: string): string {
-  return `${process.env.NEXT_PUBLIC_LAGOSS_ROOT_SCHEM}://${domain}`;
+  const { publicRuntimeConfig } = getConfig();
+  console.log(publicRuntimeConfig);
+  return `${publicRuntimeConfig.LAGOSS_ROOT_SCHEM}://${domain}`;
 }
 
 export function reloadSession() {
