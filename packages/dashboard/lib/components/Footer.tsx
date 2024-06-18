@@ -27,11 +27,11 @@ const Footer = () => {
       <div className="flex w-full max-w-4xl items-center justify-center gap-8">
         <span>v{packageJson.version}</span>
         <StatusBadge />
-        <FooterLink href="https://github.com/lagonapp/lagon">
+        <FooterLink href="https://github.com/lagossapp/lagoss">
           <GitHubIcon className="h-4" />
           GitHub
         </FooterLink>
-        <FooterLink href="https://twitter.com/lagonapp">
+        <FooterLink href="https://twitter.com/lagossapp">
           <TwitterIcon className="h-4" />
           Twitter
         </FooterLink>

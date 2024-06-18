@@ -1,6 +1,6 @@
 import FunctionLinks from 'lib/components/FunctionLinks';
 import useFunctions from 'lib/hooks/useFunctions';
-import { Card, Dot, Text, Button, EmptyState } from '@lagon/ui';
+import { Card, Dot, Text, Button, EmptyState } from '@lagoss/ui';
 import { useScopedI18n } from 'locales';
 import { getHumanFriendlyCron } from 'lib/utils';
 
@@ -20,7 +20,7 @@ const FunctionsList = () => {
           description={t('empty.description')}
           image="/images/functions-empty.png"
           action={
-            <Button variant="primary" size="lg" href="https://docs.lagon.app/get-started" target="_blank">
+            <Button variant="primary" size="lg" href="https://docs.lagoss.com/getting-started" target="_blank">
               {t('empty.action')}
             </Button>
           }

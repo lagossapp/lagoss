@@ -1,17 +1,14 @@
 use anyhow::Result;
-use lagon_runtime::{options::RuntimeOptions, Runtime};
-use lagon_serverless::clickhouse::{create_client, run_migrations};
-use lagon_serverless::deployments::get_deployments;
-use lagon_serverless::get_region;
-use lagon_serverless::serverless::start;
-use lagon_serverless_downloader::{get_bucket, S3BucketDownloader};
-use lagon_serverless_logger::init_logger;
-use lagon_serverless_pubsub::RedisPubSub;
+use lagoss_runtime::{options::RuntimeOptions, Runtime};
+use lagoss_serverless::clickhouse::{create_client, run_migrations};
+use lagoss_serverless::deployments::get_deployments;
+use lagoss_serverless::get_region;
+use lagoss_serverless::serverless::start;
+use lagoss_serverless_downloader::{get_bucket, S3BucketDownloader};
+use lagoss_serverless_logger::init_logger;
+use lagoss_serverless_pubsub::RedisPubSub;
 use log::info;
 use metrics_exporter_prometheus::PrometheusBuilder;
-use mysql::{Opts, Pool};
-#[cfg(not(debug_assertions))]
-use mysql::{OptsBuilder, SslOpts};
 #[cfg(not(debug_assertions))]
 use std::borrow::Cow;
 use std::env;
@@ -33,9 +30,11 @@ async fn main() -> Result<()> {
 
     let _flush_guard = init_logger(get_region().clone()).expect("Failed to init logger");
 
+    info!("Starting serverless runtime");
+
     let runtime = Runtime::new(RuntimeOptions::default());
-    let addr: SocketAddr = env::var("LAGON_LISTEN_ADDR")
-        .expect("LAGON_LISTEN_ADDR must be set")
+    let addr: SocketAddr = env::var("LAGOSS_LISTEN_ADDR")
+        .expect("LAGOSS_LISTEN_ADDR must be set")
         .parse()?;
     let prometheus_addr: SocketAddr = env::var("PROMETHEUS_LISTEN_ADDR")
         .expect("PROMETHEUS_LISTEN_ADDR must be set")
@@ -55,16 +54,6 @@ async fn main() -> Result<()> {
 
     builder.install().expect("Failed to start metrics exporter");
 
-    let url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    let url = url.as_str();
-    let opts = Opts::from_url(url).expect("Failed to parse DATABASE_URL");
-    #[cfg(not(debug_assertions))]
-    let opts = OptsBuilder::from_opts(opts).ssl_opts(Some(SslOpts::default().with_root_cert_path(
-        Some(Cow::from(Path::new("/etc/ssl/certs/ca-certificates.crt"))),
-    )));
-    let pool = Pool::new(opts)?;
-    let conn = pool.get_conn()?;
-
     let bucket = get_bucket()?;
     let downloader = Arc::new(S3BucketDownloader::new(bucket));
 
@@ -74,7 +63,10 @@ async fn main() -> Result<()> {
     let client = create_client();
     run_migrations(&client).await?;
 
-    let deployments = get_deployments(conn, Arc::clone(&downloader)).await?;
+    let api_url = env::var("LAGOSS_URL").expect("LAGOSS_URL must be set");
+    let api_token = env::var("LAGOSS_API_TOKEN").expect("LAGOSS_API_TOKEN must be set");
+    let deployments = get_deployments(api_url, api_token, Arc::clone(&downloader)).await?;
+
     let serverless = start(deployments, addr, downloader, pubsub, client).await?;
     tokio::spawn(serverless).await?;
 

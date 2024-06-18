@@ -1,0 +1,12 @@
+{
+	# debug
+	# email you@your-domain.com
+}
+
+*.your-domain.com {
+  reverse_proxy serverless:4000
+}
+
+app.your-domain.com {
+  reverse_proxy dashboard:4000
+}

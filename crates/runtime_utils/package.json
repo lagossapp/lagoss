@@ -1,9 +1,9 @@
 {
-    "name": "@lagon/runtime-utils",
-    "version": "0.2.2",
-    "description": "JavaScript Serverless Runtime for Lagon",
-    "private": true,
-    "scripts": {
-        "test": "cargo test -F test"
-    }
+  "name": "@lagoss/runtime-utils",
+  "version": "0.3.1",
+  "description": "JavaScript Serverless Runtime for Lagoss",
+  "private": true,
+  "scripts": {
+    "test": "cargo test -F test"
+  }
 }

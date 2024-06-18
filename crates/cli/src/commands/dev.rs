@@ -6,16 +6,16 @@ use envfile::EnvFile;
 use hyper::server::conn::AddrStream;
 use hyper::service::{make_service_fn, service_fn};
 use hyper::{Body, Request, Response, Server};
-use lagon_runtime::{options::RuntimeOptions, Runtime};
-use lagon_runtime_http::{
-    RunResult, X_FORWARDED_FOR, X_FORWARDED_HOST, X_FORWARDED_PROTO, X_LAGON_ID, X_LAGON_REGION,
+use lagoss_runtime::{options::RuntimeOptions, Runtime};
+use lagoss_runtime_http::{
+    RunResult, X_FORWARDED_FOR, X_FORWARDED_HOST, X_FORWARDED_PROTO, X_LAGOSS_ID, X_LAGOSS_REGION,
     X_REAL_IP,
 };
-use lagon_runtime_isolate::{options::IsolateOptions, Isolate};
-use lagon_runtime_isolate::{IsolateEvent, IsolateRequest};
-use lagon_runtime_utils::assets::{find_asset, handle_asset};
-use lagon_runtime_utils::response::{handle_response, ResponseEvent, FAVICON_URL};
-use lagon_runtime_utils::Deployment;
+use lagoss_runtime_isolate::{options::IsolateOptions, Isolate};
+use lagoss_runtime_isolate::{IsolateEvent, IsolateRequest};
+use lagoss_runtime_utils::assets::{find_asset, handle_asset};
+use lagoss_runtime_utils::response::{handle_response, ResponseEvent, FAVICON_URL};
+use lagoss_runtime_utils::Deployment;
 use notify::event::ModifyKind;
 use notify::{Config, EventKind, RecommendedWatcher, RecursiveMode, Watcher};
 use std::collections::HashMap;
@@ -123,8 +123,8 @@ async fn handle_request(
         parts.headers.insert(X_FORWARDED_HOST, "localhost".parse()?);
         parts.headers.insert(X_REAL_IP, ip.parse()?);
 
-        parts.headers.insert(X_LAGON_REGION, LOCAL_REGION.parse()?);
-        parts.headers.insert(X_LAGON_ID, "".parse()?);
+        parts.headers.insert(X_LAGOSS_REGION, LOCAL_REGION.parse()?);
+        parts.headers.insert(X_LAGOSS_ID, "".parse()?);
 
         let request = (parts, body);
 

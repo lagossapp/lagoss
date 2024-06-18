@@ -2,7 +2,7 @@ node_modules/
 dist/
 build/
 coverage/
-.lagon/
+.lagoss/
 .turbo/
 .cache/
 ssl/
@@ -21,3 +21,5 @@ storybook-static/
 tsconfig.tsbuildinfo
 snapshot.bin
 .vercel
+
+.data/

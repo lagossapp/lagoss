@@ -2,8 +2,8 @@ use hyper::{
     header::{CONTENT_TYPE, HOST},
     Body, Method, Request, Response,
 };
-use lagon_runtime_http::{RunResult, StreamResult};
-use lagon_runtime_isolate::options::IsolateOptions;
+use lagoss_runtime_http::{RunResult, StreamResult};
+use lagoss_runtime_isolate::options::IsolateOptions;
 
 mod utils;
 

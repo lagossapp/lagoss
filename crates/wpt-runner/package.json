@@ -1,7 +1,7 @@
 {
-  "name": "@lagon/wpt-runner",
-  "version": "0.1.6",
-  "description": "web-platform-tests runner for Lagon Runtime",
+  "name": "@lagoss/wpt-runner",
+  "version": "0.2.1",
+  "description": "web-platform-tests runner for Lagoss Runtime",
   "private": true,
   "scripts": {
     "start": "cargo run > current-results.md",

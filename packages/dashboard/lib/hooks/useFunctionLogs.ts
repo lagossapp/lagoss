@@ -1,4 +1,4 @@
-import { LogsLevel } from '@lagon/ui';
+import { LogsLevel } from '@lagoss/ui';
 import { trpc } from 'lib/trpc';
 import { LogsTimeframe } from 'lib/types';
 

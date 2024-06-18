@@ -1,6 +1,5 @@
-import { Text, Card, Button } from '@lagon/ui';
+import { Text, Card, Button } from '@lagoss/ui';
 import { GitHubIcon } from 'lib/components/GitHubIcon';
-import { GoogleIcon } from 'lib/components/GoogleIcon';
 import { useScopedI18n } from 'locales';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -32,7 +31,7 @@ const Error = () => {
             </Text>
           </div>
           {error === 'AccessDenied' ? (
-            <Button variant="primary" href="https://tally.so/r/n9q1Rp">
+            <Button variant="primary" href="https://tally.so/r/wd9eJr">
               {t('error.joinWaitlist')}
             </Button>
           ) : (
@@ -49,7 +48,7 @@ const Error = () => {
               >
                 {t('github')}
               </Button>
-              <Button
+              {/* <Button
                 leftIcon={<GoogleIcon className="h-4 w-4" />}
                 disabled={isLoading}
                 onClick={() => {
@@ -60,7 +59,7 @@ const Error = () => {
                 }}
               >
                 {t('google')}
-              </Button>
+              </Button> */}
             </div>
           )}
         </div>

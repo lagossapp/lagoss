@@ -1,14 +1,18 @@
 name: Release
+
 on:
   push:
     branches:
       - main
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
 jobs:
   release:
     name: Release
@@ -20,10 +24,10 @@ jobs:
           submodules: true
           token: ${{ secrets.PAT }}
       - uses: pnpm/action-setup@v2.2.4
-      - name: Use Node.js 16
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 21
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
@@ -34,6 +38,8 @@ jobs:
           title: 'ci: release'
           publish: pnpm release
         env:
+          # secrets.GITHUB_TOKEN doesn't trigger workflow on automated release
+          # https://github.com/orgs/community/discussions/26875
           GITHUB_TOKEN: ${{ secrets.PAT }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true

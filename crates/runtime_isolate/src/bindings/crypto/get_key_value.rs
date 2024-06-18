@@ -1,5 +1,5 @@
-use lagon_runtime_crypto::methods::get_key;
-use lagon_runtime_v8_utils::v8_uint8array;
+use lagoss_runtime_crypto::methods::get_key;
+use lagoss_runtime_v8_utils::v8_uint8array;
 
 pub fn get_key_value_binding(
     scope: &mut v8::HandleScope,

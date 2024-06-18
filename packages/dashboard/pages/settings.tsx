@@ -1,4 +1,4 @@
-import { Nav } from '@lagon/ui';
+import { Nav } from '@lagoss/ui';
 import LayoutTitle from 'lib/components/LayoutTitle';
 import { getLocaleProps, useScopedI18n } from 'locales';
 import { GetStaticProps } from 'next';

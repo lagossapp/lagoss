@@ -3,16 +3,16 @@
     private readonly transform;
 
     constructor(format: CompressionFormat) {
-      const id = LagonSync.compressionCreate(format, false);
+      const id = LagossSync.compressionCreate(format, false);
 
       this.transform = new TransformStream({
         transform(chunk, controller) {
-          const output = LagonSync.compressionWrite(id, chunk);
+          const output = LagossSync.compressionWrite(id, chunk);
 
           controller.enqueue(output);
         },
         flush(controller) {
-          const output = LagonSync.compressionFinish(id);
+          const output = LagossSync.compressionFinish(id);
 
           controller.enqueue(output);
         },
@@ -32,16 +32,16 @@
     private readonly transform;
 
     constructor(format: CompressionFormat) {
-      const id = LagonSync.compressionCreate(format, true);
+      const id = LagossSync.compressionCreate(format, true);
 
       this.transform = new TransformStream({
         transform(chunk, controller) {
-          const output = LagonSync.compressionWrite(id, chunk);
+          const output = LagossSync.compressionWrite(id, chunk);
 
           controller.enqueue(output);
         },
         flush(controller) {
-          const output = LagonSync.compressionFinish(id);
+          const output = LagossSync.compressionFinish(id);
 
           controller.enqueue(output);
         },

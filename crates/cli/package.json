@@ -1,13 +1,13 @@
 {
-  "name": "@lagon/cli",
-  "version": "0.7.8",
-  "description": "CLI for Lagon",
+  "name": "@lagoss/cli",
+  "version": "0.9.1",
+  "description": "CLI for Lagoss",
   "type": "module",
   "files": [
     "npm"
   ],
   "bin": {
-    "lagon": "./npm/run.js"
+    "lagoss": "./npm/run.js"
   },
   "scripts": {
     "build": "cargo build",

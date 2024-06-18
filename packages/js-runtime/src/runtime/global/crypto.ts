@@ -5,11 +5,11 @@ interface CryptoKey {
 /* eslint-disable @typescript-eslint/no-unused-vars */
 (globalThis => {
   const getRandomValues = <T extends ArrayBufferView | null>(array: T): T => {
-    LagonSync.randomValues(array);
+    LagossSync.randomValues(array);
     return array;
   };
 
-  const randomUUID = () => LagonSync.uuid();
+  const randomUUID = () => LagossSync.uuid();
 
   const SYMMETRIC_ALGORITHMS = ['HMAC', 'AES-CBC', 'AES-CTR', 'AES-GCM', 'AES-KW'];
 
@@ -148,7 +148,7 @@ interface CryptoKey {
       this.type = type!;
       this.usages = usages!;
 
-      this.keyValue = keyValue ?? LagonSync.getKeyValue();
+      this.keyValue = keyValue ?? LagossSync.getKeyValue();
     }
   };
 
@@ -158,7 +158,7 @@ interface CryptoKey {
       key: CryptoKey,
       data: BufferSource,
     ): Promise<ArrayBuffer> {
-      return LagonAsync.decrypt(algorithm, key, data);
+      return LagossAsync.decrypt(algorithm, key, data);
     }
 
     async deriveBits(
@@ -167,7 +167,7 @@ interface CryptoKey {
       length: number,
     ): Promise<ArrayBuffer> {
       checkDeriveAlgorithmType(algorithm);
-      return LagonAsync.deriveBits(algorithm, baseKey, length);
+      return LagossAsync.deriveBits(algorithm, baseKey, length);
     }
 
     async deriveKey(
@@ -187,7 +187,7 @@ interface CryptoKey {
     }
 
     async digest(algorithm: AlgorithmIdentifier, data: BufferSource): Promise<ArrayBuffer> {
-      return LagonAsync.digest(algorithm, data);
+      return LagossAsync.digest(algorithm, data);
     }
 
     async encrypt(
@@ -195,7 +195,7 @@ interface CryptoKey {
       key: CryptoKey,
       data: BufferSource,
     ): Promise<ArrayBuffer> {
-      return LagonAsync.encrypt(algorithm, key, data);
+      return LagossAsync.encrypt(algorithm, key, data);
     }
 
     async exportKey(format: 'jwk', key: CryptoKey): Promise<JsonWebKey>;
@@ -230,7 +230,7 @@ interface CryptoKey {
     ): Promise<CryptoKeyPair | CryptoKey> {
       const isSymmetric = SYMMETRIC_ALGORITHMS.includes(algorithm.name);
 
-      const arrbuf = await LagonAsync.generateKey(algorithm);
+      const arrbuf = await LagossAsync.generateKey(algorithm);
 
       if (isSymmetric) {
         // @ts-expect-error CryptoKey constructor is empty, but we know our implementation is not
@@ -285,7 +285,7 @@ interface CryptoKey {
       key: CryptoKey,
       data: BufferSource,
     ): Promise<ArrayBuffer> {
-      return LagonAsync.sign(algorithm, key, data);
+      return LagossAsync.sign(algorithm, key, data);
     }
 
     async unwrapKey(
@@ -319,7 +319,7 @@ interface CryptoKey {
       signature: BufferSource,
       data: BufferSource,
     ): Promise<boolean> {
-      return LagonAsync.verify(algorithm, key, signature, data);
+      return LagossAsync.verify(algorithm, key, signature, data);
     }
 
     async wrapKey(
@@ -334,9 +334,13 @@ interface CryptoKey {
     }
   }
 
-  globalThis.crypto = {
-    getRandomValues,
-    randomUUID,
-    subtle: new SubtleCrypto(),
-  };
+  Object.defineProperty(globalThis, 'crypto', {
+    value: {
+      getRandomValues,
+      randomUUID,
+      subtle: new SubtleCrypto(),
+    },
+    writable: true,
+    configurable: true,
+  });
 })(globalThis);

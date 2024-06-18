@@ -1,12 +1,12 @@
 use anyhow::Result;
 use dashmap::DashMap;
-use lagon_runtime_utils::{
+use lagoss_runtime_utils::{
     response::{PAGE_403, PAGE_404, PAGE_500, PAGE_502},
     Deployment,
 };
-use lagon_serverless::serverless::start;
-use lagon_serverless_downloader::FakeDownloader;
-use lagon_serverless_pubsub::FakePubSub;
+use lagoss_serverless::serverless::start;
+use lagoss_serverless_downloader::FakeDownloader;
+use lagoss_serverless_pubsub::FakePubSub;
 use serial_test::serial;
 use std::{
     collections::{HashMap, HashSet},

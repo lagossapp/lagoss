@@ -1,5 +1,5 @@
 import LayoutTitle from 'lib/components/LayoutTitle';
-import { Button, Card, Dialog, Divider, Form, Input, Skeleton, Text } from '@lagon/ui';
+import { Button, Card, Dialog, Divider, Form, Input, Skeleton, Text } from '@lagoss/ui';
 import { requiredValidator } from 'lib/form/validators';
 import useTokens from 'lib/hooks/useTokens';
 import { trpc } from 'lib/trpc';

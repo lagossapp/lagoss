@@ -1,15 +1,15 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./assets/logo-white.png">
-    <source media="(prefers-color-scheme: light)" srcset="./assets/logo-black.png">
-    <img alt="Lagon logo" height="60px" src="./assets/logo-white.png">
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/icon-white.png">
+    <source media="(prefers-color-scheme: light)" srcset="./assets/icon-black.png">
+    <img alt="Lagoss logo" height="60px" src="./assets/logo-white.png">
   </picture>
+  <h1 align="center">Lagoss</h1>
   <p align="center">
     Deploy Serverless Functions at the Edge
     <br />
     <br />
-    <a align="center" href="https://discord.lagon.dev" alt="Discord"><img src="https://img.shields.io/discord/996005154753093713" /></a>
-    <a href="https://github.com/lagonapp/lagon/actions/workflows/wpt.yml" alt="web-platform-tests"><img src="https://wpt.lagon.dev" /></a>
+    <a href="https://github.com/lagossapp/lagoss/actions/workflows/wpt.yml" alt="web-platform-tests"><img src="https://wpt.lagoss.com" /></a>
   </p>
 </p>
 
@@ -19,16 +19,14 @@
 
 ## About
 
-Lagon is an open-source runtime and platform that allows developers to run TypeScript and JavaScript Serverless Functions close to users.
+Lagoss is a fork of [Lagon](https://github.com/lagonapp/lagon) an open-source runtime and platform that allows developers to run TypeScript and JavaScript Serverless Functions.
 
-> **Note**: Lagon is in Alpha. Get access to Lagon Cloud via the [waitlist](https://tally.so/r/n9q1Rp)
-
-Current status:
-
-- Dev: In heavy development, features are being added and APIs have breaking changes
-- **Alpha**: Missing features and bugs to fix, progressive access to Lagon Cloud ([waitlist](https://tally.so/r/n9q1Rp))
-- ~Beta~: Stable APIs, last features are being added, Lagon Cloud available without a waitlist
-- ~General Availability~: Cloud and self-hosted versions available for production usage
+> [!NOTE]
+> The project was forked from [Lagon](https://github.com/lagonapp/lagon) with the
+> intention to continue development. There is currently a public testing instance
+> deployed at <https://app.lagoss.com>. However it should be used for basic
+> testing only and data might be deleted at any point. If you want a proper setup,
+> please deploy your own instance => [Install my own instance](https://docs.lagoss.com/self-hosting/installation).
 
 ## Packages
 
@@ -39,8 +37,7 @@ Current status:
 - **[runtime](./crates/runtime)** Rust JavaScript Runtime, using V8 Isolates
 - **[serverless](./crates/serverless)** HTTP entrypoint for Functions, using the Runtime and exporting metrics
 - **[ui](./packages/ui)** Design system
-- **[wpt-runner](./crates/wpt-runner)** Run web-platform-tests on Lagon
-- **[www](./www)** Public website
+- **[wpt-runner](./crates/wpt-runner)** Run web-platform-tests on Lagoss
 
 ## Features
 
@@ -51,27 +48,19 @@ Current status:
 - CLI to manage Functions and develop locally
 - Deploy at the Edge using the Cloud version, or self-host it
 
-## Roadmap
-
-The roadmap is accessible to anyone on GitHub. Feel free to open an issue to discuss new features that you would like to see implemented.
-
-[See the roadmap on GitHub](https://github.com/orgs/lagonapp/projects/1)
-
 ## Contributing
 
-[See the contributing guide](https://docs.lagon.app/contributing)
+[See the contributing guide](https://docs.lagoss.com/contributing)
 
 ## How it works
 
-Lagon uses V8 Isolates, which are sandboxed environments used to run plain JavaScript. That means each Function's memory is isolated from each others, and you can run a lot of them at the same time with very few resources. [Node.js](https://nodejs.org/), [Electron](https://www.electronjs.org/), [Deno](https://deno.land/) (and [Deno Deploy](https://deno.com/deploy)), [Cloudflare Workers](https://workers.cloudflare.com/) are also using V8 Isolates to execute JavaScript.
+Lagoss uses V8 Isolates, which are sandboxed environments used to run plain JavaScript. That means each Function's memory is isolated from each others, and you can run a lot of them at the same time with very few resources. [Node.js](https://nodejs.org/), [Electron](https://www.electronjs.org/), [Deno](https://deno.land/) (and [Deno Deploy](https://deno.com/deploy)), [Cloudflare Workers](https://workers.cloudflare.com/) are also using V8 Isolates to execute JavaScript.
 
 Starting an Isolate is a lot faster than starting a whole Node.js process, which allows for almost free cold starts.
 
-## Sponsors ❤️
+## Installation
 
-Thanks a lot to every current and past sponsor!
-
-![Sponsors list](./assets/sponsors.png)
+Learn how you can [install](https://docs.lagoss.com/self-hosting/installation) your own Lagoss instance.
 
 ## License
 

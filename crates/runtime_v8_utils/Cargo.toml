@@ -1,5 +1,5 @@
 [package]
-name = "lagon-runtime-v8-utils"
+name = "lagoss-runtime-v8-utils"
 version = "0.1.0"
 edition = "2021"
 

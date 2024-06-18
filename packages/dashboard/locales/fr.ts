@@ -87,7 +87,7 @@ export default defineLocale({
   'settings.transfer.success': "La propriété de l'Organisation a été transférée.",
   'settings.transfer.notAvailable': 'Non disponible.',
   'settings.transfer.notAvailable.description':
-    "Merci d'envoyer un email à contact@lagon.app si vous voulez transférer votre Organisation.",
+    "Merci d'envoyer un email à lagoss[at]ju60.de si vous voulez transférer votre Organisation.",
 
   'settings.usage.title': 'Utilisation',
   'settings.usage.description':
@@ -139,7 +139,7 @@ export default defineLocale({
   'profile.delete.modal.submit': 'Supprimer ce Compte',
   'profile.delete.notAvailable': 'Non disponible.',
   'profile.delete.notAvailable.description':
-    "Merci d'envoyer un email à contact@lagon.app si vous voulez supprimer votre Compte.",
+    "Merci d'envoyer un email à lagoss[at]ju60.de si vous voulez supprimer votre Compte.",
 
   'cli.title': 'Connexion à la CLI',
   'cli.description':

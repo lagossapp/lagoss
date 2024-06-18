@@ -2,7 +2,7 @@ use aes::{cipher::typenum::U16, Aes256};
 use aes_gcm::AesGcm;
 use anyhow::{anyhow, Result};
 use hmac::Hmac;
-use lagon_runtime_v8_utils::{
+use lagoss_runtime_v8_utils::{
     extract_v8_string, extract_v8_uint32, extract_v8_uint8array, v8_string,
 };
 use sha2::Sha256;

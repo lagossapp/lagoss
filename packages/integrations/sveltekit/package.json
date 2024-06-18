@@ -1,7 +1,7 @@
 {
-  "name": "@lagon/sveltekit",
-  "version": "0.1.1",
-  "description": "SvelteKit integration to deploy your site to Lagon",
+  "name": "@lagoss/sveltekit",
+  "version": "0.2.1",
+  "description": "SvelteKit integration to deploy your site to Lagoss",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,11 +11,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lagonapp/lagon"
+    "url": "https://github.com/lagossapp/lagoss"
   },
-  "homepage": "https://github.com/lagonapp/lagon/tree/main/packages/integrations/sveltekit",
+  "homepage": "https://github.com/lagossapp/lagoss/tree/main/packages/integrations/sveltekit",
   "keywords": [
-    "lagon",
+    "lagoss",
     "serverless",
     "edge",
     "integration",

@@ -1,5 +1,5 @@
 import { getCurrentDomain, getFullCurrentDomain, getFullDomain } from 'lib/utils';
-import { Link } from '@lagon/ui';
+import { Link } from '@lagoss/ui';
 import { MouseEventHandler } from 'react';
 
 type FunctionLinksProps = {

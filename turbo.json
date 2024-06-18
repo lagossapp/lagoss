@@ -2,56 +2,32 @@
   "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
     "typecheck": {
-      "dependsOn": [
-        "@lagon/remix#build"
-      ]
+      "dependsOn": ["@lagoss/remix#build"]
     },
     "test": {
-      "dependsOn": [
-        "@lagon/runtime#build",
-        "@lagon/remix#build"
-      ]
+      "dependsOn": ["@lagoss/runtime#build", "@lagoss/remix#build"]
     },
-    "@lagon/runtime#test": {
-      "dependsOn": [
-        "@lagon/serverless#build"
-      ]
+    "@lagoss/runtime#test": {
+      "dependsOn": ["@lagoss/serverless#build"]
     },
     "lint": {
-      "dependsOn": [
-        "@lagon/runtime#build",
-        "@lagon/remix#build"
-      ]
+      "dependsOn": ["@lagoss/runtime#build", "@lagoss/remix#build"]
     },
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "dist/**",
-        ".next/**",
-        "out/**",
-        "target/debug/**",
-        "storybook-static/**"
-      ]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "out/**", "target/debug/**", "storybook-static/**"]
     },
-    "@lagon/dashboard#build": {
+    "@lagoss/dashboard#build": {
       "dependsOn": []
     },
-    "@lagon/runtime#build": {
-      "dependsOn": [
-        "@lagon/js-runtime#build"
-      ]
+    "@lagoss/runtime#build": {
+      "dependsOn": ["@lagoss/js-runtime#build"]
     },
-    "@lagon/cli#build": {
-      "dependsOn": [
-        "@lagon/js-runtime#build"
-      ]
+    "@lagoss/cli#build": {
+      "dependsOn": ["@lagoss/js-runtime#build"]
     },
-    "@lagon/serverless#build": {
-      "dependsOn": [
-        "@lagon/js-runtime#build"
-      ]
+    "@lagoss/serverless#build": {
+      "dependsOn": ["@lagoss/js-runtime#build"]
     }
   }
 }

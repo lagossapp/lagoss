@@ -17,29 +17,29 @@ export function Welcome({ name }: WelcomeProps) {
     <Html>
       <Head />
       <Preview>
-        Welcome to Lagon, an open-source runtime and platform that allows developers to run TypeScript and JavaScript
+        Welcome to Lagoss, an open-source runtime and platform that allows developers to run TypeScript and JavaScript
         Serverless Functions at the Edge, close to users.
       </Preview>
       <Section style={main}>
         <Container style={container}>
-          <Img src="https://dash.lagon.app/images/logo-black.png" width="170" height="50" alt="Lagon" style={logo} />
+          <Img src="https://app.lagoss.com/images/logo-black.png" width="170" height="50" alt="Lagoss" style={logo} />
           <Text style={paragraph}>Hi {name},</Text>
           <Text style={paragraph}>
-            Welcome to Lagon, an open-source runtime and platform that allows developers to run TypeScript and
+            Welcome to Lagoss, an open-source runtime and platform that allows developers to run TypeScript and
             JavaScript Serverless Functions at the Edge, close to users.
           </Text>
           <Text style={paragraph}>
             We are excited to have you on board! Start your journey by deploying your first Function:
           </Text>
           <Section style={btnContainer}>
-            <Button pX={14} pY={10} style={button} href="https://docs.lagon.app/get-started">
+            <Button pX={14} pY={10} style={button} href="https://docs.lagoss.com/getting-started">
               Get started guide
             </Button>
           </Section>
           <Text style={paragraph}>
             See you soon,
             <br />
-            Tom from Lagon
+            Tom from Lagoss
           </Text>
         </Container>
       </Section>

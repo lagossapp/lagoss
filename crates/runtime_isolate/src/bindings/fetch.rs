@@ -1,6 +1,6 @@
 use anyhow::{anyhow, Result};
 use hyper::{Body, Request};
-use lagon_runtime_http::request_from_v8;
+use lagoss_runtime_http::request_from_v8;
 use reqwest::{redirect::Policy, Client, ClientBuilder};
 use std::sync::OnceLock;
 
@@ -22,7 +22,7 @@ pub fn fetch_init(scope: &mut v8::HandleScope, args: v8::FunctionCallbackArgumen
     let fetch_calls = {
         let mut state = state.borrow_mut();
 
-        if let Some(mut handler_result) = state.handler_results.get_mut(&id) {
+        if let Some(handler_result) = state.handler_results.get_mut(&id) {
             handler_result.context.fetch_calls += 1;
             handler_result.context.fetch_calls
         } else {

@@ -60,7 +60,7 @@ pub async fn deploy(
 
     if config.token.is_none() {
         return Err(anyhow!(
-            "You are not logged in. Please log in with `lagon login`",
+            "You are not logged in. Please log in with `lagoss login`",
         ));
     }
 
@@ -106,8 +106,8 @@ pub async fn deploy(
                     .interact()?;
                 let function = &functions[index];
 
-                function_config.function_id = function.id.clone();
-                function_config.organization_id = organization.id.clone();
+                function_config.function_id.clone_from(&function.id);
+                function_config.organization_id.clone_from(&organization.id);
                 function_config.write(&root)?;
 
                 println!();
@@ -137,8 +137,8 @@ pub async fn deploy(
 
                 end_progress();
 
-                function_config.function_id = function.id.clone();
-                function_config.organization_id = organization.id.clone();
+                function_config.function_id.clone_from(&function.id);
+                function_config.organization_id.clone_from(&organization.id);
                 function_config.write(&root)?;
 
                 create_deployment(config, &function_config, is_production, &root, true).await?;

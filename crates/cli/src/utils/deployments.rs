@@ -156,7 +156,7 @@ impl FunctionConfig {
         let path = get_function_config_path(root);
 
         if !path.exists() {
-            fs::create_dir_all(root.join(".lagon"))?;
+            fs::create_dir_all(root.join(".lagoss"))?;
         }
 
         let content = serde_json::to_string(self)?;
@@ -221,7 +221,7 @@ pub fn get_root(root: Option<PathBuf>) -> PathBuf {
 }
 
 pub fn get_function_config_path(root: &Path) -> PathBuf {
-    root.join(".lagon").join("config.json")
+    root.join(".lagoss").join("config.json")
 }
 
 fn esbuild(file: &Path, root: &Path, prod: bool) -> Result<Vec<u8>> {
@@ -237,7 +237,7 @@ fn esbuild(file: &Path, root: &Path, prod: bool) -> Result<Vec<u8>> {
         .arg("--format=esm")
         .arg("--target=esnext")
         .arg("--platform=browser")
-        .arg("--conditions=lagon,worker")
+        .arg("--conditions=lagoss,worker")
         .arg("--loader:.wasm=binary")
         .output()?;
 

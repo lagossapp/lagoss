@@ -2,10 +2,9 @@ use crate::get_region;
 use anyhow::{anyhow, Result};
 use dashmap::DashMap;
 use futures::{stream::FuturesUnordered, StreamExt};
-use lagon_runtime_utils::{Deployment, DEPLOYMENTS_DIR};
-use lagon_serverless_downloader::Downloader;
+use lagoss_runtime_utils::{Deployment, DEPLOYMENTS_DIR};
+use lagoss_serverless_downloader::Downloader;
 use log::{error, info, warn};
-use mysql::{prelude::Queryable, PooledConn};
 use serde::Deserialize;
 use std::{
     collections::{HashMap, HashSet},
@@ -63,122 +62,102 @@ where
     }
 }
 
+// {
+//     id: string,
+//     isProduction: boolean,
+//     assets: string[],
+//     function: {
+//     id: string,
+//     name: string,
+//     memory: number,
+//     tickTimeout: number,
+//     totalTimeout: number,
+//     cron: string,
+//     },
+//     domains: string[],
+//     env: {key: string, value: string}[],
+// }
+
 #[derive(Deserialize)]
-struct AssetObj(Vec<String>);
+struct DeploymentData {
+    id: String,
 
-type QueryResult = (
-    String,
-    bool,
-    String,
-    String,
-    String,
-    usize,
-    usize,
-    usize,
-    Option<String>,
-    Option<String>,
-    Option<String>,
-    Option<String>,
-);
+    #[serde(rename = "functionId")]
+    function_id: String,
 
-pub async fn get_deployments<D>(mut conn: PooledConn, downloader: Arc<D>) -> Result<Deployments>
+    #[serde(rename = "functionName")]
+    function_name: String,
+
+    domains: HashSet<String>,
+    assets: HashSet<String>,
+    memory: usize, // in MB (MegaBytes)
+
+    #[serde(rename = "env")]
+    environment_variables: HashMap<String, String>,
+
+    #[serde(rename = "tickTimeout")]
+    tick_timeout: usize, // in ms (MilliSeconds)
+
+    #[serde(rename = "totalTimeout")]
+    total_timeout: usize, // in ms (MilliSeconds)
+
+    #[serde(rename = "isProduction")]
+    is_production: bool,
+
+    cron: Option<String>,
+}
+
+pub async fn get_deployments<D>(
+    api_url: String,
+    api_token: String,
+    downloader: Arc<D>,
+) -> Result<Deployments>
 where
     D: Downloader,
 {
     let deployments = Arc::new(DashMap::new());
     let mut deployments_list: HashMap<String, Deployment> = HashMap::new();
 
-    conn.query_map(
-        format!(
-            "
-SELECT
-    Deployment.id,
-    Deployment.isProduction,
-    Deployment.assets,
-    Function.id,
-    Function.name,
-    Function.memory,
-    Function.tickTimeout,
-    Function.totalTimeout,
-    Function.cron,
-    Domain.domain,
-    EnvVariable.key,
-    EnvVariable.value
-FROM
-    Deployment
-INNER JOIN Function
-    ON Deployment.functionId = Function.id
-LEFT JOIN Domain
-    ON Function.id = Domain.functionId
-LEFT JOIN EnvVariable 
-    ON Function.id = EnvVariable.functionId
-WHERE
-    Function.cron IS NULL
-OR
-    Function.cronRegion = '{}'
-",
-            get_region()
-        ),
-        |(
-            id,
-            is_production,
-            assets,
-            function_id,
-            function_name,
-            memory,
-            tick_timeout,
-            total_timeout,
-            cron,
-            domain,
-            env_key,
-            env_value,
-        ): QueryResult| {
-            let assets = serde_json::from_str::<AssetObj>(&assets)
-                .map(|asset_obj| asset_obj.0)
-                .unwrap_or_default();
+    let url: String = format!("{}/api/serverless/deployments", api_url);
+    let client = reqwest::Client::new();
+    let deployments_response = client
+        .get(&url)
+        .header("Authorization", format!("Bearer {}", api_token))
+        .header("x-lagoss-region", get_region())
+        .send()
+        .await?
+        .json::<Vec<DeploymentData>>()
+        .await?;
 
-            deployments_list
-                .entry(id.clone())
-                .and_modify(|deployment| {
-                    if let Some(domain) = domain.clone() {
-                        deployment.domains.insert(domain);
-                    }
-
-                    deployment.assets.extend(assets.clone());
-
-                    if let Some(env_key) = env_key.clone() {
-                        deployment
-                            .environment_variables
-                            .insert(env_key, env_value.clone().unwrap_or_default());
-                    }
-                })
-                .or_insert(Deployment {
-                    id,
-                    function_id,
-                    function_name,
-                    domains: domain
-                        .map(|domain| {
-                            let mut domains = HashSet::new();
-                            domains.insert(domain);
-                            domains
-                        })
-                        .unwrap_or_default(),
-                    assets: HashSet::from_iter(assets.iter().cloned()),
-                    environment_variables: env_key
-                        .map(|key| {
-                            let mut environment_variables = HashMap::new();
-                            environment_variables.insert(key, env_value.unwrap_or_default());
-                            environment_variables
-                        })
-                        .unwrap_or_default(),
-                    memory,
-                    tick_timeout,
-                    total_timeout,
-                    is_production,
-                    cron,
-                });
+    deployments_response.into_iter().for_each(
+        |DeploymentData {
+             id,
+             function_id,
+             function_name,
+             domains,
+             assets,
+             environment_variables,
+             memory,
+             tick_timeout,
+             total_timeout,
+             is_production,
+             cron,
+         }| {
+            deployments_list.entry(id.clone()).or_insert(Deployment {
+                id,
+                function_id,
+                function_name,
+                domains: HashSet::from_iter(domains.iter().cloned()),
+                assets: HashSet::from_iter(assets.iter().cloned()),
+                environment_variables: environment_variables.clone(),
+                memory,
+                tick_timeout,
+                total_timeout,
+                is_production,
+                cron,
+            });
         },
-    )?;
+    );
 
     let deployments_list: Vec<Deployment> = deployments_list.values().cloned().collect();
 

@@ -1,7 +1,7 @@
 {
-  "name": "@lagon/astro",
-  "version": "0.3.0",
-  "description": "Astro integration to deploy your site to Lagon",
+  "name": "@lagoss/astro",
+  "version": "0.4.1",
+  "description": "Astro integration to deploy your site to Lagoss",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,11 +12,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lagonapp/lagon"
+    "url": "https://github.com/lagossapp/lagoss"
   },
-  "homepage": "https://github.com/lagonapp/lagon/tree/main/packages/integrations/astro",
+  "homepage": "https://github.com/lagossapp/lagoss/tree/main/packages/integrations/astro",
   "keywords": [
-    "lagon",
+    "lagoss",
     "serverless",
     "edge",
     "integration",

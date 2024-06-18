@@ -1,0 +1,98 @@
+name: Release cli
+
+on:
+  push:
+    tags:
+      - '@lagoss/cli@*'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
+jobs:
+  release-cli:
+    name: Create Artifact ${{ matrix.target }} (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-20.04
+            target: x86_64-unknown-linux-gnu
+            asset_name: lagoss-linux-x64
+            input: lagoss-cli
+            output: lagoss
+          - os: ubuntu-20.04
+            target: aarch64-unknown-linux-gnu
+            asset_name: lagoss-linux-arm64
+            input: lagoss-cli
+            output: lagoss
+          - os: macOS-latest
+            target: x86_64-apple-darwin
+            asset_name: lagoss-darwin-x64
+            input: lagoss-cli
+            output: lagoss
+          - os: macOS-latest
+            target: aarch64-apple-darwin
+            asset_name: lagoss-darwin-arm64
+            input: lagoss-cli
+            output: lagoss
+          - os: windows-2019
+            target: x86_64-pc-windows-msvc
+            asset_name: lagoss-win-x64
+            input: lagoss-cli.exe
+            output: lagoss.exe
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: moonrepo/setup-rust@v0
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+          override: true
+      - uses: pnpm/action-setup@v2.2.4
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+          cache: 'pnpm'
+      - name: Install cross compilation toolchain (Linux)
+        if: matrix.target == 'aarch64-unknown-linux-gnu'
+        run: |
+          sudo apt update
+          sudo apt install -yq --no-install-suggests --no-install-recommends \
+            binfmt-support g++-10-aarch64-linux-gnu g++-10-multilib \
+            gcc-10-aarch64-linux-gnu libc6-arm64-cross qemu qemu-user \
+            qemu-user-binfmt libssl-dev gcc-aarch64-linux-gnu
+          sudo ln -s /usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 \
+                      /lib/ld-linux-aarch64.so.1
+          echo "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=/usr/bin/aarch64-linux-gnu-gcc-10" >> ${GITHUB_ENV}
+          echo "QEMU_LD_PREFIX=/usr/aarch64-linux-gnu" >> ${GITHUB_ENV}
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build js-runtime
+        run: pnpm turbo build --filter=@lagoss/js-runtime
+      - name: Build CLI
+        run: |
+          cd crates/cli && cargo build --release --target ${{ matrix.target }}
+          mkdir -p builds/${{ matrix.asset_name }}
+          cp ../../target/${{ matrix.target }}/release/${{ matrix.input }} builds/${{ matrix.asset_name }}/${{ matrix.output }}
+          tar -C builds -czvf ${{ matrix.asset_name }}.tar.gz ${{ matrix.asset_name }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.asset_name }}
+          path: crates/cli/${{ matrix.asset_name }}.tar.gz
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
+        if: github.event_name == 'push'
+        with:
+          files: crates/cli/${{ matrix.asset_name }}.tar.gz
+          token: ${{ secrets.GITHUB_TOKEN }}

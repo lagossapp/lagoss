@@ -11,8 +11,8 @@ interface Options {
 
 export function getAdapter(args?: Options): AstroAdapter {
   return {
-    name: '@lagon/astro',
-    serverEntrypoint: '@lagon/astro/server.js',
+    name: '@lagoss/astro',
+    serverEntrypoint: '@lagoss/astro/server.js',
     args: args ?? {},
     exports: ['handler'],
   };
@@ -23,14 +23,14 @@ export default function createIntegration(args?: Options): AstroIntegration {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let _vite: any;
   return {
-    name: '@lagon/astro',
+    name: '@lagoss/astro',
     hooks: {
       'astro:config:done': ({ setAdapter, config }) => {
         setAdapter(getAdapter(args));
         _buildConfig = config.build;
 
         if (config.output === 'static') {
-          console.warn(`[@lagon/astro] \`output: "server"\` is required to use this adapter.`);
+          console.warn(`[@lagoss/astro] \`output: "server"\` is required to use this adapter.`);
         }
       },
       'astro:build:setup': ({ vite, target }) => {
@@ -66,7 +66,7 @@ export default function createIntegration(args?: Options): AstroIntegration {
           minify: _vite.build?.minify !== false,
         });
 
-        const configPath = path.join(_vite.root, '.lagon/config.json');
+        const configPath = path.join(_vite.root, '.lagoss/config.json');
         let shouldCreateConfig = false;
 
         try {
@@ -81,7 +81,7 @@ export default function createIntegration(args?: Options): AstroIntegration {
           const assets = path.relative(_vite.root, fileURLToPath(_buildConfig.client));
 
           console.log();
-          console.log('Wrote Lagon configuration to .lagon/config.json');
+          console.log('Wrote Lagoss configuration to .lagoss/config.json');
 
           await fs.mkdir(path.dirname(configPath), { recursive: true });
           await fs.writeFile(
@@ -107,7 +107,7 @@ export default function createIntegration(args?: Options): AstroIntegration {
         }
 
         console.log();
-        console.log('Run `lagon dev` / `lagon deploy` to start your app!');
+        console.log('Run `lagoss dev` / `lagoss deploy` to start your app!');
         console.log();
       },
     },
