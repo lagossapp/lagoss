@@ -45,9 +45,12 @@ impl FunctionConfig {
         if !path.exists() {
             println!(
                 "{}",
-                style("No configuration found in directory...")
-                    .black()
-                    .bright()
+                style(format!(
+                    "No configuration found in directory {} ...",
+                    path.display()
+                ))
+                .black()
+                .bright()
             );
             println!();
 
