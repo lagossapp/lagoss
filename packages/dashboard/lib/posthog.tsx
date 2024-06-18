@@ -2,10 +2,12 @@ import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { PostHogProvider as OriginalPostHogProvider } from 'posthog-js/react';
 import posthog from 'posthog-js';
+import getConfig from 'next/config';
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'development') {
-  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY ?? '', {
-    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://app.posthog.com',
+  const { publicRuntimeConfig } = getConfig();
+  posthog.init(publicRuntimeConfig.POSTHOG_KEY ?? '', {
+    api_host: publicRuntimeConfig.POSTHOG_HOST || 'https://app.posthog.com',
   });
 }
 

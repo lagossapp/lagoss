@@ -1,3 +1,5 @@
+import getConfig from 'next/config';
+
 export type Plan = {
   type: 'personal' | 'pro';
   id?: string;
@@ -21,9 +23,11 @@ export const PERSONAL_PLAN: Plan = {
   maxAssetsPerFunction: 100,
 };
 
+const { publicRuntimeConfig } = getConfig();
+
 export const PRO_PLAN: Plan = {
   type: 'pro',
-  id: process.env.NEXT_PUBLIC_STRIPE_PRO_PLAN_PRICE_ID,
+  id: publicRuntimeConfig.STRIPE_PRO_PLAN_PRICE_ID,
   expired: false,
   maxFunctions: 50,
   freeRequests: 5000000,
