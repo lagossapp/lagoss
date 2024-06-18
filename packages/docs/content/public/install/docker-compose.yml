@@ -73,8 +73,8 @@ services:
   serverless:
     image: ghcr.io/lagossapp/serverless:${LAGOSS_VERSION:-latest}
     environment:
-      DASHBOARD_URL: http://dashboard:3000
-      DASHBOARD_API_TOKEN: ${LAGOSS_API_TOKEN}
+      LAGOSS_URL: http://dashboard:3000
+      LAGOSS_API_TOKEN: ${LAGOSS_API_TOKEN}
       REDIS_URL: redis://redis:6379
       S3_ENDPOINT: http://minio:9002
       S3_REGION: unknown

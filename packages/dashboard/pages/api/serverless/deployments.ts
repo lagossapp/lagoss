@@ -18,6 +18,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).end();
   }
 
+  console.log(req.headers);
+
   // SELECT
   //   Deployment.id,
   //   Deployment.isProduction,
@@ -44,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // OR
   //   Function.cronRegion = '{}'
 
-  const cronRegion = req.headers['lagoss-cron-region'] as string;
+  const cronRegion = req.headers['x-lagoss-region'] as string;
 
   const deployments = await prisma.deployment.findMany({
     where: cronRegion

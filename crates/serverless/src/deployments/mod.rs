@@ -62,9 +62,6 @@ where
     }
 }
 
-#[derive(Deserialize)]
-struct AssetObj(Vec<String>);
-
 // {
 //     id: string,
 //     isProduction: boolean,
@@ -126,7 +123,7 @@ where
     let deployments_response = client
         .get(&url)
         .header("Authorization", format!("Bearer {}", api_token))
-        .header("lagoss-region", get_region())
+        .header("x-lagoss-region", get_region())
         .send()
         .await?
         .json::<Vec<DeploymentData>>()

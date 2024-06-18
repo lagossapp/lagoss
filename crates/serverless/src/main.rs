@@ -30,6 +30,8 @@ async fn main() -> Result<()> {
 
     let _flush_guard = init_logger(get_region().clone()).expect("Failed to init logger");
 
+    info!("Starting serverless runtime");
+
     let runtime = Runtime::new(RuntimeOptions::default());
     let addr: SocketAddr = env::var("LAGOSS_LISTEN_ADDR")
         .expect("LAGOSS_LISTEN_ADDR must be set")
@@ -61,8 +63,8 @@ async fn main() -> Result<()> {
     let client = create_client();
     run_migrations(&client).await?;
 
-    let api_url = env::var("DASHBOARD_URL").expect("DASHBOARD_URL must be set");
-    let api_token = env::var("DASHBOARD_API_TOKEN").expect("DASHBOARD_API_TOKEN must be set");
+    let api_url = env::var("LAGOSS_URL").expect("LAGOSS_URL must be set");
+    let api_token = env::var("LAGOSS_API_TOKEN").expect("LAGOSS_API_TOKEN must be set");
     let deployments = get_deployments(api_url, api_token, Arc::clone(&downloader)).await?;
 
     let serverless = start(deployments, addr, downloader, pubsub, client).await?;
