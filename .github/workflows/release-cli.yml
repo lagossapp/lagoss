@@ -58,10 +58,10 @@ jobs:
           target: ${{ matrix.target }}
           override: true
       - uses: pnpm/action-setup@v2.2.4
-      - name: Use Node.js 16
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 22
           cache: 'pnpm'
       - name: Install cross compilation toolchain (Linux)
         if: matrix.target == 'aarch64-unknown-linux-gnu'

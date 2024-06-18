@@ -5,8 +5,12 @@
 import { version } from '../../../package.json';
 
 (globalThis => {
-  globalThis.navigator = {
-    ...globalThis.navigator,
-    userAgent: `Lagoss/${version}`,
-  };
+  Object.defineProperty(globalThis, 'navigator', {
+    value: {
+      ...globalThis.navigator,
+      userAgent: `Lagoss/${version}`,
+    },
+    writable: true,
+    configurable: true,
+  });
 })(globalThis);

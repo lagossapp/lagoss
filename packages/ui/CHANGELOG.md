@@ -1,5 +1,11 @@
 # @lagoss/ui
 
+## 0.4.0
+
+### Minor Changes
+
+- [#12](https://github.com/lagossapp/lagoss/pull/12) [`b475ca4`](https://github.com/lagossapp/lagoss/commit/b475ca4a93690dd88a36a4f9c240d6ab3df1ff08) Thanks [@anbraten](https://github.com/anbraten)! - Updated docs to vitepress, added self-hosting instructions and adjusted README
+
 ## 0.3.1
 
 ### Patch Changes
