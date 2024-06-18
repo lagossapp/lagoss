@@ -29,7 +29,7 @@ impl SimpleLogger {
                     }
                 });
             }
-            Err(error) => println!("Axiom is not configured: {error}"),
+            Err(error) => println!("Axiom is not configured: {error} (can be ignored)"),
         }
 
         Self {

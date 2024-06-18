@@ -1,5 +1,11 @@
 # @lagoss/docs
 
+## 1.1.2
+
+### Patch Changes
+
+- [#30](https://github.com/lagossapp/lagoss/pull/30) [`5036840`](https://github.com/lagossapp/lagoss/commit/5036840b66f8d380e4f35e6f044054a86672da6f) Thanks [@anbraten](https://github.com/anbraten)! - Load deployments using api
+
 ## 1.1.1
 
 ### Patch Changes

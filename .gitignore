@@ -21,3 +21,5 @@ storybook-static/
 tsconfig.tsbuildinfo
 snapshot.bin
 .vercel
+
+.data/

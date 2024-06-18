@@ -334,9 +334,13 @@ interface CryptoKey {
     }
   }
 
-  globalThis.crypto = {
-    getRandomValues,
-    randomUUID,
-    subtle: new SubtleCrypto(),
-  };
+  Object.defineProperty(globalThis, 'crypto', {
+    value: {
+      getRandomValues,
+      randomUUID,
+      subtle: new SubtleCrypto(),
+    },
+    writable: true,
+    configurable: true,
+  });
 })(globalThis);
