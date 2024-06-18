@@ -26,7 +26,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 21
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
@@ -47,7 +47,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 21
           cache: 'pnpm'
       - name: Copy .env.example to .env
         run: cp crates/serverless/.env.example crates/serverless/.env
@@ -67,7 +67,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 21
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
@@ -86,7 +86,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 21
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
