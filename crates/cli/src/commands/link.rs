@@ -49,8 +49,8 @@ pub async fn link(directory: Option<PathBuf>) -> Result<()> {
             let function = &functions[index];
 
             let mut function_config = FunctionConfig::load(&root, None, None)?;
-            function_config.function_id = function.id.clone();
-            function_config.organization_id = organization.id.clone();
+            function_config.function_id.clone_from(&function.id);
+            function_config.organization_id.clone_from(&organization.id);
             function_config.write(&root)?;
 
             println!();

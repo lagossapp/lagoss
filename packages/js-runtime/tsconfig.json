@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "lib": [
-      "ES2022",
-      "WebWorker",
-      "Webworker.Iterable"
-    ],
+    "lib": ["ES2022", "WebWorker", "Webworker.Iterable"],
     "types": [], // Exclude node types
     "module": "ESNext",
     "moduleResolution": "Node",
@@ -15,9 +11,7 @@
     "strict": true,
     "skipLibCheck": true,
     "incremental": true,
-    "tsBuildInfoFile": "tsconfig.tsbuildinfo",
+    "tsBuildInfoFile": "tsconfig.tsbuildinfo"
   },
-  "exclude": [
-    "./dist/**/*"
-  ],
+  "exclude": ["./dist/**/*"]
 }
