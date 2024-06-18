@@ -1,0 +1,7 @@
+*
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!.npmrc
+!packages/dashboard/package.json
+!packages/ui/package.json ./packages/ui/

@@ -20,7 +20,7 @@ COPY . .
 COPY --from=js-runtime /app/dist/index.js /app/crates/runtime_isolate/runtime.js
 RUN cargo build --release --bin lagoss-serverless
 
-FROM chef AS runtime
+FROM debian:bookworm-slim AS runtime
 WORKDIR /app
 RUN apt-get update -y \
     && apt-get install -y ca-certificates libssl1.0 libssl-dev \
