@@ -18,8 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).end();
   }
 
-  console.log(req.headers);
-
   // SELECT
   //   Deployment.id,
   //   Deployment.isProduction,
