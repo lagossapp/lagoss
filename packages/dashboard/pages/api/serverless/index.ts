@@ -7,7 +7,7 @@ export const config = {
   },
 };
 
-const apiToken = process.env.API_TOKEN;
+const apiToken = process.env.LAGOSS_API_TOKEN;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
