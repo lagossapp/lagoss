@@ -1,5 +1,16 @@
 # @lagoss/dashboard
 
+## 0.5.0
+
+### Minor Changes
+
+- [#30](https://github.com/lagossapp/lagoss/pull/30) [`5036840`](https://github.com/lagossapp/lagoss/commit/5036840b66f8d380e4f35e6f044054a86672da6f) Thanks [@anbraten](https://github.com/anbraten)! - Load deployments using api
+
+### Patch Changes
+
+- Updated dependencies [[`b475ca4`](https://github.com/lagossapp/lagoss/commit/b475ca4a93690dd88a36a4f9c240d6ab3df1ff08)]:
+  - @lagoss/ui@0.4.0
+
 ## 0.4.1
 
 ### Patch Changes
