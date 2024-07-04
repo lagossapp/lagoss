@@ -1,0 +1,10 @@
+*
+!Cargo.toml
+!Cargo.lock
+!crates/**/Cargo.toml
+!crates/**/Cargo.lock
+!crates/**/*.rs
+!crates/runtime/icudtl.dat
+!crates/runtime_utils/public/*.html
+!packages/js-runtime/src/
+!packages/js-runtime/package.json
