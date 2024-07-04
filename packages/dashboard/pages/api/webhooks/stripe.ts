@@ -4,7 +4,7 @@ import type Stripe from 'stripe';
 import prisma from 'lib/prisma';
 import { Readable } from 'node:stream';
 import { upgradeFunctions } from 'lib/api/deployments';
-import { getPlanFromPriceId } from 'lib/plans';
+import { getPlanFromOrg } from 'lib/plans';
 
 export const config = {
   api: {
@@ -48,7 +48,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const organizationId = session.metadata!.organizationId;
     const priceId = subscription.items.data[0].price.id;
-    const currentPeriodEnd = new Date(subscription.current_period_end * 1000);
+    const isPro = priceId !== undefined && priceId === process.env.STRIPE_PRO_PLAN_PRICE_ID;
+    const plan = isPro ? 'pro' : 'personal';
+    const planPeriodEnd = new Date(subscription.current_period_end * 1000);
 
     await prisma.organization.update({
       where: {
@@ -57,17 +59,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       data: {
         stripeSubscriptionId: subscription.id,
         stripeCustomerId: subscription.customer as string,
-        stripeCurrentPeriodEnd: currentPeriodEnd,
-        stripePriceId: priceId,
+        plan,
+        planPeriodEnd,
       },
     });
 
-    const plan = getPlanFromPriceId({
-      priceId,
-      currentPeriodEnd,
+    await upgradeFunctions({
+      plan: getPlanFromOrg({
+        plan,
+        planPeriodEnd,
+      }),
+      organizationId,
     });
-
-    await upgradeFunctions({ plan, organizationId });
   }
 
   if (event.type === 'invoice.payment_succeeded') {
@@ -78,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         stripeSubscriptionId: subscription.id,
       },
       data: {
-        stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
+        planPeriodEnd: new Date(subscription.current_period_end * 1000),
       },
     });
   }

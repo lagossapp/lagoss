@@ -10,7 +10,7 @@ import {
   ORGANIZATION_NAME_MAX_LENGTH,
   ORGANIZATION_NAME_MIN_LENGTH,
 } from 'lib/constants';
-import { getPlanFromPriceId } from 'lib/plans';
+import { getPlanFromOrg } from 'lib/plans';
 import prisma from 'lib/prisma';
 import { stripe } from 'lib/stripe';
 import { T } from 'pages/api/trpc/[trpc]';
@@ -214,10 +214,7 @@ export const organizationsRouter = (t: T) =>
         }),
       )
       .mutation(async ({ ctx, input }) => {
-        const plan = getPlanFromPriceId({
-          priceId: ctx.session.organization.stripePriceId,
-          currentPeriodEnd: ctx.session.organization.stripeCurrentPeriodEnd,
-        });
+        const plan = getPlanFromOrg(ctx.session?.organization);
 
         await checkCanAddMember({
           organizationId: ctx.session.organization.id,
@@ -338,8 +335,7 @@ export const organizationsRouter = (t: T) =>
     organizationCheckout: t.procedure
       .input(
         z.object({
-          priceId: z.string(),
-          priceIdMetered: z.string(),
+          plan: z.string(),
         }),
       )
       .mutation(async ({ input, ctx }) => {
@@ -348,15 +344,19 @@ export const organizationsRouter = (t: T) =>
           ownerId: ctx.session.user.id,
         });
 
+        const isPro = input.plan === 'pro';
+        const price = input.plan === 'pro' ? process.env.STRIPE_PRO_PLAN_PRICE_ID : undefined;
+        const priceIdMetered = isPro ? process.env.STRIPE_PRO_PLAN_PRICE_ID_METERED : undefined;
+
         const session = await stripe.checkout.sessions.create({
           billing_address_collection: 'auto',
           line_items: [
             {
-              price: input.priceId,
+              price,
               quantity: 1,
             },
             {
-              price: input.priceIdMetered,
+              price: priceIdMetered,
             },
           ],
           mode: 'subscription',

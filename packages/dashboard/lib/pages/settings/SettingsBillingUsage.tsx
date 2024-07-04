@@ -3,13 +3,12 @@ import toast from 'react-hot-toast';
 import { Banner, Button, Card, Description, Skeleton, Text } from '@lagoss/ui';
 import { trpc } from 'lib/trpc';
 import { useScopedI18n } from 'locales';
-import { getPlanFromPriceId } from 'lib/plans';
+import { getPlanFromOrg } from 'lib/plans';
 import { Suspense, useState } from 'react';
 import useFunctions from 'lib/hooks/useFunctions';
 import useFunctionsUsage from 'lib/hooks/useFunctionsUsage';
 import useOrganizationMembers from 'lib/hooks/useOrganizationMembers';
 import { useRouter } from 'next/router';
-import { getEnv } from 'lib/env/env';
 
 function formatNumber(number = 0) {
   return number.toLocaleString();
@@ -17,10 +16,7 @@ function formatNumber(number = 0) {
 
 const Requests = () => {
   const { data: session } = useSession();
-  const plan = getPlanFromPriceId({
-    priceId: session?.organization?.stripePriceId,
-    currentPeriodEnd: session?.organization?.stripeCurrentPeriodEnd,
-  });
+  const plan = getPlanFromOrg(session?.organization);
   const functions = useFunctions();
   const usage = useFunctionsUsage({
     functions: functions.data?.map(func => func.id) ?? [],
@@ -36,10 +32,7 @@ const Requests = () => {
 
 const Functions = () => {
   const { data: session } = useSession();
-  const plan = getPlanFromPriceId({
-    priceId: session?.organization?.stripePriceId,
-    currentPeriodEnd: session?.organization?.stripeCurrentPeriodEnd,
-  });
+  const plan = getPlanFromOrg(session?.organization);
   const functions = useFunctions();
   const t = useScopedI18n('settings');
 
@@ -75,11 +68,10 @@ const SettingsBillingUsage = () => {
     }
   };
 
-  const checkout = async (priceId: string, priceIdMetered: string) => {
+  const checkout = async (plan: string) => {
     redirectStripe(async () => {
       const result = await organizationCheckout.mutateAsync({
-        priceId,
-        priceIdMetered,
+        plan,
       });
 
       return result.url;
@@ -96,12 +88,7 @@ const SettingsBillingUsage = () => {
     });
   };
 
-  const plan = getPlanFromPriceId({
-    priceId: session?.organization?.stripePriceId,
-    currentPeriodEnd: session?.organization?.stripeCurrentPeriodEnd,
-  });
-
-  const { STRIPE_PRO_PLAN_PRICE_ID, STRIPE_PRO_PLAN_PRICE_ID_METERED } = getEnv();
+  const plan = getPlanFromOrg(session?.organization);
 
   return (
     <div className="flex flex-col gap-8">
@@ -143,18 +130,14 @@ const SettingsBillingUsage = () => {
             <Text strong>{t(`subcription.plan.${plan.type}`)}</Text>
           </div>
           {plan.type === 'personal' ? (
-            <Button
-              variant="primary"
-              disabled={isLoadingPlan || !isOrganizationOwner}
-              onClick={() => checkout(STRIPE_PRO_PLAN_PRICE_ID as string, STRIPE_PRO_PLAN_PRICE_ID_METERED as string)}
-            >
+            <Button variant="primary" disabled={isLoadingPlan || !isOrganizationOwner} onClick={() => checkout('pro')}>
               {t('subcription.upgrade.pro')}
             </Button>
           ) : (
             <>
               <Text>
                 {t('subcription.renew', {
-                  date: new Date(session?.organization?.stripeCurrentPeriodEnd ?? 0).toLocaleDateString(),
+                  date: new Date(session?.organization?.planPeriodEnd ?? 0).toLocaleDateString(),
                 })}
               </Text>
               <Button variant="secondary" disabled={isLoadingPlan || !isOrganizationOwner} onClick={managePlan}>
