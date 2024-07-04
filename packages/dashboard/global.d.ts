@@ -7,9 +7,9 @@ declare module 'next-auth' {
       name: string;
       description?: string;
       stripeCustomerId: string | null;
-      stripePriceId: string | null;
       stripeSubscriptionId: string | null;
-      stripeCurrentPeriodEnd: Date | null;
+      plan: string | null;
+      planPeriodEnd: Date | null;
       createdAt: Date;
     };
     user: {

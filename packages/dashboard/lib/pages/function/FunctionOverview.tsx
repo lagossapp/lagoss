@@ -6,7 +6,7 @@ import useFunctionStats from 'lib/hooks/useFunctionStats';
 import { AnalyticsTimeframe, ANALYTICS_TIMEFRAMES } from 'lib/types';
 import useFunction from 'lib/hooks/useFunction';
 import { useScopedI18n } from 'locales';
-import { getPlanFromPriceId } from 'lib/plans';
+import { getPlanFromOrg } from 'lib/plans';
 import { useSession } from 'next-auth/react';
 import cron from 'cron-parser';
 
@@ -47,10 +47,7 @@ type UsageProps = {
 const Usage = ({ func, timeframe }: UsageProps) => {
   const t = useScopedI18n('functions.overview');
   const { data: session } = useSession();
-  const plan = getPlanFromPriceId({
-    priceId: session?.organization?.stripePriceId,
-    currentPeriodEnd: session?.organization?.stripeCurrentPeriodEnd,
-  });
+  const plan = getPlanFromOrg(session?.organization);
   const { data = [] } = useFunctionStats({ functionId: func?.id, timeframe });
 
   const requests = data.reduce((acc, { requests }) => acc + requests, 0);
