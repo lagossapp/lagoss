@@ -16,15 +16,15 @@ jobs:
     name: Lint
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
       - uses: moonrepo/setup-rust@v0
         with:
           components: clippy
-      - uses: pnpm/action-setup@v2.2.4
+      - uses: pnpm/action-setup@v4
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 21
           cache: 'pnpm'
@@ -37,15 +37,15 @@ jobs:
     name: Test
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
       - uses: moonrepo/setup-rust@v0
         with:
           bins: cargo-all-features
-      - uses: pnpm/action-setup@v2.2.4
+      - uses: pnpm/action-setup@v4
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 21
           cache: 'pnpm'
@@ -60,12 +60,12 @@ jobs:
     name: Typecheck
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
-      - uses: pnpm/action-setup@v2.2.4
+      - uses: pnpm/action-setup@v4
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 21
           cache: 'pnpm'
@@ -78,13 +78,13 @@ jobs:
     name: Build
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
       - uses: moonrepo/setup-rust@v0
-      - uses: pnpm/action-setup@v2.2.4
+      - uses: pnpm/action-setup@v4
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 21
           cache: 'pnpm'
