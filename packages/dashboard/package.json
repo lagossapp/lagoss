@@ -54,7 +54,7 @@
     "react-final-form": "^6.5.9",
     "react-hot-toast": "^2.2.0",
     "redis": "^4.6.5",
-    "stripe": "^12.2.0",
+    "stripe": "^16.1.0",
     "zod": "^3.17.3"
   },
   "devDependencies": {
