@@ -9,7 +9,7 @@ import useFunctions from 'lib/hooks/useFunctions';
 import useFunctionsUsage from 'lib/hooks/useFunctionsUsage';
 import useOrganizationMembers from 'lib/hooks/useOrganizationMembers';
 import { useRouter } from 'next/router';
-import getConfig from 'next/config';
+import { getEnv } from 'lib/env/env';
 
 function formatNumber(number = 0) {
   return number.toLocaleString();
@@ -101,7 +101,7 @@ const SettingsBillingUsage = () => {
     currentPeriodEnd: session?.organization?.stripeCurrentPeriodEnd,
   });
 
-  const { publicRuntimeConfig } = getConfig();
+  const { STRIPE_PRO_PLAN_PRICE_ID, STRIPE_PRO_PLAN_PRICE_ID_METERED } = getEnv();
 
   return (
     <div className="flex flex-col gap-8">
@@ -146,12 +146,7 @@ const SettingsBillingUsage = () => {
             <Button
               variant="primary"
               disabled={isLoadingPlan || !isOrganizationOwner}
-              onClick={() =>
-                checkout(
-                  publicRuntimeConfig.STRIPE_PRO_PLAN_PRICE_ID as string,
-                  publicRuntimeConfig.STRIPE_PRO_PLAN_PRICE_ID_METERED as string,
-                )
-              }
+              onClick={() => checkout(STRIPE_PRO_PLAN_PRICE_ID as string, STRIPE_PRO_PLAN_PRICE_ID_METERED as string)}
             >
               {t('subcription.upgrade.pro')}
             </Button>

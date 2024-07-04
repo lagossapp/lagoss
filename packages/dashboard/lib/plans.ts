@@ -1,4 +1,4 @@
-import getConfig from 'next/config';
+import { getEnv } from 'lib/env/env';
 
 export type Plan = {
   type: 'personal' | 'pro';
@@ -23,11 +23,11 @@ export const PERSONAL_PLAN: Plan = {
   maxAssetsPerFunction: 100,
 };
 
-const { publicRuntimeConfig } = getConfig();
+const { STRIPE_PRO_PLAN_PRICE_ID } = getEnv();
 
 export const PRO_PLAN: Plan = {
   type: 'pro',
-  id: publicRuntimeConfig.STRIPE_PRO_PLAN_PRICE_ID,
+  id: STRIPE_PRO_PLAN_PRICE_ID,
   expired: false,
   maxFunctions: 50,
   freeRequests: 5000000,

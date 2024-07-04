@@ -1,5 +1,5 @@
 import cronstrue from 'cronstrue';
-import getConfig from 'next/config';
+import { getEnv } from 'lib/env/env';
 
 /**
  * Example:
@@ -12,19 +12,18 @@ import getConfig from 'next/config';
  */
 
 export function getFullCurrentDomain({ name }: { name: string }): string {
-  const { publicRuntimeConfig } = getConfig();
-  return `${publicRuntimeConfig.LAGOSS_ROOT_SCHEM}://${getCurrentDomain({ name })}`;
+  const { LAGOSS_ROOT_SCHEM } = getEnv();
+  return `${LAGOSS_ROOT_SCHEM}://${getCurrentDomain({ name })}`;
 }
 
 export function getCurrentDomain({ name }: { name: string }): string {
-  const { publicRuntimeConfig } = getConfig();
-  return `${name}.${publicRuntimeConfig.LAGOSS_ROOT_DOMAIN}`;
+  const { LAGOSS_ROOT_DOMAIN } = getEnv();
+  return `${name}.${LAGOSS_ROOT_DOMAIN}`;
 }
 
 export function getFullDomain(domain: string): string {
-  const { publicRuntimeConfig } = getConfig();
-  console.log(publicRuntimeConfig);
-  return `${publicRuntimeConfig.LAGOSS_ROOT_SCHEM}://${domain}`;
+  const { LAGOSS_ROOT_SCHEM } = getEnv();
+  return `${LAGOSS_ROOT_SCHEM}://${domain}`;
 }
 
 export function reloadSession() {
