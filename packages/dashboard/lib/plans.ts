@@ -1,3 +1,5 @@
+import { getEnv } from 'lib/env/env';
+
 export type Plan = {
   type: 'personal' | 'pro';
   id?: string;
@@ -21,9 +23,11 @@ export const PERSONAL_PLAN: Plan = {
   maxAssetsPerFunction: 100,
 };
 
+const { STRIPE_PRO_PLAN_PRICE_ID } = getEnv();
+
 export const PRO_PLAN: Plan = {
   type: 'pro',
-  id: process.env.NEXT_PUBLIC_STRIPE_PRO_PLAN_PRICE_ID,
+  id: STRIPE_PRO_PLAN_PRICE_ID,
   expired: false,
   maxFunctions: 50,
   freeRequests: 5000000,

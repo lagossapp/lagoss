@@ -9,6 +9,7 @@ import en from 'locales/en';
 import { trpc } from 'lib/trpc';
 import { useMemo } from 'react';
 import { PostHogProvider } from 'lib/posthog';
+import Script from 'next/script';
 
 type LayoutAppProps = AppProps & {
   Component: AppProps['Component'] & {
@@ -27,6 +28,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: LayoutAppProps
 
   return (
     <PostHogProvider>
+      <Script src="/api/config" />
       <SessionProvider session={session}>
         <Toaster
           position="top-right"
