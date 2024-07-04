@@ -25,7 +25,7 @@ jobs:
           token: ${{ secrets.PAT }}
       - uses: pnpm/action-setup@v4
       - name: Use Node.js
-        uses: pnpm/action-setup@v4
+        uses: actions/setup-node@v4
         with:
           node-version: 21
           cache: 'pnpm'
