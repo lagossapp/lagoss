@@ -345,7 +345,7 @@ export const organizationsRouter = (t: T) =>
         });
 
         const isPro = input.plan === 'pro';
-        const price = input.plan === 'pro' ? process.env.STRIPE_PRO_PLAN_PRICE_ID : undefined;
+        const price = isPro ? process.env.STRIPE_PRO_PLAN_PRICE_ID : undefined;
         const priceIdMetered = isPro ? process.env.STRIPE_PRO_PLAN_PRICE_ID_METERED : undefined;
 
         const session = await stripe.checkout.sessions.create({
