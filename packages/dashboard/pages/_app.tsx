@@ -8,7 +8,6 @@ import { I18nProvider, usePersistLocale } from 'locales';
 import en from 'locales/en';
 import { trpc } from 'lib/trpc';
 import { useMemo } from 'react';
-import { PostHogProvider } from 'lib/posthog';
 
 type LayoutAppProps = AppProps & {
   Component: AppProps['Component'] & {
@@ -26,23 +25,21 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: LayoutAppProps
   );
 
   return (
-    <PostHogProvider>
-      <SessionProvider session={session}>
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            className: 'bg-white text-stone-800 dark:bg-black dark:text-stone-200',
-          }}
-        />
-        <MaybeAuthGuard>
-          <I18nProvider locale={pageProps.locale} fallbackLocale={en}>
-            <Layout title={Component.title} anonymous={Component.anonymous}>
-              <Component {...pageProps} />
-            </Layout>
-          </I18nProvider>
-        </MaybeAuthGuard>
-      </SessionProvider>
-    </PostHogProvider>
+    <SessionProvider session={session}>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          className: 'bg-white text-stone-800 dark:bg-black dark:text-stone-200',
+        }}
+      />
+      <MaybeAuthGuard>
+        <I18nProvider locale={pageProps.locale} fallbackLocale={en}>
+          <Layout title={Component.title} anonymous={Component.anonymous}>
+            <Component {...pageProps} />
+          </Layout>
+        </I18nProvider>
+      </MaybeAuthGuard>
+    </SessionProvider>
   );
 };
 
