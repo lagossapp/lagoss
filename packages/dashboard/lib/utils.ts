@@ -1,24 +1,29 @@
 import cronstrue from 'cronstrue';
+import { getEnv } from 'lib/env/env';
 
 /**
  * Example:
  *
- * NEXT_PUBLIC_LAGOSS_ROOT_SCHEM=https
- * NEXT_PUBLIC_LAGOSS_ROOT_DOMAIN=lagoss.com
+ * LAGOSS_ROOT_SCHEM=https
+ * LAGOSS_ROOT_DOMAIN=lagoss.com
  * name=hello-world
  *
  * -> https://hello-world.lagoss.com
  */
+
 export function getFullCurrentDomain({ name }: { name: string }): string {
-  return `${process.env.NEXT_PUBLIC_LAGOSS_ROOT_SCHEM}://${getCurrentDomain({ name })}`;
+  const { LAGOSS_ROOT_SCHEM } = getEnv();
+  return `${LAGOSS_ROOT_SCHEM}://${getCurrentDomain({ name })}`;
 }
 
 export function getCurrentDomain({ name }: { name: string }): string {
-  return `${name}.${process.env.NEXT_PUBLIC_LAGOSS_ROOT_DOMAIN}`;
+  const { LAGOSS_ROOT_DOMAIN } = getEnv();
+  return `${name}.${LAGOSS_ROOT_DOMAIN}`;
 }
 
 export function getFullDomain(domain: string): string {
-  return `${process.env.NEXT_PUBLIC_LAGOSS_ROOT_SCHEM}://${domain}`;
+  const { LAGOSS_ROOT_SCHEM } = getEnv();
+  return `${LAGOSS_ROOT_SCHEM}://${domain}`;
 }
 
 export function reloadSession() {
