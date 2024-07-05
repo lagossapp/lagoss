@@ -7,7 +7,7 @@ fs.stat('../bin/install.js')
   })
   .catch(() => {
     console.log('Building the lagoss cli ...');
-    const { status } = spawnSync('pnpm', ['build']);
+    const { status } = spawnSync('pnpm', ['build:js']);
     if (status !== 0) {
       throw new Error('Failed to build the lagoss cli');
     } else {
