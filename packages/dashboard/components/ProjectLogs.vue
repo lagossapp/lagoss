@@ -24,7 +24,7 @@ const props = defineProps<{
 
 // TODO: auto update logs
 // TODO: auto scroll to bottom
-const { data: logs, refresh: refreshLogs } = useFetch(`/api/projects/${props.project.name}/logs`, {
+const { data: logs, refresh: refreshLogs } = await useFetch(`/api/projects/${props.project.name}/logs`, {
   query: {
     level: 'all',
     timeframe: 'Last hour',

@@ -1,5 +1,7 @@
-export async function useAuth() {
-  const { data: user, refresh: updateAuthSession } = await useFetch('/api/user');
+import { defineStore } from 'pinia';
+
+export const useAuth = defineStore('auth', () => {
+  const { data: user, refresh: updateAuthSession } = useFetch('/api/user');
 
   const isAuthenticated = computed(() => !!user.value?.id);
 
@@ -27,4 +29,4 @@ export async function useAuth() {
     selectOrganization,
     updateAuthSession,
   };
-}
+});

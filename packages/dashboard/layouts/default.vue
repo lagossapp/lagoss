@@ -32,4 +32,8 @@ onErrorCaptured(err => {
   margin: 0;
   padding: 0;
 }
+
+html {
+  scrollbar-gutter: stable;
+}
 </style>
