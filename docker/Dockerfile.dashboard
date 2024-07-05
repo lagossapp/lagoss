@@ -21,8 +21,7 @@ FROM base AS runner
 ENV NODE_ENV production
 ENV PORT 3000
 ENV NEXT_SHARP_PATH /app/packages/dashboard/node_modules/sharp
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/packages/dashboard/public ./packages/dashboard/public
