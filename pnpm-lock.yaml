@@ -56,12 +56,16 @@ importers:
 
   crates/cli:
     dependencies:
-      axios:
-        specifier: ^1.7.2
-        version: 1.7.2
       esbuild:
         specifier: ^0.18.7
         version: 0.18.7
+    devDependencies:
+      '@types/update-notifier':
+        specifier: ^6.0.8
+        version: 6.0.8
+      axios:
+        specifier: ^1.7.2
+        version: 1.7.2
       rimraf:
         specifier: ^5.0.7
         version: 5.0.7
@@ -71,10 +75,6 @@ importers:
       update-notifier:
         specifier: ^7.0.0
         version: 7.0.0
-    devDependencies:
-      '@types/update-notifier':
-        specifier: ^6.0.8
-        version: 6.0.8
 
   crates/runtime: {}
 
