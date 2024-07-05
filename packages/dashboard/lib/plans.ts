@@ -1,5 +1,3 @@
-import { getEnv } from 'lib/env/env';
-
 export type Plan = {
   type: 'personal' | 'pro';
   id?: string;
@@ -23,11 +21,8 @@ export const PERSONAL_PLAN: Plan = {
   maxAssetsPerFunction: 100,
 };
 
-const { STRIPE_PRO_PLAN_PRICE_ID } = getEnv();
-
 export const PRO_PLAN: Plan = {
   type: 'pro',
-  id: STRIPE_PRO_PLAN_PRICE_ID,
   expired: false,
   maxFunctions: 50,
   freeRequests: 5000000,
@@ -37,17 +32,11 @@ export const PRO_PLAN: Plan = {
   maxAssetsPerFunction: 1000,
 };
 
-export const getPlanFromPriceId = ({
-  priceId,
-  currentPeriodEnd,
-}: {
-  priceId?: string | null;
-  currentPeriodEnd?: Date | null;
-}) => {
-  if (priceId === PRO_PLAN.id) {
+export const getPlanFromOrg = (org?: { plan?: string | null; planPeriodEnd?: Date | null }) => {
+  if (org?.plan === 'pro') {
     return {
       ...PRO_PLAN,
-      expired: new Date(currentPeriodEnd ?? 0).getTime() < Date.now(),
+      expired: new Date(org.planPeriodEnd ?? 0).getTime() < Date.now(),
     };
   }
 

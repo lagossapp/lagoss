@@ -210,8 +210,8 @@ importers:
         specifier: ^4.6.5
         version: 4.6.5
       stripe:
-        specifier: ^12.2.0
-        version: 12.2.0
+        specifier: ^16.1.0
+        version: 16.1.0
       zod:
         specifier: ^3.17.3
         version: 3.17.3
@@ -8700,8 +8700,8 @@ packages:
   strip-literal@2.1.0:
     resolution: {integrity: sha512-Op+UycaUt/8FbN/Z2TWPBLge3jWrP3xj10f3fnYxf052bKuS3EKs1ZQcVGjnEMdsNVAM+plXRdmjrZ/KgG3Skw==}
 
-  stripe@12.2.0:
-    resolution: {integrity: sha512-OVqmUuHvDL8z9pBhrhL0HkjPduBM6x1KJCSnVC8R3m+nWpTb7xRpqNuETEkvkYrek1QpfzbcS+UlOCTpv7SC/w==}
+  stripe@16.1.0:
+    resolution: {integrity: sha512-syeEEd112om/waJ5gOQ+SaYi+setuidQ4ZIPiQREF4yJeegXhn2HKy6C0JYm7uhVQKfMAvuZ22dIRsnoDv7AMw==}
     engines: {node: '>=12.*'}
 
   style-loader@3.3.2:
@@ -20828,7 +20828,7 @@ snapshots:
     dependencies:
       js-tokens: 9.0.0
 
-  stripe@12.2.0:
+  stripe@16.1.0:
     dependencies:
       '@types/node': 18.11.18
       qs: 6.11.0

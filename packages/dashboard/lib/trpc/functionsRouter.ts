@@ -22,7 +22,7 @@ import {
   isFunctionNameBlacklisted,
   isFunctionNameUnique,
 } from 'lib/api/functions';
-import { getPlanFromPriceId } from 'lib/plans';
+import { getPlanFromOrg } from 'lib/plans';
 import { checkIsOrganizationOwner } from 'lib/api/organizations';
 import clickhouse from 'lib/clickhouse';
 
@@ -200,10 +200,7 @@ LIMIT 100`,
         }),
       )
       .mutation(async ({ ctx, input }) => {
-        const plan = getPlanFromPriceId({
-          priceId: ctx.session.organization.stripePriceId,
-          currentPeriodEnd: ctx.session.organization.stripeCurrentPeriodEnd,
-        });
+        const plan = getPlanFromOrg(ctx.session?.organization);
 
         await checkCanCreateFunction({
           functionName: input.name,
