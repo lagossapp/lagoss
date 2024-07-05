@@ -1,5 +1,11 @@
 # @lagoss/dashboard
 
+## 0.6.2
+
+### Patch Changes
+
+- [#43](https://github.com/lagossapp/lagoss/pull/43) [`d08bbb2`](https://github.com/lagossapp/lagoss/commit/d08bbb251067dfa551f0ae9d2b814ff5ab309df0) Thanks [@anbraten](https://github.com/anbraten)! - Fix asset loading
+
 ## 0.6.1
 
 ### Patch Changes
