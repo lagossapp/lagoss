@@ -5,5 +5,5 @@
 // @ts-expect-error This is a hack to prevent the process from exiting
 process.exit = (): never => {};
 
-import { getBinary } from './get-binary.js';
+import { getBinary } from './get-binary';
 getBinary().install();

@@ -1,5 +1,5 @@
 import { createRequire } from 'node:module';
-import { Binary } from './binary-install.js';
+import { Binary } from './binary-install';
 import os from 'node:os';
 import path from 'node:path';
 
