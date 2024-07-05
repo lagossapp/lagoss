@@ -1,5 +1,6 @@
 export default defineNuxtConfig({
   modules: ['@nuxt/ui', '@pinia/nuxt'],
+
   runtimeConfig: {
     auth: {
       name: 'nuxt-session',
@@ -41,9 +42,11 @@ export default defineNuxtConfig({
       },
     },
   },
+
   ui: {
     icons: ['mdi', 'simple-icons', 'heroicons', 'ion'],
   },
+
   app: {
     head: {
       title: 'Lagoss',
@@ -53,11 +56,15 @@ export default defineNuxtConfig({
       // ],
     },
   },
+
   // nitro: {
   //   preset: 'node',
   // },
   devtools: { enabled: true },
+
   build: {
     transpile: ['trpc-nuxt'],
   },
+
+  compatibilityDate: '2024-07-05',
 });

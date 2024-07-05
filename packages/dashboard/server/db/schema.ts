@@ -81,10 +81,8 @@ export const organizationSchema = mysqlTable('Organization', {
   ownerId: varchar('ownerId', { length: 191 }).notNull(),
   stripeCustomerId: varchar('stripe_customer_id', { length: 191 }).unique(),
   stripeSubscriptionId: varchar('stripe_subscription_id', { length: 191 }).unique(),
-  stripePriceId: varchar('stripe_price_id', { length: 191 }),
-  stripeCurrentPeriodEnd: datetime('stripe_current_period_end'),
-  // plan: varchar('plan', { length: 191 }).notNull().default('free'),
-  // currentPeriodEnd: datetime('currentPeriodEnd'),
+  plan: varchar('plan', { length: 191 }).$type<'personal' | 'pro'>().notNull().default('personal'),
+  planPeriodEnd: datetime('plan_period_end'),
 });
 export type Organization = InferSelectModel<typeof organizationSchema>;
 
