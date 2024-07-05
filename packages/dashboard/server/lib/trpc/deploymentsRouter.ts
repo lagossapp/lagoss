@@ -48,9 +48,6 @@ export const deploymentsRouter = (t: T) =>
           functionId: input.functionId,
           userId: ctx.session.user.id,
           plan,
-        });
-
-        const deployment = await createDeployment(
           {
             id: input.functionId,
           },

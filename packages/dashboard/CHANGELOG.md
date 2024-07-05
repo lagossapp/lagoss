@@ -1,5 +1,35 @@
 # @lagoss/dashboard
 
+## 0.6.3
+
+### Patch Changes
+
+- [#45](https://github.com/lagossapp/lagoss/pull/45) [`7287ab5`](https://github.com/lagossapp/lagoss/commit/7287ab537e12073016d4310e2b444567d6d6832a) Thanks [@anbraten](https://github.com/anbraten)! - Fix docker tags pattern
+
+## 0.6.2
+
+### Patch Changes
+
+- [#43](https://github.com/lagossapp/lagoss/pull/43) [`d08bbb2`](https://github.com/lagossapp/lagoss/commit/d08bbb251067dfa551f0ae9d2b814ff5ab309df0) Thanks [@anbraten](https://github.com/anbraten)! - Fix asset loading
+
+## 0.6.1
+
+### Patch Changes
+
+- [#41](https://github.com/lagossapp/lagoss/pull/41) [`7735890`](https://github.com/lagossapp/lagoss/commit/77358906a195bcab639db74ff5d1a22f42dcc209) Thanks [@anbraten](https://github.com/anbraten)! - Fix docker tag and publishing
+
+## 0.6.0
+
+### Minor Changes
+
+- [#29](https://github.com/lagossapp/lagoss/pull/29) [`1d06a2d`](https://github.com/lagossapp/lagoss/commit/1d06a2de406a6b12ef0746430d938a803cd5722e) Thanks [@anbraten](https://github.com/anbraten)! - do not bundle config vars to allow changing with docker env
+
+### Patch Changes
+
+- [#36](https://github.com/lagossapp/lagoss/pull/36) [`a68e021`](https://github.com/lagossapp/lagoss/commit/a68e021ef2ef5816ccb935b85af0c5a54cb522b2) Thanks [@anbraten](https://github.com/anbraten)! - Simplify stripe integration
+
+- [#33](https://github.com/lagossapp/lagoss/pull/33) [`09697a4`](https://github.com/lagossapp/lagoss/commit/09697a4bca46f301eff4886fae07765b072c101c) Thanks [@anbraten](https://github.com/anbraten)! - Remove posthog integration
+
 ## 0.5.0
 
 ### Minor Changes

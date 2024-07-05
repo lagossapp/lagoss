@@ -18,32 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).end();
   }
 
-  // SELECT
-  //   Deployment.id,
-  //   Deployment.isProduction,
-  //   Deployment.assets,
-  //   Function.id,
-  //   Function.name,
-  //   Function.memory,
-  //   Function.tickTimeout,
-  //   Function.totalTimeout,
-  //   Function.cron,
-  //   Domain.domain,
-  //   EnvVariable.key,
-  //   EnvVariable.value
-  // FROM
-  //   Deployment
-  // INNER JOIN Function
-  //   ON Deployment.functionId = Function.id
-  // LEFT JOIN Domain
-  //   ON Function.id = Domain.functionId
-  // LEFT JOIN EnvVariable
-  //   ON Function.id = EnvVariable.functionId
-  // WHERE
-  //   Function.cron IS NULL
-  // OR
-  //   Function.cronRegion = '{}'
-
   const cronRegion = req.headers['x-lagoss-region'] as string;
 
   const deployments = await prisma.deployment.findMany({
