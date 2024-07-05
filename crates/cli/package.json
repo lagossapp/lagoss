@@ -13,7 +13,7 @@
     "build": "esbuild --outdir=bin/ --platform=node --packages=external --format=esm --bundle --minify lib/run.ts lib/install.ts && cargo build",
     "lint": "cargo clippy -- -Dwarnings --no-deps",
     "typecheck": "tsc --noEmit",
-    "postinstall": "node bin/install.js"
+    "postinstall": "node entry.js"
   },
   "dependencies": {
     "axios": "^1.7.2",
