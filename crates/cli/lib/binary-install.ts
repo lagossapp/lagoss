@@ -21,28 +21,28 @@ export class Binary {
   private url: string;
   private name: string;
   private version: string;
-  private installDirectory: string;
+  private installationDirectory: string;
 
   constructor(
     url: string,
     data: {
       name: string;
       version: string;
-      installDirectory: string;
+      installationDirectory: string;
     },
   ) {
     this.url = url;
     this.name = data.name;
     this.version = data.version;
-    this.installDirectory = data.installDirectory;
+    this.installationDirectory = data.installationDirectory;
   }
 
-  _getInstallDirectory() {
-    return this.installDirectory;
+  _getInstallationDirectory() {
+    return this.installationDirectory;
   }
 
   _getBinaryDirectory() {
-    return join(this._getInstallDirectory(), 'bin');
+    return join(this._getInstallationDirectory(), 'bin');
   }
 
   _getBinaryPath() {
@@ -67,9 +67,9 @@ export class Binary {
       return;
     }
 
-    const dir = this._getInstallDirectory();
-    if (!existsSync(dir)) {
-      mkdirSync(dir, { recursive: true });
+    const installationDirectory = this._getInstallationDirectory();
+    if (!existsSync(installationDirectory)) {
+      mkdirSync(installationDirectory, { recursive: true });
     }
 
     const binaryDirectory = this._getBinaryDirectory();
@@ -106,8 +106,8 @@ export class Binary {
   }
 
   uninstall() {
-    if (existsSync(this._getInstallDirectory())) {
-      rimraf.sync(this.installDirectory);
+    if (existsSync(this._getInstallationDirectory())) {
+      rimraf.sync(this.installationDirectory);
       console.log(`${this.name} has been uninstalled`);
     }
   }

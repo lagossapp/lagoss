@@ -4,16 +4,17 @@
   "description": "CLI for Lagoss",
   "type": "module",
   "files": [
-    "bin"
+    "bin",
+    "dist"
   ],
   "bin": {
     "lagoss": "./bin/run.js"
   },
   "scripts": {
-    "build": "esbuild --outdir=bin/ --platform=node --packages=external --format=esm --bundle --minify lib/run.ts lib/install.ts && cargo build",
+    "build": "esbuild --outdir=dist/ --platform=node --packages=external --format=esm --bundle --minify lib/run.ts lib/install.ts && cargo build",
     "lint": "cargo clippy -- -Dwarnings --no-deps",
     "typecheck": "tsc --noEmit",
-    "postinstall": "node entry.js"
+    "postinstall": "node ./bin/install.js"
   },
   "dependencies": {
     "axios": "^1.7.2",

@@ -13,12 +13,8 @@
     "rootDir": ".",
     "baseUrl": "src",
     "skipLibCheck": true,
-    "noUnusedLocals": true,
-    "paths": {
-      "~/*": ["./*"],
-      "$/*": ["../test/*"]
-    }
+    "noUnusedLocals": true
   },
-  "include": ["lib"],
+  "include": ["lib", "bin"],
   "exclude": ["node_modules", "**/dist"]
 }

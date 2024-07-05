@@ -55,7 +55,7 @@ export function getBinary() {
   };
 
   const url = `https://github.com/lagossapp/lagoss/releases/download/${packageName}@${version}/${platform}.tar.gz`;
-  const installDirectory = path.join(os.homedir(), '.lagoss');
+  const installationDirectory = path.join(os.homedir(), '.lagoss');
 
-  return new Binary(url, { name, installDirectory, version });
+  return new Binary(url, { name, installationDirectory, version });
 }
