@@ -1,12 +1,16 @@
 {
   "name": "@lagoss/cli",
-  "version": "0.10.0",
+  "version": "0.9.1",
   "description": "CLI for Lagoss",
   "type": "module",
   "files": [
     "bin",
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lagossapp/lagoss"
+  },
   "bin": {
     "lagoss": "./bin/run.js"
   },
