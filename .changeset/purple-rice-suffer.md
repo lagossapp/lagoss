@@ -1,5 +1,5 @@
 ---
-'@lagoss/ui': minor
+'@lagoss/cli': minor
 ---
 
-Updated docs to vitepress, added self-hosting instructions and adjusted README
+Skip downloading cli if requested version is already installed and migrate cli code to typescript.

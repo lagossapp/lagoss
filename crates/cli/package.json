@@ -22,7 +22,6 @@
     "update-notifier": "^7.0.0"
   },
   "devDependencies": {
-    "@types/update-notifier": "^6.0.8",
-    "tsup": "^7.1.0"
+    "@types/update-notifier": "^6.0.8"
   }
 }
