@@ -1,5 +1,11 @@
 # @lagoss/cli
 
+## 0.10.0
+
+### Minor Changes
+
+- [#26](https://github.com/lagossapp/lagoss/pull/26) [`11c504c`](https://github.com/lagossapp/lagoss/commit/11c504c83185c9b1bea3dc0097bfa7f9276e9148) Thanks [@anbraten](https://github.com/anbraten)! - Skip downloading cli if requested version is already installed and migrate cli code to typescript.
+
 ## 0.9.1
 
 ### Patch Changes
