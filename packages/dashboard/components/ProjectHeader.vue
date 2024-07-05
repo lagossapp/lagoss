@@ -1,7 +1,7 @@
 <template>
   <header class="mx-auto flex w-full max-w-4xl flex-col">
     <div class="flex w-full items-center justify-between">
-      <h1 class="text-3xl font-bold">Project {{ project?.name }}</h1>
+      <h1 class="text-3xl font-bold">{{ project?.name }}</h1>
 
       <div class="flex gap-4">
         <a :href="getFullCurrentDomain({ name: project.name })" rel="noopener noreferrer" target="_blank">
@@ -19,22 +19,7 @@
     </div>
 
     <div class="my-4 flex gap-4">
-      <router-link
-        v-for="tab in tabs"
-        :key="tab.label"
-        :to="tab.to"
-        class="cursor-pointer rounded-md px-2 py-1 hover:bg-gray-100 hover:text-gray-900 hover:dark:bg-zinc-700 hover:dark:text-gray-100"
-      >
-        <span
-          class="pb-1"
-          :class="{
-            'text-gray-500 dark:text-gray-300': $route.path !== tab.to,
-            'border-b-2 border-gray-900 text-gray-900 hover:rounded-b-none dark:border-gray-200 dark:text-gray-100':
-              $route.path === tab.to,
-          }"
-          >{{ tab.label }}</span
-        >
-      </router-link>
+      <TabButton v-for="tab in tabs" :key="tab.label" :to="tab.to" :label="tab.label" />
     </div>
   </header>
 </template>

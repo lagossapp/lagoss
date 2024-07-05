@@ -11,11 +11,20 @@ export async function useAuth() {
     window.location.href = '/api/auth/logout';
   }
 
+  async function selectOrganization(organizationId: string) {
+    await $fetch(`/api/user/`, {
+      method: 'PATCH',
+      body: JSON.stringify({ currentOrganizationId: organizationId }),
+    });
+    await updateAuthSession();
+  }
+
   return {
     isAuthenticated,
     user,
     login,
     logout,
+    selectOrganization,
     updateAuthSession,
   };
 }

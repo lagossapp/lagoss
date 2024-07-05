@@ -7,39 +7,60 @@
       <img src="/icon-white.png" alt="Dark icon" class="hidden w-6 dark:block" />
     </router-link>
 
-    <UBreadcrumb :links="links">
-      <template #default="{ link, isActive }">
-        <UBadge :color="isActive ? 'primary' : 'gray'" class="rounded-full">{{ link.label }}</UBadge>
-        <UPopover v-if="link.id === 'org'">
-          <UButton color="white" icon="i-heroicons-chevron-down-20-solid" size="xs" />
+    <UPopover v-model:open="orgSelectOpen">
+      <UButton color="white" class="w-48">
+        <UAvatar :alt="selectedOrganization?.name" size="xs" />
+        <span>{{ selectedOrganization?.name }}</span>
+        <UIcon
+          name="i-heroicons-chevron-down-20-solid"
+          class="ms-auto h-4 w-4 transform transition-transform"
+          :class="{
+            'rotate-180': orgSelectOpen,
+          }"
+        />
+      </UButton>
 
-          <template #panel>
-            <div class="flex flex-col gap-2 p-2">
-              <UButton
-                v-for="organization in organizations"
-                :key="organization.id"
-                :label="organization.name"
-                size="md"
-                :to="`/organizations/${organization.id}`"
-                color="white"
-                class="w-full justify-between"
-                :trailing-icon="organization.id === $route.params.organizationId ? 'i-heroicons-check-20-solid' : ''"
+      <template #panel>
+        <div class="flex w-48 flex-col divide-y divide-gray-200 dark:divide-gray-700">
+          <div class="p-1" @click="orgSelectOpen = !orgSelectOpen">
+            <UButton
+              v-for="organization in organizations"
+              :key="organization.id"
+              :label="organization.name"
+              size="sm"
+              :to="`/organizations/${organization.id}`"
+              variant="ghost"
+              class="w-full"
+              @click="selectOrganization(organization.id)"
+            >
+              <UAvatar :alt="organization.name" size="xs" />
+              <span class="truncate">{{ organization.name }}</span>
+              <UIcon
+                v-if="organization.id === selectedOrganization?.id"
+                name="i-heroicons-check-20-solid"
+                class="ml-auto h-4 w-4"
               />
-              <UButton
-                label="Create organization"
-                icon="i-heroicons-plus"
-                size="md"
-                color="white"
-                class="w-full"
-                to="/organizations/create"
-              />
-            </div>
-          </template>
-        </UPopover>
+            </UButton>
+          </div>
+          <div class="p-1">
+            <UButton
+              label="Create organization"
+              icon="i-heroicons-plus"
+              variant="ghost"
+              class="w-full"
+              to="/organizations/create"
+            />
+          </div>
+        </div>
       </template>
-    </UBreadcrumb>
+    </UPopover>
 
-    <div class="ml-auto flex items-center gap-2">
+    <template v-if="selectedOrganization">
+      <TabButton :to="`/organizations/${selectedOrganization.id}`" label="Projects" />
+      <TabButton :to="`/organizations/${selectedOrganization.id}/settings`" label="Settings" />
+    </template>
+
+    <div class="ml-auto flex items-center gap-4">
       <ClientOnly>
         <UButton
           :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
@@ -62,12 +83,16 @@
         <UAvatar :src="user?.image || ''" alt="User avatar" size="sm" :initials="user?.name" />
 
         <template #panel>
-          <div class="flex w-48 flex-col items-center p-4">
-            <UAvatar :src="user?.image || ''" alt="User avatar" size="xl" :initials="user?.name" />
-            <p class="mb-8">{{ user.name }}</p>
+          <div class="flex w-48 flex-col items-center gap-2">
+            <div class="my-4 flex flex-col items-center gap-2">
+              <UAvatar :src="user?.image || ''" alt="User avatar" size="xl" :initials="user?.name" />
+              <span>{{ user.name }}</span>
+            </div>
 
-            <UButton label="Settings" size="xs" color="white" class="mb-2 w-full" />
-            <UButton label="Logout" size="xs" color="white" class="w-full" @click="logout" />
+            <div class="flex w-full flex-col border-t border-gray-200 p-2 dark:border-gray-800">
+              <UButton label="Settings" variant="ghost" to="/settings" class="w-full" />
+              <UButton label="Logout" variant="ghost" class="w-full" @click="logout" />
+            </div>
           </div>
         </template>
       </UPopover>
@@ -87,36 +112,13 @@ const isDark = computed({
   },
 });
 
-const { user, logout } = await useAuth();
+const { user, logout, selectOrganization } = await useAuth();
 
 const { data: organizations } = useFetch('/api/organizations');
 
-const breadCrumbsStore = useBreadCrumbsStore();
+const selectedOrganization = computed(
+  () => organizations.value?.find(org => org.id === user.value?.currentOrganizationId),
+);
 
-const links = computed(() => {
-  const _links: { id: string; label: string; to?: string }[] = [
-    // {
-    //   label: 'Home',
-    //   to: '/',
-    // },
-  ];
-
-  if (breadCrumbsStore.selectedOrganization) {
-    _links.push({
-      id: 'org',
-      label: `${breadCrumbsStore.selectedOrganization.name}`,
-      to: `/organizations/${breadCrumbsStore.selectedOrganization.id}`,
-    });
-  }
-
-  if (breadCrumbsStore.selectedProject) {
-    _links.push({
-      id: 'project',
-      label: `${breadCrumbsStore.selectedProject.name}`,
-      to: `/projects/${breadCrumbsStore.selectedProject.name}`,
-    });
-  }
-
-  return _links;
-});
+const orgSelectOpen = ref(false);
 </script>
