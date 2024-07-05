@@ -49,10 +49,13 @@ export function getBinary() {
   const { platform, name } = getPlatform();
   const customRequire = createRequire(import.meta.url);
 
-  const { name: packageName, version } = customRequire('../package.json');
+  const { name: packageName, version } = customRequire('../package.json') as {
+    name: string;
+    version: string;
+  };
 
   const url = `https://github.com/lagossapp/lagoss/releases/download/${packageName}@${version}/${platform}.tar.gz`;
   const installDirectory = path.join(os.homedir(), '.lagoss');
 
-  return new Binary(url, { name, installDirectory });
+  return new Binary(url, { name, installDirectory, version });
 }

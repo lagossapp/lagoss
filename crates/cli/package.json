@@ -4,24 +4,25 @@
   "description": "CLI for Lagoss",
   "type": "module",
   "files": [
-    "npm"
+    "bin"
   ],
   "bin": {
-    "lagoss": "./npm/run.js"
+    "lagoss": "./bin/run.js"
   },
   "scripts": {
-    "build": "cargo build",
-    "install-local": "cargo build && cp ../../target/debug/lagoss-cli ~/.lagoss/bin/lagoss",
+    "build": "esbuild --outdir=bin/ --platform=node --packages=external --format=esm --bundle --minify lib/run.ts lib/install.ts && cargo build",
     "lint": "cargo clippy -- -Dwarnings --no-deps",
-    "postinstall": "node npm/install.js"
+    "postinstall": "node bin/install.js"
   },
   "dependencies": {
-    "axios": "^1.4.0",
-    "rimraf": "^5.0.1",
-    "tar": "^6.1.15",
-    "update-notifier": "^6.0.2"
+    "axios": "^1.7.2",
+    "esbuild": "^0.18.7",
+    "rimraf": "^5.0.7",
+    "tar": "^7.4.0",
+    "update-notifier": "^7.0.0"
   },
   "devDependencies": {
-    "@types/update-notifier": "^6.0.1"
+    "@types/update-notifier": "^6.0.8",
+    "tsup": "^7.1.0"
   }
 }

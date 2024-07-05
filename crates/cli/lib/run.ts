@@ -2,7 +2,7 @@
 
 import { createRequire } from 'node:module';
 import updateNotifier from 'update-notifier';
-import { getBinary } from './getBinary.js';
+import { getBinary } from './get-binary.js';
 
 const customRequire = createRequire(import.meta.url);
 const pkg = customRequire('../package.json');
