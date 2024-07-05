@@ -1,5 +1,11 @@
 # @lagoss/serverless
 
+## 0.4.1
+
+### Patch Changes
+
+- [#41](https://github.com/lagossapp/lagoss/pull/41) [`7735890`](https://github.com/lagossapp/lagoss/commit/77358906a195bcab639db74ff5d1a22f42dcc209) Thanks [@anbraten](https://github.com/anbraten)! - Fix docker tag and publishing
+
 ## 0.4.0
 
 ### Minor Changes
