@@ -1,5 +1,11 @@
 # @lagoss/dashboard
 
+## 0.6.3
+
+### Patch Changes
+
+- [#45](https://github.com/lagossapp/lagoss/pull/45) [`7287ab5`](https://github.com/lagossapp/lagoss/commit/7287ab537e12073016d4310e2b444567d6d6832a) Thanks [@anbraten](https://github.com/anbraten)! - Fix docker tags pattern
+
 ## 0.6.2
 
 ### Patch Changes
