@@ -22,6 +22,7 @@ export default defineNuxtConfig({
       forcePathStyle: !!process.env.S3_ENDPOINT,
     },
     db: {
+      url: 'mysql://root:mysql@localhost:3306/lagoss',
       turso: {
         url: process.env.TURSO_DB_URL,
         authToken: process.env.TURSO_DB_TOKEN,

@@ -14,7 +14,7 @@ export async function useAuthSession(event: H3Event) {
 }
 
 export async function getUser(event: H3Event): Promise<User | undefined> {
-  const db = useDB();
+  const db = await useDB();
   const session = await useAuthSession(event);
   if (!session.data?.userId) {
     return undefined;

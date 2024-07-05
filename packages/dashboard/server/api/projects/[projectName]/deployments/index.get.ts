@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { deploymentSchema } from '~/server/db/schema';
 
 export default defineEventHandler(async event => {
-  const db = useDB();
+  const db = await useDB();
   const project = await requireProject(event);
 
   const deployments = await db

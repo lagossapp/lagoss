@@ -7,7 +7,7 @@ import { s3 } from '~/server/lib/s3';
 import { z } from 'zod';
 
 export default defineEventHandler(async event => {
-  const db = useDB();
+  const db = await useDB();
   const user = await requireUser(event);
   const project = await requireProject(event);
 

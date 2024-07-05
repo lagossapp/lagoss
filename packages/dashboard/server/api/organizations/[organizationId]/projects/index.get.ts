@@ -2,7 +2,7 @@ import { organizationMemberSchema, organizationSchema, projectSchema } from '~/s
 import { eq, and, or } from 'drizzle-orm';
 
 export default defineEventHandler(async event => {
-  const db = useDB();
+  const db = await useDB();
   const user = await requireUser(event);
 
   const organizationId = getRouterParam(event, 'organizationId');

@@ -15,7 +15,7 @@ async function loginUser(event: H3Event, userId: User['id']) {
 }
 
 export default defineEventHandler(async event => {
-  const db = useDB();
+  const db = await useDB();
   const { state, code } = getQuery(event);
   if (!state) {
     throw new Error('State is undefined');

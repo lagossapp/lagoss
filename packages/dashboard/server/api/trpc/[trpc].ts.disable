@@ -11,7 +11,7 @@ import { User, organizationSchema, tokenSchema, userSchema } from '~/server/db/s
 import { eq } from 'drizzle-orm';
 
 async function createContext(event: H3Event) {
-  const db = useDB();
+  const db = await useDB();
   const tokenValue = getHeader(event, 'x-lagoss-token');
   const organizationId = getHeader(event, 'x-lagoss-organization-id');
 

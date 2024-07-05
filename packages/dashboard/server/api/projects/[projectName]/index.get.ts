@@ -2,7 +2,7 @@ import { domainSchema, envVariableSchema } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 export default defineEventHandler(async event => {
-  const db = useDB();
+  const db = await useDB();
 
   const project = await requireProject(event);
 

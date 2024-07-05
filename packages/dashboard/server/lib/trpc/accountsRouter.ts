@@ -14,7 +14,7 @@ export const accountsRouter = (t: T) =>
         }),
       )
       .mutation(async ({ ctx, input }) => {
-        const db = useDB();
+        const db = await useDB();
 
         if (!ctx.session?.user) {
           throw new TRPCError({

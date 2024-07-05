@@ -103,7 +103,7 @@ export const deploymentsRouter = (t: T) =>
           userId: ctx.session.user.id,
         });
 
-        const db = useDB();
+        const db = await useDB();
         const hasProductionDeployment = await db
           .select()
           .from(deploymentSchema)

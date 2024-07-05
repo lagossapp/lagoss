@@ -5,7 +5,7 @@ import { redis } from '~/server/lib/redis';
 import { envStringToObject, getFullCurrentDomain } from '~/composables/utils';
 
 export default defineEventHandler(async event => {
-  const db = useDB();
+  const db = await useDB();
   const project = await requireProject(event);
 
   const deploymentId = getRouterParam(event, 'deploymentId');

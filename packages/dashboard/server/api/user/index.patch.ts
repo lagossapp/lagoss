@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 
 export default defineEventHandler(async event => {
-  const db = useDB();
+  const db = await useDB();
   const user = await requireUser(event);
 
   const input = await z

@@ -6,7 +6,7 @@ import { s3 } from '~/server/lib/s3';
 import { DeleteObjectCommand, DeleteObjectsCommand } from '@aws-sdk/client-s3';
 
 export default defineEventHandler(async event => {
-  const db = useDB();
+  const db = await useDB();
   const project = await requireProject(event);
 
   const deploymentId = getRouterParam(event, 'deploymentId');

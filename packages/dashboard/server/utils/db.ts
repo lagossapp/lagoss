@@ -1,14 +1,13 @@
-import { drizzle } from 'drizzle-orm/planetscale-serverless';
-import { connect } from '@planetscale/database';
+import { drizzle, MySql2Database } from 'drizzle-orm/mysql2';
+import mysql from 'mysql2/promise';
 import * as schema from '~/server/db/schema';
 import { randomBytes } from 'crypto';
 
-function getDB() {
-  const connection = connect({
-    url: process.env['DATABASE_URL'],
-  });
+async function getDB() {
+  const config = useRuntimeConfig();
 
-  return drizzle(connection, { schema });
+  const connection = await mysql.createConnection(config.db.url);
+  return drizzle(connection, { schema, mode: 'default' });
 
   // if (config.db.turso.url && config.db.turso.authToken) {
   //   const connection = createLibSQLClient({
@@ -26,11 +25,11 @@ function getDB() {
   // throw new Error('Missing database configuration');
 }
 
-let _db: ReturnType<typeof getDB>;
+let _db: MySql2Database<typeof schema> | undefined;
 
-export function useDB() {
+export async function useDB() {
   if (!_db) {
-    _db = getDB();
+    _db = await getDB();
   }
 
   return _db;

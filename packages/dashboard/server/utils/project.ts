@@ -6,7 +6,7 @@ import { PROJECT_NAME_REGEX } from '~/server/lib/constants';
 import { randomName } from '@scaleway/use-random-name';
 
 export async function requireProject(event: H3Event) {
-  const db = useDB();
+  const db = await useDB();
   const user = await requireUser(event);
 
   const projectName = getRouterParam(event, 'projectName');
@@ -43,7 +43,7 @@ export async function requireProject(event: H3Event) {
 }
 
 async function isProjectNameUnique(name: string): Promise<boolean> {
-  const db = useDB();
+  const db = await useDB();
   const result = await getFirst(db.select().from(projectSchema).where(eq(projectSchema.name, name)).execute());
 
   return result === undefined;
@@ -77,7 +77,7 @@ export async function checkCanCreateProject({
   organization: Organization;
   plan: Plan;
 }) {
-  const db = useDB();
+  const db = await useDB();
 
   if (!(await isProjectNameUnique(projectName))) {
     throw createError({
