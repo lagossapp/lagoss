@@ -50,16 +50,17 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'Lagoss',
-      // link: [
-      //   { rel: 'alternate icon', type: 'image/png', href: '/logo.png' },
-      //   { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
-      // ],
+      link: [
+        { rel: 'alternate icon', type: 'image/png', href: '/logo.png' },
+        { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
+      ],
     },
   },
 
-  // nitro: {
-  //   preset: 'node',
-  // },
+  nitro: {
+    preset: './preset',
+  },
+
   devtools: { enabled: true },
 
   build: {
