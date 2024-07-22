@@ -1,7 +1,7 @@
 import type { PackageJson } from 'pkg-types';
 import { resolve, relative } from 'pathe';
 import type { NitroPreset } from 'nitropack';
-import { writeFile, mkdir } from 'node:fs/promises';
+import { writeFile, mkdir, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 /**
@@ -38,15 +38,20 @@ export default <NitroPreset>{
       const assetsDir = relative(rootDir, nitro.options.output.publicDir);
 
       await mkdir(resolve(rootDir, '.lagoss'), { recursive: true });
-      await writeFile(
-        resolve(rootDir, '.lagoss', 'config.json'),
-        JSON.stringify({
-          function_id: '',
-          organization_id: '',
-          index: indexPath,
-          assets: assetsDir,
-        } satisfies LagossFunctionConfig),
-      );
+
+      const configPath = resolve(rootDir, '.lagoss', 'config.json');
+      const configExists = (await stat(configPath).catch(() => null)) !== null;
+      if (!configExists) {
+        await writeFile(
+          resolve(rootDir, '.lagoss', 'config.json'),
+          JSON.stringify({
+            function_id: '',
+            organization_id: '',
+            index: indexPath,
+            assets: assetsDir,
+          } satisfies LagossFunctionConfig),
+        );
+      }
 
       // Write package.json for deployment
       await writeFile(
@@ -55,8 +60,8 @@ export default <NitroPreset>{
           <PackageJson>{
             private: true,
             scripts: {
-              dev: 'npx -p esbuild -p @lagoss/cli lagoss dev',
-              deploy: 'npx -p esbuild -p @lagoss/cli lagoss deploy',
+              dev: 'npx @lagoss/cli lagoss dev',
+              deploy: 'npx @lagoss/cli lagoss deploy',
             },
           },
           null,

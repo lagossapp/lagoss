@@ -1,15 +1,18 @@
-import '#nitro-internal-pollyfills';
-import { useNitroApp } from 'nitropack/runtime';
-import { isPublicAssetURL } from '#nitro-internal-virtual/public-assets';
+// import '#nitro-internal-pollyfills';
+import '#internal/nitro/virtual/polyfill';
+import { nitroApp } from '#internal/nitro/app';
 
-const nitroApp = useNitroApp();
+// import { useNitroApp } from 'nitropack/runtime';
+// import { isPublicAssetURL } from '#nitro-internal-virtual/public-assets';
+
+// const nitroApp = useNitroApp();
 
 export async function handler(request: Request) {
   const url = new URL(request.url);
 
-  if (isPublicAssetURL(url.pathname)) {
-    return;
-  }
+  // if (isPublicAssetURL(url.pathname)) {
+  //   return;
+  // }
 
   let body;
   if (request.body) {
