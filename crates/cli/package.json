@@ -15,6 +15,7 @@
     "lagoss": "./bin/run.js"
   },
   "scripts": {
+    "prepare": "pnpm build:js",
     "build:js": "esbuild --outdir=dist/ --platform=node --format=esm --packages=external --bundle --minify lib/core.ts",
     "build": "pnpm build:js && cargo build",
     "lint": "cargo clippy -- -Dwarnings --no-deps",
