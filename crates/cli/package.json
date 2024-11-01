@@ -19,7 +19,7 @@
     "build": "pnpm build:js && cargo build",
     "lint": "cargo clippy -- -Dwarnings --no-deps",
     "typecheck": "tsc --noEmit",
-    "postinstall": "node scripts/no-dist.js || node ./bin/install.js"
+    "postinstall": "node bin/no-dist.js || node ./bin/install.js"
   },
   "dependencies": {
     "axios": "^1.7.7",
