@@ -1,12 +1,75 @@
 use axiom_rs::Client;
 use chrono::prelude::Local;
 use flume::Sender;
+use log::kv::{Key, Source, Visitor};
 use log::{
-    as_serde, kv::source::as_map, set_boxed_logger, set_max_level, Level, LevelFilter, Log,
-    Metadata, Record, SetLoggerError,
+    set_boxed_logger, set_max_level, Level, LevelFilter, Log, Metadata, Record, SetLoggerError,
 };
+use serde::ser::SerializeMap;
+use serde::{Serialize, Serializer};
 use serde_json::{json, Value};
 use std::sync::{Arc, RwLock};
+
+// TODO: cleanup record.key_values() to serde serialization
+// AsMap added as removed by https://github.com/rust-lang/log/commit/0f2e26d88a845755c7121ffa902321e71dc786f6
+
+/// The result of calling `Source::as_map`.
+pub struct AsMap<S>(S);
+/// Visit this source as a map.
+pub fn as_map<S>(source: S) -> AsMap<S>
+where
+    S: Source,
+{
+    AsMap(source)
+}
+impl<S> Source for AsMap<S>
+where
+    S: Source,
+{
+    fn visit<'kvs>(
+        &'kvs self,
+        visitor: &mut dyn log::kv::Visitor<'kvs>,
+    ) -> Result<(), log::kv::Error> {
+        self.0.visit(visitor)
+    }
+    fn get(&self, key: log::kv::Key) -> Option<log::kv::Value<'_>> {
+        self.0.get(key)
+    }
+    fn count(&self) -> usize {
+        self.0.count()
+    }
+}
+
+impl<T> Serialize for AsMap<T>
+where
+    T: Source,
+{
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        struct SerializerVisitor<'a, S>(&'a mut S);
+        impl<'a, 'kvs, S> Visitor<'kvs> for SerializerVisitor<'a, S>
+        where
+            S: SerializeMap,
+        {
+            fn visit_pair(
+                &mut self,
+                key: Key<'kvs>,
+                value: log::kv::Value<'kvs>,
+            ) -> Result<(), log::kv::Error> {
+                self.0
+                    .serialize_entry(&key, &value)
+                    .map_err(|_| log::kv::Error::msg("failed to serialize map entry"))?;
+                Ok(())
+            }
+        }
+        let mut map = serializer.serialize_map(Some(self.count()))?;
+        self.visit(&mut SerializerVisitor(&mut map))
+            .map_err(|_| serde::ser::Error::custom("failed to serialize map"))?;
+        map.end()
+    }
+}
 
 struct SimpleLogger {
     tx: Arc<RwLock<Option<Sender<Value>>>>,
@@ -53,7 +116,7 @@ impl Log for SimpleLogger {
                 Local::now(),
                 record.level(),
                 record.args(),
-                as_serde!(metadata),
+                serde_json::to_value(&metadata).unwrap(),
             );
 
             // Axiom is optional, so tx can have no listeners

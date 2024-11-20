@@ -1,3 +1,5 @@
 #!/usr/bin/env node
 
-import '../dist/run.js';
+import { run } from '../dist/core.js';
+
+run();

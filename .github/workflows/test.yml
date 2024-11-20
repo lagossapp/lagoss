@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
-      - uses: moonrepo/setup-rust@v0
+      - uses: moonrepo/setup-rust@v1
         with:
           components: clippy
       - uses: pnpm/action-setup@v4
@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
-      - uses: moonrepo/setup-rust@v0
+      - uses: moonrepo/setup-rust@v1
         with:
           bins: cargo-all-features
       - uses: pnpm/action-setup@v4
@@ -81,7 +81,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
-      - uses: moonrepo/setup-rust@v0
+      - uses: moonrepo/setup-rust@v1
       - uses: pnpm/action-setup@v4
       - name: Use Node.js
         uses: actions/setup-node@v4
