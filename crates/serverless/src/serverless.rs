@@ -26,7 +26,7 @@ use lagoss_runtime_utils::{
 };
 use lagoss_serverless_downloader::Downloader;
 use lagoss_serverless_pubsub::PubSubListener;
-use log::{as_debug, error, info, warn};
+use log::{error, info, warn};
 use metrics::{decrement_gauge, histogram, increment_counter, increment_gauge};
 use std::{
     collections::HashSet,
@@ -115,7 +115,7 @@ async fn handle_request(
                 "lagoss_ignored_requests",
                 "reason" => "No hostname",
             );
-            warn!(req = as_debug!(req), request = request_id; "No Host header found in request");
+            warn!(req:? = req, request = request_id; "No Host header found in request");
 
             return Ok(Builder::new().status(404).body(PAGE_404.into())?);
         }
@@ -129,7 +129,7 @@ async fn handle_request(
                 "reason" => "No deployment",
                 "hostname" => hostname.clone(),
             );
-            warn!(req = as_debug!(req), hostname = hostname, request = request_id; "No deployment found for hostname");
+            warn!(req:? = req, hostname = hostname, request = request_id; "No deployment found for hostname");
 
             return Ok(Response::builder().status(404).body(PAGE_404.into())?);
         }
@@ -141,7 +141,7 @@ async fn handle_request(
             "reason" => "Cron",
             "hostname" => hostname.clone(),
         );
-        warn!(req = as_debug!(req), hostname = hostname, request = request_id; "Cron deployment cannot be called directly");
+        warn!(req:? = req, hostname = hostname, request = request_id; "Cron deployment cannot be called directly");
 
         return Ok(Response::builder().status(403).body(PAGE_403.into())?);
     }
