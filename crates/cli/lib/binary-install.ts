@@ -12,10 +12,10 @@ import axios from 'axios';
 import * as tar from 'tar';
 import { rimraf } from 'rimraf';
 
-const error = (msg: string | Error) => {
+function error(msg: string | Error) {
   console.error(msg);
   process.exit(1);
-};
+}
 
 export class Binary {
   private url: string;
