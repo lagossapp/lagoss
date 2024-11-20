@@ -11,6 +11,7 @@ use serde_json::{json, Value};
 use std::sync::{Arc, RwLock};
 
 // TODO: cleanup record.key_values() to serde serialization
+// AsMap added as removed by https://github.com/rust-lang/log/commit/0f2e26d88a845755c7121ffa902321e71dc786f6
 
 /// The result of calling `Source::as_map`.
 pub struct AsMap<S>(S);
