@@ -10,3 +10,4 @@ serde_json = "1.0"
 axiom-rs = { version = "0.8.0", default-features = false, features = ["tokio", "rustls-tls"] }
 log = { version = "0.4.19", features = ["std", "kv_unstable", "kv_unstable_serde"] }
 tokio = { version = "1", features = ["rt-multi-thread"] }
+serde = "1.0.215"
