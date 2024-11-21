@@ -399,7 +399,7 @@ importers:
         version: 5.1.3
       uplot:
         specifier: ^1.6.23
-        version: 1.6.23
+        version: 1.6.31
 
 packages:
 
@@ -10284,8 +10284,8 @@ packages:
     resolution: {integrity: sha512-+dwUY4L35XFYEzE+OAL3sarJdUioVovq+8f7lcIJ7wnmnYQV5UD1Y/lcwaMSyaQ6Bj3JMj1XSTjZbNLHn/19yA==}
     engines: {node: '>=18'}
 
-  uplot@1.6.23:
-    resolution: {integrity: sha512-zERH8HUbHE6kYyAqfP58SYuESp9M5jphSrMjsyckAM0DJ8C39SEI19YrpVvTCTLZB5joFUBPOwueRnJCdV2OdQ==}
+  uplot@1.6.31:
+    resolution: {integrity: sha512-sQZqSwVCbJGnFB4IQjQYopzj5CoTZJ4Br1fG/xdONimqgHmsacvCjNesdGDypNKFbrhLGIeshYhy89FxPF+H+w==}
 
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
@@ -23342,7 +23342,7 @@ snapshots:
       semver: 7.6.3
       xdg-basedir: 5.1.0
 
-  uplot@1.6.23: {}
+  uplot@1.6.31: {}
 
   uri-js@4.4.1:
     dependencies:
