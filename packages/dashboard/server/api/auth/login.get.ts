@@ -10,6 +10,8 @@ export default defineEventHandler(async event => {
 
   const config = useRuntimeConfig();
   const redirectUri = `${config.public.APP_URL}/api/auth/callback`;
+
+  // TODO: support different providers
   const github = new Github({
     clientId: config.auth.oauth.github.clientId,
     clientSecret: config.auth.oauth.github.clientSecret,

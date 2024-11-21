@@ -25,6 +25,8 @@ export default defineEventHandler(async event => {
     throw new Error('No code provided');
   }
 
+  // TODO: check if provider is github
+
   const session = await useStorage().getItem<{ login: string }>(`oauth:${state}`);
   if (!session) {
     throw new Error('Session not found');
@@ -79,6 +81,7 @@ export default defineEventHandler(async event => {
       ownerId: userId,
       createdAt: new Date(),
       updatedAt: new Date(),
+      plan: 'personal',
     })
     .execute();
 

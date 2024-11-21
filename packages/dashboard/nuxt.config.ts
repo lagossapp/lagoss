@@ -24,16 +24,14 @@ export default defineNuxtConfig({
     },
     db: {
       url: 'mysql://root:mysql@localhost:3306/lagoss',
-      turso: {
-        url: process.env.TURSO_DB_URL,
-        authToken: process.env.TURSO_DB_TOKEN,
-      },
-      file: process.env.DB_FILE_PATH,
     },
     projects: {
       blacklistedNames: process.env.BLACKLISTED_PROJECT_NAMES
         ? process.env.BLACKLISTED_PROJECT_NAMES.split(',')
         : ['lagoss', 'api', 'dash', 'www', 'docs', 'app', 's3', 'clickhouse'],
+    },
+    serverless: {
+      apiToken: '',
     },
     public: {
       root: {
