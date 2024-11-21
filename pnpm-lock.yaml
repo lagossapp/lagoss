@@ -120,8 +120,8 @@ importers:
         specifier: ^0.0.10
         version: 0.0.10
       '@react-email/container':
-        specifier: 0.0.8
-        version: 0.0.8
+        specifier: 0.0.14
+        version: 0.0.14(react@18.2.0)
       '@react-email/head':
         specifier: ^0.0.11
         version: 0.0.11(react@18.2.0)
@@ -3569,9 +3569,11 @@ packages:
     resolution: {integrity: sha512-S8r7NGTxXoxvw5kCdMzpwXdBHhYAhrYM9sylK6xr+2M9osrjHQOPLBoV3I/po9xdzN3WyRcZqQixH0wPeXy2Gw==}
     engines: {node: '>=16.0.0'}
 
-  '@react-email/container@0.0.8':
-    resolution: {integrity: sha512-MQZQxvTOoLWjJR+Jm689jltm0I/mtZbEaDnwZbNkkHKgccr++wwb9kOKMgXG777Y7tGa1JATAsZpvFYiCITwUg==}
-    engines: {node: '>=16.0.0'}
+  '@react-email/container@0.0.14':
+    resolution: {integrity: sha512-NgoaJJd9tTtsrveL86Ocr/AYLkGyN3prdXKd/zm5fQpfDhy/NXezyT3iF6VlwAOEUIu64ErHpAJd+P6ygR+vjg==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^18.0 || ^19.0 || ^19.0.0-rc
 
   '@react-email/head@0.0.11':
     resolution: {integrity: sha512-skw5FUgyamIMK+LN+fZQ5WIKQYf0dPiRAvsUAUR2eYoZp9oRsfkIpFHr0GWPkKAYjFEj+uJjaxQ/0VzQH7svVg==}
@@ -14910,7 +14912,7 @@ snapshots:
     dependencies:
       react: 18.2.0
 
-  '@react-email/container@0.0.8':
+  '@react-email/container@0.0.14(react@18.2.0)':
     dependencies:
       react: 18.2.0
 
