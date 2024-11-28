@@ -1,8 +1,9 @@
 import { mysqlTable, tinyint, varchar, datetime, json, int } from 'drizzle-orm/mysql-core';
-import { InferSelectModel, relations } from 'drizzle-orm';
+import { InferSelectModel } from 'drizzle-orm';
+import { generateId } from '~/server/utils/db';
 
 export const userSchema = mysqlTable('User', {
-  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  id: varchar('id', { length: 191 }).notNull().primaryKey().$defaultFn(generateId),
   name: varchar('name', { length: 191 }),
   email: varchar('email', { length: 191 }).unique(),
   emailVerified: datetime('emailVerified'),
@@ -13,7 +14,7 @@ export const userSchema = mysqlTable('User', {
 export type User = InferSelectModel<typeof userSchema>;
 
 export const deploymentSchema = mysqlTable('Deployment', {
-  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  id: varchar('id', { length: 191 }).notNull().primaryKey().$defaultFn(generateId),
   createdAt: datetime('createdAt').notNull(),
   updatedAt: datetime('updatedAt').notNull(),
   projectId: varchar('functionId', { length: 191 })
@@ -27,7 +28,7 @@ export const deploymentSchema = mysqlTable('Deployment', {
 export type Deployment = InferSelectModel<typeof deploymentSchema>;
 
 export const domainSchema = mysqlTable('Domain', {
-  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  id: varchar('id', { length: 191 }).notNull().primaryKey().$defaultFn(generateId),
   createdAt: datetime('createdAt').notNull(),
   updatedAt: datetime('updatedAt').notNull(),
   domain: varchar('domain', { length: 191 }).notNull(),
@@ -38,7 +39,7 @@ export const domainSchema = mysqlTable('Domain', {
 export type Domain = InferSelectModel<typeof domainSchema>;
 
 export const envVariableSchema = mysqlTable('EnvVariable', {
-  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  id: varchar('id', { length: 191 }).notNull().primaryKey().$defaultFn(generateId),
   createdAt: datetime('createdAt').notNull(),
   updatedAt: datetime('updatedAt').notNull(),
   key: varchar('key', { length: 64 }).notNull(),
@@ -51,7 +52,7 @@ export type EnvVariable = InferSelectModel<typeof envVariableSchema>;
 
 // TODO: rename to project
 export const projectSchema = mysqlTable('Function', {
-  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  id: varchar('id', { length: 191 }).notNull().primaryKey().$defaultFn(generateId),
   createdAt: datetime('createdAt').notNull(),
   updatedAt: datetime('updatedAt').notNull(),
   name: varchar('name', { length: 64 }).notNull().unique(),
@@ -67,27 +68,21 @@ export const projectSchema = mysqlTable('Function', {
 });
 export type Project = InferSelectModel<typeof projectSchema>;
 
-export const projectRelations = relations(projectSchema, ({ many }) => ({
-  domains: many(domainSchema),
-  envVariables: many(envVariableSchema),
-}));
-
 export const organizationSchema = mysqlTable('Organization', {
-  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  id: varchar('id', { length: 191 }).notNull().primaryKey().$defaultFn(generateId),
   createdAt: datetime('createdAt').notNull(),
   updatedAt: datetime('updatedAt').notNull(),
   name: varchar('name', { length: 64 }).notNull(),
   description: varchar('description', { length: 256 }),
   ownerId: varchar('ownerId', { length: 191 }).notNull(),
-  stripeCustomerId: varchar('stripe_customer_id', { length: 191 }).unique(),
-  stripeSubscriptionId: varchar('stripe_subscription_id', { length: 191 }).unique(),
+  // .references(() => userSchema.id),
   plan: varchar('plan', { length: 191 }).$type<'personal' | 'pro'>().notNull().default('personal'),
   planPeriodEnd: datetime('plan_period_end'),
 });
 export type Organization = InferSelectModel<typeof organizationSchema>;
 
 export const organizationMemberSchema = mysqlTable('OrganizationMember', {
-  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  id: varchar('id', { length: 191 }).notNull().primaryKey().$defaultFn(generateId),
   createdAt: datetime('createdAt').notNull(),
   updatedAt: datetime('updatedAt').notNull(),
   organizationId: varchar('organizationId', { length: 191 })
@@ -100,7 +95,7 @@ export const organizationMemberSchema = mysqlTable('OrganizationMember', {
 export type OrganizationMember = InferSelectModel<typeof organizationMemberSchema>;
 
 export const tokenSchema = mysqlTable('Token', {
-  id: varchar('id', { length: 191 }).notNull().primaryKey(),
+  id: varchar('id', { length: 191 }).notNull().primaryKey().$defaultFn(generateId),
   createdAt: datetime('createdAt').notNull(),
   updatedAt: datetime('updatedAt').notNull(),
   value: varchar('value', { length: 191 }).notNull(),

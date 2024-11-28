@@ -32,7 +32,7 @@ export const PRO_PLAN: Plan = {
 };
 
 export function getPlanOfOrganization(organization: Organization) {
-  if (organization.plan === 'pro' && dayjs().isBefore(organization.currentPeriodEnd)) {
+  if (organization.plan === 'pro' && dayjs().isBefore(organization.planPeriodEnd)) {
     return PRO_PLAN;
   }
 

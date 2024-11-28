@@ -41,10 +41,6 @@ export default defineNuxtConfig({
     },
   },
 
-  ui: {
-    icons: ['mdi', 'simple-icons', 'heroicons', 'ion'],
-  },
-
   app: {
     head: {
       title: 'Lagoss',

@@ -29,7 +29,7 @@ export const accountsRouter = (t: T) =>
             email: input.email,
           })
           .where(eq(userSchema.id, ctx.session.user.id))
-          .run();
+          .execute();
 
         return { ok: true };
       }),

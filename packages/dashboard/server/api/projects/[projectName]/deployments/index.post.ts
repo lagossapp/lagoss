@@ -5,6 +5,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { PRESIGNED_URL_EXPIRES_SECONDS } from '~/server/lib/constants';
 import { s3 } from '~/server/lib/s3';
 import { z } from 'zod';
+import { generateId } from '~/server/utils/db';
 
 export default defineEventHandler(async event => {
   const db = await useDB();
@@ -37,11 +38,11 @@ export default defineEventHandler(async event => {
   //   plan,
   // });
 
-  const id = await generateId();
+  const deploymentId = await generateId();
   await db
     .insert(deploymentSchema)
     .values({
-      id,
+      id: deploymentId,
       projectId: project.id,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -51,7 +52,9 @@ export default defineEventHandler(async event => {
     })
     .execute();
 
-  const deployment = await getFirst(db.select().from(deploymentSchema).where(eq(deploymentSchema.id, id)).execute());
+  const deployment = await getFirst(
+    db.select().from(deploymentSchema).where(eq(deploymentSchema.id, deploymentId)).execute(),
+  );
   if (!deployment) {
     throw createError({
       status: 500,

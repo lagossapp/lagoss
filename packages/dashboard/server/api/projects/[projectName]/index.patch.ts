@@ -47,7 +47,6 @@ export default defineEventHandler(async event => {
           db
             .insert(domainSchema)
             .values({
-              id: await generateId(),
               domain,
               projectId: project.id,
               createdAt: new Date(),
@@ -97,7 +96,6 @@ export default defineEventHandler(async event => {
           db
             .insert(envVariableSchema)
             .values({
-              id: await generateId(),
               key: key.toLocaleUpperCase(),
               value,
               projectId: project.id,

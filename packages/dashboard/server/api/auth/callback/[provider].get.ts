@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3';
-import { type User, organizationSchema, userSchema } from '~/server/db/schema';
+import { type User, organizationMemberSchema, organizationSchema, userSchema } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { Github } from '~/server/oauth/github';
 import { generateId } from '~/server/utils/db';
@@ -58,10 +58,11 @@ export default defineEventHandler(async event => {
   }
 
   // new user
-  const result = await db
+  const userId = generateId();
+  await db
     .insert(userSchema)
     .values({
-      id: await generateId(),
+      id: userId,
       image: oauthUser.avatarUrl,
       name: oauthUser.name,
       email: oauthUser.email,
@@ -69,13 +70,12 @@ export default defineEventHandler(async event => {
     })
     .execute();
 
-  const userId = result.insertId;
-
   // create user organization
+  const orgId = generateId();
   await db
     .insert(organizationSchema)
     .values({
-      id: await generateId(),
+      id: orgId,
       name: oauthUser.name,
       description: `${oauthUser.name}'s default organization`,
       ownerId: userId,
@@ -84,6 +84,14 @@ export default defineEventHandler(async event => {
       plan: 'personal',
     })
     .execute();
+
+  // create user organization member
+  await db.insert(organizationMemberSchema).values({
+    organizationId: orgId,
+    userId: userId,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
 
   return loginUser(event, userId);
 });

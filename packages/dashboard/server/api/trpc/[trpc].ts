@@ -27,12 +27,13 @@ async function createContext(event: H3Event) {
 
   let user: User | undefined;
   if (tokenValue) {
-    const token = await db
-      .select()
-      .from(tokenSchema)
-      .leftJoin(userSchema, eq(userSchema.id, tokenSchema.userId))
-      .where(eq(tokenSchema.value, tokenValue))
-      .get();
+    const token = await getFirst(
+      db
+        .select()
+        .from(tokenSchema)
+        .leftJoin(userSchema, eq(userSchema.id, tokenSchema.userId))
+        .where(eq(tokenSchema.value, tokenValue)),
+    );
 
     if (!token) {
       throw new TRPCError({
@@ -40,7 +41,7 @@ async function createContext(event: H3Event) {
       });
     }
 
-    user = token.users || undefined;
+    user = token.User || undefined;
   } else {
     user = await getUser(event);
   }
@@ -58,11 +59,9 @@ async function createContext(event: H3Event) {
     });
   }
 
-  const organization = await db
-    .select()
-    .from(organizationSchema)
-    .where(eq(organizationSchema.id, organizationId))
-    .get();
+  const organization = await getFirst(
+    db.select().from(organizationSchema).where(eq(organizationSchema.id, organizationId)).execute(),
+  );
 
   return {
     event,

@@ -1,5 +1,5 @@
-import { organizationSchema, projectSchema } from '~/server/db/schema';
-import { eq } from 'drizzle-orm';
+import { organizationMemberSchema, organizationSchema, projectSchema } from '~/server/db/schema';
+import { and, eq, or } from 'drizzle-orm';
 import { z } from 'zod';
 import { PROJECT_MEMORY } from '~/server/lib/constants';
 import { getPlanOfOrganization } from '~/server/lib/plans';
@@ -25,10 +25,26 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const organization = await getFirst(
-    db.select().from(organizationSchema).where(eq(organizationSchema.id, organizationId)),
-    // TODO: where user is owner or member
-  );
+  const organization = (
+    await getFirst(
+      db
+        .select()
+        .from(organizationSchema)
+        .leftJoin(organizationMemberSchema, eq(organizationMemberSchema.organizationId, organizationSchema.id))
+        .where(
+          and(
+            eq(organizationSchema.id, organizationId),
+            or(
+              eq(organizationSchema.ownerId, user.id),
+              and(
+                eq(organizationMemberSchema.userId, user.id),
+                eq(organizationMemberSchema.organizationId, organizationSchema.id),
+              ),
+            ),
+          ),
+        ),
+    )
+  )?.Organization;
 
   if (!organization) {
     throw createError({
@@ -50,7 +66,6 @@ export default defineEventHandler(async event => {
   await db
     .insert(projectSchema)
     .values({
-      id: await generateId(),
       organizationId,
       // playground: input.playground, // TODO: set playground
       name,

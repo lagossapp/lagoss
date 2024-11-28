@@ -39,6 +39,6 @@ export async function getFirst<T>(query: Promise<T[]>): Promise<T | undefined> {
   return (await query)?.[0] ?? undefined;
 }
 
-export async function generateId(length = 16) {
+export function generateId(length = 16) {
   return randomBytes(length).toString('hex');
 }
