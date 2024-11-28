@@ -7,12 +7,12 @@
       "path": "packages/dashboard",
       "release-type": "node"
     },
-    "packages/serverless": {
-      "path": "packages/serverless",
+    "crates/serverless": {
+      "path": "crates/serverless",
       "release-type": "node"
     },
-    "packages/cli": {
-      "path": "packages/cli",
+    "crates/cli": {
+      "path": "crates/cli",
       "release-type": "node"
     }
   },
