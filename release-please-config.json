@@ -3,15 +3,15 @@
   "tag-separator": "@",
   "separate-pull-requests": true,
   "packages": {
-    "dashboard": {
+    "packages/dashboard": {
       "path": "packages/dashboard",
       "release-type": "node"
     },
-    "serverless": {
+    "packages/serverless": {
       "path": "packages/serverless",
       "release-type": "node"
     },
-    "cli": {
+    "packages/cli": {
       "path": "packages/cli",
       "release-type": "node"
     }
