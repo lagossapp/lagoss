@@ -1,5 +1,11 @@
 # @lagoss/dashboard
 
+## 0.6.4
+
+### Patch Changes
+
+- [#79](https://github.com/lagossapp/lagoss/pull/79) [`9c4fa61`](https://github.com/lagossapp/lagoss/commit/9c4fa6154358cd704b579db1b3fae80f1da87990) Thanks [@anbraten](https://github.com/anbraten)! - Fix docker tag creation
+
 ## 0.6.3
 
 ### Patch Changes
