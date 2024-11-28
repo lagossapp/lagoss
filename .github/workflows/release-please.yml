@@ -26,18 +26,3 @@ jobs:
           # secrets.GITHUB_TOKEN doesn't trigger workflow on automated release
           # https://github.com/orgs/community/discussions/26875
           token: ${{ secrets.PAT }}
-          release-type: simple
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 12
-          registry-url: 'https://registry.npmjs.org'
-        if: ${{ steps.release.outputs.release_created }}
-      - run: npm ci
-        if: ${{ steps.release.outputs.release_created }}
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        if: ${{ steps.release.outputs.release_created }}
