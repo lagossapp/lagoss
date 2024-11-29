@@ -37,7 +37,7 @@ jobs:
           tags: |
             type=match,pattern=@lagoss\/${{matrix.image}}@(\d+\.\d+\.\d+),enable=${{startsWith(github.ref, 'refs/tags/')}},group=1
             type=ref,event=pr
-            type=raw,value=next,enable={{is_default_branch}}
+          #  type=raw,value=next,enable={{is_default_branch}}
 
       - name: Login to ghcr.io registry
         if: github.event_name != 'pull_request'
