@@ -23,12 +23,12 @@ jobs:
           script: |
             const images = []
 
-            if (github.event_name === 'pull_request') {
+            if (context.eventName === 'pull_request') {
               images.push('serverless', 'dashboard')
             }
 
-            if (github.event_name === 'push' && github.ref.startsWith('refs/tags/')) {
-              const match = github.ref.match(/@lagoss\/(\w+)@(\d+\.\d+\.\d+)/)
+            if (context.eventName === 'push' && context.ref.startsWith('refs/tags/')) {
+              const match = context.ref.match(/@lagoss\/(\w+)@(\d+\.\d+\.\d+)/)
               if (match) {
                 images.push(match[1])
               }
