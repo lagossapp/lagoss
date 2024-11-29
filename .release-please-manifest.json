@@ -1,5 +1,5 @@
 {
-  "dashboard": "0.4.5",
-  "serverless": "0.4.4",
-  "cli": "0.10.2"
+  "@lagoss/dashboard": "0.4.5",
+  "@lagoss/serverless": "0.4.4",
+  "@lagoss/cli": "0.10.2"
 }
