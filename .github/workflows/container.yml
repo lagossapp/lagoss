@@ -42,6 +42,7 @@ jobs:
     name: Create "${{matrix.image}}" container image
     needs: define-matrix
     runs-on: ubuntu-latest
+    if: ${{needs.define-matrix.outputs.images != '[]'}}
     strategy:
       matrix:
         image: ${{fromJson(needs.define-matrix.outputs.images)}}
