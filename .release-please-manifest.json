@@ -1,5 +1,5 @@
 {
-  "packages/dashboard": "0.4.6",
+  "packages/dashboard": "0.4.7",
   "creates/serverless": "0.4.4",
   "creates/cli": "0.10.2"
 }
