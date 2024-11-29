@@ -5,12 +5,15 @@
   "separate-pull-requests": true,
   "packages": {
     "packages/dashboard": {
+      "package-name": "@lagoss/dashboard",
       "release-type": "node"
     },
     "crates/serverless": {
+      "package-name": "@lagoss/serverless",
       "release-type": "node"
     },
     "crates/cli": {
+      "package-name": "@lagoss/cli",
       "release-type": "node"
     }
   },
