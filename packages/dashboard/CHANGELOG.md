@@ -1,5 +1,29 @@
 # @lagoss/dashboard
 
+## [0.4.7](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard-v0.4.6...@lagoss/dashboard@0.4.7) (2024-11-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @react-email/head to ^0.0.11 ([#70](https://github.com/lagossapp/lagoss/issues/70)) ([01a5010](https://github.com/lagossapp/lagoss/commit/01a501096101c0a7b9ecd81a3e8c2c39d4a47230))
+* **deps:** update dependency @react-email/html to ^0.0.10 ([#72](https://github.com/lagossapp/lagoss/issues/72)) ([e1b1dbe](https://github.com/lagossapp/lagoss/commit/e1b1dbec7d77bb3d62f87e929d396cbee3fd35f2))
+* **deps:** update dependency @react-email/text to ^0.0.10 ([#77](https://github.com/lagossapp/lagoss/issues/77)) ([d7b9838](https://github.com/lagossapp/lagoss/commit/d7b98381be35dc1b34ca9d77c18c5cb2720da664))
+
+## [0.4.6](https://github.com/lagossapp/lagoss/compare/dashboard-v0.4.5...dashboard@v0.4.6) (2024-11-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @react-email/head to ^0.0.11 ([#70](https://github.com/lagossapp/lagoss/issues/70)) ([01a5010](https://github.com/lagossapp/lagoss/commit/01a501096101c0a7b9ecd81a3e8c2c39d4a47230))
+* **deps:** update dependency @react-email/html to ^0.0.10 ([#72](https://github.com/lagossapp/lagoss/issues/72)) ([e1b1dbe](https://github.com/lagossapp/lagoss/commit/e1b1dbec7d77bb3d62f87e929d396cbee3fd35f2))
+* **deps:** update dependency @react-email/text to ^0.0.10 ([#77](https://github.com/lagossapp/lagoss/issues/77)) ([d7b9838](https://github.com/lagossapp/lagoss/commit/d7b98381be35dc1b34ca9d77c18c5cb2720da664))
+
+## 0.6.4
+
+### Patch Changes
+
+- [#79](https://github.com/lagossapp/lagoss/pull/79) [`9c4fa61`](https://github.com/lagossapp/lagoss/commit/9c4fa6154358cd704b579db1b3fae80f1da87990) Thanks [@anbraten](https://github.com/anbraten)! - Fix docker tag creation
+
 ## 0.6.3
 
 ### Patch Changes

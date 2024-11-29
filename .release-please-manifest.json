@@ -1,0 +1,5 @@
+{
+  "packages/dashboard": "0.6.4",
+  "creates/serverless": "0.4.5",
+  "creates/cli": "0.10.2"
+}
