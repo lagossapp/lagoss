@@ -16,20 +16,23 @@ jobs:
     strategy:
       matrix:
         image: [serverless, dashboard]
-    if: "!startsWith(github.ref, 'refs/tags/') || contains(github.ref, matrix.image)" # only execute if not tag or tag with specific matrix image
     steps:
       - name: Checkout
+        if: "!startsWith(github.ref, 'refs/tags/') || contains(github.ref, matrix.image)"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up QEMU
+        if: "!startsWith(github.ref, 'refs/tags/') || contains(github.ref, matrix.image)"
         uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
+        if: "!startsWith(github.ref, 'refs/tags/') || contains(github.ref, matrix.image)"
         uses: docker/setup-buildx-action@v2
 
       - name: Docker meta
+        if: "!startsWith(github.ref, 'refs/tags/') || contains(github.ref, matrix.image)"
         id: meta
         uses: docker/metadata-action@v4
         with:
@@ -41,7 +44,7 @@ jobs:
           #  type=raw,value=next,enable={{is_default_branch}}
 
       - name: Login to ghcr.io registry
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && contains(github.ref, matrix.image) && steps.meta.outputs.tags != '[]'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -50,7 +53,7 @@ jobs:
 
       - name: Build and push
         uses: docker/build-push-action@v4
-        if: "steps.meta.outputs.tags != '[]'"
+        if: "(!startsWith(github.ref, 'refs/tags/') || contains(github.ref, matrix.image)) && steps.meta.outputs.tags != '[]'"
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
