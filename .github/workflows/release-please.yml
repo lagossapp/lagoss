@@ -26,3 +26,4 @@ jobs:
           # secrets.GITHUB_TOKEN doesn't trigger workflow on automated release
           # https://github.com/orgs/community/discussions/26875
           token: ${{ secrets.PAT }}
+          manifest-file: release-please-manifest.json

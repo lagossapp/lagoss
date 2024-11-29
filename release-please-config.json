@@ -4,16 +4,17 @@
   "tag-separator": "@",
   "separate-pull-requests": true,
   "packages": {
-    "packages/dashboard": {
+    "./packages/dashboard": {
+      "package-name": "dashboard",
       "path": "packages/dashboard",
       "release-type": "node"
     },
-    "crates/serverless": {
-      "path": "crates/serverless",
+    "./crates/serverless": {
+      "package-name": "serverless",
       "release-type": "node"
     },
-    "crates/cli": {
-      "path": "crates/cli",
+    "./crates/cli": {
+      "package-name": "cli",
       "release-type": "node"
     }
   },
