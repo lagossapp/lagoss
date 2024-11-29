@@ -9,14 +9,14 @@
     },
     {
       "matchDepTypes": ["engines", "peerDependencies"],
-      "versionStrategy": "widen"
+      "rangeStrategy": "widen"
     },
     {
-      "stabilityDays": 14,
+      "minimumReleaseAge": "14 days",
       "matchUpdateTypes": ["major"]
     },
     {
-      "stabilityDays": 7,
+      "minimumReleaseAge": "7 days",
       "matchUpdateTypes": ["minor"]
     }
   ],
