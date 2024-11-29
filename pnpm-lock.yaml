@@ -34,10 +34,10 @@ importers:
         version: 8.38.0
       eslint-config-prettier:
         specifier: ^8.8.0
-        version: 8.8.0(eslint@8.38.0)
+        version: 8.10.0(eslint@8.38.0)
       eslint-plugin-prettier:
         specifier: ^5.0.0
-        version: 5.0.0(@types/eslint@8.4.5)(eslint-config-prettier@8.8.0(eslint@8.38.0))(eslint@8.38.0)(prettier@3.0.0)
+        version: 5.0.0(@types/eslint@8.4.5)(eslint-config-prettier@8.10.0(eslint@8.38.0))(eslint@8.38.0)(prettier@3.0.0)
       prettier:
         specifier: ^3.0.0
         version: 3.0.0
@@ -6150,8 +6150,8 @@ packages:
       typescript:
         optional: true
 
-  eslint-config-prettier@8.8.0:
-    resolution: {integrity: sha512-wLbQiFre3tdGgpDv67NQKnJuTlcUVYHas3k+DZCc2U2BadthoEY4B7hLPvAxaqdyOGCzuLfii2fqGph10va7oA==}
+  eslint-config-prettier@8.10.0:
+    resolution: {integrity: sha512-SM8AMJdeQqRYT9O9zguiruQZaN7+z+E4eAP9oiLNGKMtomwaB1E9dcgUD6ZAn/eQAb52USbvezbiljfZUhbJcg==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -18578,7 +18578,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-config-prettier@8.8.0(eslint@8.38.0):
+  eslint-config-prettier@8.10.0(eslint@8.38.0):
     dependencies:
       eslint: 8.38.0
 
@@ -18653,7 +18653,7 @@ snapshots:
       minimatch: 3.1.2
       semver: 6.3.0
 
-  eslint-plugin-prettier@5.0.0(@types/eslint@8.4.5)(eslint-config-prettier@8.8.0(eslint@8.38.0))(eslint@8.38.0)(prettier@3.0.0):
+  eslint-plugin-prettier@5.0.0(@types/eslint@8.4.5)(eslint-config-prettier@8.10.0(eslint@8.38.0))(eslint@8.38.0)(prettier@3.0.0):
     dependencies:
       eslint: 8.38.0
       prettier: 3.0.0
@@ -18661,7 +18661,7 @@ snapshots:
       synckit: 0.8.5
     optionalDependencies:
       '@types/eslint': 8.4.5
-      eslint-config-prettier: 8.8.0(eslint@8.38.0)
+      eslint-config-prettier: 8.10.0(eslint@8.38.0)
 
   eslint-plugin-react-hooks@5.0.0-canary-7118f5dd7-20230705(eslint@8.19.0):
     dependencies:
