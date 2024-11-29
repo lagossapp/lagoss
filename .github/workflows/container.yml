@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        image: ${{fromJson(needs.define-matrix.outputs.matrix)}}
+        image: ${{fromJson(needs.define-matrix.outputs.images)}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
