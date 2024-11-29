@@ -1,25 +1,25 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":combinePatchMinorReleases"],
+  "extends": [
+    "config:recommended",
+    ":combinePatchMinorReleases",
+    ":automergeMinor",
+    ":configMigration",
+    ":maintainLockFilesMonthly"
+  ],
   "labels": ["dependency"],
   "packageRules": [
     {
-      "matchUpdateTypes": ["patch", "pin", "digest"],
-      "automerge": false
-    },
-    {
       "matchDepTypes": ["engines", "peerDependencies"],
-      "versionStrategy": "widen"
+      "rangeStrategy": "widen"
     },
     {
-      "stabilityDays": 14,
+      "minimumReleaseAge": "14 days",
       "matchUpdateTypes": ["major"]
     },
     {
-      "stabilityDays": 7,
+      "minimumReleaseAge": "7 days",
       "matchUpdateTypes": ["minor"]
     }
-  ],
-  "automergeStrategy": "squash",
-  "automergeType": "branch"
+  ]
 }
