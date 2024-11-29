@@ -1,5 +1,11 @@
 # @lagoss/cli
 
+## 0.10.2
+
+### Patch Changes
+
+- [#47](https://github.com/lagossapp/lagoss/pull/47) [`b25dee2`](https://github.com/lagossapp/lagoss/commit/b25dee2ad14bbfbca0ee53e6432e2ebe643570b2) Thanks [@anbraten](https://github.com/anbraten)! - Fixes the installation of the cli
+
 ## 0.10.1
 
 ### Patch Changes

@@ -1,5 +1,17 @@
 # @lagoss/serverless
 
+## 0.4.5
+
+### Patch Changes
+
+- [#79](https://github.com/lagossapp/lagoss/pull/79) [`9c4fa61`](https://github.com/lagossapp/lagoss/commit/9c4fa6154358cd704b579db1b3fae80f1da87990) Thanks [@anbraten](https://github.com/anbraten)! - Fix docker tag creation
+
+## 0.4.4
+
+### Patch Changes
+
+- [#48](https://github.com/lagossapp/lagoss/pull/48) [`b8024e4`](https://github.com/lagossapp/lagoss/commit/b8024e40431b1e34ef340f59d9cc21f2ed33dc40) Thanks [@anbraten](https://github.com/anbraten)! - Update logging
+
 ## 0.4.3
 
 ### Patch Changes
