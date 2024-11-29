@@ -1,0 +1,22 @@
+{
+  "bootstrap-sha": "c7ea09570e7b2bb6ece58844874aa013bcf21a25",
+  "include-component-in-tag": true,
+  "tag-separator": "@",
+  "separate-pull-requests": true,
+  "packages": {
+    "./packages/dashboard": {
+      "package-name": "dashboard",
+      "path": "packages/dashboard",
+      "release-type": "node"
+    },
+    "./crates/serverless": {
+      "package-name": "serverless",
+      "release-type": "node"
+    },
+    "./crates/cli": {
+      "package-name": "cli",
+      "release-type": "node"
+    }
+  },
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json"
+}
