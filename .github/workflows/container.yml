@@ -14,7 +14,7 @@ jobs:
     name: Define matrix
     runs-on: ubuntu-latest
     outputs:
-      images: ${{ steps.set-matrix.outputs.images }}
+      images: ${{ steps.set-matrix.outputs.result }}
     steps:
       - name: Set matrix
         uses: actions/github-script@v7
