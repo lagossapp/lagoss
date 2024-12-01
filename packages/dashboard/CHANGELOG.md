@@ -1,5 +1,17 @@
 # @lagoss/dashboard
 
+## [0.6.5](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard@0.6.4...@lagoss/dashboard@0.6.5) (2024-12-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @react-email/container to v0.0.14 ([#69](https://github.com/lagossapp/lagoss/issues/69)) ([e4099c8](https://github.com/lagossapp/lagoss/commit/e4099c8937d5cd07519cec7f3094c1eeb7fab31b))
+* **deps:** update dependency @react-email/hr to ^0.0.10 ([#71](https://github.com/lagossapp/lagoss/issues/71)) ([0e1ce44](https://github.com/lagossapp/lagoss/commit/0e1ce444bf63aee09243651e38eed49f7726818c))
+* **deps:** update dependency @react-email/img to ^0.0.10 ([#73](https://github.com/lagossapp/lagoss/issues/73)) ([caaf8a5](https://github.com/lagossapp/lagoss/commit/caaf8a56f9631ef2f3df70c76e30b88857fb2f34))
+* **deps:** update dependency @react-email/preview to ^0.0.11 ([#74](https://github.com/lagossapp/lagoss/issues/74)) ([c5a9bd8](https://github.com/lagossapp/lagoss/commit/c5a9bd8e05163c72dc6512d8a09dd32808874d78))
+* **deps:** update dependency @react-email/render to ^0.0.17 ([#75](https://github.com/lagossapp/lagoss/issues/75)) ([06a02cf](https://github.com/lagossapp/lagoss/commit/06a02cff8bc5857d74aee93914dd62105bac9610))
+* **deps:** update dependency @react-email/section to ^0.0.15 ([#76](https://github.com/lagossapp/lagoss/issues/76)) ([0f136b2](https://github.com/lagossapp/lagoss/commit/0f136b2651a697ad4c8e3af4616d74b8abcb1924))
+
 ## [0.4.7](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard-v0.4.6...@lagoss/dashboard@0.4.7) (2024-11-29)
 
 
