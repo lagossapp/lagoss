@@ -141,8 +141,8 @@ importers:
         specifier: ^0.0.17
         version: 0.0.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@react-email/section':
-        specifier: ^0.0.15
-        version: 0.0.15(react@18.3.1)
+        specifier: ^0.0.16
+        version: 0.0.16(react@18.3.1)
       '@react-email/text':
         specifier: ^0.0.10
         version: 0.0.10(react@18.3.1)
@@ -3591,8 +3591,8 @@ packages:
       react: ^18.2.0
       react-dom: ^18.2.0
 
-  '@react-email/section@0.0.15':
-    resolution: {integrity: sha512-xfM3Qy5eU7fbkwvktlTeQgad7uo+1Z7YVh1aowSZaRBvKbkEXgoH/XssRYQmQL8ZrZGXbEJMujwtf4fsQL6vrg==}
+  '@react-email/section@0.0.16':
+    resolution: {integrity: sha512-FjqF9xQ8FoeUZYKSdt8sMIKvoT9XF8BrzhT3xiFKdEMwYNbsDflcjfErJe3jb7Wj/es/lKTbV5QR1dnLzGpL3w==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
@@ -14908,7 +14908,7 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       react-promise-suspense: 0.3.4
 
-  '@react-email/section@0.0.15(react@18.3.1)':
+  '@react-email/section@0.0.16(react@18.3.1)':
     dependencies:
       react: 18.3.1
 
