@@ -31,7 +31,7 @@
     "@react-email/img": "^0.0.11",
     "@react-email/preview": "^0.0.12",
     "@react-email/render": "^0.0.17",
-    "@react-email/section": "^0.0.15",
+    "@react-email/section": "^0.0.16",
     "@react-email/text": "^0.0.10",
     "@scaleway/use-random-name": "^0.3.0",
     "@tanstack/react-query": "^4.6.1",
