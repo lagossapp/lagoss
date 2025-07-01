@@ -3,7 +3,7 @@
     <div class="bg mx-auto flex w-full max-w-4xl flex-col">
       <div class="flex items-start gap-2">
         <div>
-          <h1 class="text-3xl font-bold">Settings - {{ authStore.user?.name }}</h1>
+          <h1 class="text-3xl font-bold">Settings - {{ user?.name }}</h1>
           <p class="text-gray-500">{{}}</p>
         </div>
       </div>
@@ -19,5 +19,5 @@
 </template>
 
 <script setup lang="ts">
-const authStore = useAuth();
+const { user } = await useAuth();
 </script>

@@ -31,7 +31,7 @@
               :to="`/organizations/${organization.id}`"
               variant="ghost"
               class="w-full"
-              @click="authStore.selectOrganization(organization.id)"
+              @click="selectOrganization(organization.id)"
             >
               <UAvatar :alt="organization.name" size="xs" />
               <span class="truncate">{{ organization.name }}</span>
@@ -79,19 +79,19 @@
         <UButton label="Docs" size="xs" color="white" />
       </a>
 
-      <UPopover v-if="authStore.user" class="flex items-center">
-        <UAvatar :src="authStore.user.image || ''" alt="User avatar" size="sm" :initials="authStore.user.name" />
+      <UPopover v-if="user" class="flex items-center">
+        <UAvatar :src="user.image || ''" alt="User avatar" size="sm" :initials="user.name" />
 
         <template #panel>
           <div class="flex w-48 flex-col items-center gap-2">
             <div class="my-4 flex flex-col items-center gap-2">
-              <UAvatar :src="authStore.user.image || ''" alt="User avatar" size="xl" :initials="authStore.user.name" />
-              <span>{{ authStore.user.name }}</span>
+              <UAvatar :src="user.image || ''" alt="User avatar" size="xl" :initials="user.name" />
+              <span>{{ user.name }}</span>
             </div>
 
             <div class="flex w-full flex-col border-t border-gray-200 p-2 dark:border-gray-800">
               <UButton label="Settings" variant="ghost" to="/settings" class="w-full" />
-              <UButton label="Logout" variant="ghost" class="w-full" @click="authStore.logout" />
+              <UButton label="Logout" variant="ghost" class="w-full" @click="logout" />
             </div>
           </div>
         </template>
@@ -112,12 +112,12 @@ const isDark = computed({
   },
 });
 
-const authStore = useAuth();
+const { user, logout, selectOrganization } = await useAuth();
 
 const { data: organizations } = await useFetch('/api/organizations');
 
 const selectedOrganization = computed(
-  () => organizations.value?.find(org => org.id === authStore.user?.currentOrganizationId),
+  () => organizations.value?.find(org => org.id === user.value?.currentOrganizationId),
 );
 
 const orgSelectOpen = ref(false);

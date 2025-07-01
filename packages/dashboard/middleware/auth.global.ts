@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware(async to => {
-  const authStore = useAuth();
+  const authStore = await useAuth();
 
   await authStore.updateAuthSession(); // initial load of user
 
