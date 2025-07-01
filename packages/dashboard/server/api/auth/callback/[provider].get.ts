@@ -18,18 +18,32 @@ export default defineEventHandler(async event => {
   const db = await useDB();
   const { state, code } = getQuery(event);
   if (!state) {
-    throw new Error('State is undefined');
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'No state provided',
+    });
   }
 
   if (!code) {
-    throw new Error('No code provided');
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'No code provided',
+    });
   }
 
-  // TODO: check if provider is github
+  if (getRouterParam(event, 'provider') !== 'github') {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Invalid provider',
+    });
+  }
 
   const session = await useStorage().getItem<{ login: string }>(`oauth:${state}`);
   if (!session) {
-    throw new Error('Session not found');
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Invalid or expired session',
+    });
   }
 
   const config = useRuntimeConfig();
