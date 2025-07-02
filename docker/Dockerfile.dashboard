@@ -14,13 +14,13 @@ COPY packages/ui/package.json ./packages/ui/
 RUN pnpm install
 COPY . .
 RUN pnpm --filter @lagoss/dashboard postinstall
-ENV NEXTJS_OUTPUT standalone
+ENV NEXTJS_OUTPUT=standalone
 RUN pnpm --filter @lagoss/dashboard build
 
 FROM base AS runner
-ENV NODE_ENV production
-ENV PORT 3000
-ENV NEXT_SHARP_PATH /app/packages/dashboard/node_modules/sharp
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV NEXT_SHARP_PATH=/app/packages/dashboard/node_modules/sharp
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs

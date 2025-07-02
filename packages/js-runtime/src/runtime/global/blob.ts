@@ -1,5 +1,4 @@
 (globalThis => {
-  // @ts-expect-error missing `prototype` property
   globalThis.Blob = class {
     readonly size: number;
     readonly type: string;

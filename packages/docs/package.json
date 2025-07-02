@@ -6,13 +6,16 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
-    "preview": "vitepress preview"
+    "preview": "vitepress preview",
+    "deploy": "lagoss deploy -p .vitepress/dist/ .vitepress/dist/index.html"
   },
   "devDependencies": {
-    "vitepress": "^1.0.0-rc.44",
-    "@lagoss/cli": "workspace:*"
+    "@lagoss/cli": "workspace:*",
+    "vitepress": "^1.6.3"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
   }
 }
