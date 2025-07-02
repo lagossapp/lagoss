@@ -22,12 +22,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             asset_name: lagoss-linux-x64
             input: lagoss-cli
             output: lagoss
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
             target: aarch64-unknown-linux-gnu
             asset_name: lagoss-linux-arm64
             input: lagoss-cli
