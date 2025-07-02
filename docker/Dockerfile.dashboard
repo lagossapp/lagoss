@@ -2,43 +2,27 @@ FROM node:24.3.0-bullseye-slim AS base
 RUN corepack enable
 WORKDIR /app
 
-FROM base AS deps
-RUN npm install -g --libc=glibc sharp@0.33.0-rc.2
-
 FROM base AS builder
-RUN apt-get update -y \
-     && apt-get install -y libsqlite3-dev python3 build-essential
+# RUN apt-get update -y \
+#      && apt-get install -y libsqlite3-dev python3 build-essential
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
-COPY packages/dashboard/package.json ./packages/dashboard/
-COPY packages/ui/package.json ./packages/ui/
+COPY packages/dashboard/package.json packages/dashboard/.npmrc ./packages/dashboard/
 RUN pnpm install
 COPY . .
 RUN pnpm --filter @lagoss/dashboard postinstall
-ENV NEXTJS_OUTPUT=standalone
 RUN pnpm --filter @lagoss/dashboard build
 
 FROM base AS runner
 ENV NODE_ENV=production
 ENV PORT=3000
-ENV NEXT_SHARP_PATH=/app/packages/dashboard/node_modules/sharp
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-COPY --from=builder /app/packages/dashboard/public ./packages/dashboard/public
-
-COPY --from=deps --chown=nextjs:nodejs /usr/local/lib/node_modules/sharp ./packages/dashboard/node_modules/sharp
-
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/packages/dashboard/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/packages/dashboard/.next/static ./packages/dashboard/.next/static
-
-USER nextjs
 EXPOSE 3000
 
-ENTRYPOINT ["node", "packages/dashboard/server.js"]
-#CMD HOSTNAME="0.0.0.0" node packages/dashboard/server.js
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nodejs
+
+COPY packages/dashboard/public ./
+COPY --from=builder --chown=nodejs:nodejs /app/packages/dashboard/.output ./
+
+USER nodejs
+
+CMD ["node", "server/index.mjs"]
