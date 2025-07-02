@@ -1,8 +1,8 @@
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { Readable } from 'node:stream';
 
-import { deploymentSchema } from '~/server/db/schema';
-import { s3 } from '~/server/lib/s3';
+import { deploymentSchema } from '~~/server/db/schema';
+import { s3 } from '~~/server/lib/s3';
 import { and, eq } from 'drizzle-orm';
 
 async function streamToString(stream: Readable): Promise<string> {

@@ -1,6 +1,6 @@
 import { mysqlTable, tinyint, varchar, datetime, json, int } from 'drizzle-orm/mysql-core';
 import { InferSelectModel } from 'drizzle-orm';
-import { generateId } from '~/server/utils/db';
+import { generateId } from '~~/server/utils/db';
 
 export const userSchema = mysqlTable('User', {
   id: varchar('id', { length: 191 }).notNull().primaryKey().$defaultFn(generateId),

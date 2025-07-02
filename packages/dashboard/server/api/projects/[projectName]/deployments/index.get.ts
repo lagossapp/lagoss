@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm';
-import { deploymentSchema } from '~/server/db/schema';
+import { deploymentSchema } from '~~/server/db/schema';
 
 export default defineEventHandler(async event => {
   const db = await useDB();

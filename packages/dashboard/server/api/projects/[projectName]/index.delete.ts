@@ -1,4 +1,4 @@
-import { domainSchema, envVariableSchema, projectSchema } from '~/server/db/schema';
+import { domainSchema, envVariableSchema, projectSchema } from '~~/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 export default defineEventHandler(async event => {

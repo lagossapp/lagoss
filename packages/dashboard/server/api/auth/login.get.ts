@@ -1,5 +1,5 @@
 import { randomBytes } from 'crypto';
-import { Github } from '~/server/oauth/github';
+import { Github } from '~~/server/oauth/github';
 
 export default defineEventHandler(async event => {
   const state = randomBytes(64).toString('hex');

@@ -1,8 +1,8 @@
 import type { H3Event } from 'h3';
-import { type User, organizationMemberSchema, organizationSchema, userSchema } from '~/server/db/schema';
+import { type User, organizationMemberSchema, organizationSchema, userSchema } from '~~/server/db/schema';
 import { eq } from 'drizzle-orm';
-import { Github } from '~/server/oauth/github';
-import { generateId } from '~/server/utils/db';
+import { Github } from '~~/server/oauth/github';
+import { generateId } from '~~/server/utils/db';
 
 async function loginUser(event: H3Event, userId: User['id']) {
   const session = await useAuthSession(event);

@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import { dayjs } from '~/lib/dayjs';
+import { dayjs } from '~~/lib/dayjs';
 
 const route = useRoute();
 const router = useRouter();

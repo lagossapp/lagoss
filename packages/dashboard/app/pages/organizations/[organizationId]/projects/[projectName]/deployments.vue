@@ -48,8 +48,8 @@
 </template>
 
 <script setup lang="ts">
-import { dayjs } from '~/lib/dayjs';
-import type { Deployment } from '~/server/db/schema';
+import { dayjs } from '~~/lib/dayjs';
+import type { Deployment } from '~~/server/db/schema';
 
 const { project } = useProject();
 

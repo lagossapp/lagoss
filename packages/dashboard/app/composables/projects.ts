@@ -1,4 +1,4 @@
-import type { Project } from '~/server/db/schema';
+import type { Project } from '~~/server/db/schema';
 
 export function useProject() {
   const project = inject<Ref<Project>>('project');

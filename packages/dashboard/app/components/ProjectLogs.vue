@@ -46,9 +46,9 @@
 </template>
 
 <script setup lang="ts">
-import { dayjs } from '~/lib/dayjs';
+import { dayjs } from '~~/lib/dayjs';
 
-import type { Project } from '~/server/db/schema';
+import type { Project } from '~~/server/db/schema';
 
 const props = defineProps<{
   project: Project;

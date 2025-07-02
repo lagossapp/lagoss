@@ -1,4 +1,4 @@
-import { organizationMemberSchema, organizationSchema, projectSchema } from '~/server/db/schema';
+import { organizationMemberSchema, organizationSchema, projectSchema } from '~~/server/db/schema';
 import { eq, and, or } from 'drizzle-orm';
 
 export default defineEventHandler(async event => {

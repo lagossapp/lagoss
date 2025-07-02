@@ -1,6 +1,6 @@
-import type { T } from '~/server/api/trpc/[trpc]';
+import type { T } from '~~/server/api/trpc/[trpc]';
 import { z } from 'zod';
-import { userSchema } from '~/server/db/schema';
+import { userSchema } from '~~/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 

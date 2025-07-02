@@ -1,8 +1,8 @@
-import { organizationMemberSchema, organizationSchema, projectSchema } from '~/server/db/schema';
+import { organizationMemberSchema, organizationSchema, projectSchema } from '~~/server/db/schema';
 import { and, eq, or } from 'drizzle-orm';
 import { z } from 'zod';
-import { PROJECT_MEMORY } from '~/server/lib/constants';
-import { getPlanOfOrganization } from '~/server/lib/plans';
+import { PROJECT_MEMORY } from '~~/server/lib/constants';
+import { getPlanOfOrganization } from '~~/server/lib/plans';
 
 export default defineEventHandler(async event => {
   const db = await useDB();

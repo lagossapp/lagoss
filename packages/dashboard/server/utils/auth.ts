@@ -1,5 +1,5 @@
 import type { H3Event, SessionConfig } from 'h3';
-import { type User, userSchema } from '~/server/db/schema';
+import { type User, userSchema } from '~~/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 const sessionConfig: SessionConfig = useRuntimeConfig().auth || {};

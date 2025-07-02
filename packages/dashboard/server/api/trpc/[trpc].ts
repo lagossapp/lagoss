@@ -1,13 +1,13 @@
 import { type inferAsyncReturnType, initTRPC, TRPCError } from '@trpc/server';
-// import { functionsRouter } from '~/server/lib/trpc/functionsRouter';
-// import { organizationsRouter } from '~/server/lib/trpc/organizationsRouter';
-// import { tokensRouter } from '~/server/lib/trpc/tokensRouter';
-// import { deploymentsRouter } from '~/server/lib/trpc/deploymentsRouter';
-import { accountsRouter } from '~/server/lib/trpc/accountsRouter';
-// import { statsRouter } from '~/server/lib/trpc/statsRouter';
+// import { functionsRouter } from '~~/server/lib/trpc/functionsRouter';
+// import { organizationsRouter } from '~~/server/lib/trpc/organizationsRouter';
+// import { tokensRouter } from '~~/server/lib/trpc/tokensRouter';
+// import { deploymentsRouter } from '~~/server/lib/trpc/deploymentsRouter';
+import { accountsRouter } from '~~/server/lib/trpc/accountsRouter';
+// import { statsRouter } from '~~/server/lib/trpc/statsRouter';
 import { createNuxtApiHandler } from 'trpc-nuxt';
 import type { H3Event } from 'h3';
-import { User, organizationSchema, tokenSchema, userSchema } from '~/server/db/schema';
+import { User, organizationSchema, tokenSchema, userSchema } from '~~/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 async function createContext(event: H3Event) {

@@ -1,4 +1,4 @@
-import { clickhouse } from '~/server/lib/clickhouse';
+import { clickhouse } from '~~/server/lib/clickhouse';
 
 export default defineEventHandler(async event => {
   const project = await requireProject(event);

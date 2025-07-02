@@ -1,8 +1,8 @@
 import type { H3Event } from 'h3';
-import { Organization, organizationMemberSchema, organizationSchema, projectSchema } from '~/server/db/schema';
+import { Organization, organizationMemberSchema, organizationSchema, projectSchema } from '~~/server/db/schema';
 import { and, eq, or } from 'drizzle-orm';
-import type { Plan } from '~/server/lib/plans';
-import { PROJECT_NAME_REGEX } from '~/server/lib/constants';
+import type { Plan } from '~~/server/lib/plans';
+import { PROJECT_NAME_REGEX } from '~~/server/lib/constants';
 import { randomName } from '@scaleway/use-random-name';
 
 export async function requireProject(event: H3Event) {

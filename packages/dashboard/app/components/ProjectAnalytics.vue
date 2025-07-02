@@ -106,9 +106,9 @@
 </template>
 
 <script setup lang="ts">
-import type { Project } from '~/server/db/schema';
-import { FREE_PLAN } from '~/server/lib/plans';
-import type { AnalyticsTimeframe } from '~/server/lib/types';
+import type { Project } from '~~/server/db/schema';
+import { FREE_PLAN } from '~~/server/lib/plans';
+import type { AnalyticsTimeframe } from '~~/server/lib/types';
 
 const props = defineProps<{
   project: Project;

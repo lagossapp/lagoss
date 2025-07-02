@@ -1,11 +1,11 @@
-import { deploymentSchema } from '~/server/db/schema';
+import { deploymentSchema } from '~~/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { PRESIGNED_URL_EXPIRES_SECONDS } from '~/server/lib/constants';
-import { s3 } from '~/server/lib/s3';
+import { PRESIGNED_URL_EXPIRES_SECONDS } from '~~/server/lib/constants';
+import { s3 } from '~~/server/lib/s3';
 import { z } from 'zod';
-import { generateId } from '~/server/utils/db';
+import { generateId } from '~~/server/utils/db';
 
 export default defineEventHandler(async event => {
   const db = await useDB();

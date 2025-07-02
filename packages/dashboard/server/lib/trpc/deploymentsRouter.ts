@@ -6,17 +6,17 @@ import {
   removeDeployment,
   promoteProductionDeployment,
   checkCanCreateDeployment,
-} from '~/server/lib/api/deployments';
-import type { T } from '~/server/api/trpc/[trpc]';
+} from '~~/server/lib/api/deployments';
+import type { T } from '~~/server/api/trpc/[trpc]';
 import { z } from 'zod';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { redis } from '~/server/lib/redis';
-import { envStringToObject, getFullCurrentDomain } from '~/server/lib/utils';
-import { s3 } from '~/server/lib/s3';
-import { PRESIGNED_URL_EXPIRES_SECONDS } from '~/server/lib/constants';
-import { checkCanQueryFunction } from '~/server/lib/api/functions';
-import { getPlanOfOrganization } from '~/server/lib/plans';
-import { deploymentSchema } from '~/server/db/schema';
+import { redis } from '~~/server/lib/redis';
+import { envStringToObject, getFullCurrentDomain } from '~~/server/lib/utils';
+import { s3 } from '~~/server/lib/s3';
+import { PRESIGNED_URL_EXPIRES_SECONDS } from '~~/server/lib/constants';
+import { checkCanQueryFunction } from '~~/server/lib/api/functions';
+import { getPlanOfOrganization } from '~~/server/lib/plans';
+import { deploymentSchema } from '~~/server/db/schema';
 import { and, eq } from 'drizzle-orm';
 
 export const deploymentsRouter = (t: T) =>

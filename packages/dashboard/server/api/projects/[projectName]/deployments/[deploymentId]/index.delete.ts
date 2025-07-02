@@ -1,8 +1,8 @@
-import { deploymentSchema, domainSchema, envVariableSchema } from '~/server/db/schema';
+import { deploymentSchema, domainSchema, envVariableSchema } from '~~/server/db/schema';
 import { eq, and } from 'drizzle-orm';
-import { redis } from '~/server/lib/redis';
-import { envStringToObject } from '~/composables/utils';
-import { s3 } from '~/server/lib/s3';
+import { redis } from '~~/server/lib/redis';
+import { envStringToObject } from '~~/app/composables/utils';
+import { s3 } from '~~/server/lib/s3';
 import { DeleteObjectCommand, DeleteObjectsCommand } from '@aws-sdk/client-s3';
 
 export default defineEventHandler(async event => {

@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Project } from '~/server/db/schema';
+import type { Project } from '~~/server/db/schema';
 
 const props = defineProps<{
   project: Project;

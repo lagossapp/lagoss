@@ -1,4 +1,4 @@
-import { domainSchema, envVariableSchema, projectSchema } from '~/server/db/schema';
+import { domainSchema, envVariableSchema, projectSchema } from '~~/server/db/schema';
 import { eq, and, notInArray } from 'drizzle-orm';
 import { z } from 'zod';
 

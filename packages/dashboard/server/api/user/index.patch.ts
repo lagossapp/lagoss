@@ -1,4 +1,4 @@
-import { userSchema } from '~/server/db/schema';
+import { userSchema } from '~~/server/db/schema';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 
