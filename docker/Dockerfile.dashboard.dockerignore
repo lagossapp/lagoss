@@ -6,7 +6,7 @@
 !packages/dashboard/app/**/*
 !packages/dashboard/lib/**/*
 !packages/dashboard/public/**/*
-!packages/dashboard/public/**/*
+!packages/dashboard/preset/**/*
 !packages/dashboard/server/**/*
 !packages/dashboard/nuxt.config.ts
 !packages/dashboard/package.json

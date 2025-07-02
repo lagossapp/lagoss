@@ -52,10 +52,6 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
 
-  nitro: {
-    preset: './preset',
-  },
-
   build: {
     transpile: ['trpc-nuxt'],
   },
