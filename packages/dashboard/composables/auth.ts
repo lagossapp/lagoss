@@ -11,6 +11,7 @@ export async function useAuth() {
     window.location.href = '/api/auth/logout';
   }
 
+  // TODO: select using link params and remove the currentOrganizationId property
   async function selectOrganization(organizationId: string) {
     await $fetch(`/api/user/`, {
       method: 'PATCH',

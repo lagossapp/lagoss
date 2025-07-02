@@ -8,9 +8,12 @@
             <img src="/icon-white.png" alt="Dark icon" class="hidden w-6 dark:block" />
           </router-link>
 
-          <router-link :to="`/projects/${project.name}`" class="font-bold hover:underline" title="Back to project">{{
-            project.name
-          }}</router-link>
+          <router-link
+            :to="`/organizations/${project.organizationId}/projects/${project.name}`"
+            class="font-bold hover:underline"
+            title="Back to project"
+            >{{ project.name }}</router-link
+          >
         </div>
 
         <UButton
@@ -76,7 +79,7 @@ definePageMeta({
 
 const iframeEl = ref<HTMLIFrameElement>();
 
-const project = useProject();
+const { project } = useProject();
 
 const code = ref('');
 const changed = ref(false);

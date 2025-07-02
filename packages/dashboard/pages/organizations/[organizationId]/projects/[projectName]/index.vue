@@ -9,5 +9,5 @@
 </template>
 
 <script setup lang="ts">
-const project = useProject();
+const { project } = useProject();
 </script>

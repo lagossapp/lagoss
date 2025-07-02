@@ -1,7 +1,7 @@
 <template>
   <header class="mx-auto flex w-full max-w-4xl flex-col">
     <div class="flex w-full items-center justify-between">
-      <h1 class="text-3xl font-bold">{{ project?.name }}</h1>
+      <h1 class="text-3xl font-bold">{{ project.name }}</h1>
 
       <div class="flex gap-4">
         <a :href="getFullCurrentDomain({ name: project.name })" rel="noopener noreferrer" target="_blank">
@@ -13,7 +13,7 @@
           size="md"
           color="blue"
           icon="i-ion-edit"
-          :to="`/projects/${project.name}/playground`"
+          :to="`/organizations/${project.organizationId}/projects/${project.name}/playground`"
         />
       </div>
     </div>
@@ -33,23 +33,23 @@ const props = defineProps<{
 
 const tabs = computed(() => [
   {
-    to: `/projects/${props.project.name}`,
+    to: `/organizations/${props.project.organizationId}/projects/${props.project.name}`,
     label: 'Overview',
   },
   {
-    to: `/projects/${props.project.name}/deployments`,
+    to: `/organizations/${props.project.organizationId}/projects/${props.project.name}/deployments`,
     label: 'Deployments',
   },
   {
-    to: `/projects/${props.project.name}/analytics`,
+    to: `/organizations/${props.project.organizationId}/projects/${props.project.name}/analytics`,
     label: 'Analytics',
   },
   {
-    to: `/projects/${props.project.name}/logs`,
+    to: `/organizations/${props.project.organizationId}/projects/${props.project.name}/logs`,
     label: 'Logs',
   },
   {
-    to: `/projects/${props.project.name}/settings`,
+    to: `/organizations/${props.project.organizationId}/projects/${props.project.name}/settings`,
     label: 'Settings',
   },
 ]);

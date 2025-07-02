@@ -4,7 +4,15 @@
       v-if="logs?.length === 0"
       class="mt-4 w-full rounded border border-gray-200 py-16 text-center hover:shadow"
     >
-      <p class="text-gray-500">No logs yet! Please wait patiently!</p>
+      <p class="font-bold text-gray-500">No logs found for this project.</p>
+
+      <p class="text-gray-500">
+        You can use <span class="rounded-md bg-gray-200 px-1">console.log</span> in your code to log messages. Visit
+        <a :href="getFullCurrentDomain({ name: project.name })" target="_blank" class="text-blue-500 hover:underline"
+          >your project</a
+        >
+        to see the logs in action! 😉
+      </p>
     </UContainer>
     <div v-for="log in logs" :key="log.timestamp" class="flex gap-2 rounded-sm px-1 text-sm hover:bg-gray-200">
       <span class="text-gray-500">{{ dayjs(log.timestamp).format('HH:mm:ss') }}</span>
@@ -24,7 +32,7 @@ const props = defineProps<{
 
 // TODO: auto update logs
 // TODO: auto scroll to bottom
-const { data: logs, refresh: refreshLogs } = await useFetch(`/api/projects/${props.project.name}/logs`, {
+const { data: logs, refresh: refreshLogs } = await useFetch(() => `/api/projects/${props.project.name}/logs`, {
   query: {
     level: 'all',
     timeframe: 'Last hour',

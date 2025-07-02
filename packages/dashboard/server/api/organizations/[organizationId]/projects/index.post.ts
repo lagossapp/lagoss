@@ -63,7 +63,7 @@ export default defineEventHandler(async event => {
     plan,
   });
 
-  await db
+  const res = await db
     .insert(projectSchema)
     .values({
       organizationId,
@@ -77,9 +77,19 @@ export default defineEventHandler(async event => {
       tickTimeout: plan.tickTimeout,
       totalTimeout: plan.totalTimeout,
     })
-    .execute();
+    .$returningId();
+
+  const projectId = res.at(0)?.id;
+  if (!projectId) {
+    throw createError({
+      message: 'Failed to create project',
+      statusCode: 500,
+    });
+  }
+
+  const project = await getFirst(db.select().from(projectSchema).where(eq(projectSchema.id, projectId)).execute());
 
   // TODO: create first deployment (at least for playground projects) with default code
 
-  return 'ok';
+  return project;
 });

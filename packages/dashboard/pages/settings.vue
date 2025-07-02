@@ -8,12 +8,12 @@
         </div>
       </div>
 
-      <span>TODO:</span>
+      <!-- <span>TODO:</span>
       <ul>
         <li>general: name, email</li>
         <li>tokens</li>
         <li>delete</li>
-      </ul>
+      </ul> -->
     </div>
   </div>
 </template>

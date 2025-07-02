@@ -51,10 +51,10 @@
 import { dayjs } from '~/lib/dayjs';
 import type { Deployment } from '~/server/db/schema';
 
-const project = useProject();
+const { project } = useProject();
 
 const { data: deployments, refresh: refreshDeployments } = await useFetch(
-  `/api/projects/${project.value.name}/deployments`,
+  () => `/api/projects/${project.value.name}/deployments`,
 );
 
 const promotingDeploymentId = ref<string>();
@@ -86,7 +86,7 @@ async function deleteDeployment(deployment: Deployment) {
 
   deletingDeploymentId.value = deployment.id;
   try {
-    await $fetch(`/api/projects/${projectName.value}/deployments/${deployment.id}`, {
+    await $fetch(`/api/projects/${project.value.name}/deployments/${deployment.id}`, {
       method: 'DELETE',
     });
 

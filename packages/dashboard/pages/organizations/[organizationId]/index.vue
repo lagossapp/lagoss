@@ -2,12 +2,12 @@
   <div class="flex w-full flex-col">
     <div class="bg mx-auto flex w-full max-w-4xl flex-col">
       <div class="flex items-start gap-2">
-        <div>
+        <div class="mr-auto">
           <h1 class="text-3xl font-bold">{{ organization?.name }}</h1>
           <p class="text-gray-500">{{ organization?.description }}</p>
         </div>
 
-        <UButton
+        <!-- <UButton
           icon="i-ion-ios-play"
           label="New playground"
           color="blue"
@@ -15,7 +15,7 @@
           :loading="creatingProject === 'playground'"
           :disabled="creatingProject === 'normal'"
           @click="createProject(true)"
-        />
+        /> -->
 
         <UButton
           icon="i-ion-plus"
@@ -42,7 +42,12 @@
       </UContainer>
 
       <div class="mt-4 grid grid-cols-2 gap-4">
-        <router-link v-for="project in projects" :key="project.id" :to="`/projects/${project.name}`" class="w-full">
+        <router-link
+          v-for="project in projects"
+          :key="project.id"
+          :to="`/organizations/${project.organizationId}/projects/${project.name}`"
+          class="w-full"
+        >
           <Card
             class="relative flex w-full cursor-pointer items-center justify-between hover:border-gray-500 hover:dark:border-gray-200"
           >
@@ -69,7 +74,7 @@ const organizationId = computed(() => route.params.organizationId as string);
 
 const { data: organization } = await useFetch(() => `/api/organizations/${organizationId.value}`);
 
-const { data: projects } = await useFetch(`/api/organizations/${organizationId.value}/projects`);
+const { data: projects } = await useFetch(() => `/api/organizations/${organizationId.value}/projects`);
 
 const creatingProject = ref<'playground' | 'normal'>();
 async function createProject(playground = false) {
@@ -83,7 +88,11 @@ async function createProject(playground = false) {
       },
     });
 
-    await router.push(`/projects/${project.name}`);
+    if (!project) {
+      throw new Error('Failed to create project');
+    }
+
+    await router.push(`/organizations/${project.organizationId}/projects/${project.name}`);
   } catch (error) {
     throw error;
   } finally {

@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full">
-    <ProjectHeader v-if="project" :project="project" />
+  <div v-if="project" class="w-full">
+    <ProjectHeader :project="project" />
 
     <div class="mx-auto flex w-full max-w-4xl flex-col gap-4">
       <Card>
@@ -54,11 +54,11 @@
         </p>
 
         <div class="flex gap-4">
-          <span v-if="project">{{ project.name }}.{{ $config.public.root.domain }}</span>
+          <span>{{ project.name }}.{{ $config.public.root.domain }}</span>
           <span class="text-gray-500">Default domain</span>
         </div>
 
-        <div v-if="project" v-for="domain in project.domains" :key="domain" class="flex items-center gap-2">
+        <div v-for="domain in project.domains" :key="domain" class="flex items-center gap-2">
           <span>{{ domain }}</span>
           <UButton icon="i-heroicons-minus" color="white" @click="removeDomain(domain)" />
         </div>
@@ -114,7 +114,7 @@
 const router = useRouter();
 const toast = useToast();
 
-const dbProject = useProject();
+const { project: dbProject, refreshProject } = useProject();
 
 const project = ref<typeof dbProject.value>();
 watch(
@@ -138,7 +138,9 @@ function removeEnvVariable(index: number) {
 }
 
 function addPastedEnvVariables(event: ClipboardEvent) {
-  if (!project.value) return;
+  if (!project.value) {
+    throw new Error('Project not found');
+  }
   if (event.clipboardData === null) return;
 
   const text = event.clipboardData.getData('text');
@@ -159,18 +161,20 @@ function addPastedEnvVariables(event: ClipboardEvent) {
       ...project.value,
       envVariables: project.value.envVariables.filter(({ key, value }) => !pastedEnv[key] && key && value),
     };
-    project.value.envVariables.push(...Object.entries(pastedEnv).map(([key, value]) => ({ key, value })));
+    project.value?.envVariables?.push(...Object.entries(pastedEnv).map(([key, value]) => ({ key, value })));
   }
 }
 
 async function removeDomain(domain: string) {
-  if (!project.value) return;
+  if (!project.value) {
+    throw new Error('Project not found');
+  }
   if (!confirm(`Are you sure you want to remove the domain "${domain}"?`)) return;
 
   await $fetch(`/api/projects/${project.value.name}`, {
     method: 'PATCH',
     body: {
-      domains: project.value.domains.filter(_domain => _domain !== domain),
+      domains: project.value.domains?.filter(_domain => _domain !== domain),
     },
   });
 
@@ -180,11 +184,13 @@ async function removeDomain(domain: string) {
     color: 'green',
   });
 
-  await projectsStore.refreshProject();
+  await refreshProject();
 }
 
 async function saveName() {
-  if (!project.value) return;
+  if (!project.value) {
+    throw new Error('Project not found');
+  }
 
   await $fetch(`/api/projects/${project.value.name}`, {
     method: 'PATCH',
@@ -199,13 +205,15 @@ async function saveName() {
     color: 'green',
   });
 
-  await router.push(`/projects/${project.value.name}`);
+  await router.push(`/organizations/${project.value.organizationId}/projects/${project.value.name}`);
 
-  await projectsStore.refreshProject();
+  await refreshProject();
 }
 
 async function saveEnvironmentVariables() {
-  if (!project.value) return;
+  if (!project.value) {
+    throw new Error('Project not found');
+  }
 
   await $fetch(`/api/projects/${project.value.name}`, {
     method: 'PATCH',
@@ -220,12 +228,14 @@ async function saveEnvironmentVariables() {
     color: 'green',
   });
 
-  await projectsStore.refreshProject();
+  await refreshProject();
 }
 
 const newDomain = ref('');
 async function addDomain() {
-  if (!project.value) return;
+  if (!project.value) {
+    throw new Error('Project not found');
+  }
   if (!newDomain.value) return;
   const _newDomain = newDomain.value;
   newDomain.value = '';
@@ -244,11 +254,13 @@ async function addDomain() {
     color: 'green',
   });
 
-  await projectsStore.refreshProject();
+  await refreshProject();
 }
 
 async function saveCron() {
-  if (!project.value) return;
+  if (!project.value) {
+    throw new Error('Project not found');
+  }
 
   await $fetch(`/api/projects/${project.value.name}`, {
     method: 'PATCH',
@@ -263,10 +275,14 @@ async function saveCron() {
     color: 'green',
   });
 
-  await projectsStore.refreshProject();
+  await refreshProject();
 }
 
 async function deleteProject() {
+  if (!project.value) {
+    throw new Error('Project not found');
+  }
+
   if (prompt('Are you sure you want to delete this project? Type "DELETE" to confirm.') !== 'DELETE') return;
 
   await $fetch(`/api/projects/${project.value.name}`, { method: 'DELETE' });

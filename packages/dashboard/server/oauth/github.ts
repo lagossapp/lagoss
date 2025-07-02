@@ -60,7 +60,7 @@ export class Github {
     if (!code) {
       throw new Error('No code provided');
     }
-    const response: { error?: string; access_token: string; expires_in: string; refresh_token?: string } = await $fetch(
+    const response = await $fetch<{ error?: string; access_token: string; expires_in: string; refresh_token?: string }>(
       'https://github.com/login/oauth/access_token',
       {
         method: 'POST',

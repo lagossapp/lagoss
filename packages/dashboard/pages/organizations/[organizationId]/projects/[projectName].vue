@@ -9,7 +9,8 @@
 <script setup lang="ts">
 const route = useRoute();
 const projectName = computed(() => route.params.projectName as string);
-const { data: project, pending, refresh: refreshProject } = await useFetch(`/api/projects/${projectName.value}`);
+const { data: project, pending, refresh: refreshProject } = await useFetch(() => `/api/projects/${projectName.value}`);
 
 provide('project', project);
+provide('refreshProject', refreshProject);
 </script>

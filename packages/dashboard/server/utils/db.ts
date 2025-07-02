@@ -1,7 +1,7 @@
 import { drizzle, MySql2Database } from 'drizzle-orm/mysql2';
 import mysql from 'mysql2/promise';
 import * as schema from '~/server/db/schema';
-import { randomBytes } from 'crypto';
+import { randomBytes } from 'node:crypto';
 
 async function getDB() {
   const config = useRuntimeConfig();

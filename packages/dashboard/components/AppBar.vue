@@ -7,7 +7,7 @@
       <img src="/icon-white.png" alt="Dark icon" class="hidden w-6 dark:block" />
     </router-link>
 
-    <UPopover v-model:open="orgSelectOpen">
+    <UPopover v-if="selectedOrganization" v-model:open="orgSelectOpen">
       <UButton color="white" class="w-48">
         <UAvatar :alt="selectedOrganization?.name" size="xs" />
         <span>{{ selectedOrganization?.name }}</span>
@@ -101,6 +101,7 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute();
 const colorMode = useColorMode();
 
 const isDark = computed({
@@ -116,9 +117,14 @@ const { user, logout, selectOrganization } = await useAuth();
 
 const { data: organizations } = await useFetch('/api/organizations');
 
-const selectedOrganization = computed(
-  () => organizations.value?.find(org => org.id === user.value?.currentOrganizationId),
-);
+const selectedOrganization = computed(() => {
+  const organizationId = route.params.organizationId;
+  if (!organizationId) {
+    return undefined;
+  }
+
+  return organizations.value?.find(org => org.id === organizationId);
+});
 
 const orgSelectOpen = ref(false);
 </script>

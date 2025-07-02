@@ -13,12 +13,12 @@
         <span class="text-gray-500">projects</span>
       </p>
 
-      <span>TODO:</span>
+      <!-- <span>TODO:</span>
       <ul>
         <li>general: name, description, delete</li>
         <li>members</li>
         <li>billing & usage</li>
-      </ul>
+      </ul> -->
     </div>
   </div>
 </template>

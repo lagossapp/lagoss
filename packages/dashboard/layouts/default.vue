@@ -14,8 +14,7 @@ const toast = useToast();
 // eslint-disable-next-line promise/prefer-await-to-callbacks
 onErrorCaptured(err => {
   // eslint-disable-next-line no-console
-  console.log('error captured');
-  console.error(err);
+  console.error('error captured', err);
   toast.add({
     title: 'Error',
     description: err.message,
