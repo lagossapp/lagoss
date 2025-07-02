@@ -1,6 +1,6 @@
 <template>
   <header
-    class="border-b-1 sticky top-0 z-40 flex w-full items-center gap-4 border-transparent px-4 py-4 backdrop-blur"
+    class="sticky top-0 z-40 flex w-full items-center gap-4 border-b border-transparent px-4 py-4 backdrop-blur-sm"
   >
     <router-link to="/">
       <img src="/icon-black.png" alt="Icon" class="w-6 dark:hidden" />
@@ -8,7 +8,7 @@
     </router-link>
 
     <UPopover v-if="selectedOrganization" v-model:open="orgSelectOpen">
-      <UButton color="white" class="w-48">
+      <UButton color="neutral" variant="outline" class="w-48">
         <UAvatar :alt="selectedOrganization?.name" size="xs" />
         <span>{{ selectedOrganization?.name }}</span>
         <UIcon
@@ -21,7 +21,7 @@
       </UButton>
 
       <template #panel>
-        <div class="flex w-48 flex-col divide-y divide-gray-200 dark:divide-gray-700">
+        <div class="flex w-48 flex-col divide-y divide-neutral-200 dark:divide-neutral-700">
           <div class="p-1" @click="orgSelectOpen = !orgSelectOpen">
             <UButton
               v-for="organization in organizations"
@@ -64,7 +64,7 @@
       <ClientOnly>
         <UButton
           :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
-          color="gray"
+          color="neutral"
           variant="ghost"
           aria-label="Theme"
           @click="isDark = !isDark"
@@ -76,7 +76,7 @@
       </ClientOnly>
 
       <a href="https://docs.lagoss.com" rel="noopener noreferrer" target="_blank">
-        <UButton label="Docs" size="xs" color="white" />
+        <UButton label="Docs" size="xs" color="neutral" variant="outline" />
       </a>
 
       <UPopover v-if="user" class="flex items-center">
@@ -89,7 +89,7 @@
               <span>{{ user.name }}</span>
             </div>
 
-            <div class="flex w-full flex-col border-t border-gray-200 p-2 dark:border-gray-800">
+            <div class="flex w-full flex-col border-t border-neutral-200 p-2 dark:border-neutral-800">
               <UButton label="Settings" variant="ghost" to="/settings" class="w-full" />
               <UButton label="Logout" variant="ghost" class="w-full" @click="logout" />
             </div>

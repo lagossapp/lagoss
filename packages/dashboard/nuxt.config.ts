@@ -56,11 +56,9 @@ export default defineNuxtConfig({
     preset: './preset',
   },
 
-  devtools: { enabled: true },
-
   build: {
     transpile: ['trpc-nuxt'],
   },
 
-  compatibilityDate: '2024-07-05',
+  compatibilityDate: '2025-05-15',
 });

@@ -3,7 +3,7 @@
     <div class="bg mx-auto flex w-full max-w-4xl flex-col">
       <h1 class="text-3xl font-bold">👋 Welcome to Lagoss</h1>
 
-      <p class="mt-4 text-gray-800 dark:text-gray-200">
+      <p class="mt-4 text-neutral-800 dark:text-neutral-200">
         Lagoss is a serverless platform for building and deploying web applications. It's like Heroku, but for
         Functions.
       </p>
@@ -18,11 +18,11 @@
             class="w-full max-w-sm"
           >
             <Card
-              class="flex w-full cursor-pointer items-center justify-between hover:border-gray-500 hover:dark:border-gray-200"
+              class="flex w-full cursor-pointer items-center justify-between hover:border-neutral-500 dark:hover:border-neutral-200"
             >
               <div>
                 <p>{{ organization.name }}</p>
-                <p class="text-sm text-gray-500">{{ organization.description }}</p>
+                <p class="text-sm text-neutral-500">{{ organization.description }}</p>
               </div>
             </Card>
           </router-link>

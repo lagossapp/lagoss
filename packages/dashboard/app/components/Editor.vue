@@ -25,7 +25,7 @@ const editorEl = shallowRef<HTMLDivElement>();
 const editor = shallowRef<monaco.editor.IStandaloneCodeEditor>();
 onMounted(() => {
   nextTick(async () => {
-    if (process.client && editorEl.value) {
+    if (import.meta.client && editorEl.value) {
       const { editor: monacoEditor } = await import('monaco-editor/esm/vs/editor/editor.api');
 
       editor.value = monacoEditor.create(editorEl.value, {

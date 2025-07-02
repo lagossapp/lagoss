@@ -4,7 +4,7 @@
       <div class="flex items-start gap-2">
         <div>
           <h1 class="text-3xl font-bold">Settings - {{ user?.name }}</h1>
-          <p class="text-gray-500">{{}}</p>
+          <p class="text-neutral-500">{{}}</p>
         </div>
       </div>
 

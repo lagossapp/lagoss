@@ -1,23 +1,23 @@
 <template>
   <div class="flex w-full justify-between gap-4">
     <div class="flex flex-col gap-2">
-      <span class="text-gray-500">Requests</span>
+      <span class="text-neutral-500">Requests</span>
       <p>
         <span class="text-2xl font-bold">{{ formatNumber(requests) }}</span>
-        <span class="text-gray-500"> / {{ formatNumber(plan.freeRequests) }}</span>
+        <span class="text-neutral-500"> / {{ formatNumber(plan.freeRequests) }}</span>
       </p>
     </div>
 
     <div class="flex flex-col gap-2">
-      <span class="text-gray-500">Avg. CPU Time</span>
+      <span class="text-neutral-500">Avg. CPU Time</span>
       <p>
         <span class="text-2xl font-bold">{{ formatSeconds(cpuTimeAvg) }}</span>
-        <span class="text-gray-500"> / {{ formatSeconds(plan.totalTimeout / 1000) }}</span>
+        <span class="text-neutral-500"> / {{ formatSeconds(plan.totalTimeout / 1000) }}</span>
       </p>
     </div>
 
     <div class="flex flex-col gap-2">
-      <span class="text-gray-500">Avg. IN bytes</span>
+      <span class="text-neutral-500">Avg. IN bytes</span>
       <span class="text-2xl font-bold"
         >{{
           formatBytes(
@@ -30,7 +30,7 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <span class="text-gray-500">Avg. OUT bytes</span>
+      <span class="text-neutral-500">Avg. OUT bytes</span>
       <span class="text-2xl font-bold"
         >{{
           formatBytes(

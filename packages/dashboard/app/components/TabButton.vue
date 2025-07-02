@@ -3,7 +3,7 @@
     <span
       class="border-b"
       :class="{
-        'border-gray-800 dark:border-gray-400': $route.path === to,
+        'border-neutral-800 dark:border-neutral-400': $route.path === to,
         'border-transparent': $route.path !== to,
       }"
       >{{ label }}</span

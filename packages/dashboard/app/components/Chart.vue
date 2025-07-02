@@ -2,7 +2,7 @@
   <div>
     <div className="relative" ref="uPlotRef">
       <div
-        className="pointer-events-none absolute z-[10000] whitespace-pre hidden rounded bg-white  px-2 py-1 text-sm text-stone-800 shadow-md dark:bg-stone-900 dark:text-stone-200"
+        className="pointer-events-none absolute z-10000 whitespace-pre hidden rounded-sm bg-white  px-2 py-1 text-sm text-stone-800 shadow-md dark:bg-stone-900 dark:text-stone-200"
         :id="tooltipId"
       >
         <p className="mb-1 text-xs text-stone-500 dark:text-stone-400" :id="`${tooltipId}-date`" />
@@ -16,7 +16,7 @@
 import 'uplot/dist/uPlot.min.css';
 import uPlot from 'uplot';
 import type { Series, Axis } from 'uplot';
-import { _stone } from '#tailwind-config/theme/colors';
+import colors from 'tailwindcss/colors';
 import { scaleGradient } from './gradient';
 
 const props = defineProps<{
@@ -167,13 +167,13 @@ onMounted(() => {
       },
       axes: [
         {
-          stroke: _stone[500],
+          stroke: colors.stone[500],
           grid: {
             show: false,
           },
         },
         {
-          stroke: _stone[500],
+          stroke: colors.stone[500],
           values: props.axisTransform,
           // From this example
           // https://github.com/leeoniya/uPlot/blob/master/demos/axis-autosize.html

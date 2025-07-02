@@ -1,7 +1,7 @@
 <template>
   <div v-if="project" class="flex h-screen w-screen">
     <div class="w-1/2">
-      <header class="flex h-16 items-center justify-between border-b border-gray-200 px-4 py-2">
+      <header class="flex h-16 items-center justify-between border-b border-neutral-200 px-4 py-2">
         <div class="flex items-center gap-4">
           <router-link to="/">
             <img src="/icon-black.png" alt="Icon" class="w-6 dark:hidden" />
@@ -28,18 +28,18 @@
       </header>
 
       <div class="relative flex" style="height: calc(100vh - 15rem)">
-        <Editor v-model="code" class="flex-grow" />
+        <Editor v-model="code" class="grow" />
       </div>
 
-      <div class="relative flex h-44 flex-shrink-0 flex-col border-t border-gray-200">
+      <div class="relative flex h-44 shrink-0 flex-col border-t border-neutral-200">
         <div class="flex h-10 items-center justify-between px-5">
-          <div class="flex h-full items-center gap-1 text-sm text-gray-500">
+          <div class="flex h-full items-center gap-1 text-sm text-neutral-500">
             <UIcon name="document" />
             Logs
           </div>
           <button
             type="button"
-            class="relative left-3 inline-flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-gray-400/80 hover:text-gray-800"
+            class="relative left-3 inline-flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-neutral-400/80 hover:text-neutral-800"
           >
             <UIcon name="down" />
           </button>
@@ -48,22 +48,22 @@
         <ProjectLogs :project="project" />
       </div>
     </div>
-    <div class="relative h-full w-1/2 border-l border-gray-300/70">
+    <div class="relative h-full w-1/2 border-l border-neutral-300/70">
       <header
-        class="flex h-16 items-center justify-between gap-4 border-b border-gray-200 bg-white px-4 py-2 dark:bg-zinc-900"
+        class="flex h-16 items-center justify-between gap-4 border-b border-neutral-200 bg-white px-4 py-2 dark:bg-zinc-900"
       >
-        <UInput :model-value="url || ''" size="lg" class="flex-grow" disabled />
+        <UInput :model-value="url || ''" size="lg" class="grow" disabled />
 
         <a v-if="url" :href="url" rel="noopener noreferrer" target="_blank">
-          <UButton label="Open" size="lg" color="white" />
+          <UButton label="Open" size="lg" color="neutral" variant="outline" />
         </a>
-        <UButton icon="i-ion-ios-refresh" size="lg" color="white" @click="reloadIframe" />
+        <UButton icon="i-ion-ios-refresh" size="lg" color="neutral" variant="outline" @click="reloadIframe" />
       </header>
 
       <iframe
         v-if="url"
         ref="iframeEl"
-        class="w-full flex-grow border-0"
+        class="w-full grow border-0"
         style="height: calc(100vh - 4rem)"
         sandbox="allow-forms allow-modals allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
         :src="url"

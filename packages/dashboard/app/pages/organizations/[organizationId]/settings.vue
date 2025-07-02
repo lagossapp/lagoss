@@ -4,13 +4,13 @@
       <div class="flex items-start gap-2">
         <div>
           <h1 class="text-3xl font-bold">{{ organization?.name }} - Settings</h1>
-          <p class="text-gray-500">{{ organization?.description }}</p>
+          <p class="text-neutral-500">{{ organization?.description }}</p>
         </div>
       </div>
 
       <p class="mt-2 flex gap-1">
-        <span class="font-bold text-gray-500">{{ projects?.length }}</span>
-        <span class="text-gray-500">projects</span>
+        <span class="font-bold text-neutral-500">{{ projects?.length }}</span>
+        <span class="text-neutral-500">projects</span>
       </p>
 
       <!-- <span>TODO:</span>

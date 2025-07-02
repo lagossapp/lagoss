@@ -1,23 +1,23 @@
 <template>
   <div class="flex min-h-0 flex-col overflow-y-auto p-2" ref="logsView">
     <div class="mb-4 flex justify-end gap-2">
-      <USelect v-model="level" :options="logLevels" class="w-48">
+      <USelect v-model="level" :items="logLevels" class="w-48">
         <!-- <template #leading>
           <span>Level:</span>
         </template> -->
       </USelect>
-      <USelect v-model="timeframe" :options="timeFrames" class="w-48" />
+      <USelect v-model="timeframe" :items="timeFrames" class="w-48" />
     </div>
 
     <Card>
       <div v-if="logs?.length === 0">
-        <p class="font-bold text-gray-500">No logs found for this project.</p>
+        <p class="font-bold text-neutral-500">No logs found for this project.</p>
 
-        <p class="text-gray-500">
-          You can use <span class="rounded-md bg-gray-200 px-1">console.log('Hello world!')</span> in your code to log
-          messages.
+        <p class="text-neutral-500">
+          You can use <span class="rounded-md bg-neutral-200 px-1">console.log('Hello world!')</span> in your code to
+          log messages.
         </p>
-        <p class="text-gray-500">
+        <p class="text-neutral-500">
           Visit
           <a :href="getFullCurrentDomain({ name: project.name })" target="_blank" class="text-blue-500 hover:underline"
             >your project</a

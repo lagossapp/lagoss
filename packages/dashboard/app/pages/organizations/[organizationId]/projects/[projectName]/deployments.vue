@@ -5,9 +5,9 @@
     <div class="mx-auto flex max-w-4xl flex-col gap-4">
       <UContainer
         v-if="deployments?.length === 0"
-        class="mt-4 w-full rounded border border-gray-200 py-16 text-center hover:shadow"
+        class="mt-4 w-full rounded-sm border border-neutral-200 py-16 text-center hover:shadow-sm"
       >
-        <p class="text-gray-500">No deployments yet! Please create a deployment using the CLI!</p>
+        <p class="text-neutral-500">No deployments yet! Please create a deployment using the CLI!</p>
         <!-- <a href="https://docs.lagoss.io" target="_blank" class="text-blue-500">
           Quickstart guide!
         </a> -->
@@ -15,7 +15,7 @@
       <div
         v-for="deployment in deployments?.sort((a, b) => dayjs(b.createdAt).diff(dayjs(a.createdAt)))"
         :id="deployment.id"
-        class="flex w-full items-center rounded-md border border-gray-300 p-4"
+        class="flex w-full items-center rounded-md border border-neutral-300 p-4"
       >
         <div class="flex flex-col">
           <div>
@@ -29,19 +29,19 @@
             </a>
             <span v-if="deployment.isProduction" class="ml-2">(Production)</span>
           </div>
-          <span class="text-gray-500">{{ dayjs().to(deployment.createdAt) }}</span>
+          <span class="text-neutral-500">{{ dayjs().to(deployment.createdAt) }}</span>
           <span v-if="promotingDeploymentId === deployment.id">promoting deployment to production ...</span>
           <span v-if="deletingDeploymentId === deployment.id">deleting deployment ...</span>
         </div>
 
         <div class="ml-auto flex flex-col">
-          <span class="text-gray-500">{{ deployment.commit ?? 'No commit linked' }}</span>
-          <span class="text-gray-500">By {{ deployment.triggerer }}</span>
+          <span class="text-neutral-500">{{ deployment.commit ?? 'No commit linked' }}</span>
+          <span class="text-neutral-500">By {{ deployment.triggerer }}</span>
         </div>
 
-        <UDropdown :items="getDeploymentDropdownItems(deployment)" class="ml-4">
-          <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
-        </UDropdown>
+        <UDropdownMenu :items="getDeploymentDropdownItems(deployment)" class="ml-4">
+          <UButton color="neutral" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+        </UDropdownMenu>
       </div>
     </div>
   </div>

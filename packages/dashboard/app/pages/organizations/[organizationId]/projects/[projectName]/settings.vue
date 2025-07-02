@@ -7,19 +7,19 @@
         <form @submit.prevent="saveName" class="flex flex-col items-start gap-4">
           <h2 class="text-xl">Name</h2>
 
-          <p class="text-gray-500">
+          <p class="text-neutral-500">
             Change the name of this project. Note that changing the name also changes the default domain.
           </p>
 
-          <UFormGroup label="Name" required>
+          <UFormField label="Name" required>
             <UButtonGroup size="md" orientation="horizontal">
               <UInput v-if="project" v-model="project.name" placeholder="your-name" size="md" />
-              <UInput :model-value="`.${$config.public.root.domain}`" disabled class="!cursor-default" size="md" />
+              <UInput :model-value="`.${$config.public.root.domain}`" disabled class="cursor-default!" size="md" />
             </UButtonGroup>
-          </UFormGroup>
+          </UFormField>
 
           <div class="flex w-full border-t pt-2">
-            <UButton type="submit" label="Save" size="md" color="white" class="ml-auto" />
+            <UButton type="submit" label="Save" size="md" color="neutral" variant="outline" class="ml-auto" />
           </div>
         </form>
       </Card>
@@ -28,20 +28,33 @@
         <form @submit.prevent="saveEnvironmentVariables" class="flex flex-col items-start gap-4">
           <h2 class="text-xl">Environment variables</h2>
 
-          <p class="text-gray-500">Environment variables are injected into your Function at runtime.</p>
+          <p class="text-neutral-500">Environment variables are injected into your Function at runtime.</p>
 
           <div class="flex flex-col gap-2">
             <div v-if="project" v-for="(envVariable, i) in project.envVariables" class="flex w-full gap-2">
               <UInput v-model="envVariable.key" placeholder="Key" size="md" @paste.prevent="addPastedEnvVariables" />
               <UInput v-model="envVariable.value" placeholder="Value" size="md" icon="i-heroicons-key" />
-              <UButton icon="i-heroicons-minus" size="md" color="white" @click="removeEnvVariable(i)" />
+              <UButton
+                icon="i-heroicons-minus"
+                size="md"
+                color="neutral"
+                variant="outline"
+                @click="removeEnvVariable(i)"
+              />
             </div>
           </div>
 
-          <UButton icon="i-heroicons-plus" label="Add" size="md" color="white" @click="addEnvVariable" />
+          <UButton
+            icon="i-heroicons-plus"
+            label="Add"
+            size="md"
+            color="neutral"
+            variant="outline"
+            @click="addEnvVariable"
+          />
 
           <div class="flex w-full border-t pt-2">
-            <UButton type="submit" label="Save" size="md" color="white" class="ml-auto" />
+            <UButton type="submit" label="Save" size="md" color="neutral" variant="outline" class="ml-auto" />
           </div>
         </form>
       </Card>
@@ -49,23 +62,23 @@
       <Card class="flex flex-col items-start gap-4">
         <h2 class="text-xl">Domains</h2>
 
-        <p class="text-gray-500">
+        <p class="text-neutral-500">
           The default domain is based on this Function's name. You can also add custom domains.
         </p>
 
         <div class="flex gap-4">
           <span>{{ project.name }}.{{ $config.public.root.domain }}</span>
-          <span class="text-gray-500">Default domain</span>
+          <span class="text-neutral-500">Default domain</span>
         </div>
 
         <div v-for="domain in project.domains" :key="domain" class="flex items-center gap-2">
           <span>{{ domain }}</span>
-          <UButton icon="i-heroicons-minus" color="white" @click="removeDomain(domain)" />
+          <UButton icon="i-heroicons-minus" color="neutral" variant="outline" @click="removeDomain(domain)" />
         </div>
 
         <form @submit.prevent="addDomain" class="flex gap-2">
           <UInput v-model="newDomain" placeholder="your-domain.com" size="md" />
-          <UButton type="submit" icon="i-heroicons-plus" label="Add" size="md" color="white" />
+          <UButton type="submit" icon="i-heroicons-plus" label="Add" size="md" color="neutral" variant="outline" />
         </form>
       </Card>
 
@@ -73,12 +86,12 @@
         <form @submit.prevent="saveCron" class="flex flex-col items-start gap-4">
           <h2 class="text-xl">Cron</h2>
 
-          <p class="text-gray-500">
+          <p class="text-neutral-500">
             Run this Function automatically at a scheduled rate using a Cron expression. You can also choose in which
             Region to run the Function.
           </p>
 
-          <UFormGroup label="Expression" required>
+          <UFormField label="Expression" required>
             <UInput
               v-if="project"
               :model-value="project.cron || ''"
@@ -86,10 +99,10 @@
               size="md"
               @update:model-value="project.cron = $event"
             />
-          </UFormGroup>
+          </UFormField>
 
           <div class="flex w-full border-t pt-2">
-            <UButton type="submit" label="Save" size="md" color="white" class="ml-auto" />
+            <UButton type="submit" label="Save" size="md" color="neutral" variant="outline" class="ml-auto" />
           </div>
         </form>
       </Card>
@@ -103,7 +116,7 @@
         </p>
 
         <div class="flex w-full border-t border-red-300 pt-2">
-          <UButton type="submit" label="Delete" size="md" color="red" class="ml-auto" @click="deleteProject" />
+          <UButton type="submit" label="Delete" size="md" color="error" class="ml-auto" @click="deleteProject" />
         </div>
       </Card>
     </div>
@@ -181,7 +194,7 @@ async function removeDomain(domain: string) {
   toast.add({
     title: 'Domain removed',
     description: `The domain "${domain}" was removed from the project "${project.value.name}".`,
-    color: 'green',
+    color: 'success',
   });
 
   await refreshProject();
@@ -202,7 +215,7 @@ async function saveName() {
   toast.add({
     title: 'Project updated',
     description: `The project "${project.value.name}" was updated.`,
-    color: 'green',
+    color: 'success',
   });
 
   await router.push(`/organizations/${project.value.organizationId}/projects/${project.value.name}`);
@@ -225,7 +238,7 @@ async function saveEnvironmentVariables() {
   toast.add({
     title: 'Environment variables updated',
     description: `The environment variables for the project "${project.value.name}" were updated.`,
-    color: 'green',
+    color: 'success',
   });
 
   await refreshProject();
@@ -251,7 +264,7 @@ async function addDomain() {
   toast.add({
     title: 'Domains updated',
     description: `The domains for the project "${project.value.name}" were updated.`,
-    color: 'green',
+    color: 'success',
   });
 
   await refreshProject();
@@ -272,7 +285,7 @@ async function saveCron() {
   toast.add({
     title: 'Cron updated',
     description: `The cron for the project "${project.value.name}" was updated.`,
-    color: 'green',
+    color: 'success',
   });
 
   await refreshProject();
