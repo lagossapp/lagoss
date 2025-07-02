@@ -149,7 +149,7 @@
       this.update();
     }
 
-    *entries(): IterableIterator<[string, string]> {
+    *entries(): URLSearchParamsIterator<[string, string]> {
       for (const [name, value] of this.list) {
         yield [name, value];
       }
@@ -161,19 +161,19 @@
       }
     }
 
-    *keys(): IterableIterator<string> {
+    *keys(): URLSearchParamsIterator<string> {
       for (const [name] of this.list) {
         yield name;
       }
     }
 
-    *values(): IterableIterator<string> {
+    *values(): URLSearchParamsIterator<string> {
       for (const [, value] of this.list) {
         yield value;
       }
     }
 
-    [Symbol.iterator](): IterableIterator<[string, string]> {
+    [Symbol.iterator](): URLSearchParamsIterator<[string, string]> {
       return this.entries();
     }
 

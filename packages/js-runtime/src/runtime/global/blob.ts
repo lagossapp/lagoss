@@ -1,5 +1,4 @@
 (globalThis => {
-  // @ts-expect-error missing `prototype` property
   globalThis.Blob = class {
     readonly size: number;
     readonly type: string;
@@ -65,6 +64,10 @@
 
     text(): Promise<string> {
       return Promise.resolve(globalThis.__lagoss__.TEXT_DECODER.decode(this.buffer));
+    }
+
+    async bytes(): Promise<Uint8Array> {
+      return Promise.resolve(this.buffer);
     }
   };
 })(globalThis);
