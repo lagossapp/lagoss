@@ -145,5 +145,22 @@
     toJSON(): string {
       return this.toString();
     }
+
+    static canParse(url: string | URL, base?: string | URL): boolean {
+      try {
+        new URL(url, base);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    static parse(url: string | URL, base?: string | URL): URL {
+      if (URL.canParse(url, base)) {
+        return new URL(url, base);
+      } else {
+        throw new TypeError(`Invalid URL: ${url}`);
+      }
+    }
   };
 })(globalThis);

@@ -84,7 +84,7 @@
       this.h = newHeaders;
     }
 
-    *entries(): IterableIterator<[string, string]> {
+    *entries(): HeadersIterator<[string, string]> {
       const temp = new Map<string, string[]>();
 
       for (const [key, value] of this.h) {
@@ -134,7 +134,7 @@
       return false;
     }
 
-    *keys(): IterableIterator<string> {
+    *keys(): HeadersIterator<string> {
       for (const [key] of this.h) {
         yield key;
       }
@@ -149,7 +149,7 @@
       this.append(name, value);
     }
 
-    *values(): IterableIterator<string> {
+    *values(): HeadersIterator<string> {
       for (const [, value] of this.h) {
         yield value;
       }
@@ -161,7 +161,7 @@
       }
     }
 
-    [Symbol.iterator](): IterableIterator<[string, string]> {
+    [Symbol.iterator](): HeadersIterator<[string, string]> {
       return this.entries();
     }
   };

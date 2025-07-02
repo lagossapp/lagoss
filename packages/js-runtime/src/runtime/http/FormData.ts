@@ -27,7 +27,7 @@
       this.fields.delete(name);
     }
 
-    *entries(): IterableIterator<[string, FormDataEntryValue]> {
+    *entries(): FormDataIterator<[string, FormDataEntryValue]> {
       for (const [key, values] of this.fields) {
         for (const value of values) {
           yield [key, value];
@@ -55,7 +55,7 @@
       return this.fields.has(name);
     }
 
-    keys(): IterableIterator<string> {
+    keys(): FormDataIterator<string> {
       return this.fields.keys();
     }
 
@@ -69,7 +69,7 @@
       }
     }
 
-    *values(): IterableIterator<FormDataEntryValue> {
+    *values(): FormDataIterator<FormDataEntryValue> {
       for (const [, values] of this.fields) {
         for (const value of values) {
           yield value;
@@ -77,7 +77,7 @@
       }
     }
 
-    [Symbol.iterator](): IterableIterator<[string, FormDataEntryValue]> {
+    [Symbol.iterator](): FormDataIterator<[string, FormDataEntryValue]> {
       return this.entries();
     }
   };
