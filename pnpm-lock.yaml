@@ -148,7 +148,7 @@ importers:
         version: 0.0.11(react@18.3.1)
       '@scaleway/use-random-name':
         specifier: ^0.3.0
-        version: 0.3.1(react@18.3.1)
+        version: 0.3.2(react@18.3.1)
       '@tanstack/react-query':
         specifier: ^4.6.1
         version: 4.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3801,12 +3801,12 @@ packages:
   '@rushstack/eslint-patch@1.10.4':
     resolution: {integrity: sha512-WJgX9nzTqknM393q1QJDJmoW28kUfEnybeTfVNcNAPnIx210RXm2DiXiHzfNPJNIUUb1tJnz/l4QGtJ30PgWmA==}
 
-  '@scaleway/random-name@4.0.1':
-    resolution: {integrity: sha512-gj7mCDm3RU4ZUoBTUPkKj7hKUYGVw2aLZ+AGkj6ZzSgRHxM0N57vG1BL5XaVvD30gae1i+trVheEBmzmcNlbGQ==}
+  '@scaleway/random-name@4.0.3':
+    resolution: {integrity: sha512-HaPlHWsqtKUhayg254TeCqPoX5LadSc7A8/kW7/gQIrnyMflFy2+qcicXCSH0R41zf6gPNBIef4DULkzMIjUHg==}
     engines: {node: '>=14.x'}
 
-  '@scaleway/use-random-name@0.3.1':
-    resolution: {integrity: sha512-2xjrSClACHVi0C/j7iZlmXicCNPx9rscKCTmW3y+SCwWkEB34pzzKZWHiBY1x1CYR7UQSOzT70v4clGsUsoIlw==}
+  '@scaleway/use-random-name@0.3.2':
+    resolution: {integrity: sha512-F0th6twKyIsyNEsFOImkNvoVGSFyzL5kyg0WLiX87d5EVvDw/KYVJt0j4cvQLFNB1E6qjKDFrQskcIkk9cJ+Qw==}
     engines: {node: '>=14.x'}
     peerDependencies:
       react: '>=16.8'
@@ -5588,7 +5588,6 @@ packages:
 
   clickhouse@2.6.0:
     resolution: {integrity: sha512-HC5OV99GJOup4qZsTuWWPpXlj+847Z0OeygDU2x22rNYost0V/vWapzFWYZdV/5iRbGMrhFQPOyQEzmGvoaWRQ==}
-    bundledDependencies: []
 
   client-only@0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
@@ -8230,6 +8229,7 @@ packages:
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
+    deprecated: Use your platform's native DOMException instead
 
   node-fetch-native@1.2.0:
     resolution: {integrity: sha512-5IAMBTl9p6PaAjYCnMv5FmqIF6GcZnawAVnzaCG0rX2aYZJ4CxEkZNtVPuTRug7fL7wyM5BQYTlAzcyMPi6oTQ==}
@@ -15053,11 +15053,11 @@ snapshots:
 
   '@rushstack/eslint-patch@1.10.4': {}
 
-  '@scaleway/random-name@4.0.1': {}
+  '@scaleway/random-name@4.0.3': {}
 
-  '@scaleway/use-random-name@0.3.1(react@18.3.1)':
+  '@scaleway/use-random-name@0.3.2(react@18.3.1)':
     dependencies:
-      '@scaleway/random-name': 4.0.1
+      '@scaleway/random-name': 4.0.3
       react: 18.3.1
 
   '@selderee/plugin-htmlparser2@0.11.0':
