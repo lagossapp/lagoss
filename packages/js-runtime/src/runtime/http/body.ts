@@ -208,4 +208,29 @@ export class RequestResponseBody {
       pull();
     });
   }
+
+  async bytes(): Promise<Uint8Array> {
+    if (this.bodyUsed) {
+      throw new TypeError('Body is already used');
+    }
+
+    if (this.theBody === null) {
+      this.bodyUsed = true;
+      return new Uint8Array();
+    }
+
+    if (this.theBody instanceof Uint8Array || this.theBody instanceof ArrayBuffer) {
+      this.bodyUsed = true;
+      return new Uint8Array(this.theBody);
+    }
+
+    if (this.theBody instanceof Blob) {
+      this.bodyUsed = true;
+      return new Uint8Array(await this.theBody.arrayBuffer());
+    }
+
+    const text = await this.text();
+    this.bodyUsed = true;
+    return globalThis.__lagoss__.TEXT_ENCODER.encode(text);
+  }
 }
