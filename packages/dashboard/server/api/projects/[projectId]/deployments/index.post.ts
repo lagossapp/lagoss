@@ -1,4 +1,4 @@
-import { deploymentSchema } from '~~/server/db/schema';
+import { deploymentSchema, organizationSchema } from '~~/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
@@ -6,6 +6,7 @@ import { PRESIGNED_URL_EXPIRES_SECONDS } from '~~/server/lib/constants';
 import { s3 } from '~~/server/lib/s3';
 import { z } from 'zod';
 import { generateId } from '~~/server/utils/db';
+import { getPlanOfOrganization } from '~~/server/lib/plans';
 
 export default defineEventHandler(async event => {
   const db = await useDB();
@@ -25,18 +26,24 @@ export default defineEventHandler(async event => {
     })
     .parseAsync(await readBody(event));
 
-  // TODO: check plan
-  // const plan = getPlanFromPriceId({
-  //   priceId: ctx.session.organization.stripePriceId,
-  //   currentPeriodEnd: ctx.session.organization.stripeCurrentPeriodEnd,
-  // });
+  const organization = await getFirst(
+    db.select().from(organizationSchema).where(eq(organizationSchema.id, project.organizationId)).execute(),
+  );
+  if (!organization) {
+    throw createError({
+      status: 404,
+      message: 'Organization not found',
+    });
+  }
 
-  // await checkCanCreateDeployment({
-  //   assets: input.assets.length,
-  //   projectId: input.projectId,
-  //   userId: ctx.session.user.id,
-  //   plan,
-  // });
+  const plan = getPlanOfOrganization(organization);
+
+  if (input.assets.length > plan.maxAssetsPerProject) {
+    throw createError({
+      status: 400,
+      message: `You can only deploy up to ${plan.maxAssetsPerProject} assets.`,
+    });
+  }
 
   const deploymentId = await generateId();
   await db

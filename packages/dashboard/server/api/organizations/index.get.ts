@@ -5,7 +5,7 @@ export default defineEventHandler(async event => {
   const db = await useDB();
   const user = await requireUser(event);
 
-  return (
+  const organizations = (
     await db
       .select()
       .from(organizationSchema)
@@ -13,4 +13,6 @@ export default defineEventHandler(async event => {
       .where(or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id)))
       .execute()
   ).map(org => org.Organization);
+
+  return organizations;
 });

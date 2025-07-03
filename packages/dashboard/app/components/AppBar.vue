@@ -20,7 +20,7 @@
         />
       </UButton>
 
-      <template #panel>
+      <template #content>
         <div class="flex w-48 flex-col divide-y divide-neutral-200 dark:divide-neutral-700">
           <div class="p-1" @click="orgSelectOpen = !orgSelectOpen">
             <UButton
@@ -80,9 +80,9 @@
       </a>
 
       <UPopover v-if="user" class="flex items-center">
-        <UAvatar :src="user.image || ''" alt="User avatar" size="sm" :initials="user.name" />
+        <UAvatar :src="user.image || ''" alt="User avatar" size="sm" :initials="user.name" class="cursor-pointer" />
 
-        <template #panel>
+        <template #content>
           <div class="flex w-48 flex-col items-center gap-2">
             <div class="my-4 flex flex-col items-center gap-2">
               <UAvatar :src="user.image || ''" alt="User avatar" size="xl" :initials="user.name" />

@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     s3: {
       endpoint: process.env.S3_ENDPOINT,
       bucket: process.env.S3_BUCKET ?? 'lagoss',
-      region: process.env.S3_REGION || 'unkown',
+      region: process.env.S3_REGION || 'unknown',
       credentials: {
         accessKeyId: process.env.S3_ACCESS_KEY_ID ?? '',
         secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? '',
@@ -45,6 +45,13 @@ export default defineNuxtConfig({
     head: {
       title: 'Lagoss',
       link: [{ rel: 'alternate icon', type: 'image/png', href: '/icon-white.png' }],
+    },
+  },
+
+  icon: {
+    serverBundle: {
+      collections: ['heroicons', 'ion'],
+      externalizeIconsJson: true,
     },
   },
 

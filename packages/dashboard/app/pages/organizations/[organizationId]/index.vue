@@ -93,8 +93,6 @@ async function createProject(playground = false) {
     }
 
     await router.push(`/organizations/${project.organizationId}/projects/${project.name}`);
-  } catch (error) {
-    throw error;
   } finally {
     creatingProject.value = undefined;
   }

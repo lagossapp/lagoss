@@ -184,7 +184,7 @@ async function removeDomain(domain: string) {
   }
   if (!confirm(`Are you sure you want to remove the domain "${domain}"?`)) return;
 
-  await $fetch(`/api/projects/${project.value.name}`, {
+  await $fetch(`/api/projects/${project.value.id}`, {
     method: 'PATCH',
     body: {
       domains: project.value.domains?.filter(_domain => _domain !== domain),
@@ -205,7 +205,7 @@ async function saveName() {
     throw new Error('Project not found');
   }
 
-  await $fetch(`/api/projects/${project.value.name}`, {
+  await $fetch(`/api/projects/${project.value.id}`, {
     method: 'PATCH',
     body: {
       name: project.value.name,
@@ -228,7 +228,7 @@ async function saveEnvironmentVariables() {
     throw new Error('Project not found');
   }
 
-  await $fetch(`/api/projects/${project.value.name}`, {
+  await $fetch(`/api/projects/${project.value.id}`, {
     method: 'PATCH',
     body: {
       envVariables: project.value.envVariables.filter(({ key, value }) => key && value),
@@ -254,7 +254,7 @@ async function addDomain() {
   newDomain.value = '';
   if (project.value.domains.some(domain => domain === _newDomain)) return;
 
-  await $fetch(`/api/projects/${project.value.name}`, {
+  await $fetch(`/api/projects/${project.value.id}`, {
     method: 'PATCH',
     body: {
       domains: [...project.value.domains, _newDomain],
@@ -275,7 +275,7 @@ async function saveCron() {
     throw new Error('Project not found');
   }
 
-  await $fetch(`/api/projects/${project.value.name}`, {
+  await $fetch(`/api/projects/${project.value.id}`, {
     method: 'PATCH',
     body: {
       cron: project.value.cron,
@@ -298,7 +298,7 @@ async function deleteProject() {
 
   if (prompt('Are you sure you want to delete this project? Type "DELETE" to confirm.') !== 'DELETE') return;
 
-  await $fetch(`/api/projects/${project.value.name}`, { method: 'DELETE' });
+  await $fetch(`/api/projects/${project.value.id}`, { method: 'DELETE' });
 
   toast.add({
     title: 'Project deleted',

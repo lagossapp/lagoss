@@ -1,5 +1,5 @@
 use crate::utils::{
-    create_deployment, get_theme, print_progress, resolve_path, Config, TrpcClient,
+    create_deployment, get_theme, print_progress, resolve_path, Config, ApiClient,
 };
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm, Input, Select};
@@ -24,7 +24,7 @@ impl Display for Organization {
 pub type OrganizationsResponse = Vec<Organization>;
 
 #[derive(Serialize, Debug)]
-struct CreateFunctionRequest {
+struct CreateProjectRequest {
     name: String,
     domains: Vec<String>,
     env: Vec<String>,
@@ -32,23 +32,23 @@ struct CreateFunctionRequest {
 }
 
 #[derive(Deserialize, Debug)]
-struct CreateFunctionResponse {
+struct CreateProjectResponse {
     id: String,
 }
 
 #[derive(Deserialize, Debug)]
-pub struct Function {
+pub struct Project {
     pub id: String,
     pub name: String,
 }
 
-impl Display for Function {
+impl Display for Project {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.name)
     }
 }
 
-pub type FunctionsResponse = Vec<Function>;
+pub type ProjectsResponse = Vec<Project>;
 
 pub async fn deploy(
     path: Option<PathBuf>,
@@ -64,22 +64,20 @@ pub async fn deploy(
         ));
     }
 
-    let (root, mut function_config) = resolve_path(path, client, public_dir)?;
+    let (root, mut project_config) = resolve_path(path, client, public_dir)?;
 
-    if function_config.function_id.is_empty() {
+    if project_config.function_id.is_empty() {
         println!(
             "{}",
             style("No previous Deployment found...").black().bright()
         );
         println!();
 
-        let mut trpc_client = TrpcClient::new(config.clone());
-        trpc_client.set_organization_id(function_config.organization_id.clone());
+        let client = ApiClient::new(config.clone());
 
-        let response = trpc_client
-            .query::<(), OrganizationsResponse>("organizationsList", None)
+        let organizations = client
+            .get::<OrganizationsResponse>("/api/organizations")
             .await?;
-        let organizations = response.result.data;
 
         let index = Select::with_theme(get_theme())
             .items(&organizations)
@@ -89,43 +87,45 @@ pub async fn deploy(
         let organization = &organizations[index];
 
         match Confirm::with_theme(get_theme())
-            .with_prompt("Link to an existing Function?")
+            .with_prompt("Link to an existing project?")
             .default(false)
             .interact()?
         {
             true => {
-                let response = trpc_client
-                    .query::<(), FunctionsResponse>("functionsList", None)
+                let projects = client
+                    .get::<ProjectsResponse>(&format!(
+                        "/api/organizations/{}/projects",
+                        organization.id
+                    ))
                     .await?;
-                let functions = response.result.data;
 
                 let index = Select::with_theme(get_theme())
-                    .items(&functions)
+                    .items(&projects)
                     .default(0)
-                    .with_prompt("Which Function would you like to link?")
+                    .with_prompt("Which project would you like to link?")
                     .interact()?;
-                let function = &functions[index];
+                let project = &projects[index];
 
-                function_config.function_id.clone_from(&function.id);
-                function_config.organization_id.clone_from(&organization.id);
-                function_config.write(&root)?;
+                project_config.function_id.clone_from(&project.id);
+                project_config.organization_id.clone_from(&organization.id);
+                project_config.write(&root)?;
 
                 println!();
-                create_deployment(config, &function_config, is_production, &root, true).await?;
+                create_deployment(config, &project_config, is_production, &root, true).await?;
             }
             false => {
                 let name = Input::<String>::with_theme(get_theme())
-                    .with_prompt("What's the name of this new Function?")
+                    .with_prompt("What's the name of this new project?")
                     .interact_text()?;
 
                 println!();
-                let message = format!("Creating Function {name}");
+                let message = format!("Creating project {name}");
                 let end_progress = print_progress(&message);
 
-                let response = trpc_client
-                    .mutation::<CreateFunctionRequest, CreateFunctionResponse>(
-                        "functionCreate",
-                        CreateFunctionRequest {
+                let project = client
+                    .post::<CreateProjectRequest, CreateProjectResponse>(
+                        &format!("/api/organizations/{}/projects", organization.id),
+                        CreateProjectRequest {
                             name,
                             domains: Vec::new(),
                             env: Vec::new(),
@@ -133,19 +133,18 @@ pub async fn deploy(
                         },
                     )
                     .await?;
-                let function = response.result.data;
 
                 end_progress();
 
-                function_config.function_id.clone_from(&function.id);
-                function_config.organization_id.clone_from(&organization.id);
-                function_config.write(&root)?;
+                project_config.function_id.clone_from(&project.id);
+                project_config.organization_id.clone_from(&organization.id);
+                project_config.write(&root)?;
 
-                create_deployment(config, &function_config, is_production, &root, true).await?;
+                create_deployment(config, &project_config, is_production, &root, true).await?;
             }
         }
     } else {
-        create_deployment(config, &function_config, is_production, &root, true).await?;
+        create_deployment(config, &project_config, is_production, &root, true).await?;
     }
 
     Ok(())

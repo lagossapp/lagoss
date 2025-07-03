@@ -1,15 +1,15 @@
 use anyhow::{anyhow, Result};
 use std::path::{Path, PathBuf};
 
+mod client;
 mod config;
 mod console;
 mod deployments;
-mod trpc;
 
+pub use client::*;
 pub use config::*;
 pub use console::*;
 pub use deployments::*;
-pub use trpc::*;
 
 pub const MAX_FUNCTION_SIZE_MB: usize = 10 * 1024 * 1024; // 10MB
 pub const MAX_ASSET_SIZE_MB: u64 = 10 * 1024 * 1024; // 10MB

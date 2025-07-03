@@ -1,17 +1,11 @@
-use crate::utils::{get_root, get_theme, print_progress, Config, FunctionConfig, TrpcClient};
+use crate::utils::{get_root, get_theme, print_progress, ApiClient, Config, FunctionConfig};
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use std::path::PathBuf;
 
-#[derive(Serialize, Debug)]
-#[serde(rename_all = "camelCase")]
-struct DeleteFunctionRequest {
-    function_id: String,
-}
-
 #[derive(Deserialize, Debug)]
-struct DeleteFunctionResponse {
+struct DeleteProjectResponse {
     #[allow(dead_code)]
     ok: bool,
 }
@@ -26,38 +20,46 @@ pub async fn rm(directory: Option<PathBuf>) -> Result<()> {
     }
 
     let root = get_root(directory);
-    let function_config = FunctionConfig::load(&root, None, None)?;
+    let project_config = FunctionConfig::load(&root, None, None)?;
+
+    if project_config.function_id.is_empty() {
+        return Err(anyhow!(
+            "This directory is not linked to a project. Please link it with `lagoss link`"
+        ));
+    }
 
     match Confirm::with_theme(get_theme())
         .with_prompt(
-            "Do you really want to completely delete this Function, its Deployments, statistics and logs?",
+            "Do you really want to completely delete this project, its deployments, statistics and logs?",
         )
         .default(false)
         .interact()?
     {
         true => {
-            let end_progress = print_progress("Deleting Function");
-            TrpcClient::new(config)
-                .set_organization_id(function_config.organization_id.clone())
-                .mutation::<DeleteFunctionRequest, DeleteFunctionResponse>(
-                    "functionDelete",
-                    DeleteFunctionRequest {
-                        function_id: function_config.function_id.clone(),
-                    },
+            let end_progress = print_progress("Deleting project");
+            let res = ApiClient::new(config)
+                .delete::<DeleteProjectResponse>(
+                &format!(
+                        "/api/projects/{}/deployments",
+                        project_config.function_id,
+                    ),
                 )
                 .await?;
             end_progress();
+            if !res.ok {
+                return Err(anyhow!("Failed to delete project"));
+            }
 
-            function_config.delete(&root)?;
+            project_config.delete(&root)?;
 
             println!();
-            println!(" {} Function deleted!", style("◼").magenta());
+            println!(" {} Project deleted!", style("◼").magenta());
 
             Ok(())
         }
         false => {
             println!();
-            println!("{} Deletion aborted", style("✕").red());
+            println!("{} Project aborted", style("✕").red());
             Ok(())
         },
     }

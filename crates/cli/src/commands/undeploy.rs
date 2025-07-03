@@ -1,15 +1,8 @@
-use crate::utils::{get_root, get_theme, print_progress, Config, FunctionConfig, TrpcClient};
+use crate::utils::{get_root, get_theme, print_progress, ApiClient, Config, FunctionConfig};
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use std::path::PathBuf;
-
-#[derive(Serialize, Debug)]
-#[serde(rename_all = "camelCase")]
-struct UndeployDeploymentRequest {
-    function_id: String,
-    deployment_id: String,
-}
 
 #[derive(Deserialize, Debug)]
 struct UndeployDeploymentResponse {
@@ -27,7 +20,13 @@ pub async fn undeploy(deployment_id: String, directory: Option<PathBuf>) -> Resu
     }
 
     let root = get_root(directory);
-    let function_config = FunctionConfig::load(&root, None, None)?;
+    let project_config = FunctionConfig::load(&root, None, None)?;
+
+    if project_config.function_id.is_empty() {
+        return Err(anyhow!(
+            "This directory is not linked to a project. Please link it with `lagoss link`"
+        ));
+    }
 
     match Confirm::with_theme(get_theme())
         .with_prompt("Do you really want to delete this Deployment?")
@@ -36,15 +35,13 @@ pub async fn undeploy(deployment_id: String, directory: Option<PathBuf>) -> Resu
     {
         true => {
             let end_progress = print_progress("Deleting Deployment");
-            TrpcClient::new(config)
-                .set_organization_id(function_config.organization_id.clone())
-                .mutation::<UndeployDeploymentRequest, UndeployDeploymentResponse>(
-                    "deploymentUndeploy",
-                    UndeployDeploymentRequest {
-                        function_id: function_config.function_id,
-                        deployment_id,
-                    },
-                )
+            let client = ApiClient::new(config);
+
+            client
+                .delete::<UndeployDeploymentResponse>(&format!(
+                    "/api/projects/{}/deployments/{}",
+                    project_config.function_id, deployment_id
+                ))
                 .await?;
             end_progress();
 

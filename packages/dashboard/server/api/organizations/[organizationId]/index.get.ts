@@ -13,7 +13,7 @@ export default defineEventHandler(async event => {
     });
   }
 
-  return (
+  const organization = (
     await getFirst(
       db
         .select()
@@ -28,4 +28,13 @@ export default defineEventHandler(async event => {
         .execute(),
     )
   )?.Organization;
+
+  if (!organization) {
+    throw createError({
+      message: 'Organization not found',
+      statusCode: 404,
+    });
+  }
+
+  return organization;
 });

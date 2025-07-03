@@ -17,12 +17,16 @@ export default defineEventHandler(async event => {
   }
 
   const deployment = await getFirst(
-    db.select().from(deploymentSchema).where(eq(deploymentSchema.id, deploymentId)).execute(),
+    db
+      .select()
+      .from(deploymentSchema)
+      .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.projectId, project.id)))
+      .execute(),
   );
   if (!deployment) {
     throw createError({
-      status: 500,
-      message: 'Failed to create deployment',
+      status: 404,
+      message: 'Deployment not found',
     });
   }
 
