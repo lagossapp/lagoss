@@ -10,13 +10,19 @@ function run() {
   getBinary().run();
 }
 
-function install() {
+async function install() {
   // Prevent exiting with code 1 when
   // the changeset PR is created
+
+  const processExit = process.exit;
+
   // @ts-expect-error This is a hack to prevent the process from exiting
   process.exit = (): never => {};
 
-  getBinary().install();
+  await getBinary().install();
+
+  // Restore the original process.exit
+  process.exit = processExit;
 }
 
 export { run, install };

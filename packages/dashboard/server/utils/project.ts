@@ -1,6 +1,6 @@
 import type { H3Event } from 'h3';
 import { Organization, organizationMemberSchema, organizationSchema, projectSchema } from '~~/server/db/schema';
-import { and, eq, or } from 'drizzle-orm';
+import { and, eq, or, SQL } from 'drizzle-orm';
 import type { Plan } from '~~/server/lib/plans';
 import { PROJECT_NAME_REGEX } from '~~/server/lib/constants';
 import { randomName } from '@scaleway/use-random-name';
@@ -9,10 +9,21 @@ export async function requireProject(event: H3Event) {
   const db = await useDB();
   const user = await requireUser(event);
 
+  let projectIdSql: SQL | undefined = undefined;
+
+  const projectId = getRouterParam(event, 'projectId');
+  if (projectId) {
+    projectIdSql = eq(projectSchema.id, projectId);
+  }
+
   const projectName = getRouterParam(event, 'projectName');
-  if (!projectName) {
+  if (projectName) {
+    projectIdSql = eq(projectSchema.name, projectName);
+  }
+
+  if (!projectIdSql) {
     throw createError({
-      message: 'Missing projectName',
+      message: 'Missing projectId parameter',
       status: 400,
     });
   }
@@ -24,10 +35,7 @@ export async function requireProject(event: H3Event) {
       .leftJoin(organizationSchema, eq(projectSchema.organizationId, organizationSchema.id))
       .leftJoin(organizationMemberSchema, eq(projectSchema.organizationId, organizationMemberSchema.organizationId))
       .where(
-        and(
-          eq(projectSchema.name, projectName),
-          or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id)),
-        ),
+        and(projectIdSql, or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id))),
       )
       .execute(),
   );

@@ -54,7 +54,10 @@ import type { Deployment } from '~~/server/db/schema';
 const { project } = useProject();
 
 const { data: deployments, refresh: refreshDeployments } = await useFetch(
-  () => `/api/projects/${project.value.name}/deployments`,
+  () => `/api/projects/${project.value.id}/deployments`,
+  {
+    transform: data => data.deployments,
+  },
 );
 
 const promotingDeploymentId = ref<string>();
@@ -64,7 +67,7 @@ async function promoteDeployment(deployment: Deployment) {
 
   promotingDeploymentId.value = deployment.id;
   try {
-    await $fetch(`/api/projects/${project.value.name}/deployments/${deployment.id}/deploy`, {
+    await $fetch(`/api/projects/${project.value.id}/deployments/${deployment.id}/deploy`, {
       method: 'POST',
       body: {
         isProduction: true,
@@ -72,8 +75,6 @@ async function promoteDeployment(deployment: Deployment) {
     });
 
     await refreshDeployments();
-  } catch (error) {
-    throw error;
   } finally {
     promotingDeploymentId.value = undefined;
   }
@@ -86,13 +87,11 @@ async function deleteDeployment(deployment: Deployment) {
 
   deletingDeploymentId.value = deployment.id;
   try {
-    await $fetch(`/api/projects/${project.value.name}/deployments/${deployment.id}`, {
+    await $fetch(`/api/projects/${project.value.id}/deployments/${deployment.id}`, {
       method: 'DELETE',
     });
 
     await refreshDeployments();
-  } catch (error) {
-    throw error;
   } finally {
     deletingDeploymentId.value = undefined;
   }

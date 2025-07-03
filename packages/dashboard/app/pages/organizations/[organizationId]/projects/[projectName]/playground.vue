@@ -87,7 +87,7 @@ watch(code, () => {
   changed.value = true;
 });
 
-const { data: codeFromDB } = await useFetch(() => `/api/projects/${project.value.name}/code`);
+const { data: codeFromDB } = await useFetch(() => `/api/projects/${project.value.id}/code`);
 watch(
   codeFromDB,
   _code => {
@@ -115,7 +115,7 @@ async function saveAndDeploy() {
 
   try {
     // create deployment
-    const deployment = await $fetch(`/api/projects/${project.value.name}/deployments`, {
+    const deployment = await $fetch(`/api/projects/${project.value.id}/deployments`, {
       method: 'POST',
       body: {
         projectId: project.value.id,
@@ -137,7 +137,7 @@ async function saveAndDeploy() {
     });
 
     // deploy
-    await $fetch(`/api/projects/${project.value.name}/deployments/${deployment.deploymentId}/deploy`, {
+    await $fetch(`/api/projects/${project.value.id}/deployments/${deployment.deploymentId}/deploy`, {
       method: 'POST',
       body: { isProduction: true },
     });
@@ -145,8 +145,6 @@ async function saveAndDeploy() {
     reloadIframe();
 
     changed.value = false;
-  } catch (e) {
-    throw e;
   } finally {
     isDeploying.value = false;
   }

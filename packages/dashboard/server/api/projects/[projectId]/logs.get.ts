@@ -24,5 +24,5 @@ LIMIT 100`,
     )
     .toPromise()) as { level: string; message: string; timestamp: string }[];
 
-  return result;
+  return { logs: result };
 });

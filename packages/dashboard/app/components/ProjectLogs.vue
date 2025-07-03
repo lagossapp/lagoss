@@ -95,19 +95,26 @@ const timeFrames = [
   },
 ];
 
-// TODO: auto update logs
-// TODO: auto scroll to bottom
-const { data: logs, refresh: refreshLogs } = await useFetch(() => `/api/projects/${props.project.name}/logs`, {
+const { data: logs, refresh: refreshLogs } = await useFetch(() => `/api/projects/${props.project.id}/logs`, {
   query: computed(() => ({
     level: level.value,
     timeframe: timeframe.value,
   })),
+  transform: data => data.logs,
 });
 
+let logInterval: ReturnType<typeof window.setInterval> | null = null;
 onMounted(() => {
-  setInterval(() => {
+  logInterval = setInterval(() => {
     refreshLogs();
-  }, 1000 * 15);
+  }, 1000 * 5); // Refresh logs every 5 seconds
+});
+
+onBeforeUnmount(() => {
+  if (logInterval) {
+    clearInterval(logInterval);
+    logInterval = null;
+  }
 });
 
 const logsView = ref<HTMLDivElement>();

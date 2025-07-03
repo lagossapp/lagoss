@@ -28,5 +28,5 @@ export default defineEventHandler(async event => {
     .execute();
 
   // return projects.map(project => ({ ...project.Function, domains: [project.Domain] }));
-  return projects.map(project => project.Function);
+  return { projects: projects.map(project => project.Function) };
 });

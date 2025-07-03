@@ -1,5 +1,5 @@
 import type { H3Event, SessionConfig } from 'h3';
-import { type User, userSchema } from '~~/server/db/schema';
+import { tokenSchema, type User, userSchema } from '~~/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 const sessionConfig: SessionConfig = useRuntimeConfig().auth || {};
@@ -15,6 +15,27 @@ export async function useAuthSession(event: H3Event) {
 
 export async function getUser(event: H3Event): Promise<User | undefined> {
   const db = await useDB();
+
+  const token = getHeader(event, 'x-lagoss-token');
+  if (token) {
+    const user = await getFirst(
+      db
+        .select()
+        .from(userSchema)
+        .leftJoin(tokenSchema, eq(userSchema.id, tokenSchema.userId))
+        .where(eq(tokenSchema.value, token))
+        .execute(),
+    );
+    if (!user?.User) {
+      throw createError({
+        statusCode: 401,
+        statusMessage: 'Invalid token',
+      });
+    }
+
+    return user.User;
+  }
+
   const session = await useAuthSession(event);
   if (!session.data?.userId) {
     return undefined;
@@ -33,38 +54,4 @@ export async function requireUser(event: H3Event): Promise<User> {
   }
 
   return user;
-}
-
-export async function getSessionHeader(event: H3Event) {
-  const config = useRuntimeConfig();
-
-  const sessionName = config.auth.name || 'h3';
-
-  let sealedSession: string | undefined;
-
-  // Try header first
-  if (config.sessionHeader !== false) {
-    const headerName =
-      typeof config.sessionHeader === 'string'
-        ? config.sessionHeader.toLowerCase()
-        : `x-${sessionName.toLowerCase()}-session`;
-    const headerValue = event.node.req.headers[headerName];
-    if (typeof headerValue === 'string') {
-      sealedSession = headerValue;
-    }
-  }
-
-  // Fallback to cookies
-  if (!sealedSession) {
-    sealedSession = getCookie(event, sessionName);
-  }
-
-  if (!sealedSession) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: 'Unauthorized',
-    });
-  }
-
-  return { [`x-${sessionName.toLowerCase()}-session`]: sealedSession };
 }

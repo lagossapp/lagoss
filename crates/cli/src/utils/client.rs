@@ -112,4 +112,57 @@ impl TrpcClient {
             },
         }
     }
+
+    async fn request<T, R>(&self, method: &str, url: &str, body: Option<T>) -> Result<R>
+    where
+        T: Serialize,
+        R: DeserializeOwned,
+    {
+        let mut builder = self
+            .client
+            .request(
+                method.parse()?,
+                format!("{}{}", self.config.site_url.clone(), url),
+            )
+            .header("content-type", "application/json")
+            .header("x-lagoss-token", self.config.token.as_ref().unwrap());
+
+        if let Some(body) = body {
+            let body: String = serde_json::to_string(&body)?;
+            builder = builder.body(body);
+        }
+
+        let response = builder.send().await?;
+        let status = response.status();
+        let body = response.text().await?;
+
+        match status.is_success() {
+            true => match serde_json::from_str::<R>(&body) {
+                Ok(response) => Ok(response),
+                // TODO: drop TrpcErrorResult
+                Err(_) => match serde_json::from_str::<TrpcErrorResult>(&body) {
+                    Ok(TrpcErrorResult { error }) => {
+                        Err(anyhow!("Error from API: {}", error.message))
+                    }
+                    Err(_) => Err(anyhow!("Could not parse error from response: {}", body)),
+                },
+            },
+            false => Err(anyhow!("Request failed with status: {}", status)),
+        }
+    }
+
+    pub async fn get<R>(&self, url: &str) -> Result<R>
+    where
+        R: DeserializeOwned,
+    {
+        self.request("GET", url, None::<()>).await
+    }
+
+    // pub async fn post<T, R>(&self, url: &str, body: T) -> Result<R>
+    // where
+    //     T: Serialize,
+    //     R: DeserializeOwned,
+    // {
+    //     self.request("POST", url, Some(body)).await
+    // }
 }

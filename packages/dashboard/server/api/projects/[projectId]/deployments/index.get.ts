@@ -11,5 +11,10 @@ export default defineEventHandler(async event => {
     .where(eq(deploymentSchema.projectId, project.id))
     .execute();
 
-  return deployments;
+  return {
+    deployments: deployments.map(deployment => ({
+      ...deployment,
+      isProduction: deployment.isProduction === 1,
+    })),
+  };
 });

@@ -115,7 +115,9 @@ const isDark = computed({
 
 const { user, logout, selectOrganization } = await useAuth();
 
-const { data: organizations } = await useFetch('/api/organizations');
+const { data: organizations } = await useFetch('/api/organizations', {
+  transform: data => data.organizations,
+});
 
 const selectedOrganization = computed(() => {
   const organizationId = route.params.organizationId;

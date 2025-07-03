@@ -74,7 +74,9 @@ const organizationId = computed(() => route.params.organizationId as string);
 
 const { data: organization } = await useFetch(() => `/api/organizations/${organizationId.value}`);
 
-const { data: projects } = await useFetch(() => `/api/organizations/${organizationId.value}/projects`);
+const { data: projects } = await useFetch(() => `/api/organizations/${organizationId.value}/projects`, {
+  transform: data => data.projects,
+});
 
 const creatingProject = ref<'playground' | 'normal'>();
 async function createProject(playground = false) {
@@ -93,8 +95,6 @@ async function createProject(playground = false) {
     }
 
     await router.push(`/organizations/${project.organizationId}/projects/${project.name}`);
-  } catch (error) {
-    throw error;
   } finally {
     creatingProject.value = undefined;
   }

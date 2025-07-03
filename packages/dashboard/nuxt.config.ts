@@ -48,6 +48,13 @@ export default defineNuxtConfig({
     },
   },
 
+  icon: {
+    serverBundle: {
+      collections: ['heroicons', 'ion'],
+      externalizeIconsJson: true,
+    },
+  },
+
   future: {
     compatibilityVersion: 4,
   },
