@@ -55,9 +55,6 @@ const { project } = useProject();
 
 const { data: deployments, refresh: refreshDeployments } = await useFetch(
   () => `/api/projects/${project.value.id}/deployments`,
-  {
-    transform: data => data.deployments,
-  },
 );
 
 const promotingDeploymentId = ref<string>();

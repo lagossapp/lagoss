@@ -100,7 +100,6 @@ const { data: logs, refresh: refreshLogs } = await useFetch(() => `/api/projects
     level: level.value,
     timeframe: timeframe.value,
   })),
-  transform: data => data.logs,
 });
 
 let logInterval: ReturnType<typeof window.setInterval> | null = null;

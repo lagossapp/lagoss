@@ -33,7 +33,5 @@
 </template>
 
 <script lang="ts" setup>
-const { data: _organizations } = await useFetch(`/api/organizations`, {
-  transform: data => data.organizations,
-});
+const { data: organizations } = await useFetch(`/api/organizations`);
 </script>

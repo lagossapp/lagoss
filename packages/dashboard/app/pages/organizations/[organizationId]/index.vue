@@ -74,9 +74,7 @@ const organizationId = computed(() => route.params.organizationId as string);
 
 const { data: organization } = await useFetch(() => `/api/organizations/${organizationId.value}`);
 
-const { data: projects } = await useFetch(() => `/api/organizations/${organizationId.value}/projects`, {
-  transform: data => data.projects,
-});
+const { data: projects } = await useFetch(() => `/api/organizations/${organizationId.value}/projects`);
 
 const creatingProject = ref<'playground' | 'normal'>();
 async function createProject(playground = false) {
