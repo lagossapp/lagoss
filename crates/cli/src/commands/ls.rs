@@ -1,4 +1,4 @@
-use crate::utils::{get_root, print_progress, Config, FunctionConfig, TrpcClient};
+use crate::utils::{get_root, print_progress, Config, FunctionConfig, ApiClient};
 use anyhow::{anyhow, Result};
 use dialoguer::console::style;
 use serde::Deserialize;
@@ -27,7 +27,7 @@ pub async fn ls(directory: Option<PathBuf>) -> Result<()> {
     let project_config = FunctionConfig::load(&root, None, None)?;
     let end_progress = print_progress("Fetching Deployments");
 
-    let deployments = TrpcClient::new(config)
+    let deployments = ApiClient::new(config)
         .get::<DeploymentsResponse>(&format!(
             "/api/projects/{}/deployments",
             project_config.function_id

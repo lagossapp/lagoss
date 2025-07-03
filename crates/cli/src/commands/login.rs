@@ -1,4 +1,4 @@
-use crate::utils::{get_theme, print_progress, Config, TrpcClient};
+use crate::utils::{get_theme, print_progress, Config, ApiClient};
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm, Password};
 use serde::{Deserialize, Serialize};
@@ -57,7 +57,7 @@ pub async fn login() -> Result<()> {
 
     config.set_token(Some(token.clone()));
 
-    let client = TrpcClient::new(config.clone());
+    let client = ApiClient::new(config.clone());
     let request = CliRequest { code: token };
 
     match client

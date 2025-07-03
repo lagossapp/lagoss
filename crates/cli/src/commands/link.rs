@@ -1,6 +1,6 @@
 use crate::{
     commands::deploy::{OrganizationsResponse, ProjectsResponse},
-    utils::{get_root, get_theme, Config, FunctionConfig, TrpcClient},
+    utils::{get_root, get_theme, ApiClient, Config, FunctionConfig},
 };
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Select};
@@ -21,7 +21,7 @@ pub async fn link(directory: Option<PathBuf>) -> Result<()> {
     match !project_config.function_id.is_empty() {
         true => Err(anyhow!("This directory is already linked to a project")),
         false => {
-            let client = TrpcClient::new(config);
+            let client = ApiClient::new(config);
 
             let organizations = client
                 .get::<OrganizationsResponse>("/api/organizations")

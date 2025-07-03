@@ -1,7 +1,7 @@
 use super::{
     validate_assets_dir, validate_code_file, Config, MAX_ASSET_SIZE_MB, MAX_FUNCTION_SIZE_MB,
 };
-use crate::utils::{get_theme, print_progress, TrpcClient};
+use crate::utils::{get_theme, print_progress, ApiClient};
 use anyhow::{anyhow, Result};
 use dialoguer::console::style;
 use dialoguer::{Confirm, Input};
@@ -400,7 +400,7 @@ pub async fn create_deployment(
 
     let end_progress = print_progress("Creating deployment");
 
-    let client = TrpcClient::new(config);
+    let client = ApiClient::new(config);
 
     let client = Arc::new(client);
 
@@ -483,7 +483,7 @@ pub async fn create_deployment(
     Ok(())
 }
 
-async fn upload_asset(trpc_client: Arc<TrpcClient>, asset: Vec<u8>, url: String) -> Result<()> {
+async fn upload_asset(trpc_client: Arc<ApiClient>, asset: Vec<u8>, url: String) -> Result<()> {
     trpc_client
         .client
         .request("PUT".parse()?, url)

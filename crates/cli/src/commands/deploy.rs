@@ -1,5 +1,5 @@
 use crate::utils::{
-    create_deployment, get_theme, print_progress, resolve_path, Config, TrpcClient,
+    create_deployment, get_theme, print_progress, resolve_path, Config, ApiClient,
 };
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm, Input, Select};
@@ -73,7 +73,7 @@ pub async fn deploy(
         );
         println!();
 
-        let client = TrpcClient::new(config.clone());
+        let client = ApiClient::new(config.clone());
 
         let organizations = client
             .get::<OrganizationsResponse>("/api/organizations")

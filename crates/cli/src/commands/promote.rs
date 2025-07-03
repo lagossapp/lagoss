@@ -1,4 +1,4 @@
-use crate::utils::{get_root, get_theme, print_progress, Config, FunctionConfig, TrpcClient};
+use crate::utils::{get_root, get_theme, print_progress, ApiClient, Config, FunctionConfig};
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm};
 use serde::Deserialize;
@@ -30,7 +30,7 @@ pub async fn promote(deployment_id: String, directory: Option<PathBuf>) -> Resul
         true => {
             println!();
             let end_progress = print_progress("Promoting Deployment");
-            let res = TrpcClient::new(config)
+            let res = ApiClient::new(config)
                 .post::<(), PromoteDeploymentResponse>(
                     &format!(
                         "/api/projects/{}/deployments/{}/promote",
