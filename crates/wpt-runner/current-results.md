@@ -187,17 +187,17 @@ Running ../../tools/wpt/fetch/api/request/request-consume.any.js
 TEST DONE 0 Consume String request's body as text
 TEST DONE 0 Consume String request's body as blob
 TEST DONE 0 Consume String request's body as arrayBuffer
-TEST DONE 1 Consume String request's body as bytes
+TEST DONE 0 Consume String request's body as bytes
 TEST DONE 0 Consume String request's body as JSON
 TEST DONE 0 Consume ArrayBuffer request's body as text
 TEST DONE 0 Consume ArrayBuffer request's body as blob
 TEST DONE 0 Consume ArrayBuffer request's body as arrayBuffer
-TEST DONE 1 Consume ArrayBuffer request's body as bytes
+TEST DONE 0 Consume ArrayBuffer request's body as bytes
 TEST DONE 0 Consume ArrayBuffer request's body as JSON
 TEST DONE 0 Consume Uint8Array request's body as text
 TEST DONE 0 Consume Uint8Array request's body as blob
 TEST DONE 0 Consume Uint8Array request's body as arrayBuffer
-TEST DONE 1 Consume Uint8Array request's body as bytes
+TEST DONE 0 Consume Uint8Array request's body as bytes
 TEST DONE 0 Consume Uint8Array request's body as JSON
 TEST DONE 1 Consume Int8Array request's body as text
 TEST DONE 1 Consume Int8Array request's body as blob
@@ -219,7 +219,7 @@ TEST DONE 0 Consume blob response's body as blob
 TEST DONE 0 Consume blob response's body as text
 TEST DONE 0 Consume blob response's body as json
 TEST DONE 0 Consume blob response's body as arrayBuffer
-TEST DONE 1 Consume blob response's body as bytes
+TEST DONE 0 Consume blob response's body as bytes
 TEST DONE 0 Consume blob response's body as blob (empty blob as input)
 TEST DONE 0 Consume JSON from text: '"null"'
 TEST DONE 0 Consume JSON from text: '"1"'
@@ -649,23 +649,23 @@ TEST DONE 1 URL.searchParams and URL.search setters, update propagation
 Skipping ../../tools/wpt/url/url-setters-stripping.any.js
 Skipping ../../tools/wpt/url/url-setters.any.js
 Running ../../tools/wpt/url/url-statics-canparse.any.js
-TEST DONE 1 URL.canParse(undefined, undefined)
-TEST DONE 1 URL.canParse(aaa:b, undefined)
-TEST DONE 1 URL.canParse(undefined, aaa:b)
-TEST DONE 1 URL.canParse(undefined, https://test:test/)
-TEST DONE 1 URL.canParse(aaa:/b, undefined)
+TEST DONE 0 URL.canParse(undefined, undefined)
+TEST DONE 0 URL.canParse(aaa:b, undefined)
+TEST DONE 0 URL.canParse(undefined, aaa:b)
+TEST DONE 0 URL.canParse(undefined, https://test:test/)
+TEST DONE 0 URL.canParse(aaa:/b, undefined)
 TEST DONE 1 URL.canParse(undefined, aaa:/b)
 TEST DONE 1 URL.canParse(https://test:test, undefined)
-TEST DONE 1 URL.canParse(a, https://b/)
+TEST DONE 0 URL.canParse(a, https://b/)
 Running ../../tools/wpt/url/url-statics-parse.any.js
 TEST DONE 1 URL.parse(undefined, undefined)
-TEST DONE 1 URL.parse(aaa:b, undefined)
+TEST DONE 0 URL.parse(aaa:b, undefined)
 TEST DONE 1 URL.parse(undefined, aaa:b)
-TEST DONE 1 URL.parse(aaa:/b, undefined)
+TEST DONE 0 URL.parse(aaa:/b, undefined)
 TEST DONE 1 URL.parse(undefined, aaa:/b)
 TEST DONE 1 URL.parse(https://test:test, undefined)
-TEST DONE 1 URL.parse(a, https://b/)
-TEST DONE 1 URL.parse() should return a unique object
+TEST DONE 0 URL.parse(a, https://b/)
+TEST DONE 0 URL.parse() should return a unique object
 Running ../../tools/wpt/url/url-tojson.any.js
 TEST DONE 0 Untitled
 Running ../../tools/wpt/url/urlencoded-parser.any.js
@@ -1099,11 +1099,11 @@ TEST DONE 0 Blob.arrayBuffer() non-ascii input
 TEST DONE 0 Blob.arrayBuffer() non-unicode input
 TEST DONE 0 Blob.arrayBuffer() concurrent reads
 Running ../../tools/wpt/FileAPI/blob/Blob-bytes.any.js
-TEST DONE 1 Blob.bytes()
-TEST DONE 1 Blob.bytes() empty Blob data
-TEST DONE 1 Blob.bytes() non-ascii input
-TEST DONE 1 Blob.bytes() non-unicode input
-TEST DONE 1 Blob.bytes() concurrent reads
+TEST DONE 0 Blob.bytes()
+TEST DONE 0 Blob.bytes() empty Blob data
+TEST DONE 0 Blob.bytes() non-ascii input
+TEST DONE 0 Blob.bytes() non-unicode input
+TEST DONE 0 Blob.bytes() concurrent reads
 Running ../../tools/wpt/FileAPI/blob/Blob-constructor.any.js
 TEST DONE 1 Blob interface object
 TEST DONE 1 Blob constructor with no arguments
@@ -1488,5 +1488,5 @@ Running ../../tools/wpt/urlpattern/urlpattern-hasregexpgroups.any.js
 Running ../../tools/wpt/urlpattern/urlpattern.any.js
 Running ../../tools/wpt/urlpattern/urlpattern.https.any.js
 
-1351 tests, 667 passed, 679 failed (5 not completed)
- -> 49% conformance
+1351 tests, 686 passed, 660 failed (5 not completed)
+ -> 50% conformance
