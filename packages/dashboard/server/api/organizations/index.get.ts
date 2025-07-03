@@ -14,5 +14,5 @@ export default defineEventHandler(async event => {
       .execute()
   ).map(org => org.Organization);
 
-  return { organizations };
+  return organizations;
 });

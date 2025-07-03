@@ -1,5 +1,5 @@
 use crate::{
-    commands::deploy::{FunctionsResponse, OrganizationsResponse},
+    commands::deploy::{OrganizationsResponse, ProjectsResponse},
     utils::{get_root, get_theme, Config, FunctionConfig, TrpcClient},
 };
 use anyhow::{anyhow, Result};
@@ -16,18 +16,16 @@ pub async fn link(directory: Option<PathBuf>) -> Result<()> {
     }
 
     let root = get_root(directory);
-    let function_config = FunctionConfig::load(&root, None, None)?;
+    let project_config = FunctionConfig::load(&root, None, None)?;
 
-    match !function_config.function_id.is_empty() {
-        true => Err(anyhow!("This directory is already linked to a Function")),
+    match !project_config.function_id.is_empty() {
+        true => Err(anyhow!("This directory is already linked to a project")),
         false => {
-            let mut trpc_client = TrpcClient::new(config);
-            trpc_client.set_organization_id(function_config.organization_id.clone());
+            let client = TrpcClient::new(config);
 
-            let response = trpc_client
-                .query::<(), OrganizationsResponse>("organizationsList", None)
+            let organizations = client
+                .get::<OrganizationsResponse>("/api/organizations")
                 .await?;
-            let organizations = response.result.data;
 
             let index = Select::with_theme(get_theme())
                 .items(&organizations)
@@ -36,25 +34,27 @@ pub async fn link(directory: Option<PathBuf>) -> Result<()> {
                 .interact()?;
             let organization = &organizations[index];
 
-            let response = trpc_client
-                .query::<(), FunctionsResponse>("functionsList", None)
+            let projects = client
+                .get::<ProjectsResponse>(&format!(
+                    "/api/organizations/{}/projects",
+                    organization.id
+                ))
                 .await?;
-            let functions = response.result.data;
 
             let index = Select::with_theme(get_theme())
-                .items(&functions)
+                .items(&projects)
                 .default(0)
-                .with_prompt("Which Function would you like to link?")
+                .with_prompt("Which project would you like to link?")
                 .interact()?;
-            let function = &functions[index];
+            let project = &projects[index];
 
-            let mut function_config = FunctionConfig::load(&root, None, None)?;
-            function_config.function_id.clone_from(&function.id);
-            function_config.organization_id.clone_from(&organization.id);
-            function_config.write(&root)?;
+            let mut project_config = FunctionConfig::load(&root, None, None)?;
+            project_config.function_id.clone_from(&project.id);
+            project_config.organization_id.clone_from(&organization.id);
+            project_config.write(&root)?;
 
             println!();
-            println!(" {} Function linked!", style("◼").magenta());
+            println!(" {} Project linked!", style("◼").magenta());
 
             Ok(())
         }

@@ -4,10 +4,7 @@ use dialoguer::console::style;
 use serde::Deserialize;
 use std::path::PathBuf;
 
-#[derive(Deserialize, Debug)]
-struct DeploymentsResponse {
-    deployments: Vec<Deployment>,
-}
+type DeploymentsResponse = Vec<Deployment>;
 
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -30,7 +27,7 @@ pub async fn ls(directory: Option<PathBuf>) -> Result<()> {
     let project_config = FunctionConfig::load(&root, None, None)?;
     let end_progress = print_progress("Fetching Deployments");
 
-    let project = TrpcClient::new(config)
+    let deployments = TrpcClient::new(config)
         .get::<DeploymentsResponse>(&format!(
             "/api/projects/{}/deployments",
             project_config.function_id
@@ -41,8 +38,6 @@ pub async fn ls(directory: Option<PathBuf>) -> Result<()> {
     println!();
     println!(" {} List of Deployments:", style("◼").magenta());
     println!();
-
-    let deployments = project.deployments;
 
     if deployments.is_empty() {
         println!("{} No deployments found", style("✕").red());

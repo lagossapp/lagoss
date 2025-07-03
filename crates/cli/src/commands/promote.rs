@@ -1,15 +1,8 @@
 use crate::utils::{get_root, get_theme, print_progress, Config, FunctionConfig, TrpcClient};
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use std::path::PathBuf;
-
-#[derive(Serialize, Debug)]
-#[serde(rename_all = "camelCase")]
-struct PromoteDeploymentRequest {
-    function_id: String,
-    deployment_id: String,
-}
 
 #[derive(Deserialize, Debug)]
 struct PromoteDeploymentResponse {
@@ -27,7 +20,7 @@ pub async fn promote(deployment_id: String, directory: Option<PathBuf>) -> Resul
     }
 
     let root = get_root(directory);
-    let function_config = FunctionConfig::load(&root, None, None)?;
+    let project_config = FunctionConfig::load(&root, None, None)?;
 
     match Confirm::with_theme(get_theme())
         .with_prompt("Do you really want to promote this Deployment to production?")
@@ -37,17 +30,19 @@ pub async fn promote(deployment_id: String, directory: Option<PathBuf>) -> Resul
         true => {
             println!();
             let end_progress = print_progress("Promoting Deployment");
-            TrpcClient::new(config)
-                .set_organization_id(function_config.organization_id.clone())
-                .mutation::<PromoteDeploymentRequest, PromoteDeploymentResponse>(
-                    "deploymentPromote",
-                    PromoteDeploymentRequest {
-                        function_id: function_config.function_id,
-                        deployment_id,
-                    },
+            let res = TrpcClient::new(config)
+                .post::<(), PromoteDeploymentResponse>(
+                    &format!(
+                        "/api/projects/{}/deployments/{}/promote",
+                        project_config.function_id, deployment_id
+                    ),
+                    (),
                 )
                 .await?;
             end_progress();
+            if !res.ok {
+                return Err(anyhow!("Failed to promote deployment"));
+            }
 
             println!();
             println!(

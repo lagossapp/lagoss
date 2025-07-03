@@ -30,7 +30,13 @@ pub async fn login() -> Result<()> {
     println!();
 
     let end_progress = print_progress("Opening browser");
-    let url = config.site_url.clone() + "/cli";
+
+    // TODO: find open port for webserver
+    let callback = "http://localhost:1234/cli";
+
+    let url = config.site_url.clone() + "/cli?callback=" + callback;
+
+    // TODO: open webserver for callback
 
     if webbrowser::open(&url).is_err() {
         println!("{} Could not open browser", style("✕").red());
@@ -45,21 +51,21 @@ pub async fn login() -> Result<()> {
     );
     println!();
 
-    let code = Password::with_theme(get_theme())
-        .with_prompt("Paste the verification code from your browser here")
+    let token = Password::with_theme(get_theme())
+        .with_prompt("Paste the token from your browser here")
         .interact()?;
 
-    config.set_token(Some(code.clone()));
+    config.set_token(Some(token.clone()));
 
     let client = TrpcClient::new(config.clone());
-    let request = CliRequest { code };
+    let request = CliRequest { code: token };
 
     match client
-        .mutation::<CliRequest, CliResponse>("tokensAuthenticate", request)
+        .post::<CliRequest, CliResponse>("tokensAuthenticate", request)
         .await
     {
         Ok(response) => {
-            config.set_token(Some(response.result.data.token));
+            config.set_token(Some(response.token));
             config.save()?;
 
             println!();

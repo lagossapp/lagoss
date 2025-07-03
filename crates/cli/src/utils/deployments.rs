@@ -218,7 +218,7 @@ pub fn resolve_path(
 
 pub fn get_root(root: Option<PathBuf>) -> PathBuf {
     match root {
-        Some(path) => path,
+        Some(path) => path, // TODO: find closes parent with .lagoss
         None => std::env::current_dir().unwrap(),
     }
 }
@@ -381,8 +381,6 @@ struct CreateDeploymentResponse {
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 struct DeployDeploymentRequest {
-    function_id: String,
-    deployment_id: String,
     is_production: bool,
 }
 
@@ -400,16 +398,19 @@ pub async fn create_deployment(
 ) -> Result<()> {
     let (index, assets) = bundle_function(function_config, root, prod_bundle)?;
 
-    let end_progress = print_progress("Creating Deployment");
+    let end_progress = print_progress("Creating deployment");
 
-    let mut trpc_client = TrpcClient::new(config);
-    trpc_client.set_organization_id(function_config.organization_id.clone());
+    let client = TrpcClient::new(config);
 
-    let trpc_client = Arc::new(trpc_client);
+    let client = Arc::new(client);
 
-    let response = trpc_client
-        .mutation::<CreateDeploymentRequest, CreateDeploymentResponse>(
-            "deploymentCreate",
+    let CreateDeploymentResponse {
+        deployment_id,
+        code_url,
+        assets_urls,
+    } = client
+        .post::<CreateDeploymentRequest, CreateDeploymentResponse>(
+            &format!("/api/projects/{}/deployments", function_config.function_id),
             CreateDeploymentRequest {
                 function_id: function_config.function_id.clone(),
                 function_size: index.len(),
@@ -426,15 +427,9 @@ pub async fn create_deployment(
 
     end_progress();
 
-    let CreateDeploymentResponse {
-        deployment_id,
-        code_url,
-        assets_urls,
-    } = response.result.data;
-
     let end_progress = print_progress("Uploading files");
 
-    trpc_client
+    client
         .client
         .request("PUT".parse()?, code_url)
         .body(index)
@@ -447,7 +442,7 @@ pub async fn create_deployment(
             .get(&asset)
             .unwrap_or_else(|| panic!("Couldn't find asset {asset}"));
 
-        join_set.spawn(upload_asset(Arc::clone(&trpc_client), asset.clone(), url));
+        join_set.spawn(upload_asset(Arc::clone(&client), asset.clone(), url));
     }
 
     while let Some(res) = join_set.join_next().await {
@@ -456,14 +451,13 @@ pub async fn create_deployment(
 
     end_progress();
 
-    let response = trpc_client
-        .mutation::<DeployDeploymentRequest, DeployDeploymentResponse>(
-            "deploymentDeploy",
-            DeployDeploymentRequest {
-                function_id: function_config.function_id.clone(),
-                deployment_id,
-                is_production,
-            },
+    let deployment = client
+        .post::<DeployDeploymentRequest, DeployDeploymentResponse>(
+            &format!(
+                "/api/projects/{}/deployments/{}",
+                function_config.function_id, deployment_id
+            ),
+            DeployDeploymentRequest { is_production },
         )
         .await?;
 
@@ -483,7 +477,7 @@ pub async fn create_deployment(
     println!(
         "{} {}",
         style("›").black().bright(),
-        style(response.result.data.url).blue().underlined()
+        style(deployment.url).blue().underlined()
     );
 
     Ok(())
