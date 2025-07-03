@@ -7,6 +7,7 @@ TEST DONE 0 Headers iterator preserves set-cookie ordering
 TEST DONE 0 Headers iterator preserves per header ordering, but sorts keys alphabetically
 TEST DONE 0 Headers iterator preserves per header ordering, but sorts keys alphabetically (and ignores value ordering)
 TEST DONE 1 Headers iterator is correctly updated with set-cookie changes
+TEST DONE 1 Headers iterator is correctly updated with set-cookie changes #2
 TEST DONE 0 Headers.prototype.has works for set-cookie
 TEST DONE 0 Headers.prototype.append works for set-cookie
 TEST DONE 0 Headers.prototype.set works for set-cookie
@@ -19,6 +20,8 @@ TEST DONE 0 Headers.prototype.getSetCookie with an empty header
 TEST DONE 0 Headers.prototype.getSetCookie with two equal headers
 TEST DONE 0 Headers.prototype.getSetCookie ignores set-cookie2 headers
 TEST DONE 0 Headers.prototype.getSetCookie preserves header ordering
+TEST DONE 1 Adding Set-Cookie headers normalizes their value
+TEST DONE 1 Adding invalid Set-Cookie headers throws
 TEST DONE 1 Set-Cookie is a forbidden response header
 Skipping ../../tools/wpt/fetch/api/headers/header-values-normalize.any.js
 Running ../../tools/wpt/fetch/api/headers/header-values.any.js
@@ -124,6 +127,7 @@ TEST DONE 0 Headers has values method
 Running ../../tools/wpt/fetch/api/body/formdata.any.js
 TEST DONE 0 Consume empty response.formData() as FormData
 TEST DONE 0 Consume empty request.formData() as FormData
+TEST DONE 1 Consume multipart/form-data headers case-insensitively
 Running ../../tools/wpt/fetch/api/body/mime-type.any.js
 TEST DONE 0 : overriding explicit Content-Type
 TEST DONE 0 : overriding explicit Content-Type
@@ -131,6 +135,20 @@ TEST DONE 0 : removing implicit Content-Type
 TEST DONE 0 : removing implicit Content-Type
 TEST DONE 0 : setting missing Content-Type
 TEST DONE 0 : setting missing Content-Type
+TEST DONE 0 : MIME type for Blob from empty body
+TEST DONE 0 : MIME type for Blob from empty body
+TEST DONE 1 : MIME type for Blob from empty body with Content-Type
+TEST DONE 1 : MIME type for Blob from empty body with Content-Type
+TEST DONE 0 : MIME type for Blob
+TEST DONE 0 : MIME type for Blob
+TEST DONE 1 : MIME type for Blob with non-empty type
+TEST DONE 1 : MIME type for Blob with non-empty type
+TEST DONE 1 : Extract a MIME type with clone
+TEST DONE 1 : Extract a MIME type with clone
+TEST DONE 0 : Content-Type in headers wins Blob"s type
+TEST DONE 0 : Content-Type in headers wins Blob"s type
+TEST DONE 0 : setting missing Content-Type in headers and it wins Blob"s type
+TEST DONE 0 : setting missing Content-Type in headers and it wins Blob"s type
 Running ../../tools/wpt/fetch/api/request/forbidden-method.any.js
 TEST DONE 1 Request() with a forbidden method CONNECT must throw.
 TEST DONE 1 Request() with a forbidden method TRACE must throw.
@@ -139,6 +157,7 @@ TEST DONE 1 Request() with a forbidden method connect must throw.
 TEST DONE 1 Request() with a forbidden method trace must throw.
 TEST DONE 1 Request() with a forbidden method track must throw.
 Running ../../tools/wpt/fetch/api/request/request-bad-port.any.js
+TEST DONE 1 Request on bad port 1 should throw TypeError.
 Skipping ../../tools/wpt/fetch/api/request/request-cache-default-conditional.any.js
 Skipping ../../tools/wpt/fetch/api/request/request-cache-default.any.js
 Skipping ../../tools/wpt/fetch/api/request/request-cache-force-cache.any.js
@@ -146,6 +165,9 @@ Skipping ../../tools/wpt/fetch/api/request/request-cache-no-cache.any.js
 Skipping ../../tools/wpt/fetch/api/request/request-cache-no-store.any.js
 Skipping ../../tools/wpt/fetch/api/request/request-cache-only-if-cached.any.js
 Skipping ../../tools/wpt/fetch/api/request/request-cache-reload.any.js
+Running ../../tools/wpt/fetch/api/request/request-constructor-init-body-override.any.js
+TEST DONE 1 Check that the body of a new request can be overridden when created from an existing Request object
+TEST DONE 0 Check that the body of a new request can be duplicated from an existing Request object
 Running ../../tools/wpt/fetch/api/request/request-consume-empty.any.js
 TEST DONE 0 Consume request's body as text
 TEST DONE 0 Consume request's body as blob
@@ -165,32 +187,39 @@ Running ../../tools/wpt/fetch/api/request/request-consume.any.js
 TEST DONE 0 Consume String request's body as text
 TEST DONE 0 Consume String request's body as blob
 TEST DONE 0 Consume String request's body as arrayBuffer
+TEST DONE 0 Consume String request's body as bytes
 TEST DONE 0 Consume String request's body as JSON
 TEST DONE 0 Consume ArrayBuffer request's body as text
 TEST DONE 0 Consume ArrayBuffer request's body as blob
 TEST DONE 0 Consume ArrayBuffer request's body as arrayBuffer
+TEST DONE 0 Consume ArrayBuffer request's body as bytes
 TEST DONE 0 Consume ArrayBuffer request's body as JSON
 TEST DONE 0 Consume Uint8Array request's body as text
 TEST DONE 0 Consume Uint8Array request's body as blob
 TEST DONE 0 Consume Uint8Array request's body as arrayBuffer
+TEST DONE 0 Consume Uint8Array request's body as bytes
 TEST DONE 0 Consume Uint8Array request's body as JSON
 TEST DONE 1 Consume Int8Array request's body as text
 TEST DONE 1 Consume Int8Array request's body as blob
 TEST DONE 1 Consume Int8Array request's body as arrayBuffer
+TEST DONE 1 Consume Int8Array request's body as bytes
 TEST DONE 1 Consume Int8Array request's body as JSON
 TEST DONE 1 Consume Float32Array request's body as text
 TEST DONE 1 Consume Float32Array request's body as blob
 TEST DONE 1 Consume Float32Array request's body as arrayBuffer
+TEST DONE 1 Consume Float32Array request's body as bytes
 TEST DONE 1 Consume Float32Array request's body as JSON
 TEST DONE 1 Consume DataView request's body as text
 TEST DONE 1 Consume DataView request's body as blob
 TEST DONE 1 Consume DataView request's body as arrayBuffer
+TEST DONE 1 Consume DataView request's body as bytes
 TEST DONE 1 Consume DataView request's body as JSON
 TEST DONE 0 Consume FormData request's body as FormData
 TEST DONE 0 Consume blob response's body as blob
 TEST DONE 0 Consume blob response's body as text
 TEST DONE 0 Consume blob response's body as json
 TEST DONE 0 Consume blob response's body as arrayBuffer
+TEST DONE 0 Consume blob response's body as bytes
 TEST DONE 0 Consume blob response's body as blob (empty blob as input)
 TEST DONE 0 Consume JSON from text: '"null"'
 TEST DONE 0 Consume JSON from text: '"1"'
@@ -241,13 +270,13 @@ TEST DONE 0 Adding valid request header "proxya: OK"
 TEST DONE 0 Adding valid request header "sec: OK"
 TEST DONE 0 Adding valid request header "secb: OK"
 TEST DONE 0 Adding valid request header "Set-Cookie2: OK"
+TEST DONE 0 Adding valid request header "User-Agent: OK"
 TEST DONE 1 Adding invalid request header "Accept-Charset: KO"
 TEST DONE 1 Adding invalid request header "accept-charset: KO"
 TEST DONE 1 Adding invalid request header "ACCEPT-ENCODING: KO"
 TEST DONE 1 Adding invalid request header "Accept-Encoding: KO"
 TEST DONE 1 Adding invalid request header "Access-Control-Request-Headers: KO"
 TEST DONE 1 Adding invalid request header "Access-Control-Request-Method: KO"
-TEST DONE 1 Adding invalid request header "Access-Control-Request-Private-Network: KO"
 TEST DONE 1 Adding invalid request header "Connection: KO"
 TEST DONE 1 Adding invalid request header "Content-Length: KO"
 TEST DONE 1 Adding invalid request header "Cookie: KO"
@@ -384,6 +413,8 @@ TEST DONE 0 Request does not expose blocking attribute
 Running ../../tools/wpt/fetch/api/response/json.any.js
 TEST DONE 1 Ensure the correct JSON parser is used
 TEST DONE 1 Ensure UTF-16 results in an error
+Running ../../tools/wpt/fetch/api/response/response-blob-realm.any.js
+TEST DONE 1 realm of the Uint8Array from Response bytes()
 Skipping ../../tools/wpt/fetch/api/response/response-cancel-stream.any.js
 Running ../../tools/wpt/fetch/api/response/response-clone.any.js
 TEST DONE 0 Check Response's clone with default values, without body
@@ -403,6 +434,7 @@ TEST DONE 1 Check response clone use structureClone for teed ReadableStreams (Ui
 TEST DONE 1 Check response clone use structureClone for teed ReadableStreams (Uint32Arraychunk)
 TEST DONE 1 Check response clone use structureClone for teed ReadableStreams (BigInt64Arraychunk)
 TEST DONE 1 Check response clone use structureClone for teed ReadableStreams (BigUint64Arraychunk)
+TEST DONE 1 Check response clone use structureClone for teed ReadableStreams (Float16Arraychunk)
 TEST DONE 1 Check response clone use structureClone for teed ReadableStreams (Float32Arraychunk)
 TEST DONE 1 Check response clone use structureClone for teed ReadableStreams (Float64Arraychunk)
 TEST DONE 1 Check response clone use structureClone for teed ReadableStreams (DataViewchunk)
@@ -436,6 +468,7 @@ TEST DONE 1 Read text response's body as readableStream with mode=byob
 TEST DONE 1 Read URLSearchParams response's body as readableStream with mode=byob
 TEST DONE 1 Read array buffer response's body as readableStream with mode=byob
 TEST DONE 1 Read form data response's body as readableStream with mode=byob
+TEST DONE 1 Reading with offset from Response stream
 Skipping ../../tools/wpt/fetch/api/response/response-error-from-stream.any.js
 Running ../../tools/wpt/fetch/api/response/response-error.any.js
 TEST DONE 1 Throws RangeError when responseInit's status is 0
@@ -453,6 +486,8 @@ Running ../../tools/wpt/fetch/api/response/response-from-stream.any.js
 TEST DONE 1 Constructing a Response with a stream on which getReader() is called
 TEST DONE 1 Constructing a Response with a stream on which read() is called
 TEST DONE 1 Constructing a Response with a stream on which read() and releaseLock() are called
+Running ../../tools/wpt/fetch/api/response/response-headers-guard.any.js
+TEST DONE 1 Ensure response headers are immutable
 Running ../../tools/wpt/fetch/api/response/response-init-001.any.js
 TEST DONE 0 Check default value for type attribute
 TEST DONE 0 Check default value for url attribute
@@ -494,7 +529,6 @@ TEST DONE 1 Default Content-Type for Response with FormData body
 Running ../../tools/wpt/fetch/api/response/response-static-error.any.js
 TEST DONE 0 Check response returned by static method error()
 TEST DONE 0 the 'guard' of the Headers instance should be immutable
-TEST DONE 1 Ensure response headers are immutable
 Running ../../tools/wpt/fetch/api/response/response-static-json.any.js
 TEST DONE 0 Throws TypeError when calling static json() with a status of 204
 TEST DONE 0 Throws TypeError when calling static json() with a status of 205
@@ -509,6 +543,9 @@ TEST DONE 0 Check response returned by static json() with init {"headers":{"cont
 TEST DONE 0 Check response returned by static json() with init {"headers":{"x-foo":"bar"}}
 TEST DONE 0 Check static json() encodes JSON objects correctly
 TEST DONE 0 Check static json() propagates JSON serializer errors
+TEST DONE 0 Check response returned by static json() with input 𝌆
+TEST DONE 0 Check response returned by static json() with input ��
+TEST DONE 0 Check response returned by static json() with input �
 Running ../../tools/wpt/fetch/api/response/response-static-redirect.any.js
 TEST DONE 0 Check default redirect response
 TEST DONE 0 Check response returned by static method redirect(), status = 301
@@ -524,6 +561,7 @@ TEST DONE 0 Check error returned when giving invalid status to redirect(), statu
 Running ../../tools/wpt/fetch/api/response/response-stream-bad-chunk.any.js
 TEST DONE 1 ReadableStream with non-Uint8Array chunk passed to Response.arrayBuffer() causes TypeError
 TEST DONE 1 ReadableStream with non-Uint8Array chunk passed to Response.blob() causes TypeError
+TEST DONE 1 ReadableStream with non-Uint8Array chunk passed to Response.bytes() causes TypeError
 TEST DONE 1 ReadableStream with non-Uint8Array chunk passed to Response.formData() causes TypeError
 TEST DONE 1 ReadableStream with non-Uint8Array chunk passed to Response.json() causes TypeError
 TEST DONE 1 ReadableStream with non-Uint8Array chunk passed to Response.text() causes TypeError
@@ -597,6 +635,7 @@ TEST DONE 0 URL.domainToASCII should be undefined
 TEST DONE 0 URL.domainToUnicode should be undefined
 TEST DONE 1 URL: no structured serialize/deserialize support
 TEST DONE 1 URLSearchParams: no structured serialize/deserialize support
+TEST DONE 0 Constructor only takes strings
 Skipping ../../tools/wpt/url/idlharness.any.js
 Running ../../tools/wpt/url/url-constructor.any.js
 TEST DONE 1 Loading data…
@@ -609,12 +648,31 @@ TEST DONE 1 URL.searchParams setter, invalid values
 TEST DONE 1 URL.searchParams and URL.search setters, update propagation
 Skipping ../../tools/wpt/url/url-setters-stripping.any.js
 Skipping ../../tools/wpt/url/url-setters.any.js
+Running ../../tools/wpt/url/url-statics-canparse.any.js
+TEST DONE 0 URL.canParse(undefined, undefined)
+TEST DONE 0 URL.canParse(aaa:b, undefined)
+TEST DONE 0 URL.canParse(undefined, aaa:b)
+TEST DONE 0 URL.canParse(undefined, https://test:test/)
+TEST DONE 0 URL.canParse(aaa:/b, undefined)
+TEST DONE 1 URL.canParse(undefined, aaa:/b)
+TEST DONE 1 URL.canParse(https://test:test, undefined)
+TEST DONE 0 URL.canParse(a, https://b/)
+Running ../../tools/wpt/url/url-statics-parse.any.js
+TEST DONE 1 URL.parse(undefined, undefined)
+TEST DONE 0 URL.parse(aaa:b, undefined)
+TEST DONE 1 URL.parse(undefined, aaa:b)
+TEST DONE 0 URL.parse(aaa:/b, undefined)
+TEST DONE 1 URL.parse(undefined, aaa:/b)
+TEST DONE 1 URL.parse(https://test:test, undefined)
+TEST DONE 0 URL.parse(a, https://b/)
+TEST DONE 0 URL.parse() should return a unique object
 Running ../../tools/wpt/url/url-tojson.any.js
 TEST DONE 0 Untitled
 Running ../../tools/wpt/url/urlencoded-parser.any.js
 TEST DONE 0 URLSearchParams constructed with: test
 TEST DONE 0 URLSearchParams constructed with: ﻿test=﻿
 TEST DONE 0 URLSearchParams constructed with: %EF%BB%BFtest=%EF%BB%BF
+TEST DONE 0 URLSearchParams constructed with: %EF%BF%BF=%EF%BF%BF
 TEST DONE 1 URLSearchParams constructed with: %FE%FF
 TEST DONE 1 URLSearchParams constructed with: %FF%FE
 TEST DONE 0 URLSearchParams constructed with: †&†=x
@@ -652,6 +710,8 @@ TEST DONE 0 request.formData() with input: ﻿test=﻿
 TEST DONE 0 response.formData() with input: ﻿test=﻿
 TEST DONE 0 request.formData() with input: %EF%BB%BFtest=%EF%BB%BF
 TEST DONE 0 response.formData() with input: %EF%BB%BFtest=%EF%BB%BF
+TEST DONE 0 request.formData() with input: %EF%BF%BF=%EF%BF%BF
+TEST DONE 0 response.formData() with input: %EF%BF%BF=%EF%BF%BF
 TEST DONE 1 request.formData() with input: %FE%FF
 TEST DONE 1 response.formData() with input: %FE%FF
 TEST DONE 1 request.formData() with input: %FF%FE
@@ -752,8 +812,10 @@ TEST DONE 0 Delete basics
 TEST DONE 0 Deleting appended multiple
 TEST DONE 0 Deleting all params removes ? from URL
 TEST DONE 0 Removing non-existent param removes ? from URL
-TEST DONE 1 Changing the query of a URL with an opaque path can impact the path
-TEST DONE 1 Changing the query of a URL with an opaque path can impact the path if the URL has no fragment
+TEST DONE 1 Changing the query of a URL with an opaque path with trailing spaces
+TEST DONE 1 Changing the query of a URL with an opaque path with trailing spaces and a fragment
+TEST DONE 1 Two-argument delete()
+TEST DONE 1 Two-argument delete() respects undefined as second arg
 Running ../../tools/wpt/url/urlsearchparams-foreach.any.js
 TEST DONE 0 ForEach Check
 TEST DONE 1 For-of Check
@@ -770,9 +832,16 @@ TEST DONE 0 getAll() multiples
 Running ../../tools/wpt/url/urlsearchparams-has.any.js
 TEST DONE 0 Has basics
 TEST DONE 0 has() following delete()
+TEST DONE 1 Two-argument has()
+TEST DONE 1 Two-argument has() respects undefined as second arg
 Running ../../tools/wpt/url/urlsearchparams-set.any.js
 TEST DONE 0 Set basics
 TEST DONE 0 URLSearchParams.set
+Running ../../tools/wpt/url/urlsearchparams-size.any.js
+TEST DONE 0 URLSearchParams's size and deletion
+TEST DONE 0 URLSearchParams's size and addition
+TEST DONE 0 URLSearchParams's size when obtained from a URL
+TEST DONE 0 URLSearchParams's size when obtained from a URL and using .search
 Running ../../tools/wpt/url/urlsearchparams-sort.any.js
 TEST DONE 0 Parse and sort: z=b&a=b&z=a&a=a
 TEST DONE 0 URL parse and sort: z=b&a=b&z=a&a=a
@@ -1029,6 +1098,12 @@ TEST DONE 0 Blob.arrayBuffer() empty Blob data
 TEST DONE 0 Blob.arrayBuffer() non-ascii input
 TEST DONE 0 Blob.arrayBuffer() non-unicode input
 TEST DONE 0 Blob.arrayBuffer() concurrent reads
+Running ../../tools/wpt/FileAPI/blob/Blob-bytes.any.js
+TEST DONE 0 Blob.bytes()
+TEST DONE 0 Blob.bytes() empty Blob data
+TEST DONE 0 Blob.bytes() non-ascii input
+TEST DONE 0 Blob.bytes() non-unicode input
+TEST DONE 0 Blob.bytes() concurrent reads
 Running ../../tools/wpt/FileAPI/blob/Blob-constructor.any.js
 TEST DONE 1 Blob interface object
 TEST DONE 1 Blob constructor with no arguments
@@ -1036,23 +1111,12 @@ TEST DONE 0 Blob constructor with no arguments, without 'new'
 TEST DONE 0 Blob constructor without brackets
 TEST DONE 1 Blob constructor with undefined as first argument
 TEST DONE 1 Passing non-objects, Dates and RegExps for blobParts should throw a TypeError.
-TEST DONE 1 A plain object with @@iterator should be treated as a sequence for the blobParts argument.
 TEST DONE 1 A plain object with custom @@iterator should be treated as a sequence for the blobParts argument.
-TEST DONE 1 A plain object with @@iterator and a length property should be treated as a sequence for the blobParts argument.
-TEST DONE 1 A String object should be treated as a sequence for the blobParts argument.
-TEST DONE 1 A Uint8Array object should be treated as a sequence for the blobParts argument.
 TEST DONE 1 The length getter should be invoked and any exceptions should be propagated.
 TEST DONE 1 ToUint32 should be applied to the length and any exceptions should be propagated.
 TEST DONE 1 Getters and value conversions should happen in order until an exception is thrown.
 TEST DONE 1 ToString should be called on elements of the blobParts array and any exceptions should be propagated.
-TEST DONE 1 Changes to the blobParts array should be reflected in the returned Blob (pop).
-TEST DONE 1 Changes to the blobParts array should be reflected in the returned Blob (unshift).
-TEST DONE 1 ToString should be called on elements of the blobParts array.
-TEST DONE 1 Passing typed arrays as elements of the blobParts array should work.
-TEST DONE 1 Passing a Float64Array as element of the blobParts array should work.
-TEST DONE 1 Passing BigInt typed arrays as elements of the blobParts array should work.
 TEST DONE 1 Passing a FrozenArray as the blobParts array should work (FrozenArray<MessagePort>).
-TEST DONE 1 Array with two bufferviews
 TEST DONE 1 options properties should be accessed in lexicographic order.
 TEST DONE 1 Arguments should be evaluated from left to right.
 TEST DONE 1 Passing 123 for options should throw
@@ -1076,9 +1140,21 @@ TEST DONE 1 Blob with type "image/gif\0"
 TEST DONE 0 Blob with type "unknown/unknown"
 TEST DONE 0 Blob with type "text/plain"
 TEST DONE 0 Blob with type "image/png"
+TEST DONE 1 A plain object with @@iterator should be treated as a sequence for the blobParts argument.
+TEST DONE 1 A plain object with @@iterator and a length property should be treated as a sequence for the blobParts argument.
+TEST DONE 1 A String object should be treated as a sequence for the blobParts argument.
+TEST DONE 1 A Uint8Array object should be treated as a sequence for the blobParts argument.
+TEST DONE 1 Changes to the blobParts array should be reflected in the returned Blob (pop).
+TEST DONE 1 Changes to the blobParts array should be reflected in the returned Blob (unshift).
+TEST DONE 1 ToString should be called on elements of the blobParts array.
 TEST DONE 1 ArrayBuffer elements of the blobParts array should be supported.
+TEST DONE 1 Passing typed arrays as elements of the blobParts array should work.
+TEST DONE 1 Passing a Float16Array as element of the blobParts array should work.
+TEST DONE 1 Passing a Float64Array as element of the blobParts array should work.
+TEST DONE 1 Passing BigInt typed arrays as elements of the blobParts array should work.
 TEST DONE 0 Array with two blobs
 TEST DONE 0 Array with two buffers
+TEST DONE 1 Array with two bufferviews
 TEST DONE 1 Array with mixed types
 TEST DONE 0 Passing null (index 0) for options should use the defaults.
 TEST DONE 0 Passing null (index 0) for options should use the defaults (with newlines).
@@ -1131,36 +1207,21 @@ TEST DONE 0 Slicing test (4,2).
 TEST DONE 0 Slicing test (4,3).
 TEST DONE 0 Slicing test (4,4).
 TEST DONE 0 Slicing test (5,0).
-TEST DONE 1 Slicing test: slice (5,1).
 TEST DONE 0 Slicing test (5,1).
-TEST DONE 1 Slicing test: slice (5,2).
 TEST DONE 0 Slicing test (5,2).
-TEST DONE 1 Slicing test: slice (5,3).
 TEST DONE 0 Slicing test (5,3).
 TEST DONE 0 Slicing test (6,0).
 TEST DONE 0 Slicing test (6,1).
 TEST DONE 0 Slicing test (6,2).
-TEST DONE 1 Slicing test: slice (7,0).
 TEST DONE 0 Slicing test (7,0).
-TEST DONE 1 Slicing test: slice (7,1).
 TEST DONE 0 Slicing test (7,1).
-TEST DONE 1 Slicing test: slice (7,2).
 TEST DONE 0 Slicing test (7,2).
-TEST DONE 1 Slicing test: slice (7,3).
 TEST DONE 0 Slicing test (7,3).
 TEST DONE 0 Slicing test (8,0).
 TEST DONE 0 Slicing test (8,1).
 TEST DONE 0 Slicing test (8,2).
 TEST DONE 0 Slicing test (8,3).
 TEST DONE 0 Slices
-TEST DONE 1 Invalid contentType ("ÿ")
-TEST DONE 1 Invalid contentType ("te\txt/plain")
-TEST DONE 1 Invalid contentType ("te\0xt/plain")
-TEST DONE 1 Invalid contentType ("te\x1fxt/plain")
-TEST DONE 1 Invalid contentType ("text/plain")
-TEST DONE 1 Valid contentType ("TEXT/PLAIN")
-TEST DONE 1 Valid contentType ("text/plain;charset = UTF-8")
-TEST DONE 1 Valid contentType ("text/plain;charset=UTF-8")
 TEST DONE 0 no-argument Blob slice
 TEST DONE 0 blob1.
 TEST DONE 0 blob2.
@@ -1200,13 +1261,25 @@ TEST DONE 0 Slicing test: slice (4,2).
 TEST DONE 0 Slicing test: slice (4,3).
 TEST DONE 0 Slicing test: slice (4,4).
 TEST DONE 1 Slicing test: slice (5,0).
+TEST DONE 1 Slicing test: slice (5,1).
+TEST DONE 1 Slicing test: slice (5,2).
+TEST DONE 1 Slicing test: slice (5,3).
 TEST DONE 0 Slicing test: slice (6,0).
 TEST DONE 0 Slicing test: slice (6,1).
 TEST DONE 0 Slicing test: slice (6,2).
+TEST DONE 1 Slicing test: slice (7,0).
+TEST DONE 1 Slicing test: slice (7,1).
+TEST DONE 1 Slicing test: slice (7,2).
+TEST DONE 1 Slicing test: slice (7,3).
 TEST DONE 1 Slicing test: slice (8,0).
 TEST DONE 0 Slicing test: slice (8,1).
 TEST DONE 0 Slicing test: slice (8,2).
 TEST DONE 1 Slicing test: slice (8,3).
+TEST DONE 1 Invalid contentType ("ÿ")
+TEST DONE 1 Invalid contentType ("te\txt/plain")
+TEST DONE 1 Invalid contentType ("te\0xt/plain")
+TEST DONE 1 Invalid contentType ("te\x1fxt/plain")
+TEST DONE 1 Invalid contentType ("text/plain")
 TEST DONE 0 Valid contentType ("te(xt/plain")
 TEST DONE 0 Valid contentType ("te)xt/plain")
 TEST DONE 0 Valid contentType ("te<xt/plain")
@@ -1225,11 +1298,16 @@ TEST DONE 0 Valid contentType ("te=xt/plain")
 TEST DONE 0 Valid contentType ("te{xt/plain")
 TEST DONE 0 Valid contentType ("te}xt/plain")
 TEST DONE 0 Valid contentType ("te xt/plain")
+TEST DONE 1 Valid contentType ("TEXT/PLAIN")
+TEST DONE 1 Valid contentType ("text/plain;charset = UTF-8")
+TEST DONE 1 Valid contentType ("text/plain;charset=UTF-8")
 Running ../../tools/wpt/FileAPI/blob/Blob-stream.any.js
 TEST DONE 0 Blob.stream()
 TEST DONE 0 Blob.stream() empty Blob
 TEST DONE 0 Blob.stream() non-unicode input
-TEST DONE 1 Blob.stream() garbage collection of blob shouldn't break streamconsumption
+TEST DONE 1 Blob.stream() garbage collection of blob shouldn't break stream consumption
+TEST DONE 1 Blob.stream() garbage collection of stream shouldn't break stream consumption
+TEST DONE 1 Reading Blob.stream() with BYOB reader
 Running ../../tools/wpt/FileAPI/blob/Blob-text.any.js
 TEST DONE 0 Blob.text()
 TEST DONE 0 Blob.text() empty blob data
@@ -1334,6 +1412,7 @@ Running ../../tools/wpt/FileAPI/reading-data-section/filereader_readAsDataURL.an
 TEST DONE 1 FileReader readyState during readAsDataURL
 TEST DONE 1 readAsDataURL result for Blob with specified MIME type
 TEST DONE 1 readAsDataURL result for Blob with unspecified MIME type
+TEST DONE 1 readAsDataURL result for empty Blob
 Running ../../tools/wpt/FileAPI/reading-data-section/filereader_readAsText.any.js
 TEST DONE 1 readAsText should correctly read UTF-8.
 TEST DONE 1 readAsText should correctly read UTF-16.
@@ -1398,12 +1477,16 @@ Running ../../tools/wpt/dom/events/EventTarget-addEventListener.any.js
 TEST DONE 0 Adding a null event listener should succeed
 Running ../../tools/wpt/dom/events/EventTarget-constructible.any.js
 TEST DONE 0 A constructed EventTarget can be used as expected
+TEST DONE 1 A constructed EventTarget implements dispatch correctly
 TEST DONE 0 EventTarget can be subclassed
 Skipping ../../tools/wpt/dom/events/EventTarget-removeEventListener.any.js
-Running ../../tools/wpt/urlpattern/urlpattern-compare.any.js
-Running ../../tools/wpt/urlpattern/urlpattern-compare.https.any.js
+Running ../../tools/wpt/urlpattern/urlpattern-compare.tentative.any.js
+Running ../../tools/wpt/urlpattern/urlpattern-compare.tentative.https.any.js
+Running ../../tools/wpt/urlpattern/urlpattern-generate.tentative.any.js
+TEST DONE 1 Loading data...
+Running ../../tools/wpt/urlpattern/urlpattern-hasregexpgroups.any.js
 Running ../../tools/wpt/urlpattern/urlpattern.any.js
 Running ../../tools/wpt/urlpattern/urlpattern.https.any.js
 
-1277 tests, 646 passed, 626 failed (5 not completed)
+1351 tests, 686 passed, 660 failed (5 not completed)
  -> 50% conformance
