@@ -1,4 +1,4 @@
-use crate::utils::{get_root, print_progress, Config, FunctionConfig, ApiClient};
+use crate::utils::{get_root, print_progress, ApiClient, Config, FunctionConfig};
 use anyhow::{anyhow, Result};
 use dialoguer::console::style;
 use serde::Deserialize;
@@ -26,6 +26,12 @@ pub async fn ls(directory: Option<PathBuf>) -> Result<()> {
     let root = get_root(directory);
     let project_config = FunctionConfig::load(&root, None, None)?;
     let end_progress = print_progress("Fetching Deployments");
+
+    if project_config.function_id.is_empty() {
+        return Err(anyhow!(
+            "This directory is not linked to a project. Please link it with `lagoss link`"
+        ));
+    }
 
     let deployments = ApiClient::new(config)
         .get::<DeploymentsResponse>(&format!(

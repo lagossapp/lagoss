@@ -86,15 +86,9 @@ importers:
 
   packages/dashboard:
     dependencies:
-      '@trpc/server':
-        specifier: ^11.4.3
-        version: 11.4.3(typescript@5.8.3)
       drizzle-orm:
         specifier: ^0.44.2
         version: 0.44.2(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0)
-      trpc-nuxt:
-        specifier: ^1.0.5
-        version: 1.0.5(@trpc/client@10.18.0(@trpc/server@11.4.3(typescript@5.8.3)))(@trpc/server@11.4.3(typescript@5.8.3))
     devDependencies:
       '@aws-sdk/client-s3':
         specifier: ^3.840.0
@@ -2634,16 +2628,6 @@ packages:
     peerDependencies:
       vue: ^2.7.0 || ^3.0.0
 
-  '@trpc/client@10.18.0':
-    resolution: {integrity: sha512-2d+6r2C/xygTjDWX9jT66defgHzbQP0Z8vrvyT3XtPjqU6JNlRNuS2ZtB8xDPdOQUUVnndzZ43BMr+Zu49K0OQ==}
-    peerDependencies:
-      '@trpc/server': 10.18.0
-
-  '@trpc/server@11.4.3':
-    resolution: {integrity: sha512-wnWq3wiLlMOlYkaIZz+qbuYA5udPTLS4GVVRyFkr6aT83xpdCHyVtURT+u4hSoIrOXQM9OPCNXSXsAujWZDdaw==}
-    peerDependencies:
-      typescript: '>=5.7.2'
-
   '@trysound/sax@0.2.0':
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
     engines: {node: '>=10.13.0'}
@@ -3590,6 +3574,7 @@ packages:
 
   clickhouse@2.6.0:
     resolution: {integrity: sha512-HC5OV99GJOup4qZsTuWWPpXlj+847Z0OeygDU2x22rNYost0V/vWapzFWYZdV/5iRbGMrhFQPOyQEzmGvoaWRQ==}
+    bundledDependencies: []
 
   clipboardy@4.0.0:
     resolution: {integrity: sha512-5mOlNS0mhX0707P2I0aZ2V/cmHUEO/fL7VFLqszkhUsxt7RwnmrInf/eEQKlf5GzvYeHIjT+Ov1HRfNmymlG0w==}
@@ -7411,12 +7396,6 @@ packages:
 
   trough@2.2.0:
     resolution: {integrity: sha512-tmMpK00BjZiUyVyvrBK7knerNgmgvcV/KLVyuma/SC+TQN167GrMRciANTz09+k3zW8L8t60jWO1GpfkZdjTaw==}
-
-  trpc-nuxt@1.0.5:
-    resolution: {integrity: sha512-leQSJvyl0B+M47UH37Dvh+XoQKTtUnKW3d/g1S/SLh8ro3fNMGa2Cs1LNRwUbmMYin6Y3zFt1tKB9Wu0MSYKDA==}
-    peerDependencies:
-      '@trpc/client': ^11.0.0
-      '@trpc/server': ^11.0.0
 
   ts-api-utils@1.0.1:
     resolution: {integrity: sha512-lC/RGlPmwdrIBFTX59wwNzqh7aR2otPNPR/5brHZm/XKFYKsfqxihXUe9pU3JI+3vGkl+vyCoNNnPhJn3aLK1A==}
@@ -11498,14 +11477,6 @@ snapshots:
     dependencies:
       '@tanstack/virtual-core': 3.13.12
       vue: 3.5.17(typescript@5.8.3)
-
-  '@trpc/client@10.18.0(@trpc/server@11.4.3(typescript@5.8.3))':
-    dependencies:
-      '@trpc/server': 11.4.3(typescript@5.8.3)
-
-  '@trpc/server@11.4.3(typescript@5.8.3)':
-    dependencies:
-      typescript: 5.8.3
 
   '@trysound/sax@0.2.0': {}
 
@@ -16954,14 +16925,6 @@ snapshots:
   triple-beam@1.4.1: {}
 
   trough@2.2.0: {}
-
-  trpc-nuxt@1.0.5(@trpc/client@10.18.0(@trpc/server@11.4.3(typescript@5.8.3)))(@trpc/server@11.4.3(typescript@5.8.3)):
-    dependencies:
-      '@trpc/client': 10.18.0(@trpc/server@11.4.3(typescript@5.8.3))
-      '@trpc/server': 11.4.3(typescript@5.8.3)
-      h3: 1.15.3
-      ofetch: 1.4.1
-      ohash: 2.0.11
 
   ts-api-utils@1.0.1(typescript@5.8.3):
     dependencies:

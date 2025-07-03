@@ -22,6 +22,12 @@ pub async fn promote(deployment_id: String, directory: Option<PathBuf>) -> Resul
     let root = get_root(directory);
     let project_config = FunctionConfig::load(&root, None, None)?;
 
+    if project_config.function_id.is_empty() {
+        return Err(anyhow!(
+            "This directory is not linked to a project. Please link it with `lagoss link`"
+        ));
+    }
+
     match Confirm::with_theme(get_theme())
         .with_prompt("Do you really want to promote this Deployment to production?")
         .default(true)
