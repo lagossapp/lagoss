@@ -107,7 +107,7 @@ importers:
         version: 1.2.3
       '@nuxt/ui':
         specifier: ^3.2.0
-        version: 3.2.0(@babel/parser@7.28.0)(axios@1.10.0)(db0@0.3.2(drizzle-orm@0.44.2(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(embla-carousel@8.6.0)(focus-trap@7.6.5)(ioredis@5.6.1)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.8.3)(vite@6.3.5(@types/node@24.0.10)(jiti@2.4.2)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))(vue-router@4.5.1(vue@3.5.17(typescript@5.8.3)))(vue@3.5.17(typescript@5.8.3))(zod@3.25.71)
+        version: 3.2.0(@babel/parser@7.28.0)(axios@1.10.0)(db0@0.3.2(drizzle-orm@0.44.2(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(embla-carousel@8.6.0)(focus-trap@7.6.5)(ioredis@5.6.1)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.8.3)(vite@6.3.5(@types/node@24.0.10)(jiti@2.4.2)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))(vue-router@4.5.1(vue@3.5.17(typescript@5.8.3)))(vue@3.5.17(typescript@5.8.3))(zod@3.25.72)
       '@scaleway/use-random-name':
         specifier: ^1.0.7
         version: 1.0.7(react@18.3.1)
@@ -164,7 +164,7 @@ importers:
         version: 1.6.32
       zod:
         specifier: ^3.25.67
-        version: 3.25.71
+        version: 3.25.72
 
   packages/docs:
     dependencies:
@@ -3574,7 +3574,6 @@ packages:
 
   clickhouse@2.6.0:
     resolution: {integrity: sha512-HC5OV99GJOup4qZsTuWWPpXlj+847Z0OeygDU2x22rNYost0V/vWapzFWYZdV/5iRbGMrhFQPOyQEzmGvoaWRQ==}
-    bundledDependencies: []
 
   clipboardy@4.0.0:
     resolution: {integrity: sha512-5mOlNS0mhX0707P2I0aZ2V/cmHUEO/fL7VFLqszkhUsxt7RwnmrInf/eEQKlf5GzvYeHIjT+Ov1HRfNmymlG0w==}
@@ -8349,8 +8348,8 @@ packages:
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
-  zod@3.25.71:
-    resolution: {integrity: sha512-BsBc/NPk7h8WsUWYWYL+BajcJPY8YhjelaWu2NMLuzgraKAz4Lb4/6K11g9jpuDetjMiqhZ6YaexFLOC0Ogi3Q==}
+  zod@3.25.72:
+    resolution: {integrity: sha512-Cl+fe4dNL4XumOBNBsr0lHfA80PQiZXHI4xEMTEr8gt6aGz92t3lBA32e71j9+JeF/VAYvdfBnuwJs+BMx/BrA==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -10183,7 +10182,7 @@ snapshots:
       unixify: 1.0.0
       urlpattern-polyfill: 8.0.2
       yargs: 17.7.2
-      zod: 3.25.71
+      zod: 3.25.72
     transitivePeerDependencies:
       - encoding
       - rollup
@@ -10411,7 +10410,7 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/ui@3.2.0(@babel/parser@7.28.0)(axios@1.10.0)(db0@0.3.2(drizzle-orm@0.44.2(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(embla-carousel@8.6.0)(focus-trap@7.6.5)(ioredis@5.6.1)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.8.3)(vite@6.3.5(@types/node@24.0.10)(jiti@2.4.2)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))(vue-router@4.5.1(vue@3.5.17(typescript@5.8.3)))(vue@3.5.17(typescript@5.8.3))(zod@3.25.71)':
+  '@nuxt/ui@3.2.0(@babel/parser@7.28.0)(axios@1.10.0)(db0@0.3.2(drizzle-orm@0.44.2(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(embla-carousel@8.6.0)(focus-trap@7.6.5)(ioredis@5.6.1)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.8.3)(vite@6.3.5(@types/node@24.0.10)(jiti@2.4.2)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))(vue-router@4.5.1(vue@3.5.17(typescript@5.8.3)))(vue@3.5.17(typescript@5.8.3))(zod@3.25.72)':
     dependencies:
       '@iconify/vue': 5.0.0(vue@3.5.17(typescript@5.8.3))
       '@internationalized/date': 3.8.2
@@ -10458,7 +10457,7 @@ snapshots:
       vue-component-type-helpers: 2.2.12
     optionalDependencies:
       vue-router: 4.5.1(vue@3.5.17(typescript@5.8.3))
-      zod: 3.25.71
+      zod: 3.25.72
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -17906,6 +17905,6 @@ snapshots:
 
   zod@3.23.8: {}
 
-  zod@3.25.71: {}
+  zod@3.25.72: {}
 
   zwitch@2.0.4: {}
