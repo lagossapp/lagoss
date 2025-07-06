@@ -14,7 +14,7 @@ lagoss-runtime-utils = { path = "../runtime_utils" }
 lagoss-serverless-logger = { path = "../serverless_logger" }
 lagoss-serverless-downloader = { path = "../serverless_downloader" }
 lagoss-serverless-pubsub = { path = "../serverless_pubsub" }
-flume = "0.10.14"
+flume = "0.11.0"
 dotenv = "0.15.0"
 serde_json = "1.0"
 metrics = "0.21.1"
@@ -38,7 +38,7 @@ tikv-jemallocator = "0.5"
 [build-dependencies]
 lagoss-runtime = { path = "../runtime" }
 lagoss-runtime-isolate = { path = "../runtime_isolate" }
-flume = "0.10.14"
+flume = "0.11.0"
 
 [dev-dependencies]
 serial_test = "2.0.0"
