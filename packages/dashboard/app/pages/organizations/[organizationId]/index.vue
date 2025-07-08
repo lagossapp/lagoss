@@ -48,14 +48,12 @@
           :to="`/organizations/${project.organizationId}/projects/${project.name}`"
           class="w-full"
         >
-          <Card
-            class="relative flex w-full cursor-pointer items-center justify-between hover:border-neutral-500 dark:hover:border-neutral-200"
-          >
+          <Card class="relative flex w-full items-center justify-between" clickable>
             <div>
               <p>{{ project.name }}</p>
               <p class="text-xs text-neutral-500">{{ dayjs().to(project.updatedAt) }}</p>
             </div>
-            <UBadge class="absolute right-2 top-2" color="primary" variant="soft">{{
+            <UBadge class="absolute right-4 top-4" color="primary" variant="soft">{{
               project.playground ? 'Playground' : 'Project'
             }}</UBadge>
           </Card>

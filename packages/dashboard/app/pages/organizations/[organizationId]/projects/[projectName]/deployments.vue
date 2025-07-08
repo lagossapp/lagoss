@@ -12,10 +12,10 @@
           Quickstart guide!
         </a> -->
       </UContainer>
-      <div
+      <Card
         v-for="deployment in deployments?.sort((a, b) => dayjs(b.createdAt).diff(dayjs(a.createdAt)))"
         :id="deployment.id"
-        class="flex w-full items-center rounded-md border border-neutral-300 p-4"
+        class="flex w-full items-center rounded-md p-4"
       >
         <div class="flex flex-col">
           <div>
@@ -23,7 +23,7 @@
               :href="getFullCurrentDomain({ name: deployment.id })"
               rel="noopener noreferrer"
               target="_blank"
-              class="text-blue-500"
+              class="text-primary-500"
             >
               {{ getFullCurrentDomain({ name: deployment.id }) }}
             </a>
@@ -42,7 +42,7 @@
         <UDropdownMenu :items="getDeploymentDropdownItems(deployment)" class="ml-4">
           <UButton color="neutral" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
         </UDropdownMenu>
-      </div>
+      </Card>
     </div>
   </div>
 </template>
