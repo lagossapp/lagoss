@@ -68,4 +68,6 @@ export default defineEventHandler(async event => {
       assets: deployment.assets,
     }),
   );
+
+  return { ok: true };
 });
