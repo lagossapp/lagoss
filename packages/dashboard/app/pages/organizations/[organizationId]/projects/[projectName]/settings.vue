@@ -18,7 +18,7 @@
             </UButtonGroup>
           </UFormField>
 
-          <div class="flex w-full border-t pt-2">
+          <div class="border-accented flex w-full border-t pt-2">
             <UButton type="submit" label="Save" size="md" color="neutral" variant="outline" class="ml-auto" />
           </div>
         </form>
@@ -53,7 +53,7 @@
             @click="addEnvVariable"
           />
 
-          <div class="flex w-full border-t pt-2">
+          <div class="border-accented flex w-full border-t pt-2">
             <UButton type="submit" label="Save" size="md" color="neutral" variant="outline" class="ml-auto" />
           </div>
         </form>
@@ -101,21 +101,23 @@
             />
           </UFormField>
 
-          <div class="flex w-full border-t pt-2">
+          <div class="border-accented flex w-full border-t pt-2">
             <UButton type="submit" label="Save" size="md" color="neutral" variant="outline" class="ml-auto" />
           </div>
         </form>
       </Card>
 
-      <Card class="flex flex-col items-start gap-4 border-red-500 bg-red-100">
-        <h2 class="text-xl text-red-800">Delete</h2>
+      <Card
+        class="ring-error flex flex-col items-start gap-4 bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200"
+      >
+        <h2 class="text-xl">Delete</h2>
 
-        <p class="text-red-800">
+        <p>
           Delete the project "{{ project?.name }}.{{ $config.public.root.domain }}" and all of its deployments and
           domains. This action is not reversible, so continue with extreme caution.
         </p>
 
-        <div class="flex w-full border-t border-red-300 pt-2">
+        <div class="border-error flex w-full border-t pt-2">
           <UButton type="submit" label="Delete" size="md" color="error" class="ml-auto" @click="deleteProject" />
         </div>
       </Card>

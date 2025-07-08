@@ -48,10 +48,12 @@
 </template>
 
 <script setup lang="ts">
+import type { DropdownMenuItem } from '@nuxt/ui';
 import { dayjs } from '~~/lib/dayjs';
 import type { Deployment } from '~~/server/db/schema';
 
 const { project } = useProject();
+const toast = useToast();
 
 const { data: deployments, refresh: refreshDeployments } = await useFetch(
   () => `/api/projects/${project.value.id}/deployments`,
@@ -87,47 +89,49 @@ async function deleteDeployment(deployment: Deployment) {
     await $fetch(`/api/projects/${project.value.id}/deployments/${deployment.id}`, {
       method: 'DELETE',
     });
-
     await refreshDeployments();
   } finally {
     deletingDeploymentId.value = undefined;
   }
 }
 
-function getDeploymentDropdownItems(deployment: Deployment) {
-  const items = [];
+function getDeploymentDropdownItems(deployment: Deployment): DropdownMenuItem[] {
+  const items: DropdownMenuItem[] = [];
 
   if (!deployment.isProduction) {
     items.push({
       label: 'Promote to Production',
-      icon: 'i-ion-arrow-up-circle-outline',
-      click() {
-        promoteDeployment(deployment);
+      icon: 'i-ion-arrow-up-circle',
+      async onSelect() {
+        await promoteDeployment(deployment);
       },
     });
   }
 
-  // {
-  //   label: 'Copy Url',
-  //   icon: 'i-heroicons-arrow-right-circle-20-solid',
-  //   click() {
-  //     // TODO:
-  //   },
-  // },
+  items.push({
+    label: 'Copy Url',
+    icon: 'i-ion-copy',
+    async onSelect() {
+      await navigator.clipboard.writeText(getFullCurrentDomain({ name: deployment.id }));
+      toast.add({
+        color: 'success',
+        title: 'Deployment URL copied to clipboard',
+      });
+    },
+  });
   items.push({
     label: 'Visit',
-    icon: 'i-ion-open-outline',
-    click() {
-      window.open(getFullCurrentDomain({ name: deployment.id }), '_blank');
-    },
+    icon: 'i-ion-open',
+    href: getFullCurrentDomain({ name: deployment.id }),
+    target: '_blank',
   });
 
   if (!deployment.isProduction) {
     items.push({
       label: 'Delete',
-      icon: 'i-ion-trash-outline',
-      click() {
-        deleteDeployment(deployment);
+      icon: 'i-ion-trash',
+      async onSelect() {
+        await deleteDeployment(deployment);
       },
     });
   }
