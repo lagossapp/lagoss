@@ -15,6 +15,7 @@ export default defineEventHandler(async event => {
 
   const input = await z
     .object({
+      projectId: z.string(),
       functionSize: z.number(),
       assets: z
         .object({

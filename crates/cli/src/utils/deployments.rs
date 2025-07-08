@@ -365,6 +365,7 @@ struct Asset {
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 struct CreateDeploymentRequest {
+    function_id: String,
     function_size: usize,
     assets: Vec<Asset>,
 }
@@ -377,24 +378,25 @@ struct CreateDeploymentResponse {
     assets_urls: HashMap<String, String>,
 }
 
-#[derive(Deserialize, Debug)]
-struct GetDeploymentResponse {
-    urls: Vec<String>,
+#[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
+struct DeployDeploymentRequest {
+    is_production: bool,
 }
 
 #[derive(Deserialize, Debug)]
-struct PromoteDeploymentResponse {
-    // ok: bool,
+struct DeployDeploymentResponse {
+    url: String,
 }
 
 pub async fn create_deployment(
     config: Config,
-    project_config: &FunctionConfig,
+    function_config: &FunctionConfig,
     is_production: bool,
     root: &Path,
     prod_bundle: bool,
 ) -> Result<()> {
-    let (index, assets) = bundle_function(project_config, root, prod_bundle)?;
+    let (index, assets) = bundle_function(function_config, root, prod_bundle)?;
 
     let end_progress = print_progress("Creating deployment");
 
@@ -408,8 +410,9 @@ pub async fn create_deployment(
         assets_urls,
     } = client
         .post::<CreateDeploymentRequest, CreateDeploymentResponse>(
-            &format!("/api/projects/{}/deployments", project_config.function_id),
+            &format!("/api/projects/{}/deployments", function_config.function_id),
             CreateDeploymentRequest {
+                function_id: function_config.function_id.clone(),
                 function_size: index.len(),
                 assets: assets
                     .iter()
@@ -448,27 +451,14 @@ pub async fn create_deployment(
 
     end_progress();
 
-    if is_production {
-        let end_progress = print_progress("Promoting Function to production");
-
-        client
-            .post::<(), PromoteDeploymentResponse>(
-                &format!(
-                    "/api/projects/{}/deployments/{}/promote",
-                    project_config.function_id, deployment_id
-                ),
-                (),
-            )
-            .await?;
-
-        end_progress();
-    }
-
     let deployment = client
-        .get::<GetDeploymentResponse>(&format!(
-            "/api/projects/{}/deployments/{}",
-            project_config.function_id, deployment_id
-        ))
+        .post::<DeployDeploymentRequest, DeployDeploymentResponse>(
+            &format!(
+                "/api/projects/{}/deployments/{}",
+                function_config.function_id, deployment_id
+            ),
+            DeployDeploymentRequest { is_production },
+        )
         .await?;
 
     println!();
@@ -484,13 +474,11 @@ pub async fn create_deployment(
     }
 
     println!();
-    deployment.urls.iter().for_each(|domain| {
-        println!(
-            "   {} {}",
-            style("›").black().bright(),
-            style(domain).blue().underlined()
-        );
-    });
+    println!(
+        "{} {}",
+        style("›").black().bright(),
+        style(deployment.url).blue().underlined()
+    );
 
     Ok(())
 }

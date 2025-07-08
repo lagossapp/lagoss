@@ -31,7 +31,21 @@ export default defineEventHandler(async event => {
     });
   }
 
-  if (deployment.isProduction === 1) {
+  const isCurrentProductionDeployment = await getFirst(
+    db
+      .select()
+      .from(deploymentSchema)
+      .where(
+        and(
+          eq(deploymentSchema.id, deploymentId),
+          eq(deploymentSchema.projectId, project.id),
+          eq(deploymentSchema.isProduction, 1),
+        ),
+      )
+      .execute(),
+  );
+
+  if (isCurrentProductionDeployment) {
     throw createError({
       status: 400,
       message: 'Cannot delete a production deployment, promote another deployment first.',
