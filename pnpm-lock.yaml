@@ -189,7 +189,7 @@ importers:
     dependencies:
       '@remix-run/server-runtime':
         specifier: ^1.12.0
-        version: 1.12.0
+        version: 1.19.3
     devDependencies:
       '@types/node':
         specifier: ^24.0.10
@@ -1949,13 +1949,13 @@ packages:
     peerDependencies:
       '@redis/client': ^1.0.0
 
-  '@remix-run/router@1.3.1':
-    resolution: {integrity: sha512-+eun1Wtf72RNRSqgU7qM2AMX/oHp+dnx7BHk1qhK5ZHzdHTUU4LA1mGG1vT+jMc8sbhG3orvsfOmryjzx2PzQw==}
+  '@remix-run/router@1.7.2':
+    resolution: {integrity: sha512-7Lcn7IqGMV+vizMPoEl5F0XDshcdDYtMI6uJLQdQz5CfZAwy3vvGKYSUk789qndt5dEC4HfSjviSYlSoHGL2+A==}
     engines: {node: '>=14'}
 
-  '@remix-run/server-runtime@1.12.0':
-    resolution: {integrity: sha512-7I0165Ns/ffPfCEfuiqD58lMderTn2s/sew1xJ34ONa21mG/7+5T7diHIgxKST8rS3816JPmlwSqUaHgwbmO6Q==}
-    engines: {node: '>=14'}
+  '@remix-run/server-runtime@1.19.3':
+    resolution: {integrity: sha512-KzQ+htUsKqpBgKE2tWo7kIIGy3MyHP58Io/itUPvV+weDjApwr9tQr9PZDPA3yAY6rAzLax7BU0NMSYCXWFY5A==}
+    engines: {node: '>=14.0.0'}
 
   '@rolldown/pluginutils@1.0.0-beta.23':
     resolution: {integrity: sha512-lLCP4LUecUGBLq8EfkbY2esGYyvZj5ee+WZG12+mVnQH48b46SVbwp+0vJkD+6Pnsc+u9SWarBV9sQ5mVwmb5g==}
@@ -2732,8 +2732,8 @@ packages:
   '@types/parse5@6.0.3':
     resolution: {integrity: sha512-SuT16Q1K51EAVPz1K29DJ/sXjhSQ0zjvsypYJ6tlwVsRV9jwW5Adq2ch8Dq8kDBCkYnELS7N7VNCSB5nC56t/g==}
 
-  '@types/prop-types@15.7.14':
-    resolution: {integrity: sha512-gNMvNH49DJ7OJYv+KAKn0Xp45p8PLl6zo2YnvDIbTd4J6MER2BmWN49TG7n9LvkyihINxeKW8+3bfS2yDC9dzQ==}
+  '@types/prop-types@15.7.15':
+    resolution: {integrity: sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==}
 
   '@types/react@18.3.14':
     resolution: {integrity: sha512-NzahNKvjNhVjuPBQ+2G7WlxstQ+47kXZNHlUvFakDViuIEfGY926GqhMueQFZ7woG+sPiQKlF36XfrIUVSUfFg==}
@@ -6978,11 +6978,11 @@ packages:
   server-destroy@1.0.1:
     resolution: {integrity: sha512-rb+9B5YBIEzYcD6x2VKidaa+cqYBJQKnU4oe4E3ANwRRN56yk/ua1YCJT1n21NTS8w6CcOclAKNP3PhdCXKYtQ==}
 
-  set-cookie-parser@2.5.1:
-    resolution: {integrity: sha512-1jeBGaKNGdEq4FgIrORu/N570dwoPYio8lSoYLWmX7sQ//0JY08Xh9o5pBcgmHQ/MbsYp/aZnOe1s1lIsbLprQ==}
-
   set-cookie-parser@2.6.0:
     resolution: {integrity: sha512-RVnVQxTXuerk653XfuliOxBP81Sf0+qfQE73LIYKcyMYHG94AuH0kgrQpRDuTZnSmjpysHmzxJXKNfa6PjFhyQ==}
+
+  set-cookie-parser@2.7.1:
+    resolution: {integrity: sha512-IOc8uWeOZgnb3ptbCURJWNjWUPcO3ZnTTdzsurqERrP6nPyv+paC55vJM0LpOlT2ne+Ix+9+CRG1MNLlyZ4GjQ==}
 
   set-function-length@1.2.2:
     resolution: {integrity: sha512-pgRc4hJ4/sNjWCSS9AmnS40x3bNMDTknHgL5UaMBTMyJnU90EgWh1Rz+MC9eFu4BuN/UwZjKQuY/1v3rM7HMfg==}
@@ -7058,13 +7058,14 @@ packages:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
 
-  source-map@0.7.4:
-    resolution: {integrity: sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==}
-    engines: {node: '>= 8'}
+  source-map@0.7.6:
+    resolution: {integrity: sha512-i5uvt8C3ikiWeNZSVZNWcfZPItFQOsYTUAOkcUPGd8DqDy1uOUikjt5dG+uRlwyvR108Fb9DOd4GvXfT0N2/uQ==}
+    engines: {node: '>= 12'}
 
   source-map@0.8.0-beta.0:
     resolution: {integrity: sha512-2ymg6oRBpebeZi9UUNsgQ89bhx01TcTkmNTGnNO88imTmbSgy4nfujrgVEFKWpMTEGA11EDkTt7mqObTPdigIA==}
     engines: {node: '>= 8'}
+    deprecated: The work that was done in this beta branch won't be included in future versions
 
   space-separated-tokens@2.0.2:
     resolution: {integrity: sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==}
@@ -10753,17 +10754,16 @@ snapshots:
     dependencies:
       '@redis/client': 1.6.1
 
-  '@remix-run/router@1.3.1': {}
+  '@remix-run/router@1.7.2': {}
 
-  '@remix-run/server-runtime@1.12.0':
+  '@remix-run/server-runtime@1.19.3':
     dependencies:
-      '@remix-run/router': 1.3.1
+      '@remix-run/router': 1.7.2
       '@types/cookie': 0.4.1
-      '@types/react': 18.3.14
       '@web3-storage/multipart-parser': 1.0.0
       cookie: 0.4.2
-      set-cookie-parser: 2.5.1
-      source-map: 0.7.4
+      set-cookie-parser: 2.7.1
+      source-map: 0.7.6
 
   '@rolldown/pluginutils@1.0.0-beta.23': {}
 
@@ -11588,12 +11588,14 @@ snapshots:
 
   '@types/parse5@6.0.3': {}
 
-  '@types/prop-types@15.7.14': {}
+  '@types/prop-types@15.7.15':
+    optional: true
 
   '@types/react@18.3.14':
     dependencies:
-      '@types/prop-types': 15.7.14
+      '@types/prop-types': 15.7.15
       csstype: 3.1.3
+    optional: true
 
   '@types/resolve@1.20.2': {}
 
@@ -15241,7 +15243,7 @@ snapshots:
       semver: 7.7.2
       serve-placeholder: 2.0.2
       serve-static: 2.2.0
-      source-map: 0.7.4
+      source-map: 0.7.6
       std-env: 3.9.0
       ufo: 1.6.1
       ultrahtml: 1.6.0
@@ -16375,7 +16377,7 @@ snapshots:
     dependencies:
       open: 8.4.0
       picomatch: 4.0.2
-      source-map: 0.7.4
+      source-map: 0.7.6
       yargs: 17.7.2
     optionalDependencies:
       rollup: 4.44.1
@@ -16521,9 +16523,9 @@ snapshots:
 
   server-destroy@1.0.1: {}
 
-  set-cookie-parser@2.5.1: {}
-
   set-cookie-parser@2.6.0: {}
+
+  set-cookie-parser@2.7.1: {}
 
   set-function-length@1.2.2:
     dependencies:
@@ -16610,7 +16612,7 @@ snapshots:
 
   source-map@0.6.1: {}
 
-  source-map@0.7.4: {}
+  source-map@0.7.6: {}
 
   source-map@0.8.0-beta.0:
     dependencies:
