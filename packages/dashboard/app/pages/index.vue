@@ -17,9 +17,7 @@
             :to="`/organizations/${organization.id}`"
             class="w-full max-w-sm"
           >
-            <Card
-              class="flex w-full cursor-pointer items-center justify-between hover:border-neutral-500 dark:hover:border-neutral-200"
-            >
+            <Card class="flex w-full items-center justify-between" clickable>
               <div>
                 <p>{{ organization.name }}</p>
                 <p class="text-sm text-neutral-500">{{ organization.description }}</p>

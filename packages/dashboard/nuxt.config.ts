@@ -59,9 +59,5 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
 
-  build: {
-    transpile: ['trpc-nuxt'],
-  },
-
   compatibilityDate: '2025-05-15',
 });
