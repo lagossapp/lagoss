@@ -4,14 +4,14 @@
   "description": "Deploy Serverless Functions at the Edge",
   "private": true,
   "scripts": {
-    "start:docs": "pnpm --filter @lagoss/docs dev",
-    "test": "turbo test --continue --filter=!@lagoss/example-*",
-    "build": "turbo build --continue --filter=!@lagoss/example-*",
-    "lint": "turbo lint --continue",
-    "typecheck": "turbo typecheck --continue",
+    "start:docs": "pnpm run --filter @lagoss/docs dev",
+    "test": "pnpm run -r --parallel test",
+    "build": "pnpm run -r build",
+    "lint": "pnpm run -r --parallel lint",
+    "typecheck": "pnpm run -r --parallel typecheck",
     "docker:serverless:build": "docker build -t ghcr.io/lagossapp/serverless -f docker/Dockerfile.serverless .",
     "docker:dashboard:build": "docker build -t ghcr.io/lagossapp/dashboard -f docker/Dockerfile.dashboard .",
-    "release": "pnpm build --filter=@lagoss/astro --filter=@lagoss/remix && pnpm changeset publish"
+    "release": "pnpm run --filter=@lagoss/astro --filter=@lagoss/remix build && pnpm changeset publish"
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix"
@@ -35,7 +35,6 @@
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.6.0",
     "tsup": "^7.1.0",
-    "turbo": "^1.10.11",
     "typescript": "^5.8.3"
   }
 }
