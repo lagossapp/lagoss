@@ -384,7 +384,7 @@ struct GetDeploymentResponse {
 
 #[derive(Deserialize, Debug)]
 struct PromoteDeploymentResponse {
-    // ok: bool,
+    ok: bool,
 }
 
 pub async fn create_deployment(
@@ -451,7 +451,7 @@ pub async fn create_deployment(
     if is_production {
         let end_progress = print_progress("Promoting Function to production");
 
-        client
+        let response = client
             .post::<(), PromoteDeploymentResponse>(
                 &format!(
                     "/api/projects/{}/deployments/{}/promote",
@@ -460,6 +460,10 @@ pub async fn create_deployment(
                 (),
             )
             .await?;
+
+        if !response.ok {
+            return Err(anyhow!("Couldn't promote deployment to production"));
+        }
 
         end_progress();
     }
