@@ -1,7 +1,9 @@
 export async function useAuth() {
-  const { data: user, refresh: updateAuthSession } = await useFetch('/api/user');
+  const { data, refresh: updateAuthSession } = await useFetch('/api/user');
 
-  const isAuthenticated = computed(() => !!user.value?.user?.id);
+  const user = computed(() => data.value?.user ?? null);
+
+  const isAuthenticated = computed(() => !!user.value?.id);
 
   function login() {
     window.location.href = '/api/auth/login';
