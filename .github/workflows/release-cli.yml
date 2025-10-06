@@ -78,7 +78,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Build js-runtime
-        run: pnpm -r run --sequential --filter=@lagoss/js-runtime build
+        run: pnpm run --sequential --filter=@lagoss/js-runtime build
       - name: Build CLI
         run: |
           cd crates/cli && cargo build --release --target ${{ matrix.target }}
