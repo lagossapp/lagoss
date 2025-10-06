@@ -48,8 +48,8 @@ export default defineEventHandler(async event => {
 
   const config = useRuntimeConfig();
   const github = new Github({
-    clientId: config.auth.oauth.github.clientId,
-    clientSecret: config.auth.oauth.github.clientSecret,
+    clientId: config.oauth.github.clientId,
+    clientSecret: config.oauth.github.clientSecret,
   });
 
   const tokens = await github.oauthCallback(event);

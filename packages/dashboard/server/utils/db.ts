@@ -6,7 +6,11 @@ import { randomBytes } from 'node:crypto';
 async function getDB() {
   const config = useRuntimeConfig();
 
-  const connection = await mysql.createConnection(config.db.url);
+  if (!config.database.url) {
+    throw new Error('NUXT_DATABASE_URL is not configured');
+  }
+
+  const connection = await mysql.createConnection(config.database.url);
   return drizzle(connection, { schema, mode: 'default' });
 
   // if (config.db.turso.url && config.db.turso.authToken) {
