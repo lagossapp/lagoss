@@ -1,13 +1,16 @@
 import { deploymentSchema, domainSchema, envVariableSchema } from '~~/server/db/schema';
 import { eq, and } from 'drizzle-orm';
-import { redis } from '~~/server/lib/redis';
+import { useRedis } from '~~/server/lib/redis';
 import { envStringToObject } from '~~/app/composables/utils';
-import { s3 } from '~~/server/lib/s3';
+import { useS3 } from '~~/server/lib/s3';
 import { DeleteObjectCommand, DeleteObjectsCommand } from '@aws-sdk/client-s3';
 
 export default defineEventHandler(async event => {
   const db = await useDB();
   const project = await requireProject(event);
+  const config = useRuntimeConfig(event);
+  const s3 = await useS3();
+  const redis = await useRedis();
 
   const deploymentId = getRouterParam(event, 'deploymentId');
   if (!deploymentId) {
@@ -43,7 +46,7 @@ export default defineEventHandler(async event => {
   const deletePromises = [
     s3.send(
       new DeleteObjectCommand({
-        Bucket: process.env.S3_BUCKET,
+        Bucket: config.s3.bucket,
         Key: `${deployment.id}.js`,
       }),
     ),
@@ -53,7 +56,7 @@ export default defineEventHandler(async event => {
     deletePromises.push(
       s3.send(
         new DeleteObjectsCommand({
-          Bucket: process.env.S3_BUCKET,
+          Bucket: config.s3.bucket,
           Delete: {
             Objects: deployment.assets.map(asset => ({
               Key: `${deployment.id}/${asset}`,

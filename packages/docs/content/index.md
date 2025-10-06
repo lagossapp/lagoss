@@ -2,9 +2,9 @@
 layout: home
 
 hero:
-  name: "Lagoss"
-  text: "serverless JS / TS functions."
-  tagline: "Lagoss is a for of Langon an open-source runtime and platform for running JS / TS serverless functions."
+  name: 'Lagoss'
+  text: 'serverless JS / TS functions.'
+  tagline: 'Lagoss is a fork of Langon an open-source runtime and platform for running JS / TS serverless functions.'
   actions:
     - theme: brand
       text: Get started
@@ -21,4 +21,3 @@ features:
   - title: Incredible fast
     details: The optimized v8 runtime allows running your JS / TS applications in ms!
 ---
-
