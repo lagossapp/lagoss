@@ -1,4 +1,4 @@
-name: Container
+name: Documentation
 
 on:
   push:
