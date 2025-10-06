@@ -6,7 +6,7 @@
   "scripts": {
     "start:docs": "pnpm --filter @lagoss/docs dev",
     "test": "pnpm -r --parallel test",
-    "build": "pnpm -r --sequential build",
+    "build": "pnpm -r build",
     "lint": "pnpm -r --parallel lint",
     "typecheck": "pnpm -r --parallel typecheck",
     "docker:serverless:build": "docker build -t ghcr.io/lagossapp/serverless -f docker/Dockerfile.serverless .",
