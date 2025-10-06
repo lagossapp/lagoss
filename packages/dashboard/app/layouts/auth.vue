@@ -3,21 +3,19 @@
     class="relative grid min-h-screen grid-cols-1 divide-x divide-zinc-800 overflow-hidden md:grid-cols-3 lg:grid-cols-2"
   >
     <div
-      class="container absolute top-1/2 col-span-1 flex -translate-y-1/2 items-center md:static md:top-0 md:col-span-2 md:flex md:translate-y-0 lg:col-span-1"
+      class="absolute top-1/2 col-span-1 container flex -translate-y-1/2 items-center md:static md:top-0 md:col-span-2 md:flex md:translate-y-0 lg:col-span-1"
     >
       <div class="mx-auto flex w-full flex-col justify-center space-y-6 px-6 sm:w-[500px] md:px-0">
         <slot />
       </div>
     </div>
     <div
-      class="bg-linear-to-t relative hidden h-screen items-center justify-center bg-white from-blue-400/0 to-blue-400/20 md:flex md:bg-black"
+      class="relative hidden h-screen items-center justify-center bg-white bg-linear-to-t from-blue-400/0 to-blue-400/20 md:flex md:bg-black"
     >
       <div class="absolute inset-0 h-screen" aria-hidden="true">
         <canvas ref="canvas" />
       </div>
     </div>
-
-    <UNotifications />
   </div>
 </template>
 
