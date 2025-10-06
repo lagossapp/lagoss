@@ -83,7 +83,11 @@ importers:
         specifier: workspace:*
         version: link:../runtime
 
-  crates/wpt-runner: {}
+  crates/wpt-runner:
+    dependencies:
+      '@lagoss/js-runtime':
+        specifier: workspace:*
+        version: link:../../packages/js-runtime
 
   packages/dashboard:
     dependencies:

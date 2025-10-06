@@ -26,6 +26,8 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
+      - name: Build runtime
+        run: pnpm run --filter=@lagoss/js-runtime build
       - name: Lint
         run: pnpm lint
 
@@ -49,6 +51,8 @@ jobs:
         run: cp crates/serverless/.env.example crates/serverless/.env
       - name: Install dependencies
         run: pnpm install
+      - name: Build runtime
+        run: pnpm run --filter=@lagoss/js-runtime build
       - name: Test
         run: pnpm test
 
