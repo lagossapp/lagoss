@@ -189,7 +189,7 @@ impl Cronjob {
                                     .unwrap_or(());
 
                                 let body = String::from_utf8_lossy(&body);
-                                let maybe_body = if body == "" { String::from("") } else { format!(": {body}") };
+                                let maybe_body = if body.is_empty() { String::from("") } else { format!(": {body}") };
 
                                 if status == 200 {
                                     info!(
