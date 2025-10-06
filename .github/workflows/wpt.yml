@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Build runtime
-        run: pnpm turbo build --filter=@lagoss/js-runtime
+        run: pnpm -r run --sequential --filter=@lagoss/js-runtime build
       - name: Run wpt-runner
         run: cd crates/wpt-runner && pnpm start
       - name: Check if results have changed
