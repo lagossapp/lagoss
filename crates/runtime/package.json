@@ -7,5 +7,8 @@
     "build": "cargo build",
     "test": "cargo test-all-features",
     "lint": "cargo clippy -- -Dwarnings --no-deps"
+  },
+  "devDependencies": {
+    "@lagoss/js-runtime": "workspace:*"
   }
 }

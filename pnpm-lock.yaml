@@ -69,11 +69,18 @@ importers:
         specifier: ^7.3.1
         version: 7.3.1
     devDependencies:
+      '@lagoss/runtime':
+        specifier: workspace:*
+        version: link:../runtime
       '@types/update-notifier':
         specifier: ^6.0.8
         version: 6.0.8
 
-  crates/runtime: {}
+  crates/runtime:
+    devDependencies:
+      '@lagoss/js-runtime':
+        specifier: workspace:*
+        version: link:../../packages/js-runtime
 
   crates/runtime_utils: {}
 
@@ -84,10 +91,10 @@ importers:
         version: link:../runtime
 
   crates/wpt-runner:
-    dependencies:
-      '@lagoss/js-runtime':
+    devDependencies:
+      '@lagoss/runtime':
         specifier: workspace:*
-        version: link:../../packages/js-runtime
+        version: link:../runtime
 
   packages/dashboard:
     dependencies:
