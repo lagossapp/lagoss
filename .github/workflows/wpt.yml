@@ -24,7 +24,7 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-      - name: Build runtime
+      - name: Build js-runtime
         run: pnpm run --filter=@lagoss/js-runtime build
       - name: Run wpt-runner
         run: cd crates/wpt-runner && pnpm start
