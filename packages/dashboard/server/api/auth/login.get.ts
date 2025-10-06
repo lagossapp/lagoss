@@ -26,5 +26,7 @@ export default defineEventHandler(async event => {
     clientSecret: config.auth.oauth.github.clientSecret,
   });
 
-  return sendRedirect(event, github.getOauthRedirectUrl({ state, redirectUri }));
+  const url = github.getOauthRedirectUrl({ state, redirectUri });
+
+  return sendRedirect(event, url);
 });
