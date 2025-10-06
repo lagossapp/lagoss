@@ -21,15 +21,22 @@ export class Github {
   public getOauthRedirectUrl({
     state,
     scopes: _scopes,
+    redirectUri,
   }: {
     state: string;
     scopes?: string[];
     redirectUri?: string;
   }): string {
     const scopes = _scopes || ['read:user', 'user:email'];
-    return `https://github.com/login/oauth/authorize?client_id=${this.clientId}&state=${state}&scope=${scopes.join(
-      '%20',
-    )}`;
+
+    const query = new URLSearchParams({
+      client_id: this.clientId,
+      state,
+      scope: scopes.join(' '),
+      redirect_uri: redirectUri || '',
+    });
+
+    return `https://github.com/login/oauth/authorize?${query.toString()}`;
   }
 
   public async getUserInfo(token: string) {
@@ -86,7 +93,7 @@ export class Github {
   }
 
   public async refreshToken(refreshToken: string) {
-    const response: { error?: string; access_token: string; expires_in: string; refresh_token?: string } = await $fetch(
+    const response = await $fetch<{ error?: string; access_token: string; expires_in: string; refresh_token?: string }>(
       'https://github.com/login/oauth/access_token',
       {
         method: 'POST',

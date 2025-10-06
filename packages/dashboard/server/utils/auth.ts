@@ -27,10 +27,7 @@ export async function getUser(event: H3Event): Promise<User | undefined> {
         .execute(),
     );
     if (!user?.User) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Invalid token',
-      });
+      return undefined;
     }
 
     return user.User;
