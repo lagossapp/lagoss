@@ -20,19 +20,17 @@ export class Github {
 
   public getOauthRedirectUrl({
     state,
-    scopes: _scopes,
+    scopes,
     redirectUri,
   }: {
     state: string;
     scopes?: string[];
     redirectUri?: string;
   }): string {
-    const scopes = _scopes || ['read:user', 'user:email'];
-
     const query = new URLSearchParams({
       client_id: this.clientId,
       state,
-      scope: scopes.join(' '),
+      scope: (scopes ?? ['read:user', 'user:email']).join(' '),
       redirect_uri: redirectUri || '',
     });
 
