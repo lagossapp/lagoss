@@ -9,7 +9,16 @@ export default defineEventHandler(async event => {
   });
 
   const config = useRuntimeConfig();
-  const redirectUri = `${config.public.APP_URL}/api/auth/callback`;
+
+  if (!config.public.appUrl) {
+    throw new Error('NUXT_PUBLIC_APP_URL is not defined');
+  }
+
+  const redirectUri = `${config.public.appUrl}/api/auth/callback/github`;
+
+  if (!config.auth?.oauth?.github?.clientId || !config.auth?.oauth?.github?.clientSecret) {
+    throw new Error('NUXT_AUTH_OAUTH_GITHUB_CLIENT_ID and NUXT_AUTH_OAUTH_GITHUB_CLIENT_SECRET is not configured');
+  }
 
   // TODO: support different providers
   const github = new Github({
@@ -17,5 +26,7 @@ export default defineEventHandler(async event => {
     clientSecret: config.auth.oauth.github.clientSecret,
   });
 
-  return sendRedirect(event, github.getOauthRedirectUrl({ state, redirectUri }));
+  const url = github.getOauthRedirectUrl({ state, redirectUri });
+
+  return sendRedirect(event, url);
 });

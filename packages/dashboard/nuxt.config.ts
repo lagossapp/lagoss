@@ -1,3 +1,5 @@
+import { defineNuxtConfig } from 'nuxt/config';
+
 export default defineNuxtConfig({
   modules: ['@nuxt/ui'],
 
@@ -34,6 +36,7 @@ export default defineNuxtConfig({
       apiToken: '',
     },
     public: {
+      appUrl: 'http://localhost:3000',
       root: {
         schema: 'http',
         domain: 'localhost:4000',
@@ -57,10 +60,6 @@ export default defineNuxtConfig({
 
   future: {
     compatibilityVersion: 4,
-  },
-
-  build: {
-    transpile: ['trpc-nuxt'],
   },
 
   compatibilityDate: '2025-05-15',
