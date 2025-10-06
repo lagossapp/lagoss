@@ -1,24 +1,28 @@
-version: '3'
 services:
-  redis:
-    image: redis
+  valkey:
+    image: valkey/valkey:8.1.4
+    command: valkey-server --save 20 1 --loglevel warning
+    volumes:
+      - valkey:/data
     ports:
       - 6379:6379
-    command: redis-server --save 20 1 --loglevel warning
-    volumes:
-      - redis:/data
+    restart: unless-stopped
 
   mysql:
-    image: mariadb
+    image: mariadb:12.0.2
     environment:
-      - MYSQL_ROOT_PASSWORD=mysql
+      MYSQL_RANDOM_ROOT_PASSWORD: true
+      MYSQL_DATABASE: lagoss
+      MYSQL_USER: lagoss
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - 3306:3306
     volumes:
       - mysql:/var/lib/mysql
+    restart: unless-stopped
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v3.6.0
     ports:
       - 9090:9090
     volumes:
@@ -26,7 +30,7 @@ services:
       - prometheus:/prometheus
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:12.2.0
     ports:
       - 3001:3000
     volumes:
@@ -34,19 +38,25 @@ services:
       - grafana:/var/lib/grafana
 
   clickhouse:
-    image: clickhouse/clickhouse-server
-    ports:
-      - 8123:8123
-      - 8000:9000
+    image: clickhouse:25.9.2
     ulimits:
       nofile:
         soft: 262144
         hard: 262144
+    ports:
+      - 8123:8123
+      - 8000:9000
+    environment:
+      CLICKHOUSE_DB: serverless
+      CLICKHOUSE_USER: lagoss
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
     volumes:
       - clickhouse:/var/lib/clickhouse
+    restart: unless-stopped
 
   minio:
-    image: minio/minio
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
     ports:
       - 9002:9002
       - 9001:9001
@@ -59,7 +69,7 @@ services:
     command: -c 'mkdir -p /data/lagoss && minio server /data --console-address ":9001" --address ":9002"'
 
 volumes:
-  redis:
+  valkey:
   mysql:
   prometheus:
   grafana:

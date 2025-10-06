@@ -6,40 +6,92 @@ export default defineNuxtConfig({
   runtimeConfig: {
     auth: {
       name: 'nuxt-session',
-      password: 'my-super-secret-password-is-minimum-32-characters-long',
-      oauth: {
-        github: {
-          clientId: 'my-github-client-id',
-          clientSecret: 'my-github-client-secret',
-        },
+      password: '',
+    },
+    oauth: {
+      github: {
+        clientId: '',
+        clientSecret: '',
       },
     },
     s3: {
-      endpoint: process.env.S3_ENDPOINT,
-      bucket: process.env.S3_BUCKET ?? 'lagoss',
-      region: process.env.S3_REGION || 'unknown',
+      endpoint: '',
+      bucket: '',
+      region: 'unknown',
       credentials: {
-        accessKeyId: process.env.S3_ACCESS_KEY_ID ?? '',
-        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? '',
+        accessKeyId: '',
+        secretAccessKey: '',
       },
-      forcePathStyle: !!process.env.S3_ENDPOINT,
+      forcePathStyle: true,
     },
-    db: {
-      url: 'mysql://root:mysql@localhost:3306/lagoss',
+    database: {
+      url: '',
+    },
+    redis: {
+      url: '',
+    },
+    clickhouse: {
+      url: '',
+      user: '',
+      password: '',
+      database: 'serverless',
     },
     projects: {
       blacklistedNames: process.env.BLACKLISTED_PROJECT_NAMES
         ? process.env.BLACKLISTED_PROJECT_NAMES.split(',')
-        : ['lagoss', 'api', 'dash', 'www', 'docs', 'app', 's3', 'clickhouse'],
+        : ['lagoss', 'api', 'app', 'console', 'dash', 'www', 'docs', 'status', 's3', 'clickhouse'],
     },
     serverless: {
       apiToken: '',
     },
     public: {
-      appUrl: 'http://localhost:3000',
+      appUrl: '',
       root: {
-        schema: 'http',
-        domain: 'localhost:4000',
+        schema: 'https',
+        domain: '',
+      },
+    },
+  },
+
+  $development: {
+    runtimeConfig: {
+      auth: {
+        password: 'my-super-secret-password-is-minimum-32-characters-long',
+      },
+      s3: {
+        endpoint: 'http://localhost:9002',
+        bucket: 'lagoss',
+        region: 'unknown',
+        credentials: {
+          accessKeyId: 'lagoss',
+          secretAccessKey: '',
+        },
+        forcePathStyle: true,
+      },
+      database: {
+        url: 'mysql://root:lagoss@localhost:3306/lagoss',
+      },
+      redis: {
+        url: 'redis://localhost:6379',
+      },
+      clickhouse: {
+        url: 'http://localhost:8123',
+        user: 'lagoss',
+        password: 'lagoss',
+        database: 'serverless',
+      },
+      projects: {
+        blacklistedNames: [],
+      },
+      serverless: {
+        apiToken: '123456789',
+      },
+      public: {
+        appUrl: 'http://localhost:3000',
+        root: {
+          schema: 'http',
+          domain: 'localhost:4000',
+        },
       },
     },
   },

@@ -16,14 +16,14 @@ export default defineEventHandler(async event => {
 
   const redirectUri = `${config.public.appUrl}/api/auth/callback/github`;
 
-  if (!config.auth?.oauth?.github?.clientId || !config.auth?.oauth?.github?.clientSecret) {
+  if (!config.oauth?.github?.clientId || !config.oauth?.github?.clientSecret) {
     throw new Error('NUXT_AUTH_OAUTH_GITHUB_CLIENT_ID and NUXT_AUTH_OAUTH_GITHUB_CLIENT_SECRET is not configured');
   }
 
   // TODO: support different providers
   const github = new Github({
-    clientId: config.auth.oauth.github.clientId,
-    clientSecret: config.auth.oauth.github.clientSecret,
+    clientId: config.oauth.github.clientId,
+    clientSecret: config.oauth.github.clientSecret,
   });
 
   const url = github.getOauthRedirectUrl({ state, redirectUri });

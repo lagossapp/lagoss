@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { PRESIGNED_URL_EXPIRES_SECONDS } from '~~/server/lib/constants';
-import { s3 } from '~~/server/lib/s3';
+import { useS3 } from '~~/server/lib/s3';
 import { z } from 'zod';
 import { generateId } from '~~/server/utils/db';
 import { getPlanOfOrganization } from '~~/server/lib/plans';
@@ -12,6 +12,7 @@ export default defineEventHandler(async event => {
   const db = await useDB();
   const user = await requireUser(event);
   const project = await requireProject(event);
+  const s3 = await useS3();
 
   const input = await z
     .object({

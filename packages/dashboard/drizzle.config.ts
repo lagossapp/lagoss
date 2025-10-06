@@ -6,6 +6,6 @@ export default defineConfig({
   out: './server/db/migrations',
   dialect: 'mysql',
   dbCredentials: {
-    url: process.env.DATABASE_URL || 'mysql://root:root@localhost:3306/drizzle',
+    url: process.env.NUXT_DATABASE_URL || 'mysql://root:root@localhost:3306/drizzle',
   },
 });

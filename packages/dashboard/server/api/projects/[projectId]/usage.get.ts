@@ -1,7 +1,8 @@
-import { clickhouse } from '~~/server/lib/clickhouse';
+import { useClickHouse } from '~~/server/lib/clickhouse';
 
 export default defineEventHandler(async event => {
   const project = await requireProject(event);
+  const clickhouse = await useClickHouse();
 
   const { timeframe } = getQuery<{ level?: string; timeframe?: string }>(event);
 

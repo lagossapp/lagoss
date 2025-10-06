@@ -1,22 +1,22 @@
 import { createClient, RedisClientType } from 'redis';
 
-declare const global: typeof globalThis & {
-  redis: RedisClientType;
-};
+let redis: RedisClientType;
 
-let redis = global.redis;
+export async function useRedis(): Promise<RedisClientType> {
+  if (redis) {
+    return redis;
+  }
 
-if (!redis) {
+  const config = useRuntimeConfig();
+
   const redisClient = createClient({
-    url: process.env.REDIS_URL,
+    url: config.redis.url,
     pingInterval: 1000,
   });
 
-  // TODO: await?
-  // await redisClient.connect();
-  redisClient.connect();
+  await redisClient.connect();
 
   redis = redisClient as RedisClientType;
-}
 
-export { redis };
+  return redis;
+}
