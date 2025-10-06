@@ -5,6 +5,7 @@ members = [
   "crates/cli",
   "crates/wpt-runner",
 ]
+resolver = "3"
 
 [profile.release]
 lto = "thin"
