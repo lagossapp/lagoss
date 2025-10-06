@@ -1,6 +1,6 @@
 # Getting started
 
-This page will guide you through creating a simple JavaScript/TypeScript Edge Function and deploying it to Lagoss using the CLI. The Function will be accessible through a unique URL.
+This page will guide you through creating a simple JavaScript/TypeScript function and deploying it to Lagoss using the CLI. The edge function will be accessible through an unique URL.
 
 ## Installation
 
@@ -15,9 +15,9 @@ yarn global add @lagoss/cli esbuild
 pnpm install --global @lagoss/cli esbuild
 ```
 
-## Create a new Function
+## Create a new project
 
-We will now create a new Function, that listens for `Request`s and replies with `Response`s. Remember the `fetch` function from browsers? We use the same native Web APIs!
+We will now create a new function, that listens for `Request`s and replies with `Response`s. Remember the `fetch` function from browsers? We use the same native Web APIs!
 
 Create a new file called `hello.js` / `hello.ts` and add the following code:
 
@@ -25,8 +25,8 @@ Create a new file called `hello.js` / `hello.ts` and add the following code:
 // hello.js
 export function handler(request) {
   return new Response('Hello, <b>World!</b>', {
-    headers: { 'content-type': 'text/html' }
-  })
+    headers: { 'content-type': 'text/html' },
+  });
 }
 ```
 
@@ -34,12 +34,12 @@ export function handler(request) {
 // hello.ts
 export function handler(request: Request) {
   return new Response('Hello, <b>World!</b>', {
-    headers: { 'content-type': 'text/html' }
-  })
+    headers: { 'content-type': 'text/html' },
+  });
 }
 ```
 
-## Deploy the Function
+## Deploy the function
 
 TODO: point users to self-hosting
 
@@ -75,24 +75,24 @@ Now that we have a Function deployed, we would like to add a new feature and ret
 ```javascript {3-4,6}
 // hello.js
 export function handler(request) {
-  const url = new URL(request.url)
-  const name = url.searchParams.get('name') || 'World'
+  const url = new URL(request.url);
+  const name = url.searchParams.get('name') || 'World';
 
   return new Response(`Hello, <b>${name}!</b>`, {
-    headers: { 'content-type': 'text/html' }
-  })
+    headers: { 'content-type': 'text/html' },
+  });
 }
 ```
 
 ```typescript {3-4,6}
 // hello.ts
 export function handler(request: Request) {
-  const url = new URL(request.url)
-  const name = url.searchParams.get('name') || 'World'
+  const url = new URL(request.url);
+  const name = url.searchParams.get('name') || 'World';
 
   return new Response(`Hello, <b>${name}!</b>`, {
-    headers: { 'content-type': 'text/html' }
-  })
+    headers: { 'content-type': 'text/html' },
+  });
 }
 ```
 

@@ -2,7 +2,7 @@ import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { Readable } from 'node:stream';
 
 import { deploymentSchema } from '~~/server/db/schema';
-import { s3 } from '~~/server/lib/s3';
+import { useS3 } from '~~/server/lib/s3';
 import { and, eq } from 'drizzle-orm';
 
 async function streamToString(stream: Readable): Promise<string> {
@@ -16,6 +16,7 @@ async function streamToString(stream: Readable): Promise<string> {
 
 async function getDeploymentCode(deploymentId: string) {
   const config = useRuntimeConfig();
+  const s3 = await useS3();
 
   const content = await s3.send(
     new GetObjectCommand({
