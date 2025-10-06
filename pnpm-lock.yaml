@@ -77,7 +77,11 @@ importers:
 
   crates/runtime_utils: {}
 
-  crates/serverless: {}
+  crates/serverless:
+    dependencies:
+      '@lagoss/runtime':
+        specifier: workspace:*
+        version: link:../runtime
 
   crates/wpt-runner: {}
 
