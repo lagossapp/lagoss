@@ -12,10 +12,10 @@
           </p>
 
           <UFormField label="Name" required>
-            <UButtonGroup size="md" orientation="horizontal">
+            <UFieldGroup size="md" orientation="horizontal">
               <UInput v-if="project" v-model="project.name" placeholder="your-name" size="md" />
               <UInput :model-value="`.${$config.public.root.domain}`" disabled class="cursor-default!" size="md" />
-            </UButtonGroup>
+            </UFieldGroup>
           </UFormField>
 
           <div class="border-accented flex w-full border-t pt-2">

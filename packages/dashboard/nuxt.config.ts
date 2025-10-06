@@ -1,3 +1,5 @@
+import { defineNuxtConfig } from 'nuxt/config';
+
 export default defineNuxtConfig({
   modules: ['@nuxt/ui'],
 
@@ -34,6 +36,7 @@ export default defineNuxtConfig({
       apiToken: '',
     },
     public: {
+      appUrl: 'http://localhost:3000',
       root: {
         schema: 'http',
         domain: 'localhost:4000',
