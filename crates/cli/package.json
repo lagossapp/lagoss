@@ -5,8 +5,7 @@
   "type": "module",
   "files": [
     "bin",
-    "dist",
-    "scripts/install.js"
+    "dist"
   ],
   "repository": {
     "type": "git",
@@ -16,20 +15,18 @@
     "lagoss": "./bin/run.js"
   },
   "scripts": {
-    "build:js": "esbuild --outdir=dist/ --platform=node --format=esm --packages=external --bundle --minify lib/core.ts",
+    "build:js": "esbuild --outdir=dist/ --platform=node --format=esm --packages=external --bundle --sourcemap lib/core.ts",
     "build": "pnpm build:js && cargo build",
     "lint": "cargo clippy -- -Dwarnings --no-deps",
-    "typecheck": "tsc --noEmit",
-    "postinstall": "node ./scripts/install.js"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "axios": "^1.7.7",
-    "esbuild": "^0.25.0",
-    "rimraf": "^6.0.1",
-    "tar": "^7.4.3",
+    "esbuild": "^0.25.10",
+    "tar": "^7.5.1",
     "update-notifier": "^7.3.1"
   },
   "devDependencies": {
+    "@types/node": "^24.0.10",
     "@types/update-notifier": "^6.0.8"
   }
 }
