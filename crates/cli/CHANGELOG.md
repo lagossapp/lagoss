@@ -30,6 +30,21 @@
 * **deps:** update dependency esbuild to ^0.25.0 [security] ([#144](https://github.com/lagossapp/lagoss/issues/144)) ([1e5ed21](https://github.com/lagossapp/lagoss/commit/1e5ed21b83f83f84067878cab86bac6ea999772c))
 * **deps:** update rust crate flume to 0.11.0 ([#188](https://github.com/lagossapp/lagoss/issues/188)) ([4ee9ddb](https://github.com/lagossapp/lagoss/commit/4ee9ddb02b95ed7c1abc986f3cafa1ee25fc934b))
 
+## [0.11.0](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.10.2...@lagoss/cli@0.11.0) (2025-10-08)
+
+
+### Features
+
+* use rest api with cli ([#161](https://github.com/lagossapp/lagoss/issues/161)) ([de3b00e](https://github.com/lagossapp/lagoss/commit/de3b00ebba75b4cba7dcfcdd8030d535c83eb447))
+* use rest api with cli ([#193](https://github.com/lagossapp/lagoss/issues/193)) ([4581e10](https://github.com/lagossapp/lagoss/commit/4581e103afe447c9006c71cf43a332da00b4db92))
+
+
+### Bug Fixes
+
+* correctly bundle cli ([#203](https://github.com/lagossapp/lagoss/issues/203)) ([28c8a7b](https://github.com/lagossapp/lagoss/commit/28c8a7b549fab51ed6083177d200873423d22c5f))
+* **deps:** update dependency esbuild to ^0.25.0 [security] ([#144](https://github.com/lagossapp/lagoss/issues/144)) ([1e5ed21](https://github.com/lagossapp/lagoss/commit/1e5ed21b83f83f84067878cab86bac6ea999772c))
+* **deps:** update rust crate flume to 0.11.0 ([#188](https://github.com/lagossapp/lagoss/issues/188)) ([4ee9ddb](https://github.com/lagossapp/lagoss/commit/4ee9ddb02b95ed7c1abc986f3cafa1ee25fc934b))
+
 ## 0.10.2
 
 ### Patch Changes
