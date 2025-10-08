@@ -17,7 +17,7 @@ jobs:
   release-cli:
     name: Release artifact ${{ matrix.target }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/@lagoss/cli@')
+    if: github.ref_type == 'tag'
     strategy:
       fail-fast: false
       matrix:
@@ -86,16 +86,15 @@ jobs:
           cp ../../target/${{ matrix.target }}/release/${{ matrix.input }} builds/${{ matrix.asset_name }}/${{ matrix.output }}
           tar -C builds -czvf ${{ matrix.asset_name }}.tar.gz ${{ matrix.asset_name }}
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.asset_name }}
           path: crates/cli/${{ matrix.asset_name }}.tar.gz
-      - name: Upload to release
-        uses: softprops/action-gh-release@v1
-        if: github.event_name == 'push'
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
         with:
           files: crates/cli/${{ matrix.asset_name }}.tar.gz
-          token: ${{ secrets.GITHUB_TOKEN }}
 
   publish-preview:
     name: Publish package preview
