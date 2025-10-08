@@ -5,6 +5,9 @@ on:
     tags:
       - '@lagoss/cli@*'
   pull_request:
+    paths:
+      - 'crates/cli/**'
+      - '.github/workflows/cli.yml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
