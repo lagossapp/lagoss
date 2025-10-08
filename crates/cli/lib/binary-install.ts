@@ -4,16 +4,17 @@
 //
 // Cloudflare wrangler-legacy: https://github.com/cloudflare/wrangler-legacy/blob/master/npm/binary-install.js
 // binary-install: https://github.com/EverlastingBugstopper/binary-install#readme
-import { existsSync, mkdirSync } from 'node:fs';
+import { stat, mkdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { pipeline } from 'node:stream/promises';
 
-import axios from 'axios';
 import * as tar from 'tar';
-import { rimraf } from 'rimraf';
+import { color } from './console.js';
 
 function error(msg: string | Error) {
-  console.error(msg);
+  // Prepend a red cross to errors for visibility
+  console.error(color.red(`❌ ${msg}`));
   process.exit(1);
 }
 
@@ -49,8 +50,14 @@ export class Binary {
     return join(this._getBinaryDirectory(), this.name);
   }
 
-  _isInstalled() {
-    return existsSync(this._getBinaryPath());
+  async _exists(path: string) {
+    return stat(path)
+      .then(() => true)
+      .catch(() => false);
+  }
+
+  async _isInstalled() {
+    return this._exists(this._getBinaryPath());
   }
 
   _getInstalledVersion() {
@@ -58,62 +65,58 @@ export class Binary {
     return stdout.trim();
   }
 
-  _isUpToDate() {
-    return this._isInstalled() && this.version === this._getInstalledVersion();
+  async _isUpToDate() {
+    return (await this._isInstalled()) && this.version === this._getInstalledVersion();
   }
 
   async install() {
-    if (this._isUpToDate()) {
+    if (await this._isUpToDate()) {
       return;
     }
 
     const installationDirectory = this._getInstallationDirectory();
-    if (!existsSync(installationDirectory)) {
-      mkdirSync(installationDirectory, { recursive: true });
+    if (!(await this._exists(installationDirectory))) {
+      await mkdir(installationDirectory, { recursive: true });
     }
 
     const binaryDirectory = this._getBinaryDirectory();
-    if (existsSync(binaryDirectory)) {
-      rimraf.sync(binaryDirectory);
+    if (!(await this._exists(binaryDirectory))) {
+      await rm(binaryDirectory, { recursive: true, force: true });
     }
-    mkdirSync(binaryDirectory, { recursive: true });
+    await mkdir(binaryDirectory, { recursive: true });
 
-    console.log(`Downloading release from ${this.url}`);
+    console.log(`⬇️ Downloading ${this.name} version ${color.green(this.version)} ...`);
 
     try {
-      const res = await axios({ url: this.url, responseType: 'stream' });
+      const res = await fetch(this.url, { method: 'GET' });
+      if (!res.ok) {
+        throw new Error(`Failed to fetch release: ${res.status} ${res.statusText}`);
+      }
+
+      if (!res.body) {
+        throw new Error(`No response body`);
+      }
 
       const writer = tar.x({ strip: 1, C: binaryDirectory });
 
-      await new Promise((resolve, reject) => {
-        res.data.pipe(writer);
-        let error: Error | null = null;
-        writer.on('error', err => {
-          error = err;
-          reject(err);
-        });
-        writer.on('close', () => {
-          if (!error) {
-            resolve(true);
-          }
-        });
-      });
+      // res.body is a WHATWG ReadableStream in newer Node versions
+      await pipeline(res.body as unknown as NodeJS.ReadableStream, writer);
 
-      console.log(`${this.name} has been installed!`);
+      console.log(`✔️ ${this.name} version ${color.green(this.version)} has been installed!`);
     } catch (e) {
       error(`Error fetching release: ${(e as Error).message}`);
     }
   }
 
-  uninstall() {
-    if (existsSync(this._getInstallationDirectory())) {
-      rimraf.sync(this.installationDirectory);
-      console.log(`${this.name} has been uninstalled`);
+  async uninstall() {
+    if (await this._exists(this._getInstallationDirectory())) {
+      await rm(this.installationDirectory, { recursive: true, force: true });
+      console.log(`🗑️ ${this.name} has been uninstalled`);
     }
   }
 
   async run(shouldInstall = true) {
-    if (!this._isInstalled() && shouldInstall) {
+    if (!(await this._isUpToDate()) && shouldInstall) {
       await this.install();
     }
 

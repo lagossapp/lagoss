@@ -1,7 +1,7 @@
-import { createRequire } from 'node:module';
 import { Binary } from './binary-install';
 import os from 'node:os';
 import path from 'node:path';
+import packageJson from '../package.json' assert { type: 'json' };
 
 function getPlatform() {
   const type = os.type();
@@ -47,12 +47,7 @@ function getPlatform() {
 
 export function getBinary() {
   const { platform, name } = getPlatform();
-  const customRequire = createRequire(import.meta.url);
-
-  const { name: packageName, version } = customRequire('../package.json') as {
-    name: string;
-    version: string;
-  };
+  const { name: packageName, version } = packageJson;
 
   const url = `https://github.com/lagossapp/lagoss/releases/download/${packageName}@${version}/${platform}.tar.gz`;
   const installationDirectory = path.join(os.homedir(), '.lagoss');

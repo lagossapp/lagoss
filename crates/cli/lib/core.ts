@@ -4,10 +4,10 @@ import updateNotifier from 'update-notifier';
 import { getBinary } from './get-binary';
 import packageJson from '../package.json' assert { type: 'json' };
 
-function run() {
+async function run() {
   updateNotifier({ pkg: packageJson }).notify();
 
-  getBinary().run();
+  await getBinary().run();
 }
 
 async function install() {

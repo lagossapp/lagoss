@@ -1,10 +1,10 @@
-name: Release cli
+name: CLI
 
 on:
   push:
     tags:
       - '@lagoss/cli@*'
-  workflow_dispatch:
+  pull_request:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -12,8 +12,9 @@ concurrency:
 
 jobs:
   release-cli:
-    name: Create Artifact ${{ matrix.target }} (${{ matrix.os }})
+    name: Release artifact ${{ matrix.target }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/@lagoss/cli@')
     strategy:
       fail-fast: false
       matrix:
@@ -92,3 +93,24 @@ jobs:
         with:
           files: crates/cli/${{ matrix.asset_name }}.tar.gz
           token: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-preview:
+    name: Publish package preview
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build CLI
+        run: pnpm run --filter @lagoss/cli build:js
+      - name: Publish preview to pkg.pr.new
+        run: |
+          cd crates/cli
+          pnpm dlx pkg-pr-new publish
