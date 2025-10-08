@@ -109,6 +109,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Build CLI
-        run: pnpm run --filter @lagoss/cli build
+        run: pnpm run --filter @lagoss/cli build:js
       - name: Publish preview to pkg.pr.new
         run: pnpm dlx pkg-pr-new publish
