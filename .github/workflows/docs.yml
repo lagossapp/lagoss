@@ -22,15 +22,9 @@ jobs:
         run: pnpm install
       - name: Build documentation
         run: pnpm run --filter @lagoss/docs build
-      # - uses: lagossapp/github-action@latest
-      #   with:
-      #     lagoss_token: ${{ secrets.LAGOSS_TOKEN }}
-      - run: |
-          npm i --global https://pkg.pr.new/lagossapp/lagoss/@lagoss/cli@203
-          mkdir -p "$HOME/.lagoss"
-          echo \{\"token\":\""${LAGOSS_TOKEN}"\",\"site_url\":\"https://console.lagoss.com\"\} | jq >"$HOME/.lagoss/config.json"
-          echo "Executing CLI ..."
-          lagoss deploy --prod
+      - uses: lagossapp/github-action@latest
+        with:
+          lagoss_token: ${{ secrets.LAGOSS_TOKEN }}
       - name: Log deployment URL
         run: |
           url=$(grep -o 'https://[^[:space:]]*' lagoss.output)
