@@ -3,7 +3,7 @@
 Lagoss is an open-source runtime and platform that allows developers to run TypeScript and JavaScript Serverless Functions close to users.
 
 ::: info
-The project was forked from [Lagoss](https://github.com/lagossapp/lagoss) with the
+The project was forked from [Lagon](https://github.com/lagonapp/lagon) with the
 intention to continue development. There is currently a public testing instance
 deployed at <https://app.lagoss.com>. However it should be only used for basic
 testing and data might be deleted at any point. If you want a proper setup,
@@ -16,7 +16,7 @@ please deploy your own instance => [Install my own instance](./self-hosting/inst
 - Native Web APIs like `Request`, `Response`...
 - 100% open-source
 - Deploy APIs, SSR(ed) websites, Webhooks endpoints, Cron jobs...
-- CLI to manage Functions and develop locally
+- CLI to manage projects and develop locally
 - Deploy at the Edge using the Cloud version, or self-host it
 
 ## How it works

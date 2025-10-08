@@ -10,10 +10,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-
 jobs:
   release-cli:
     name: Create Artifact ${{ matrix.target }} (${{ matrix.os }})
@@ -78,7 +74,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Build js-runtime
-        run: pnpm turbo build --filter=@lagoss/js-runtime
+        run: pnpm run --filter=@lagoss/js-runtime build
       - name: Build CLI
         run: |
           cd crates/cli && cargo build --release --target ${{ matrix.target }}

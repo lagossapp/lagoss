@@ -1,19 +1,21 @@
 import { ClickHouse } from 'clickhouse';
 
-declare const global: typeof globalThis & {
-  clickhouse: ClickHouse;
-};
+let clickhouse: ClickHouse;
 
-const clickhouse =
-  global.clickhouse ||
-  new ClickHouse({
-    url: process.env.CLICKHOUSE_URL,
+export async function useClickHouse(): Promise<ClickHouse> {
+  if (clickhouse) {
+    return clickhouse;
+  }
+
+  const config = useRuntimeConfig();
+
+  clickhouse = new ClickHouse({
+    url: config.clickhouse.url,
     basicAuth: {
-      username: process.env.CLICKHOUSE_USER,
-      password: process.env.CLICKHOUSE_PASSWORD,
+      username: config.clickhouse.user,
+      password: config.clickhouse.password,
     },
   });
 
-if (process.env.NODE_ENV === 'development') global.clickhouse = clickhouse;
-
-export { clickhouse };
+  return clickhouse;
+}

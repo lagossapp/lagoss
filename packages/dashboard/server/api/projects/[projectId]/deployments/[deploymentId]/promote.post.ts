@@ -1,11 +1,12 @@
 import { deploymentSchema, domainSchema, envVariableSchema } from '~~/server/db/schema';
 import { eq, and } from 'drizzle-orm';
-import { redis } from '~~/server/lib/redis';
+import { useRedis } from '~~/server/lib/redis';
 import { envStringToObject } from '~~/app/composables/utils';
 
 export default defineEventHandler(async event => {
   const db = await useDB();
   const project = await requireProject(event);
+  const redis = await useRedis();
 
   const deploymentId = getRouterParam(event, 'deploymentId');
   if (!deploymentId) {

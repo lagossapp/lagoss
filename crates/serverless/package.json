@@ -8,5 +8,8 @@
     "build": "cargo build",
     "lint": "cargo clippy -- -Dwarnings --no-deps",
     "debug": "cargo build && rust-lldb ../../target/debug/lagoss-serverless"
+  },
+  "dependencies": {
+    "@lagoss/runtime": "workspace:*"
   }
 }
