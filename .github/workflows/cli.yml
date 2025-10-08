@@ -111,4 +111,6 @@ jobs:
       - name: Build CLI
         run: pnpm run --filter @lagoss/cli build:js
       - name: Publish preview to pkg.pr.new
-        run: pnpm dlx pkg-pr-new publish
+        run: |
+          cd crates/cli
+          pnpm dlx pkg-pr-new publish
