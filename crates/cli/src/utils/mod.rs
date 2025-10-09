@@ -1,11 +1,13 @@
 use anyhow::{anyhow, Result};
 use std::path::{Path, PathBuf};
 
+mod app_config;
 mod client;
 mod config;
 mod console;
 mod deployments;
 
+pub use app_config::*;
 pub use client::*;
 pub use config::*;
 pub use console::*;

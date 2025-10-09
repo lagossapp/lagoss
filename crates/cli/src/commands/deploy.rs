@@ -1,6 +1,6 @@
 use crate::utils::{
-    create_deployment, get_theme, print_progress, resolve_path, ApiClient, ApplicationConfig,
-    Config,
+    create_deployment, get_theme, print_progress, resolve_application_path, ApiClient,
+    ApplicationConfig, Config,
 };
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm, Input, Select};
@@ -77,7 +77,7 @@ async fn get_config(
     client: Option<PathBuf>,
     assets_dir: Option<PathBuf>,
 ) -> Result<(PathBuf, ApplicationConfig)> {
-    let (root, mut app_config) = resolve_path(path, client, assets_dir)?;
+    let (root, mut app_config) = resolve_application_path(path, client, assets_dir)?;
 
     if !app_config.application_id.is_empty() {
         return Ok((root, app_config));

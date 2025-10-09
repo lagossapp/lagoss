@@ -1,4 +1,4 @@
-use crate::utils::{bundle_function, resolve_path, Assets};
+use crate::utils::{bundle_function, resolve_application_path, Assets};
 use anyhow::{anyhow, Error, Result};
 use chrono::offset::Local;
 use dialoguer::console::style;
@@ -183,7 +183,7 @@ pub async fn dev(
     allow_code_generation: bool,
     prod: bool,
 ) -> Result<()> {
-    let (root, application_config) = resolve_path(path.clone(), client, assets_dir)?;
+    let (root, application_config) = resolve_application_path(path.clone(), client, assets_dir)?;
     let (index, assets) = bundle_function(&application_config, &root, prod)?;
 
     let index = Arc::new(Mutex::new(index));
