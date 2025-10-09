@@ -1,11 +1,13 @@
 use anyhow::{anyhow, Result};
 use std::path::{Path, PathBuf};
 
+mod app_config;
 mod client;
 mod config;
 mod console;
 mod deployments;
 
+pub use app_config::*;
 pub use client::*;
 pub use config::*;
 pub use console::*;
@@ -39,13 +41,11 @@ pub fn validate_code_file(file: &Path, root: &Path) -> Result<()> {
     }
 }
 
-pub fn validate_assets_dir(assets_dir: &Option<PathBuf>, root: &Path) -> Result<()> {
-    if let Some(dir) = assets_dir {
-        let path = root.join(dir);
+pub fn validate_assets_dir(assets_dir: &PathBuf, root: &Path) -> Result<()> {
+    let path = root.join(assets_dir);
 
-        if !path.is_dir() {
-            return Err(anyhow!("Public directory {:?} does not exist.", path));
-        }
+    if !path.is_dir() {
+        return Err(anyhow!("Assets directory {:?} does not exist.", path));
     }
 
     Ok(())

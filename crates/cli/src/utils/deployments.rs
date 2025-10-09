@@ -1,20 +1,12 @@
-use super::{
-    validate_assets_dir, validate_code_file, Config, MAX_ASSET_SIZE_MB, MAX_FUNCTION_SIZE_MB,
-};
-use crate::utils::{get_theme, print_progress, ApiClient};
+use super::{Config, MAX_ASSET_SIZE_MB, MAX_FUNCTION_SIZE_MB};
+use crate::utils::app_config::ApplicationConfig;
+use crate::utils::{print_progress, ApiClient};
 use anyhow::{anyhow, Result};
 use dialoguer::console::style;
-use dialoguer::{Confirm, Input};
 use pathdiff::diff_paths;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
-use std::{
-    collections::HashMap,
-    fs,
-    io::ErrorKind,
-    path::{Path, PathBuf},
-    process::Command,
-};
+use std::{collections::HashMap, fs, io::ErrorKind, path::Path, process::Command};
 use walkdir::{DirEntry, WalkDir};
 
 pub type Assets = HashMap<String, Vec<u8>>;
@@ -24,208 +16,6 @@ const ESBUILD: &str = "esbuild.cmd";
 
 #[cfg(not(windows))]
 const ESBUILD: &str = "esbuild";
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct FunctionConfig {
-    pub function_id: String,
-    pub organization_id: String,
-    pub index: PathBuf,
-    pub client: Option<PathBuf>,
-    pub assets: Option<PathBuf>,
-}
-
-impl FunctionConfig {
-    pub fn load(
-        root: &Path,
-        client_override: Option<PathBuf>,
-        assets_override: Option<PathBuf>,
-    ) -> Result<FunctionConfig> {
-        let path = get_function_config_path(root);
-
-        if !path.exists() {
-            println!(
-                "{}",
-                style(format!(
-                    "No configuration found in directory {} ...",
-                    path.display()
-                ))
-                .black()
-                .bright()
-            );
-            println!();
-
-            let index = match client_override {
-                Some(index) => {
-                    println!("{}", style("Using custom entrypoint...").black().bright());
-                    index
-                }
-                None => {
-                    let index = Input::<String>::with_theme(get_theme())
-                        .with_prompt(format!(
-                            "Path to your Function's entrypoint? {}",
-                            style(format!("(relative to {:?})", root.canonicalize()?))
-                                .black()
-                                .bright()
-                        ))
-                        .validate_with(|input: &String| -> std::result::Result<(), String> {
-                            validate_code_file(&root.join(input), root)
-                                .map_err(|err| err.to_string())
-                        })
-                        .interact_text()?;
-
-                    PathBuf::from(index)
-                }
-            };
-
-            let assets = match assets_override {
-                Some(assets) => {
-                    println!(
-                        "{}",
-                        style("Using custom public directory...").black().bright()
-                    );
-                    Some(assets)
-                }
-                None => match Confirm::with_theme(get_theme())
-                    .with_prompt("Do you have a public directory to serve assets from?")
-                    .default(false)
-                    .interact()?
-                {
-                    true => {
-                        let assets = Input::<String>::with_theme(get_theme())
-                            .with_prompt(format!(
-                                "Path to your Function's public directory? {}",
-                                style(format!("(relative to {:?})", root.canonicalize()?))
-                                    .black()
-                                    .bright(),
-                            ))
-                            .validate_with(|input: &String| -> std::result::Result<(), String> {
-                                validate_assets_dir(&Some(root.join(input)), root)
-                                    .map_err(|err| err.to_string())
-                            })
-                            .interact_text()?;
-
-                        Some(PathBuf::from(assets))
-                    }
-                    false => None,
-                },
-            };
-
-            let config = FunctionConfig {
-                function_id: String::from(""),
-                organization_id: String::from(""),
-                index,
-                client: None,
-                assets,
-            };
-
-            config.write(root)?;
-            println!();
-
-            return Ok(config);
-        }
-
-        println!("{}", style("Found configuration file...").black().bright());
-
-        let content = fs::read_to_string(path)?;
-        let mut config = serde_json::from_str::<FunctionConfig>(&content)?;
-
-        if let Some(client_override) = client_override {
-            println!("{}", style("Using custom client file...").black().bright());
-            config.client = Some(client_override);
-        }
-
-        if let Some(assets_override) = assets_override {
-            println!(
-                "{}",
-                style("Using custom public directory...").black().bright()
-            );
-            config.assets = Some(assets_override);
-        }
-
-        validate_code_file(&config.index, root)?;
-
-        if let Some(client) = &config.client {
-            validate_code_file(client, root)?;
-        }
-
-        validate_assets_dir(&config.assets, root)?;
-
-        println!();
-
-        Ok(config)
-    }
-
-    pub fn write(&self, root: &Path) -> Result<()> {
-        let path = get_function_config_path(root);
-
-        if !path.exists() {
-            fs::create_dir_all(root.join(".lagoss"))?;
-        }
-
-        let content = serde_json::to_string(self)?;
-        fs::write(path, content)?;
-        Ok(())
-    }
-
-    pub fn delete(&self, root: &Path) -> Result<()> {
-        let path = get_function_config_path(root);
-
-        if !path.exists() {
-            return Err(anyhow!("No configuration found in this directory.",));
-        }
-
-        fs::remove_file(path)?;
-        Ok(())
-    }
-}
-
-pub fn resolve_path(
-    path: Option<PathBuf>,
-    client: Option<PathBuf>,
-    public_dir: Option<PathBuf>,
-) -> Result<(PathBuf, FunctionConfig)> {
-    let path = path.unwrap_or_else(|| PathBuf::from("."));
-
-    if !path.exists() {
-        return Err(anyhow!("File or directory not found"));
-    }
-
-    match path.is_file() {
-        true => {
-            let root = PathBuf::from(path.parent().unwrap());
-
-            let index = diff_paths(&path, &root).unwrap();
-            let client = client.map(|client| diff_paths(client, &root).unwrap());
-            let assets = public_dir.map(|public_dir| diff_paths(public_dir, &root).unwrap());
-
-            Ok((
-                root,
-                FunctionConfig {
-                    function_id: String::new(),
-                    organization_id: String::new(),
-                    index,
-                    client,
-                    assets,
-                },
-            ))
-        }
-        false => Ok((
-            path.clone(),
-            FunctionConfig::load(&path, client, public_dir)?,
-        )),
-    }
-}
-
-pub fn get_root(root: Option<PathBuf>) -> PathBuf {
-    match root {
-        Some(path) => path, // TODO: find closes parent with .lagoss
-        None => std::env::current_dir().unwrap(),
-    }
-}
-
-pub fn get_function_config_path(root: &Path) -> PathBuf {
-    root.join(".lagoss").join("config.json")
-}
 
 fn esbuild(file: &Path, root: &Path, prod: bool) -> Result<Vec<u8>> {
     let node_env = match prod {
@@ -266,7 +56,7 @@ fn esbuild(file: &Path, root: &Path, prod: bool) -> Result<Vec<u8>> {
 }
 
 pub fn bundle_function(
-    function_config: &FunctionConfig,
+    application_config: &ApplicationConfig,
     root: &Path,
     prod: bool,
 ) -> Result<(Vec<u8>, Assets)> {
@@ -283,13 +73,13 @@ pub fn bundle_function(
         };
     }
 
-    let end_progress = print_progress("Bundling Function");
-    let index_output = esbuild(&function_config.index, root, prod)?;
+    let end_progress = print_progress("Bundling application");
+    let index_output = esbuild(&application_config.handler, root, prod)?;
     end_progress();
 
     let mut final_assets = Assets::new();
 
-    if let Some(client) = &function_config.client {
+    if let Some(client) = &application_config.client {
         let end_progress = print_progress("Bundling client file");
         let client_output = esbuild(client, root, prod)?;
         end_progress();
@@ -297,7 +87,7 @@ pub fn bundle_function(
         let client_path = client.as_path().with_extension("js");
         let client_path = client_path.file_name().unwrap();
 
-        if let Some(assets) = &function_config.assets {
+        if let Some(assets) = &application_config.assets {
             let client_path = assets.join(client_path);
             fs::write(client_path, &client_output)?;
         }
@@ -315,7 +105,7 @@ pub fn bundle_function(
         );
     }
 
-    if let Some(assets) = &function_config.assets {
+    if let Some(assets) = &application_config.assets {
         let assets = root.join(assets);
         let msg = format!("Processing assets ({:?})", assets.canonicalize().unwrap());
         let end_progress = print_progress(&msg);
@@ -388,17 +178,17 @@ struct PromoteDeploymentResponse {
 }
 
 pub async fn create_deployment(
-    config: Config,
-    project_config: &FunctionConfig,
+    config: &Config,
+    application_config: &ApplicationConfig,
     is_production: bool,
     root: &Path,
     prod_bundle: bool,
 ) -> Result<()> {
-    let (index, assets) = bundle_function(project_config, root, prod_bundle)?;
+    let (index, assets) = bundle_function(application_config, root, prod_bundle)?;
 
     let end_progress = print_progress("Creating deployment");
 
-    let client = ApiClient::new(config);
+    let client = ApiClient::new(config.clone());
 
     let client = Arc::new(client);
 
@@ -408,7 +198,10 @@ pub async fn create_deployment(
         assets_urls,
     } = client
         .post::<CreateDeploymentRequest, CreateDeploymentResponse>(
-            &format!("/api/projects/{}/deployments", project_config.function_id),
+            &format!(
+                "/api/projects/{}/deployments",
+                application_config.application_id
+            ),
             CreateDeploymentRequest {
                 function_size: index.len(),
                 assets: assets
@@ -449,13 +242,13 @@ pub async fn create_deployment(
     end_progress();
 
     if is_production {
-        let end_progress = print_progress("Promoting Function to production");
+        let end_progress = print_progress("Promoting deployment to production");
 
         let response = client
             .post::<(), PromoteDeploymentResponse>(
                 &format!(
                     "/api/projects/{}/deployments/{}/promote",
-                    project_config.function_id, deployment_id
+                    application_config.application_id, deployment_id
                 ),
                 (),
             )
@@ -471,12 +264,12 @@ pub async fn create_deployment(
     let deployment = client
         .get::<GetDeploymentResponse>(&format!(
             "/api/projects/{}/deployments/{}",
-            project_config.function_id, deployment_id
+            application_config.application_id, deployment_id
         ))
         .await?;
 
     println!();
-    println!(" {} Function deployed!", style("◼").magenta());
+    println!(" {} Application deployed!", style("◼").magenta());
 
     if !is_production {
         println!(

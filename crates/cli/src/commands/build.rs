@@ -1,4 +1,4 @@
-use crate::utils::{bundle_function, print_progress, resolve_path};
+use crate::utils::{bundle_function, print_progress, resolve_application_path};
 use anyhow::{anyhow, Result};
 use dialoguer::console::style;
 use std::{fs, path::PathBuf};
@@ -6,10 +6,10 @@ use std::{fs, path::PathBuf};
 pub fn build(
     path: Option<PathBuf>,
     client: Option<PathBuf>,
-    public_dir: Option<PathBuf>,
+    assets_dir: Option<PathBuf>,
 ) -> Result<()> {
-    let (root, function_config) = resolve_path(path, client, public_dir)?;
-    let (index, assets) = bundle_function(&function_config, &root, true)?;
+    let (root, application_config) = resolve_application_path(path, client, assets_dir)?;
+    let (index, assets) = bundle_function(&application_config, &root, true)?;
 
     let end_progress = print_progress("Writing files");
     let root = root.join(".lagoss");
