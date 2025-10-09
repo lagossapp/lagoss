@@ -54,7 +54,6 @@ pub type ApplicationsResponse = Vec<Application>;
 pub async fn deploy(
     config: &Config,
     path: Option<PathBuf>,
-    client: Option<PathBuf>,
     assets_dir: Option<PathBuf>,
     is_production: bool,
 ) -> Result<()> {
@@ -64,20 +63,19 @@ pub async fn deploy(
         ));
     }
 
-    let (root, application_config) = get_config(config, path, client, assets_dir).await?;
+    let (root, application_config) = get_application_config(config, path, assets_dir).await?;
 
     create_deployment(config, &application_config, is_production, &root, true).await?;
 
     Ok(())
 }
 
-async fn get_config(
+async fn get_application_config(
     config: &Config,
     path: Option<PathBuf>,
-    client: Option<PathBuf>,
     assets_dir: Option<PathBuf>,
 ) -> Result<(PathBuf, ApplicationConfig)> {
-    let (root, mut app_config) = resolve_application_path(path, client, assets_dir)?;
+    let (root, mut app_config) = resolve_application_path(path, assets_dir)?;
 
     if !app_config.application_id.is_empty() {
         return Ok((root, app_config));
@@ -126,7 +124,6 @@ async fn get_config(
             app_config.application_id.clone_from(&application.id);
             app_config.write(&root)?;
 
-            println!();
             Ok((root, app_config))
         }
         false => {
@@ -134,7 +131,6 @@ async fn get_config(
                 .with_prompt("What's the name of this new application?")
                 .interact_text()?;
 
-            println!();
             let message = format!("Creating an application {name}");
             let end_progress = print_progress(&message);
 

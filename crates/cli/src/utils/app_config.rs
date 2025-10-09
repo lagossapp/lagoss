@@ -1,5 +1,5 @@
 use super::{validate_assets_dir, validate_code_file};
-use crate::utils::get_theme;
+use crate::utils::{get_pretty_path, get_theme};
 use anyhow::{anyhow, Result};
 use dialoguer::console::style;
 use dialoguer::{Confirm, Input};
@@ -16,70 +16,100 @@ pub struct ApplicationConfig {
     pub application_id: String,
 
     /// Path to the application's handler file (optional)
-    pub handler: PathBuf,
+    pub handler: Option<PathBuf>,
 
     /// Path to the application's assets directory (optional)
     pub assets: Option<PathBuf>,
-
-    // TODO: do we need this? if not remove!
-    /// Path to the application's client file (optional)
-    /// Deprecated: will probably be removed in future versions
-    pub client: Option<PathBuf>,
 }
 
 impl ApplicationConfig {
     pub fn load(
         root: &Path,
-        client_override: Option<PathBuf>,
+        handler_override: Option<PathBuf>,
         assets_override: Option<PathBuf>,
     ) -> Result<ApplicationConfig> {
-        let path = get_application_config_path(root);
+        // load config or blank config and use as base
+        // apply overrides (handler, assets) if any
+        // if no still no handler or assets => detect
+        // try to detect handler (lagoss-handler.js, index.js, index.ts, ...)
+        // if no handler try to detect static deployment folder (current, dist, public, ...) with index.html
+        // if still nothing prompt or error
 
-        if !path.exists() {
+        let config_path = get_application_config_path(root);
+        let mut application_config = ApplicationConfig {
+            application_id: String::from(""),
+            handler: None,
+            assets: None,
+        };
+
+        let config_exists = config_path.clone().exists();
+        if config_exists {
             println!(
-                "{}",
-                style(format!(
-                    "No configuration found in directory {} ...",
-                    path.display()
-                ))
-                .black()
-                .bright()
+                "{} {}",
+                style("Using configuration file from").black().bright(),
+                config_path.display()
             );
-            println!();
 
-            let index = match client_override {
-                Some(index) => {
-                    println!("{}", style("Using custom entrypoint...").black().bright());
-                    index
-                }
-                None => {
-                    let index = Input::<String>::with_theme(get_theme())
-                        .with_prompt(format!(
-                            "Path to your application's entrypoint? {}",
-                            style(format!("(relative to {:?})", root.canonicalize()?))
-                                .black()
-                                .bright()
-                        ))
-                        .validate_with(|input: &String| -> std::result::Result<(), String> {
-                            validate_code_file(&root.join(input), root)
-                                .map_err(|err| err.to_string())
-                        })
-                        .interact_text()?;
+            let content = fs::read_to_string(config_path.clone())?;
+            application_config = serde_json::from_str::<ApplicationConfig>(&content)?;
+        }
 
-                    PathBuf::from(index)
-                }
-            };
+        if let Some(handler_override) = handler_override.clone() {
+            println!(
+                "{} {}",
+                style("Using custom handler").black().bright(),
+                get_pretty_path(root, handler_override.as_path())
+            );
+            application_config.handler = Some(handler_override);
+        }
 
-            let assets = match assets_override {
-                Some(assets) => {
+        if let Some(assets_override) = assets_override.clone() {
+            println!(
+                "{} {}",
+                style("Using custom assets directory").black().bright(),
+                get_pretty_path(root, assets_override.as_path())
+            );
+            application_config.assets = Some(assets_override);
+        }
+
+        if !config_exists {
+            println!(
+                "{} {}",
+                style("No configuration found at").black().bright(),
+                get_pretty_path(root, config_path.as_path())
+            );
+
+            application_config.handler = application_config.handler.or_else(|| {
+                let detected = detect_handler(root);
+                if let Some(ref handler) = detected {
                     println!(
-                        "{}",
-                        style("Using custom assets directory...").black().bright()
+                        "{} Handler detected: {}",
+                        style("✓").green().bright(),
+                        get_pretty_path(root, handler)
                     );
-                    Some(assets)
                 }
-                None => match Confirm::with_theme(get_theme())
-                    .with_prompt("Do you have a directory to serve assets from?")
+                detected
+            });
+
+            // only try to detect assets directory if handler is not set
+            if !application_config.handler.is_some() {
+                application_config.assets = application_config.assets.or_else(|| {
+                    let detected = detect_assets_directory(root);
+                    if let Some(ref detected) = detected {
+                        println!(
+                            "{} Assets directory detected: {}",
+                            style("✓").green().bright(),
+                            get_pretty_path(root, detected)
+                        );
+                    }
+                    detected
+                });
+            }
+
+            // if still no handler or assets, prompt for assets directory
+            if application_config.handler.is_none() && application_config.assets.is_none() {
+                application_config.assets = match Confirm::with_theme(get_theme())
+                    .with_prompt("Do you have an assets directory to serve assets from?")
                     .default(false)
                     .interact()?
                 {
@@ -100,53 +130,25 @@ impl ApplicationConfig {
                         Some(PathBuf::from(assets))
                     }
                     false => None,
-                },
-            };
-
-            let config = ApplicationConfig {
-                application_id: String::from(""),
-                handler: index,
-                client: None,
-                assets,
-            };
-
-            config.write(root)?;
-            println!();
-
-            return Ok(config);
+                };
+            }
         }
 
-        println!("{}", style("Found configuration file...").black().bright());
-
-        let content = fs::read_to_string(path)?;
-        let mut config = serde_json::from_str::<ApplicationConfig>(&content)?;
-
-        if let Some(client_override) = client_override {
-            println!("{}", style("Using custom client file...").black().bright());
-            config.client = Some(client_override);
+        if let Some(handler) = &application_config.handler {
+            validate_code_file(handler, root)?;
         }
 
-        if let Some(assets_override) = assets_override {
-            println!(
-                "{}",
-                style("Using custom assets directory...").black().bright()
-            );
-            config.assets = Some(assets_override);
+        if let Some(assets_dir) = &application_config.assets {
+            validate_assets_dir(assets_dir, root)?;
         }
 
-        validate_code_file(&config.handler, root)?;
-
-        if let Some(client) = &config.client {
-            validate_code_file(client, root)?;
+        if application_config.handler.is_none() && application_config.assets.is_none() {
+            return Err(anyhow!(
+                "No handler or assets directory specified or detected.",
+            ));
         }
 
-        if let Some(assets) = &config.assets {
-            validate_assets_dir(assets, root)?;
-        }
-
-        println!();
-
-        Ok(config)
+        Ok(application_config)
     }
 
     pub fn write(&self, root: &Path) -> Result<()> {
@@ -184,9 +186,43 @@ pub fn get_root(root: Option<PathBuf>) -> PathBuf {
     }
 }
 
+fn detect_handler(root: &Path) -> Option<PathBuf> {
+    let candidates = [
+        "lagoss-handler.js",
+        "lagoss-handler.js",
+        "index.ts",
+        "index.mjs",
+        "index.cjs",
+        "index.js",
+    ];
+
+    for candidate in candidates {
+        let path = root.join(candidate);
+        if path.exists() && path.is_file() {
+            return Some(PathBuf::from(candidate));
+        }
+    }
+
+    None
+}
+
+/// Try to detect an assets directory. Check if it contains an index.html file.
+fn detect_assets_directory(root: &Path) -> Option<PathBuf> {
+    let candidates = ["", "dist", "public", "assets", "static", "www"];
+
+    for candidate in candidates {
+        let path = root.join(candidate);
+        let has_index = path.join("index.html").exists() && path.join("index.html").is_file();
+        if path.exists() && path.is_dir() && !(candidate == "" && !has_index) {
+            return Some(PathBuf::from(candidate));
+        }
+    }
+
+    None
+}
+
 pub fn resolve_application_path(
     path: Option<PathBuf>,
-    client: Option<PathBuf>,
     assets_dir: Option<PathBuf>,
 ) -> Result<(PathBuf, ApplicationConfig)> {
     let path = path.unwrap_or_else(|| PathBuf::from("."));
@@ -199,23 +235,22 @@ pub fn resolve_application_path(
         true => {
             let root = PathBuf::from(path.parent().unwrap());
 
-            let index = diff_paths(&path, &root).unwrap();
-            let client = client.map(|client| diff_paths(client, &root).unwrap());
+            let handler = diff_paths(&path, &root).unwrap();
             let assets = assets_dir.map(|assets_dir| diff_paths(assets_dir, &root).unwrap());
 
             Ok((
                 root,
                 ApplicationConfig {
                     application_id: String::new(),
-                    handler: index,
-                    client,
+                    handler: Some(handler),
                     assets,
                 },
             ))
         }
         false => Ok((
+            // TODO: should we detect a config from a parent directory?
             path.clone(),
-            ApplicationConfig::load(&path, client, assets_dir)?,
+            ApplicationConfig::load(&path, None, assets_dir)?,
         )),
     }
 }

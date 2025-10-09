@@ -1,4 +1,5 @@
 use anyhow::{anyhow, Result};
+use pathdiff::diff_paths;
 use std::path::{Path, PathBuf};
 
 mod app_config;
@@ -49,4 +50,24 @@ pub fn validate_assets_dir(assets_dir: &PathBuf, root: &Path) -> Result<()> {
     }
 
     Ok(())
+}
+
+// TODO: find prettier way to do this
+fn get_pretty_path(root: &Path, path: &Path) -> String {
+    let path = if path.display().to_string().is_empty() {
+        Path::new(".")
+    } else {
+        path
+    };
+
+    let diff = diff_paths(path, root)
+        .unwrap_or_else(|| path.to_path_buf())
+        .display()
+        .to_string();
+
+    if diff.is_empty() {
+        ".".to_string()
+    } else {
+        diff.to_string()
+    }
 }
