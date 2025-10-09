@@ -1,5 +1,12 @@
 # @lagoss/cli
 
+## [0.12.0](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.11.0...@lagoss/cli@0.12.0) (2025-10-09)
+
+
+### Features
+
+* add env vars for cli config and improve arguments + output ([#211](https://github.com/lagossapp/lagoss/issues/211)) ([1ea69b5](https://github.com/lagossapp/lagoss/commit/1ea69b5f34acae34ec53c004eac7f9bd29eff53d))
+
 ## [0.11.0](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.10.2...@lagoss/cli@0.11.0) (2025-10-08)
 
 ### Features
