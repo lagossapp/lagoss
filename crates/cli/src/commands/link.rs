@@ -1,5 +1,5 @@
 use crate::{
-    commands::deploy::{OrganizationsResponse, ProjectsResponse},
+    commands::deploy::{ApplicationsResponse, OrganizationsResponse},
     utils::{get_root, get_theme, ApiClient, ApplicationConfig, Config},
 };
 use anyhow::{anyhow, Result};
@@ -14,10 +14,12 @@ pub async fn link(config: Config, directory: Option<PathBuf>) -> Result<()> {
     }
 
     let root = get_root(directory);
-    let project_config = ApplicationConfig::load(&root, None, None)?;
+    let application_config = ApplicationConfig::load(&root, None, None)?;
 
-    match !project_config.application_id.is_empty() {
-        true => Err(anyhow!("This directory is already linked to a project")),
+    match !application_config.application_id.is_empty() {
+        true => Err(anyhow!(
+            "This directory is already linked to an application"
+        )),
         false => {
             let client = ApiClient::new(config);
 
@@ -33,7 +35,7 @@ pub async fn link(config: Config, directory: Option<PathBuf>) -> Result<()> {
             let organization = &organizations[index];
 
             let applications = client
-                .get::<ProjectsResponse>(&format!(
+                .get::<ApplicationsResponse>(&format!(
                     "/api/organizations/{}/projects",
                     organization.id
                 ))

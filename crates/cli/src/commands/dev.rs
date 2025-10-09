@@ -183,8 +183,8 @@ pub async fn dev(
     allow_code_generation: bool,
     prod: bool,
 ) -> Result<()> {
-    let (root, function_config) = resolve_path(path.clone(), client, public_dir)?;
-    let (index, assets) = bundle_function(&function_config, &root, prod)?;
+    let (root, application_config) = resolve_path(path.clone(), client, public_dir)?;
+    let (index, assets) = bundle_function(&application_config, &root, prod)?;
 
     let index = Arc::new(Mutex::new(index));
     let assets = Arc::new(Mutex::new(assets));
@@ -198,7 +198,7 @@ pub async fn dev(
     )
     .parse()?;
 
-    let server_public_dir = function_config
+    let server_public_dir = application_config
         .assets
         .as_ref()
         .map(|assets| root.join(assets));
@@ -282,7 +282,7 @@ pub async fn dev(
     )?;
 
     watcher.watch(
-        &root.join(function_config.index.clone()),
+        &root.join(application_config.handler.clone()),
         RecursiveMode::NonRecursive,
     )?;
 
@@ -299,7 +299,7 @@ pub async fn dev(
                 print!("\x1B[2J\x1B[1;1H");
                 println!("{}", style("File modified, updating...").black().bright());
 
-                let (new_index, new_assets) = bundle_function(&function_config, &root, prod)?;
+                let (new_index, new_assets) = bundle_function(&application_config, &root, prod)?;
 
                 *assets.lock().await = new_assets;
                 *index.lock().await = new_index;

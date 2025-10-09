@@ -5,7 +5,7 @@ use serde::Deserialize;
 use std::path::PathBuf;
 
 #[derive(Deserialize, Debug)]
-struct DeleteProjectResponse {
+struct DeleteApplicationResponse {
     #[allow(dead_code)]
     ok: bool,
 }
@@ -36,7 +36,7 @@ pub async fn rm(config: Config, directory: Option<PathBuf>) -> Result<()> {
         true => {
             let end_progress = print_progress("Deleting application");
             let res = ApiClient::new(config)
-                .delete::<DeleteProjectResponse>(
+                .delete::<DeleteApplicationResponse>(
                 &format!(
                         "/api/projects/{}",
                         application_config.application_id,

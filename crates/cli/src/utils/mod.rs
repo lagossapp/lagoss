@@ -39,13 +39,11 @@ pub fn validate_code_file(file: &Path, root: &Path) -> Result<()> {
     }
 }
 
-pub fn validate_assets_dir(assets_dir: &Option<PathBuf>, root: &Path) -> Result<()> {
-    if let Some(dir) = assets_dir {
-        let path = root.join(dir);
+pub fn validate_assets_dir(public_dir: &PathBuf, root: &Path) -> Result<()> {
+    let path = root.join(public_dir);
 
-        if !path.is_dir() {
-            return Err(anyhow!("Public directory {:?} does not exist.", path));
-        }
+    if !path.is_dir() {
+        return Err(anyhow!("Public directory {:?} does not exist.", path));
     }
 
     Ok(())
