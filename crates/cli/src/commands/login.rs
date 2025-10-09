@@ -46,5 +46,5 @@ pub async fn login(config: &Config) -> Result<()> {
     config.set_token(Some(token.clone()));
     config.save()?;
 
-    return Ok(());
+    Ok(())
 }
