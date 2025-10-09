@@ -12,7 +12,7 @@ fn get_site_url() -> String {
 
 #[cfg(not(debug_assertions))]
 fn get_site_url() -> String {
-    "https://app.lagoss.com".to_string()
+    "https://console.lagoss.com".to_string()
 }
 
 fn get_config_path() -> Result<PathBuf> {

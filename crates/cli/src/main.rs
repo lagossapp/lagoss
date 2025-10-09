@@ -23,10 +23,10 @@ struct CliArgs {
     /// Print version information
     #[clap(short, long)]
     version: bool,
-    /// Path to a configuration file
+    /// Your Lagoss API token
     #[clap(short, long, env = "LAGOSS_TOKEN")]
     token: Option<String>,
-    /// Path to a configuration file
+    /// Api endpoint of Lagoss to use (default: https://console.lagoss.com)
     #[clap(short, long, env = "LAGOSS_SITE_URL")]
     site_url: Option<String>,
 }
