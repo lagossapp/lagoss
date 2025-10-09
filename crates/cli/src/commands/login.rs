@@ -1,4 +1,4 @@
-use crate::utils::{get_theme, print_progress, Config, ApiClient};
+use crate::utils::{get_theme, print_progress, ApiClient, Config};
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm, Password};
 use serde::{Deserialize, Serialize};
@@ -13,9 +13,7 @@ struct CliRequest {
     code: String,
 }
 
-pub async fn login() -> Result<()> {
-    let mut config = Config::new()?;
-
+pub async fn login(mut config: Config) -> Result<()> {
     if config.token.is_some()
         && !Confirm::with_theme(get_theme())
             .with_prompt("You are already logged in. Do you want to log out and log in again?")

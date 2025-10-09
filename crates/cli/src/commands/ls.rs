@@ -1,4 +1,4 @@
-use crate::utils::{get_root, print_progress, ApiClient, Config, FunctionConfig};
+use crate::utils::{get_root, print_progress, ApiClient, ApplicationConfig, Config};
 use anyhow::{anyhow, Result};
 use dialoguer::console::style;
 use serde::Deserialize;
@@ -14,9 +14,7 @@ struct Deployment {
     is_production: bool,
 }
 
-pub async fn ls(directory: Option<PathBuf>) -> Result<()> {
-    let config = Config::new()?;
-
+pub async fn ls(config: Config, directory: Option<PathBuf>) -> Result<()> {
     if config.token.is_none() {
         return Err(anyhow!(
             "You are not logged in. Please log in with `lagoss login`",
@@ -24,19 +22,19 @@ pub async fn ls(directory: Option<PathBuf>) -> Result<()> {
     }
 
     let root = get_root(directory);
-    let project_config = FunctionConfig::load(&root, None, None)?;
+    let application_config = ApplicationConfig::load(&root, None, None)?;
     let end_progress = print_progress("Fetching Deployments");
 
-    if project_config.function_id.is_empty() {
+    if application_config.application_id.is_empty() {
         return Err(anyhow!(
-            "This directory is not linked to a project. Please link it with `lagoss link`"
+            "This directory is not linked to an application. Please link it with `lagoss link`"
         ));
     }
 
     let deployments = ApiClient::new(config)
         .get::<DeploymentsResponse>(&format!(
             "/api/projects/{}/deployments",
-            project_config.function_id
+            application_config.application_id
         ))
         .await?;
 
