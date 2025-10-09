@@ -11,7 +11,7 @@ struct PromoteDeploymentResponse {
 }
 
 pub async fn promote(
-    config: Config,
+    config: &Config,
     deployment_id: String,
     directory: Option<PathBuf>,
 ) -> Result<()> {
@@ -38,7 +38,7 @@ pub async fn promote(
         true => {
             println!();
             let end_progress = print_progress("Promoting deployment");
-            let res = ApiClient::new(config)
+            let res = ApiClient::new(config.clone())
                 .post::<(), PromoteDeploymentResponse>(
                     &format!(
                         "/api/projects/{}/deployments/{}/promote",

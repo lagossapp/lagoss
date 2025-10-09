@@ -11,7 +11,7 @@ struct UndeployDeploymentResponse {
 }
 
 pub async fn undeploy(
-    config: Config,
+    config: &Config,
     deployment_id: String,
     directory: Option<PathBuf>,
 ) -> Result<()> {
@@ -37,7 +37,7 @@ pub async fn undeploy(
     {
         true => {
             let end_progress = print_progress("Deleting deployment");
-            let client = ApiClient::new(config);
+            let client = ApiClient::new(config.clone());
 
             client
                 .delete::<UndeployDeploymentResponse>(&format!(

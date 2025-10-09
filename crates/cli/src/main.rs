@@ -138,15 +138,15 @@ async fn main() {
 
     if let Some(command) = args.command {
         if let Err(err) = match command {
-            Commands::Login => commands::login(config).await,
-            Commands::Logout => commands::logout(config),
+            Commands::Login => commands::login(&config).await,
+            Commands::Logout => commands::logout(&config),
             Commands::Deploy {
                 path,
                 client,
                 public_dir,
                 prod,
-            } => commands::deploy(config, path, client, public_dir, prod).await,
-            Commands::Rm { directory } => commands::rm(config, directory).await,
+            } => commands::deploy(&config, path, client, public_dir, prod).await,
+            Commands::Rm { directory } => commands::rm(&config, directory).await,
             Commands::Dev {
                 path,
                 client,
@@ -174,16 +174,16 @@ async fn main() {
                 client,
                 public_dir,
             } => commands::build(path, client, public_dir),
-            Commands::Link { directory } => commands::link(config, directory).await,
-            Commands::Ls { directory } => commands::ls(config, directory).await,
+            Commands::Link { directory } => commands::link(&config, directory).await,
+            Commands::Ls { directory } => commands::ls(&config, directory).await,
             Commands::Undeploy {
                 deployment_id,
                 directory,
-            } => commands::undeploy(config, deployment_id, directory).await,
+            } => commands::undeploy(&config, deployment_id, directory).await,
             Commands::Promote {
                 deployment_id,
                 directory,
-            } => commands::promote(config, deployment_id, directory).await,
+            } => commands::promote(&config, deployment_id, directory).await,
         } {
             println!("{} {}", style("✕").red(), err);
             exit(1);

@@ -1,19 +1,8 @@
-use crate::utils::{get_theme, print_progress, ApiClient, Config};
-use anyhow::{anyhow, Result};
+use crate::utils::{get_theme, print_progress, Config};
+use anyhow::Result;
 use dialoguer::{console::style, Confirm, Password};
-use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Debug)]
-struct CliResponse {
-    token: String,
-}
-
-#[derive(Serialize, Debug)]
-struct CliRequest {
-    code: String,
-}
-
-pub async fn login(mut config: Config) -> Result<()> {
+pub async fn login(config: &Config) -> Result<()> {
     if config.token.is_some()
         && !Confirm::with_theme(get_theme())
             .with_prompt("You are already logged in. Do you want to log out and log in again?")
@@ -53,28 +42,9 @@ pub async fn login(mut config: Config) -> Result<()> {
         .with_prompt("Paste the token from your browser here")
         .interact()?;
 
+    let mut config = config.clone();
     config.set_token(Some(token.clone()));
+    config.save()?;
 
-    let client = ApiClient::new(config.clone());
-    let request = CliRequest { code: token };
-
-    match client
-        .post::<CliRequest, CliResponse>("tokensAuthenticate", request)
-        .await
-    {
-        Ok(response) => {
-            config.set_token(Some(response.token));
-            config.save()?;
-
-            println!();
-            println!(" {} You are now logged in!", style("◼").magenta());
-            println!(
-                "   {}",
-                style("You can now close the browser tab").black().bright()
-            );
-
-            Ok(())
-        }
-        Err(_) => Err(anyhow!("Failed to log in.")),
-    }
+    return Ok(());
 }

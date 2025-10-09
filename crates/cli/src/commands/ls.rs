@@ -14,7 +14,7 @@ struct Deployment {
     is_production: bool,
 }
 
-pub async fn ls(config: Config, directory: Option<PathBuf>) -> Result<()> {
+pub async fn ls(config: &Config, directory: Option<PathBuf>) -> Result<()> {
     if config.token.is_none() {
         return Err(anyhow!(
             "You are not logged in. Please log in with `lagoss login`",
@@ -31,7 +31,7 @@ pub async fn ls(config: Config, directory: Option<PathBuf>) -> Result<()> {
         ));
     }
 
-    let deployments = ApiClient::new(config)
+    let deployments = ApiClient::new(config.clone())
         .get::<DeploymentsResponse>(&format!(
             "/api/projects/{}/deployments",
             application_config.application_id

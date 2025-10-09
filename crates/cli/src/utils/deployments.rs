@@ -396,7 +396,7 @@ struct PromoteDeploymentResponse {
 }
 
 pub async fn create_deployment(
-    config: Config,
+    config: &Config,
     application_config: &ApplicationConfig,
     is_production: bool,
     root: &Path,
@@ -406,7 +406,7 @@ pub async fn create_deployment(
 
     let end_progress = print_progress("Creating deployment");
 
-    let client = ApiClient::new(config);
+    let client = ApiClient::new(config.clone());
 
     let client = Arc::new(client);
 

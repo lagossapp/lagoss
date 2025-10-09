@@ -10,7 +10,7 @@ struct DeleteApplicationResponse {
     ok: bool,
 }
 
-pub async fn rm(config: Config, directory: Option<PathBuf>) -> Result<()> {
+pub async fn rm(config: &Config, directory: Option<PathBuf>) -> Result<()> {
     if config.token.is_none() {
         return Err(anyhow!(
             "You are not logged in. Please log in with `lagoss login`",
@@ -35,7 +35,7 @@ pub async fn rm(config: Config, directory: Option<PathBuf>) -> Result<()> {
     {
         true => {
             let end_progress = print_progress("Deleting application");
-            let res = ApiClient::new(config)
+            let res = ApiClient::new(config.clone())
                 .delete::<DeleteApplicationResponse>(
                 &format!(
                         "/api/projects/{}",

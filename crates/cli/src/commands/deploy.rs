@@ -52,7 +52,7 @@ impl Display for Application {
 pub type ApplicationsResponse = Vec<Application>;
 
 pub async fn deploy(
-    config: Config,
+    config: &Config,
     path: Option<PathBuf>,
     client: Option<PathBuf>,
     public_dir: Option<PathBuf>,
@@ -64,7 +64,7 @@ pub async fn deploy(
         ));
     }
 
-    let (root, application_config) = get_config(path, client, public_dir).await?;
+    let (root, application_config) = get_config(config, path, client, public_dir).await?;
 
     create_deployment(config, &application_config, is_production, &root, true).await?;
 
@@ -72,18 +72,11 @@ pub async fn deploy(
 }
 
 async fn get_config(
+    config: &Config,
     path: Option<PathBuf>,
     client: Option<PathBuf>,
     public_dir: Option<PathBuf>,
 ) -> Result<(PathBuf, ApplicationConfig)> {
-    let config = Config::new()?;
-
-    if config.token.is_none() {
-        return Err(anyhow!(
-            "You are not logged in. Please log in with `lagoss login`",
-        ));
-    }
-
     let (root, mut app_config) = resolve_path(path, client, public_dir)?;
 
     if !app_config.application_id.is_empty() {

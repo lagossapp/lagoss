@@ -6,7 +6,7 @@ use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Select};
 use std::path::PathBuf;
 
-pub async fn link(config: Config, directory: Option<PathBuf>) -> Result<()> {
+pub async fn link(config: &Config, directory: Option<PathBuf>) -> Result<()> {
     if config.token.is_none() {
         return Err(anyhow!(
             "You are not logged in. Please log in with `lagoss login`",
@@ -21,7 +21,7 @@ pub async fn link(config: Config, directory: Option<PathBuf>) -> Result<()> {
             "This directory is already linked to an application"
         )),
         false => {
-            let client = ApiClient::new(config);
+            let client = ApiClient::new(config.clone());
 
             let organizations = client
                 .get::<OrganizationsResponse>("/api/organizations")

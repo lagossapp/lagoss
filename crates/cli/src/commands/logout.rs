@@ -2,7 +2,7 @@ use crate::utils::{get_theme, Config};
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm};
 
-pub fn logout(mut config: Config) -> Result<()> {
+pub fn logout(config: &Config) -> Result<()> {
     if config.token.is_none() {
         return Err(anyhow!("You are not logged in."));
     }
@@ -13,6 +13,7 @@ pub fn logout(mut config: Config) -> Result<()> {
         .interact()?
     {
         true => {
+            let mut config = config.clone();
             config.set_token(None);
             config.save()?;
 
