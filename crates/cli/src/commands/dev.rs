@@ -74,7 +74,7 @@ fn parse_environment_variables(
 // threads to manage, and we don't manager logs and metrics.
 async fn handle_request(
     req: Request<Body>,
-    public_dir: Option<PathBuf>,
+    assets_dir: Option<PathBuf>,
     ip: String,
     assets: Arc<Mutex<Assets>>,
     isolate_tx: flume::Sender<IsolateEvent>,
@@ -93,7 +93,7 @@ async fn handle_request(
             style("(asset)").black().bright()
         );
 
-        let run_result = match handle_asset(public_dir.unwrap(), asset) {
+        let run_result = match handle_asset(assets_dir.unwrap(), asset) {
             Ok((response_builder, body)) => RunResult::Response(response_builder, body, None),
             Err(error) => RunResult::Error(format!("Could not retrieve asset ({asset}): {error}")),
         };
@@ -176,14 +176,14 @@ async fn handle_request(
 pub async fn dev(
     path: Option<PathBuf>,
     client: Option<PathBuf>,
-    public_dir: Option<PathBuf>,
+    assets_dir: Option<PathBuf>,
     port: Option<u16>,
     hostname: Option<String>,
     env: Option<PathBuf>,
     allow_code_generation: bool,
     prod: bool,
 ) -> Result<()> {
-    let (root, application_config) = resolve_path(path.clone(), client, public_dir)?;
+    let (root, application_config) = resolve_path(path.clone(), client, assets_dir)?;
     let (index, assets) = bundle_function(&application_config, &root, prod)?;
 
     let index = Arc::new(Mutex::new(index));
@@ -198,7 +198,7 @@ pub async fn dev(
     )
     .parse()?;
 
-    let server_public_dir = application_config
+    let server_assets_dir = application_config
         .assets
         .as_ref()
         .map(|assets| root.join(assets));
@@ -255,7 +255,7 @@ pub async fn dev(
     let tx_handle = isolate_tx.clone();
 
     let server = Server::bind(&addr).serve(make_service_fn(move |conn: &AddrStream| {
-        let public_dir = server_public_dir.clone();
+        let assets_dir = server_assets_dir.clone();
         let assets = Arc::clone(&assets_handle);
         let tx = tx_handle.clone();
 
@@ -266,7 +266,7 @@ pub async fn dev(
             Ok::<_, Infallible>(service_fn(move |req| {
                 handle_request(
                     req,
-                    public_dir.clone(),
+                    assets_dir.clone(),
                     ip.clone(),
                     Arc::clone(&assets),
                     tx.clone(),

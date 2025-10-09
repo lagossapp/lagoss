@@ -89,19 +89,19 @@ impl ApplicationConfig {
                 Some(assets) => {
                     println!(
                         "{}",
-                        style("Using custom public directory...").black().bright()
+                        style("Using custom assets directory...").black().bright()
                     );
                     Some(assets)
                 }
                 None => match Confirm::with_theme(get_theme())
-                    .with_prompt("Do you have a public directory to serve assets from?")
+                    .with_prompt("Do you have a directory to serve assets from?")
                     .default(false)
                     .interact()?
                 {
                     true => {
                         let assets = Input::<String>::with_theme(get_theme())
                             .with_prompt(format!(
-                                "Path to your application's public directory? {}",
+                                "Path to your application's assets directory? {}",
                                 style(format!("(relative to {:?})", root.canonicalize()?))
                                     .black()
                                     .bright(),
@@ -144,7 +144,7 @@ impl ApplicationConfig {
         if let Some(assets_override) = assets_override {
             println!(
                 "{}",
-                style("Using custom public directory...").black().bright()
+                style("Using custom assets directory...").black().bright()
             );
             config.assets = Some(assets_override);
         }
@@ -191,7 +191,7 @@ impl ApplicationConfig {
 pub fn resolve_path(
     path: Option<PathBuf>,
     client: Option<PathBuf>,
-    public_dir: Option<PathBuf>,
+    assets_dir: Option<PathBuf>,
 ) -> Result<(PathBuf, ApplicationConfig)> {
     let path = path.unwrap_or_else(|| PathBuf::from("."));
 
@@ -205,7 +205,7 @@ pub fn resolve_path(
 
             let index = diff_paths(&path, &root).unwrap();
             let client = client.map(|client| diff_paths(client, &root).unwrap());
-            let assets = public_dir.map(|public_dir| diff_paths(public_dir, &root).unwrap());
+            let assets = assets_dir.map(|assets_dir| diff_paths(assets_dir, &root).unwrap());
 
             Ok((
                 root,
@@ -219,7 +219,7 @@ pub fn resolve_path(
         }
         false => Ok((
             path.clone(),
-            ApplicationConfig::load(&path, client, public_dir)?,
+            ApplicationConfig::load(&path, client, assets_dir)?,
         )),
     }
 }

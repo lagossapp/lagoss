@@ -47,7 +47,7 @@ enum Commands {
         client: Option<PathBuf>,
         /// Folder of static assets to be served.
         #[clap(short, long, value_parser)]
-        public_dir: Option<PathBuf>,
+        assets: Option<PathBuf>,
         /// Deploy to production
         #[clap(visible_alias = "production", long)]
         prod: bool,
@@ -66,9 +66,9 @@ enum Commands {
         /// Path to a client-side script
         #[clap(short, long, value_parser)]
         client: Option<PathBuf>,
-        /// Path to a public directory to serve assets from
+        /// Folder of static assets to be served.
         #[clap(short, long, value_parser)]
-        public_dir: Option<PathBuf>,
+        assets: Option<PathBuf>,
         /// Port to start dev server on
         #[clap(long)]
         port: Option<u16>,
@@ -93,9 +93,9 @@ enum Commands {
         /// Path to a client-side script
         #[clap(short, long, value_parser)]
         client: Option<PathBuf>,
-        /// Path to a public directory to serve assets from
+        /// Folder of static assets to be served.
         #[clap(short, long, value_parser)]
-        public_dir: Option<PathBuf>,
+        assets: Option<PathBuf>,
     },
     /// Link a local folder to an already deployed application
     Link {
@@ -143,14 +143,14 @@ async fn main() {
             Commands::Deploy {
                 path,
                 client,
-                public_dir,
+                assets,
                 prod,
-            } => commands::deploy(&config, path, client, public_dir, prod).await,
+            } => commands::deploy(&config, path, client, assets, prod).await,
             Commands::Rm { directory } => commands::rm(&config, directory).await,
             Commands::Dev {
                 path,
                 client,
-                public_dir,
+                assets,
                 port,
                 hostname,
                 env,
@@ -160,7 +160,7 @@ async fn main() {
                 commands::dev(
                     path,
                     client,
-                    public_dir,
+                    assets,
                     port,
                     hostname,
                     env,
@@ -172,8 +172,8 @@ async fn main() {
             Commands::Build {
                 path,
                 client,
-                public_dir,
-            } => commands::build(path, client, public_dir),
+                assets,
+            } => commands::build(path, client, assets),
             Commands::Link { directory } => commands::link(&config, directory).await,
             Commands::Ls { directory } => commands::ls(&config, directory).await,
             Commands::Undeploy {

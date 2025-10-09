@@ -55,7 +55,7 @@ pub async fn deploy(
     config: &Config,
     path: Option<PathBuf>,
     client: Option<PathBuf>,
-    public_dir: Option<PathBuf>,
+    assets_dir: Option<PathBuf>,
     is_production: bool,
 ) -> Result<()> {
     if config.token.is_none() {
@@ -64,7 +64,7 @@ pub async fn deploy(
         ));
     }
 
-    let (root, application_config) = get_config(config, path, client, public_dir).await?;
+    let (root, application_config) = get_config(config, path, client, assets_dir).await?;
 
     create_deployment(config, &application_config, is_production, &root, true).await?;
 
@@ -75,9 +75,9 @@ async fn get_config(
     config: &Config,
     path: Option<PathBuf>,
     client: Option<PathBuf>,
-    public_dir: Option<PathBuf>,
+    assets_dir: Option<PathBuf>,
 ) -> Result<(PathBuf, ApplicationConfig)> {
-    let (root, mut app_config) = resolve_path(path, client, public_dir)?;
+    let (root, mut app_config) = resolve_path(path, client, assets_dir)?;
 
     if !app_config.application_id.is_empty() {
         return Ok((root, app_config));

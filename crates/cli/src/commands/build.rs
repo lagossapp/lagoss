@@ -6,9 +6,9 @@ use std::{fs, path::PathBuf};
 pub fn build(
     path: Option<PathBuf>,
     client: Option<PathBuf>,
-    public_dir: Option<PathBuf>,
+    assets_dir: Option<PathBuf>,
 ) -> Result<()> {
-    let (root, application_config) = resolve_path(path, client, public_dir)?;
+    let (root, application_config) = resolve_path(path, client, assets_dir)?;
     let (index, assets) = bundle_function(&application_config, &root, true)?;
 
     let end_progress = print_progress("Writing files");
