@@ -45,7 +45,7 @@ enum Commands {
         /// Path to a client-side script
         #[clap(short, long, value_parser)]
         client: Option<PathBuf>,
-        /// Folder of static assets to be served.
+        /// Folder of static assets to be served
         #[clap(short, long, value_parser)]
         assets: Option<PathBuf>,
         /// Deploy to production
@@ -66,7 +66,7 @@ enum Commands {
         /// Path to a client-side script
         #[clap(short, long, value_parser)]
         client: Option<PathBuf>,
-        /// Folder of static assets to be served.
+        /// Folder of static assets to be served
         #[clap(short, long, value_parser)]
         assets: Option<PathBuf>,
         /// Port to start dev server on
@@ -93,7 +93,7 @@ enum Commands {
         /// Path to a client-side script
         #[clap(short, long, value_parser)]
         client: Option<PathBuf>,
-        /// Folder of static assets to be served.
+        /// Folder of static assets to be served
         #[clap(short, long, value_parser)]
         assets: Option<PathBuf>,
     },
