@@ -92,7 +92,7 @@ impl ApplicationConfig {
             });
 
             // only try to detect assets directory if handler is not set
-            if !application_config.handler.is_some() {
+            if application_config.handler.is_none() {
                 application_config.assets = application_config.assets.or_else(|| {
                     let detected = detect_assets_directory(root);
                     if let Some(ref detected) = detected {
@@ -213,7 +213,7 @@ fn detect_assets_directory(root: &Path) -> Option<PathBuf> {
     for candidate in candidates {
         let path = root.join(candidate);
         let has_index = path.join("index.html").exists() && path.join("index.html").is_file();
-        if path.exists() && path.is_dir() && !(candidate == "" && !has_index) {
+        if path.exists() && path.is_dir() && (!candidate.is_empty() || has_index) {
             return Some(PathBuf::from(candidate));
         }
     }
