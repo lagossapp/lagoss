@@ -40,11 +40,8 @@ enum Commands {
     /// Deploy a new or existing application
     Deploy {
         /// Path to a handler file or directory containing an application
-        #[clap(value_parser)]
+        #[clap(value_parser, default_value = ".")]
         path: Option<PathBuf>,
-        /// Path to a client-side script
-        #[clap(short, long, value_parser)]
-        client: Option<PathBuf>,
         /// Folder of static assets to be served
         #[clap(short, long, value_parser)]
         assets: Option<PathBuf>,
@@ -54,18 +51,15 @@ enum Commands {
     },
     /// Delete an existing application
     Rm {
-        /// Path to a directory containing a handler
-        #[clap(value_parser)]
-        directory: Option<PathBuf>,
+        /// Path to a handler file or directory containing an application
+        #[clap(value_parser, default_value = ".")]
+        path: Option<PathBuf>,
     },
     /// Start a local dev server to test an application
     Dev {
         /// Path to a handler file or directory containing an application
-        #[clap(value_parser)]
+        #[clap(value_parser, default_value = ".")]
         path: Option<PathBuf>,
-        /// Path to a client-side script
-        #[clap(short, long, value_parser)]
-        client: Option<PathBuf>,
         /// Folder of static assets to be served
         #[clap(short, long, value_parser)]
         assets: Option<PathBuf>,
@@ -88,26 +82,23 @@ enum Commands {
     /// Build an application without deploying it
     Build {
         /// Path to a handler file or directory containing an application
-        #[clap(value_parser)]
+        #[clap(value_parser, default_value = ".")]
         path: Option<PathBuf>,
-        /// Path to a client-side script
-        #[clap(short, long, value_parser)]
-        client: Option<PathBuf>,
         /// Folder of static assets to be served
         #[clap(short, long, value_parser)]
         assets: Option<PathBuf>,
     },
     /// Link a local folder to an already deployed application
     Link {
-        /// Path to a directory containing an application
-        #[clap(value_parser)]
-        directory: Option<PathBuf>,
+        /// Path to a handler file or directory containing an application
+        #[clap(value_parser, default_value = ".")]
+        path: Option<PathBuf>,
     },
     /// List all the deployments for an application
     Ls {
-        /// Path to a directory containing an application
-        #[clap(value_parser)]
-        directory: Option<PathBuf>,
+        /// Path to a handler file or directory containing an application
+        #[clap(value_parser, default_value = ".")]
+        path: Option<PathBuf>,
     },
     /// Undeploy a given deployment
     Undeploy {
@@ -115,15 +106,15 @@ enum Commands {
         deployment_id: String,
         /// Path to a directory containing an application
         #[clap(value_parser)]
-        directory: Option<PathBuf>,
+        path: Option<PathBuf>,
     },
     /// Promote the given preview deployment to production
     Promote {
         /// ID of the deployment to promote
         deployment_id: String,
-        /// Path to a directory containing an application
-        #[clap(value_parser)]
-        directory: Option<PathBuf>,
+        /// Path to a handler file or directory containing an application
+        #[clap(value_parser, default_value = ".")]
+        path: Option<PathBuf>,
     },
 }
 
@@ -140,16 +131,12 @@ async fn main() {
         if let Err(err) = match command {
             Commands::Login => commands::login(&config).await,
             Commands::Logout => commands::logout(&config),
-            Commands::Deploy {
-                path,
-                client,
-                assets,
-                prod,
-            } => commands::deploy(&config, path, client, assets, prod).await,
-            Commands::Rm { directory } => commands::rm(&config, directory).await,
+            Commands::Deploy { path, assets, prod } => {
+                commands::deploy(&config, path, assets, prod).await
+            }
+            Commands::Rm { path } => commands::rm(&config, path).await,
             Commands::Dev {
                 path,
-                client,
                 assets,
                 port,
                 hostname,
@@ -159,7 +146,6 @@ async fn main() {
             } => {
                 commands::dev(
                     path,
-                    client,
                     assets,
                     port,
                     hostname,
@@ -169,21 +155,17 @@ async fn main() {
                 )
                 .await
             }
-            Commands::Build {
-                path,
-                client,
-                assets,
-            } => commands::build(path, client, assets),
-            Commands::Link { directory } => commands::link(&config, directory).await,
-            Commands::Ls { directory } => commands::ls(&config, directory).await,
+            Commands::Build { path, assets } => commands::build(path, assets),
+            Commands::Link { path } => commands::link(&config, path).await,
+            Commands::Ls { path } => commands::ls(&config, path).await,
             Commands::Undeploy {
                 deployment_id,
-                directory,
-            } => commands::undeploy(&config, deployment_id, directory).await,
+                path,
+            } => commands::undeploy(&config, deployment_id, path).await,
             Commands::Promote {
                 deployment_id,
-                directory,
-            } => commands::promote(&config, deployment_id, directory).await,
+                path,
+            } => commands::promote(&config, deployment_id, path).await,
         } {
             println!("{} {}", style("✕").red(), err);
             exit(1);

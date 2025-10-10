@@ -1,6 +1,5 @@
 use super::{Config, MAX_ASSET_SIZE_MB, MAX_FUNCTION_SIZE_MB};
-use crate::utils::app_config::ApplicationConfig;
-use crate::utils::{print_progress, ApiClient};
+use crate::utils::{get_pretty_path, print_progress, ApiClient, ApplicationConfig};
 use anyhow::{anyhow, Result};
 use dialoguer::console::style;
 use pathdiff::diff_paths;
@@ -55,7 +54,7 @@ fn esbuild(file: &Path, root: &Path, prod: bool) -> Result<Vec<u8>> {
     ))
 }
 
-pub fn bundle_function(
+pub fn bundle_application(
     application_config: &ApplicationConfig,
     root: &Path,
     prod: bool,
@@ -67,47 +66,84 @@ pub fn bundle_function(
             ))
         } else {
             Err(anyhow!(
-                "An error occured while running ESBuild: {:?}",
+                "An error occurred while running ESBuild: {:?}",
                 error
             ))
         };
     }
 
-    let end_progress = print_progress("Bundling application");
-    let index_output = esbuild(&application_config.handler, root, prod)?;
-    end_progress();
+    let index_output = match &application_config.handler {
+        Some(handler) => {
+            let end_progress = print_progress("Bundling handler ...");
+            let output = esbuild(handler, root, prod)?;
+            end_progress();
+            output
+        }
+
+        None => {
+            println!(
+                "{}",
+                style("Using static site handler as no handler was provided.")
+                    .black()
+                    .bright()
+            );
+            // TODO: improve static site handler
+            // if no handler is provided, we create a default one that redirects to /404.html
+            Vec::from(str::trim(
+                "
+export function handler(request) {
+console.log('Handling request for', request.url);
+  if (new URL(request.url).pathname === '/404.html') {
+    return new Response('not found', { status: 404 });
+  }
+
+  return new Response('', {
+    status: 302,
+    headers: {
+      location: '/404.html',
+    },
+  });
+}
+",
+            ))
+        }
+    };
 
     let mut final_assets = Assets::new();
 
-    if let Some(client) = &application_config.client {
-        let end_progress = print_progress("Bundling client file");
-        let client_output = esbuild(client, root, prod)?;
-        end_progress();
+    // // TODO: do we actually need this client bundle?
+    // if let Some(client) = &application_config.client {
+    //     let end_progress = print_progress("Bundling client file");
+    //     let client_output = esbuild(client, root, prod)?;
+    //     end_progress();
 
-        let client_path = client.as_path().with_extension("js");
-        let client_path = client_path.file_name().unwrap();
+    //     let client_path = client.as_path().with_extension("js");
+    //     let client_path = client_path.file_name().unwrap();
 
-        if let Some(assets) = &application_config.assets {
-            let client_path = assets.join(client_path);
-            fs::write(client_path, &client_output)?;
-        }
+    //     if let Some(assets) = &application_config.assets {
+    //         let client_path = assets.join(client_path);
+    //         fs::write(client_path, &client_output)?;
+    //     }
 
-        final_assets.insert(
-            client
-                .as_path()
-                .file_stem()
-                .unwrap()
-                .to_str()
-                .unwrap()
-                .replace('\\', "/")
-                + ".js",
-            client_output,
-        );
-    }
+    //     final_assets.insert(
+    //         client
+    //             .as_path()
+    //             .file_stem()
+    //             .unwrap()
+    //             .to_str()
+    //             .unwrap()
+    //             .replace('\\', "/")
+    //             + ".js",
+    //         client_output,
+    //     );
+    // }
 
     if let Some(assets) = &application_config.assets {
         let assets = root.join(assets);
-        let msg = format!("Processing assets ({:?})", assets.canonicalize().unwrap());
+        let msg = format!(
+            "Processing assets {}",
+            get_pretty_path(root, application_config.assets.clone().unwrap().as_path()),
+        );
         let end_progress = print_progress(&msg);
 
         let files = WalkDir::new(&assets)
@@ -140,7 +176,7 @@ pub fn bundle_function(
 
         end_progress();
     } else {
-        println!("{}", style("Skipping assets...").black().bright());
+        println!("{}", style("Skipping assets ...").black().bright());
     }
 
     Ok((index_output, final_assets))
@@ -184,7 +220,7 @@ pub async fn create_deployment(
     root: &Path,
     prod_bundle: bool,
 ) -> Result<()> {
-    let (index, assets) = bundle_function(application_config, root, prod_bundle)?;
+    let (index, assets) = bundle_application(application_config, root, prod_bundle)?;
 
     let end_progress = print_progress("Creating deployment");
 
@@ -217,14 +253,10 @@ pub async fn create_deployment(
 
     end_progress();
 
-    let end_progress = print_progress("Uploading files");
+    let uploaded_assets_msg = format!("Uploading handler and {} assets", assets.len());
+    let end_progress = print_progress(&uploaded_assets_msg);
 
-    client
-        .client
-        .request("PUT".parse()?, code_url)
-        .body(index)
-        .send()
-        .await?;
+    upload_s3_file(Arc::clone(&client), index, code_url).await?;
 
     let mut join_set = tokio::task::JoinSet::new();
     for (asset, url) in assets_urls {
@@ -232,7 +264,7 @@ pub async fn create_deployment(
             .get(&asset)
             .unwrap_or_else(|| panic!("Couldn't find asset {asset}"));
 
-        join_set.spawn(upload_asset(Arc::clone(&client), asset.clone(), url));
+        join_set.spawn(upload_s3_file(Arc::clone(&client), asset.clone(), url));
     }
 
     while let Some(res) = join_set.join_next().await {
@@ -269,7 +301,10 @@ pub async fn create_deployment(
         .await?;
 
     println!();
-    println!(" {} Application deployed!", style("◼").magenta());
+    println!(
+        " {} Application successfully deployed!",
+        style("◼").magenta()
+    );
 
     if !is_production {
         println!(
@@ -292,13 +327,25 @@ pub async fn create_deployment(
     Ok(())
 }
 
-async fn upload_asset(trpc_client: Arc<ApiClient>, asset: Vec<u8>, url: String) -> Result<()> {
-    trpc_client
+async fn upload_s3_file(client: Arc<ApiClient>, asset: Vec<u8>, url: String) -> Result<()> {
+    let response = client
         .client
         .request("PUT".parse()?, url)
         .body(asset)
         .send()
         .await?;
+
+    if !response.status().is_success() {
+        let error_code = response.status();
+        let error_message = response.text().await?;
+
+        println!(
+            "Failed to upload file to s3: {}\n{}\n",
+            error_code, error_message
+        );
+
+        return Err(anyhow!("Failed to upload file to s3: {}", error_code));
+    }
 
     Ok(())
 }
