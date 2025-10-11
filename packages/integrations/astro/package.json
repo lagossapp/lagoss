@@ -31,6 +31,6 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "astro": "^2.1.7"
+    "astro": "^5.0.0"
   }
 }
