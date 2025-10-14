@@ -12,6 +12,9 @@ use std::{
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ApplicationConfig {
+    #[serde(skip)]
+    pub path: PathBuf,
+
     /// Id of the application
     pub application_id: String,
 
@@ -24,122 +27,98 @@ pub struct ApplicationConfig {
 
 impl ApplicationConfig {
     pub fn load(
-        root: &Path,
-        handler_override: Option<PathBuf>,
+        handler_or_path: Option<PathBuf>,
         assets_override: Option<PathBuf>,
+        application_id_override: Option<String>,
     ) -> Result<ApplicationConfig> {
-        // load config or blank config and use as base
-        // apply overrides (handler, assets) if any
-        // if no still no handler or assets => detect
-        // try to detect handler (lagoss-handler.js, index.js, index.ts, ...)
-        // if no handler try to detect static deployment folder (current, dist, public, ...) with index.html
-        // if still nothing prompt or error
+        let handler_or_path = handler_or_path.unwrap_or_else(|| PathBuf::from("."));
 
-        let config_path = get_application_config_path(root);
-        let mut application_config = ApplicationConfig {
-            application_id: String::from(""),
-            handler: None,
-            assets: None,
+        if !handler_or_path.exists() {
+            return Err(anyhow!("File or directory not found"));
+        }
+
+        // path could be file or directory
+        let handler_override = if handler_or_path.is_file() {
+            Some(diff_paths(handler_or_path.clone(), &handler_or_path.parent().unwrap()).unwrap())
+        } else {
+            None
         };
 
-        let config_exists = config_path.clone().exists();
-        if config_exists {
+        let path = if handler_or_path.is_file() {
+            PathBuf::from(handler_or_path.parent().unwrap())
+        } else {
+            PathBuf::from(handler_or_path)
+        };
+
+        // try to find closest .lagoss/config.json to path
+        let application_config_path = find_application_config_path(&path);
+
+        // load existing config or create new one
+        let mut application_config = if let Some(config_path) = application_config_path.clone() {
             println!(
                 "{} {}",
                 style("Using configuration file from").black().bright(),
                 config_path.display()
             );
-
             let content = fs::read_to_string(config_path.clone())?;
-            application_config = serde_json::from_str::<ApplicationConfig>(&content)?;
-        }
+            let mut app_config = serde_json::from_str::<ApplicationConfig>(&content)?;
+            let root = config_path
+                .parent()
+                .unwrap()
+                .parent()
+                .unwrap()
+                .to_path_buf();
 
-        if let Some(handler_override) = handler_override.clone() {
             println!(
-                "{} {}",
-                style("Using custom handler").black().bright(),
-                get_pretty_path(root, handler_override.as_path())
+                "{} Using project root: {}",
+                style("✓").green().bright(),
+                root.canonicalize()?.display()
             );
-            application_config.handler = Some(handler_override);
-        }
-
-        if let Some(assets_override) = assets_override.clone() {
-            println!(
-                "{} {}",
-                style("Using custom assets directory").black().bright(),
-                get_pretty_path(root, assets_override.as_path())
-            );
-            application_config.assets = Some(assets_override);
-        }
-
-        if !config_exists {
+            app_config.path = root;
+            app_config
+        } else {
             println!(
                 "{} {}",
                 style("No configuration found at").black().bright(),
-                get_pretty_path(root, config_path.as_path())
+                path.display()
             );
-
-            application_config.handler = application_config.handler.or_else(|| {
-                let detected = detect_handler(root);
-                if let Some(ref handler) = detected {
-                    println!(
-                        "{} Handler detected: {}",
-                        style("✓").green().bright(),
-                        get_pretty_path(root, handler)
-                    );
-                }
-                detected
-            });
-
-            // only try to detect assets directory if handler is not set
-            if application_config.handler.is_none() {
-                application_config.assets = application_config.assets.or_else(|| {
-                    let detected = detect_assets_directory(root);
-                    if let Some(ref detected) = detected {
-                        println!(
-                            "{} Assets directory detected: {}",
-                            style("✓").green().bright(),
-                            get_pretty_path(root, detected)
-                        );
-                    }
-                    detected
-                });
+            ApplicationConfig {
+                path: path.clone(),
+                application_id: String::from(""),
+                handler: None,
+                assets: None,
             }
+        };
 
-            // if still no handler or assets, prompt for assets directory
-            if application_config.handler.is_none() && application_config.assets.is_none() {
-                application_config.assets = match Confirm::with_theme(get_theme())
-                    .with_prompt("Do you have an assets directory to serve assets from?")
-                    .default(false)
-                    .interact()?
-                {
-                    true => {
-                        let assets = Input::<String>::with_theme(get_theme())
-                            .with_prompt(format!(
-                                "Path to your application's assets directory? {}",
-                                style(format!("(relative to {:?})", root.canonicalize()?))
-                                    .black()
-                                    .bright(),
-                            ))
-                            .validate_with(|input: &String| -> std::result::Result<(), String> {
-                                validate_assets_dir(&root.join(input), root)
-                                    .map_err(|err| err.to_string())
-                            })
-                            .interact_text()?;
+        // apply overrides
+        if let Some(app_id) = application_id_override {
+            application_config.application_id = app_id;
+        }
 
-                        Some(PathBuf::from(assets))
-                    }
-                    false => None,
-                };
-            }
+        if let Some(handler) = handler_override {
+            application_config.handler = Some(handler);
+        }
+
+        if let Some(assets) = assets_override {
+            application_config.assets = Some(assets);
+        }
+
+        // stop if we found a config file
+        if application_config_path.is_none() {
+            // do some detection magic if necessary
+            // if no handler or assets is set => try to detect (should we really do this?)
+            //   - try to detect handler (lagoss-handler.js, index.ts, ...)
+            //   - if no handler try to detect static deployment folder (current, dist, public, ...) with index.html
+            //   - if still nothing prompt or error
+            application_config = detect_application_config(application_config)?;
         }
 
         if let Some(handler) = &application_config.handler {
-            validate_code_file(handler, root)?;
+            validate_code_file(handler, application_config.path.as_path())?;
         }
 
         if let Some(assets_dir) = &application_config.assets {
-            validate_assets_dir(assets_dir, root)?;
+            validate_assets_dir(assets_dir, application_config.path.as_path())?;
         }
 
         if application_config.handler.is_none() && application_config.assets.is_none() {
@@ -151,39 +130,48 @@ impl ApplicationConfig {
         Ok(application_config)
     }
 
-    pub fn write(&self, root: &Path) -> Result<()> {
-        let path = get_application_config_path(root);
-
-        if !path.exists() {
-            fs::create_dir_all(root.join(".lagoss"))?;
+    pub fn write(&self) -> Result<()> {
+        if !self.path.exists() {
+            fs::create_dir_all(self.path.join(".lagoss"))?;
         }
 
         let content = serde_json::to_string(self)?;
-        fs::write(path, content)?;
+        fs::write(self.path.clone(), content)?;
         Ok(())
     }
 
-    pub fn delete(&self, root: &Path) -> Result<()> {
-        let path = get_application_config_path(root);
-
-        if !path.exists() {
+    pub fn delete(&self) -> Result<()> {
+        if !self.path.exists() {
             return Err(anyhow!("No configuration found in this directory.",));
         }
 
-        fs::remove_file(path)?;
+        fs::remove_file(self.path.clone())?;
         Ok(())
     }
-}
 
-pub fn get_application_config_path(root: &Path) -> PathBuf {
-    root.join(".lagoss").join("config.json")
-}
-
-pub fn get_root(root: Option<PathBuf>) -> PathBuf {
-    match root {
-        Some(path) => path, // TODO: find closes parent with .lagoss
-        None => std::env::current_dir().unwrap(),
+    pub fn clone(&self) -> ApplicationConfig {
+        ApplicationConfig {
+            path: self.path.clone(),
+            application_id: self.application_id.clone(),
+            handler: self.handler.clone(),
+            assets: self.assets.clone(),
+        }
     }
+}
+
+/// Get the path to the application config file (.lagoss/config.json)
+/// starting from the given root directory and searching in parent directories.
+pub fn find_application_config_path(root: &Path) -> Option<PathBuf> {
+    let try_dir = root.join(".lagoss").join("config.json");
+    if try_dir.exists() && try_dir.is_file() {
+        return Some(try_dir);
+    }
+
+    if let Some(parent) = root.parent() {
+        return find_application_config_path(parent);
+    }
+
+    None
 }
 
 fn detect_handler(root: &Path) -> Option<PathBuf> {
@@ -221,36 +209,64 @@ fn detect_assets_directory(root: &Path) -> Option<PathBuf> {
     None
 }
 
-pub fn resolve_application_path(
-    path: Option<PathBuf>,
-    assets_dir: Option<PathBuf>,
-) -> Result<(PathBuf, ApplicationConfig)> {
-    let path = path.unwrap_or_else(|| PathBuf::from("."));
+fn detect_application_config(
+    application_config: ApplicationConfig,
+) -> Result<ApplicationConfig, anyhow::Error> {
+    let mut application_config = application_config.clone();
+    let root = &application_config.path;
 
-    if !path.exists() {
-        return Err(anyhow!("File or directory not found"));
-    }
-
-    match path.is_file() {
-        true => {
-            let root = PathBuf::from(path.parent().unwrap());
-
-            let handler = diff_paths(&path, &root).unwrap();
-            let assets = assets_dir.map(|assets_dir| diff_paths(assets_dir, &root).unwrap());
-
-            Ok((
-                root,
-                ApplicationConfig {
-                    application_id: String::new(),
-                    handler: Some(handler),
-                    assets,
-                },
-            ))
+    application_config.handler = application_config.handler.or_else(|| {
+        let detected = detect_handler(root);
+        if let Some(ref handler) = detected {
+            println!(
+                "{} Handler detected: {}",
+                style("✓").green().bright(),
+                get_pretty_path(root, handler)
+            );
         }
-        false => Ok((
-            // TODO: should we detect a config from a parent directory?
-            path.clone(),
-            ApplicationConfig::load(&path, None, assets_dir)?,
-        )),
+        detected
+    });
+
+    // only try to detect assets directory if handler is not set
+    if application_config.handler.is_none() {
+        application_config.assets = application_config.assets.or_else(|| {
+            let detected = detect_assets_directory(root);
+            if let Some(ref detected) = detected {
+                println!(
+                    "{} Assets directory detected: {}",
+                    style("✓").green().bright(),
+                    get_pretty_path(root, detected)
+                );
+            }
+            detected
+        });
     }
+
+    // if still no handler or assets, prompt for assets directory
+    if application_config.handler.is_none() && application_config.assets.is_none() {
+        application_config.assets = match Confirm::with_theme(get_theme())
+            .with_prompt("Do you have an assets directory to serve assets from?")
+            .default(false)
+            .interact()?
+        {
+            true => {
+                let assets = Input::<String>::with_theme(get_theme())
+                    .with_prompt(format!(
+                        "Path to your application's assets directory? {}",
+                        style(format!("(relative to {:?})", root.canonicalize()?))
+                            .black()
+                            .bright(),
+                    ))
+                    .validate_with(|input: &String| -> std::result::Result<(), String> {
+                        validate_assets_dir(&root.join(input), root).map_err(|err| err.to_string())
+                    })
+                    .interact_text()?;
+
+                Some(PathBuf::from(assets))
+            }
+            false => None,
+        };
+    }
+
+    Ok(application_config)
 }

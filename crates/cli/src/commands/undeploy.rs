@@ -1,4 +1,4 @@
-use crate::utils::{get_root, get_theme, print_progress, ApiClient, ApplicationConfig, Config};
+use crate::utils::{get_theme, print_progress, ApiClient, ApplicationConfig, Config};
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm};
 use serde::Deserialize;
@@ -21,8 +21,7 @@ pub async fn undeploy(
         ));
     }
 
-    let root = get_root(directory);
-    let application_config = ApplicationConfig::load(&root, None, None)?;
+    let application_config = ApplicationConfig::load(directory, None, None)?;
 
     if application_config.application_id.is_empty() {
         return Err(anyhow!(

@@ -1,4 +1,4 @@
-use crate::utils::{get_root, print_progress, ApiClient, ApplicationConfig, Config};
+use crate::utils::{print_progress, ApiClient, ApplicationConfig, Config};
 use anyhow::{anyhow, Result};
 use dialoguer::console::style;
 use serde::Deserialize;
@@ -21,8 +21,7 @@ pub async fn ls(config: &Config, directory: Option<PathBuf>) -> Result<()> {
         ));
     }
 
-    let root = get_root(directory);
-    let application_config = ApplicationConfig::load(&root, None, None)?;
+    let application_config = ApplicationConfig::load(directory, None, None)?;
     let end_progress = print_progress("Fetching Deployments");
 
     if application_config.application_id.is_empty() {

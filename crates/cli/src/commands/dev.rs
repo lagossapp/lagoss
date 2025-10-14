@@ -1,4 +1,4 @@
-use crate::utils::{bundle_application, resolve_application_path, Assets};
+use crate::utils::{bundle_application, ApplicationConfig, Assets};
 use anyhow::{anyhow, Error, Result};
 use chrono::offset::Local;
 use dialoguer::console::style;
@@ -182,8 +182,8 @@ pub async fn dev(
     allow_code_generation: bool,
     prod: bool,
 ) -> Result<()> {
-    let (root, application_config) = resolve_application_path(path.clone(), assets_dir)?;
-    let (index, assets) = bundle_application(&application_config, &root, prod)?;
+    let application_config = ApplicationConfig::load(path, assets_dir, None)?;
+    let (index, assets) = bundle_application(&application_config, prod)?;
 
     let index = Arc::new(Mutex::new(index));
     let assets = Arc::new(Mutex::new(assets));
@@ -200,12 +200,13 @@ pub async fn dev(
     let server_assets_dir = application_config
         .assets
         .as_ref()
-        .map(|assets| root.join(assets));
+        .map(|assets| application_config.path.join(assets));
 
-    let environment_variables = match parse_environment_variables(path, env) {
-        Ok(env) => env,
-        Err(err) => return Err(anyhow!("Could not load environment variables: {:?}", err)),
-    };
+    let environment_variables =
+        match parse_environment_variables(Some(application_config.path.clone()), env) {
+            Ok(env) => env,
+            Err(err) => return Err(anyhow!("Could not load environment variables: {:?}", err)),
+        };
 
     let (isolate_tx, isolate_rx) = flume::unbounded();
     let (log_sender, log_receiver) = flume::unbounded();
@@ -281,7 +282,10 @@ pub async fn dev(
     )?;
 
     if let Some(handler) = &application_config.handler {
-        watcher.watch(&root.join(handler.clone()), RecursiveMode::NonRecursive)?;
+        watcher.watch(
+            &application_config.path.join(handler.clone()),
+            RecursiveMode::NonRecursive,
+        )?;
     }
 
     tokio::spawn(async move {
@@ -297,7 +301,7 @@ pub async fn dev(
                 print!("\x1B[2J\x1B[1;1H");
                 println!("{}", style("File modified, updating...").black().bright());
 
-                let (new_index, new_assets) = bundle_application(&application_config, &root, prod)?;
+                let (new_index, new_assets) = bundle_application(&application_config, prod)?;
 
                 *assets.lock().await = new_assets;
                 *index.lock().await = new_index;

@@ -56,9 +56,10 @@ fn esbuild(file: &Path, root: &Path, prod: bool) -> Result<Vec<u8>> {
 
 pub fn bundle_application(
     application_config: &ApplicationConfig,
-    root: &Path,
     prod: bool,
 ) -> Result<(Vec<u8>, Assets)> {
+    let root = application_config.path.as_path();
+
     if let Err(error) = Command::new(ESBUILD).arg("--version").output() {
         return if error.kind() == ErrorKind::NotFound {
             Err(anyhow!(
@@ -217,10 +218,9 @@ pub async fn create_deployment(
     config: &Config,
     application_config: &ApplicationConfig,
     is_production: bool,
-    root: &Path,
     prod_bundle: bool,
 ) -> Result<()> {
-    let (index, assets) = bundle_application(application_config, root, prod_bundle)?;
+    let (index, assets) = bundle_application(application_config, prod_bundle)?;
 
     let end_progress = print_progress("Creating deployment");
 

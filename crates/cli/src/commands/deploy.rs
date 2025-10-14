@@ -1,6 +1,5 @@
 use crate::utils::{
-    create_deployment, get_theme, print_progress, resolve_application_path, ApiClient,
-    ApplicationConfig, Config,
+    create_deployment, get_theme, print_progress, ApiClient, ApplicationConfig, Config,
 };
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm, Input, Select};
@@ -63,9 +62,9 @@ pub async fn deploy(
         ));
     }
 
-    let (root, application_config) = get_application_config(config, path, assets_dir).await?;
+    let application_config = get_application_config(config, path, assets_dir).await?;
 
-    create_deployment(config, &application_config, is_production, &root, true).await?;
+    create_deployment(config, &application_config, is_production, true).await?;
 
     Ok(())
 }
@@ -74,11 +73,11 @@ async fn get_application_config(
     config: &Config,
     path: Option<PathBuf>,
     assets_dir: Option<PathBuf>,
-) -> Result<(PathBuf, ApplicationConfig)> {
-    let (root, mut app_config) = resolve_application_path(path, assets_dir)?;
+) -> Result<ApplicationConfig> {
+    let mut app_config = ApplicationConfig::load(path, assets_dir, None)?;
 
     if !app_config.application_id.is_empty() {
-        return Ok((root, app_config));
+        return Ok(app_config);
     }
 
     println!(
@@ -122,9 +121,9 @@ async fn get_application_config(
             let application = &applications[index];
 
             app_config.application_id.clone_from(&application.id);
-            app_config.write(&root)?;
+            app_config.write()?;
 
-            Ok((root, app_config))
+            Ok(app_config)
         }
         false => {
             let name = Input::<String>::with_theme(get_theme())
@@ -149,9 +148,9 @@ async fn get_application_config(
             end_progress();
 
             app_config.application_id.clone_from(&application.id);
-            app_config.write(&root)?;
+            app_config.write()?;
 
-            Ok((root, app_config))
+            Ok(app_config)
         }
     }
 }

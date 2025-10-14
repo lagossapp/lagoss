@@ -1,6 +1,6 @@
 use crate::{
     commands::deploy::{ApplicationsResponse, OrganizationsResponse},
-    utils::{get_root, get_theme, ApiClient, ApplicationConfig, Config},
+    utils::{get_theme, ApiClient, ApplicationConfig, Config},
 };
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Select};
@@ -13,8 +13,7 @@ pub async fn link(config: &Config, directory: Option<PathBuf>) -> Result<()> {
         ));
     }
 
-    let root = get_root(directory);
-    let application_config = ApplicationConfig::load(&root, None, None)?;
+    let mut application_config = ApplicationConfig::load(directory, None, None)?;
 
     match !application_config.application_id.is_empty() {
         true => Err(anyhow!(
@@ -48,11 +47,10 @@ pub async fn link(config: &Config, directory: Option<PathBuf>) -> Result<()> {
                 .interact()?;
             let application = &applications[index];
 
-            let mut application_config = ApplicationConfig::load(&root, None, None)?;
             application_config
                 .application_id
                 .clone_from(&application.id);
-            application_config.write(&root)?;
+            application_config.write()?;
 
             println!();
             println!(" {} Application linked!", style("◼").magenta());
