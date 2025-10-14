@@ -39,7 +39,7 @@ impl ApplicationConfig {
 
         // path could be file or directory
         let handler_override = if handler_or_path.is_file() {
-            Some(diff_paths(handler_or_path.clone(), &handler_or_path.parent().unwrap()).unwrap())
+            Some(diff_paths(handler_or_path.clone(), handler_or_path.parent().unwrap()).unwrap())
         } else {
             None
         };
@@ -47,7 +47,7 @@ impl ApplicationConfig {
         let path = if handler_or_path.is_file() {
             PathBuf::from(handler_or_path.parent().unwrap())
         } else {
-            PathBuf::from(handler_or_path)
+            handler_or_path
         };
 
         // try to find closest .lagoss/config.json to path
