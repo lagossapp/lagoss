@@ -1,5 +1,13 @@
 # @lagoss/dashboard
 
+## [0.7.1](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard@0.7.0...@lagoss/dashboard@0.7.1) (2025-10-24)
+
+
+### Bug Fixes
+
+* handle db connection lost ([#215](https://github.com/lagossapp/lagoss/issues/215)) ([d8f95f9](https://github.com/lagossapp/lagoss/commit/d8f95f926803d94b58884286c2e764298d644820))
+* use boolean for is-production in serverless api ([#214](https://github.com/lagossapp/lagoss/issues/214)) ([ab6b0bb](https://github.com/lagossapp/lagoss/commit/ab6b0bb0135b635d1ce288ef79b26b4ed1f78b7b))
+
 ## [0.7.0](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard@0.6.4...@lagoss/dashboard@0.7.0) (2025-10-08)
 
 
