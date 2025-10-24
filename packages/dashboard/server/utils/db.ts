@@ -1,4 +1,4 @@
-import { drizzle, MySql2Database } from 'drizzle-orm/mysql2';
+import { drizzle } from 'drizzle-orm/mysql2';
 import mysql from 'mysql2/promise';
 import * as schema from '~~/server/db/schema';
 import { randomBytes } from 'node:crypto';
@@ -10,12 +10,11 @@ async function getDB() {
     throw new Error('NUXT_DATABASE_URL is not configured');
   }
 
-  const connection = await mysql.createConnection(config.database.url);
+  const pool = mysql.createPool({
+    uri: config.database.url,
+  });
 
-  return {
-    connection,
-    db: drizzle(connection, { schema, mode: 'default' }),
-  };
+  return pool;
 
   // if (config.db.turso.url && config.db.turso.authToken) {
   //   const connection = createLibSQLClient({
@@ -33,25 +32,14 @@ async function getDB() {
   // throw new Error('Missing database configuration');
 }
 
-let _db: MySql2Database<typeof schema> | undefined;
-let _connection: mysql.Connection | undefined;
+let _connection: mysql.Pool | undefined;
 
 export async function useDB() {
-  if (!_db || !_connection) {
-    const { db, connection } = await getDB();
-    _db = db;
-    _connection = connection;
-    return db;
+  if (!_connection) {
+    _connection = await getDB();
   }
 
-  try {
-    await _connection.ping();
-  } catch (e) {
-    console.error('Database connection lost, reconnecting...', e);
-    return useDB();
-  }
-
-  return _db;
+  return drizzle(_connection, { schema, mode: 'default' });
 }
 
 export async function getFirst<T>(query: Promise<T[]>): Promise<T | undefined> {
