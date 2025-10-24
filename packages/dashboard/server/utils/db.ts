@@ -11,7 +11,6 @@ async function getDB() {
   }
 
   const connection = await mysql.createConnection(config.database.url);
-  connection.config.maxIdle = 10 * 1000;
 
   return {
     connection,
