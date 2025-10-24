@@ -11,7 +11,12 @@ async function getDB() {
   }
 
   const connection = await mysql.createConnection(config.database.url);
-  return drizzle(connection, { schema, mode: 'default' });
+  connection.config.maxIdle = 10 * 1000;
+
+  return {
+    connection,
+    db: drizzle(connection, { schema, mode: 'default' }),
+  };
 
   // if (config.db.turso.url && config.db.turso.authToken) {
   //   const connection = createLibSQLClient({
@@ -30,10 +35,21 @@ async function getDB() {
 }
 
 let _db: MySql2Database<typeof schema> | undefined;
+let _connection: mysql.Connection | undefined;
 
 export async function useDB() {
-  if (!_db) {
-    _db = await getDB();
+  if (!_db || !_connection) {
+    const { db, connection } = await getDB();
+    _db = db;
+    _connection = connection;
+    return db;
+  }
+
+  try {
+    await _connection.ping();
+  } catch (e) {
+    console.error('Database connection lost, reconnecting...', e);
+    return useDB();
   }
 
   return _db;
