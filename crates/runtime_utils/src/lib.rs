@@ -103,9 +103,6 @@ impl Deployment {
     }
 
     pub fn write_asset(&self, asset: &str, content: &[u8]) -> Result<()> {
-        // let asset = asset.replace("public/", "");
-        // let asset = asset.as_str();
-
         let dir = self.get_assets_dir()?.join(
             Path::new(asset)
                 .parent()
