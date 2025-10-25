@@ -42,7 +42,7 @@ export default defineEventHandler(async event => {
 
       return {
         id: d.id,
-        isProduction: d.isProduction,
+        isProduction: d.isProduction === 1,
         assets: d.assets,
         functionId: project.id,
         functionName: project.name,
