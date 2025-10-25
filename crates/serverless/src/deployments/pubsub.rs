@@ -1,9 +1,8 @@
-use super::{download_deployment, filesystem::rm_deployment, Deployment, Deployments};
+use super::{filesystem::rm_deployment, Deployment, Deployments};
 use crate::{cronjob::Cronjob, get_region, serverless::Workers};
 use anyhow::Result;
 use futures::StreamExt;
 use lagoss_runtime_isolate::IsolateEvent;
-use lagoss_serverless_downloader::Downloader;
 use lagoss_serverless_pubsub::{PubSubListener, PubSubMessage, PubSubMessageKind};
 use log::{error, warn};
 use metrics::increment_counter;
@@ -19,15 +18,13 @@ pub async fn clear_deployment_cache(deployment_id: String, workers: Workers, rea
     }
 }
 
-async fn run<D, P>(
-    downloader: Arc<D>,
+async fn run<P>(
     deployments: Deployments,
     workers: Workers,
     cronjob: Arc<Mutex<Cronjob>>,
     pubsub: Arc<Mutex<P>>,
 ) -> Result<()>
 where
-    D: Downloader,
     P: PubSubListener,
 {
     let mut pubsub = pubsub.lock().await;
@@ -81,44 +78,21 @@ where
 
         match kind {
             PubSubMessageKind::Deploy => {
-                match download_deployment(&deployment, Arc::clone(&downloader)).await {
-                    Ok(_) => {
-                        increment_counter!(
-                            "lagoss_deployments",
-                            "status" => "success",
-                            "deployment" => deployment.id.clone(),
-                            "function" => deployment.function_id.clone(),
-                        );
+                let domains = deployment.get_domains();
+                let deployment = Arc::new(deployment);
 
-                        let domains = deployment.get_domains();
-                        let deployment = Arc::new(deployment);
+                for domain in &domains {
+                    deployments.insert(domain.clone(), Arc::clone(&deployment));
+                }
 
-                        for domain in &domains {
-                            deployments.insert(domain.clone(), Arc::clone(&deployment));
-                        }
+                if deployment.should_run_cron() {
+                    let mut cronjob = cronjob.lock().await;
+                    let id = deployment.id.clone();
 
-                        if deployment.should_run_cron() {
-                            let mut cronjob = cronjob.lock().await;
-                            let id = deployment.id.clone();
-
-                            if let Err(error) = cronjob.add(deployment).await {
-                                error!(deployment = id; "Failed to register cron: {}", error);
-                            }
-                        }
+                    if let Err(error) = cronjob.add(deployment).await {
+                        error!(deployment = id; "Failed to register cron: {}", error);
                     }
-                    Err(error) => {
-                        increment_counter!(
-                            "lagoss_deployments",
-                            "status" => "error",
-                            "deployment" => deployment.id.clone(),
-                            "function" => deployment.function_id.clone(),
-                        );
-                        error!(
-                            deployment = deployment.id;
-                            "Failed to download deployment: {}", error
-                        );
-                    }
-                };
+                }
             }
             PubSubMessageKind::Undeploy => {
                 match rm_deployment(&deployment.id) {
@@ -213,14 +187,12 @@ where
     Ok(())
 }
 
-pub fn listen_pub_sub<D, P>(
-    downloader: Arc<D>,
+pub fn listen_pub_sub<P>(
     deployments: Deployments,
     workers: Workers,
     cronjob: Arc<Mutex<Cronjob>>,
     pubsub: Arc<Mutex<P>>,
 ) where
-    D: Downloader + Send + Sync + 'static,
     P: PubSubListener + 'static,
 {
     let handle = Handle::current();
@@ -228,7 +200,6 @@ pub fn listen_pub_sub<D, P>(
         handle.block_on(async {
             loop {
                 if let Err(error) = run(
-                    Arc::clone(&downloader),
                     Arc::clone(&deployments),
                     Arc::clone(&workers),
                     Arc::clone(&cronjob),
