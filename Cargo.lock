@@ -512,6 +512,7 @@ dependencies = [
  "hyper 1.6.0",
  "hyper-util",
  "lz4_flex",
+ "quanta",
  "replace_with",
  "sealed",
  "serde",
