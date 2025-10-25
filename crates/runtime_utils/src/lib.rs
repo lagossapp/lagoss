@@ -60,23 +60,42 @@ impl Deployment {
         self.is_production && self.cron.is_some()
     }
 
-    pub fn get_code(&self) -> Result<String> {
+    fn get_deployment_path(&self) -> Result<std::path::PathBuf> {
         let path = Path::new(env::current_dir()?.as_path())
             .join(DEPLOYMENTS_DIR)
-            .join(self.id.clone() + ".js");
+            .join(self.id.clone());
+
+        Ok(path)
+    }
+
+    fn get_assets_dir(&self) -> Result<std::path::PathBuf> {
+        let path = self.get_deployment_path()?.join("assets");
+
+        Ok(path)
+    }
+
+    fn get_code_path(&self) -> Result<std::path::PathBuf> {
+        let path = self.get_deployment_path()?.join("index.js");
+
+        Ok(path)
+    }
+
+    pub fn get_code(&self) -> Result<String> {
+        let path = self.get_code_path()?;
         let code = fs::read_to_string(path)?;
 
         Ok(code)
     }
 
     pub fn has_code(&self) -> bool {
-        let path = Path::new(DEPLOYMENTS_DIR).join(self.id.clone() + ".js");
-
+        let path = self.get_code_path().unwrap();
         path.exists()
     }
 
     pub fn write_code(&self, code: &[u8]) -> Result<()> {
-        let mut file = File::create(Path::new(DEPLOYMENTS_DIR).join(self.id.clone() + ".js"))?;
+        fs::create_dir_all(self.get_deployment_path()?)?;
+
+        let mut file = File::create(self.get_code_path()?)?;
 
         file.write_all(code)?;
 
@@ -87,15 +106,14 @@ impl Deployment {
         let asset = asset.replace("public/", "");
         let asset = asset.as_str();
 
-        let dir = Path::new(DEPLOYMENTS_DIR).join(self.id.clone()).join(
+        let dir = self.get_assets_dir()?.join(
             Path::new(asset)
                 .parent()
                 .ok_or_else(|| anyhow!("Could not get parent of {}", asset))?,
         );
-        fs::create_dir_all(dir)?;
+        fs::create_dir_all(dir.clone())?;
 
-        let mut file =
-            File::create(Path::new(DEPLOYMENTS_DIR).join(self.id.clone() + "/" + asset))?;
+        let mut file = File::create(dir.join(asset))?;
         file.write_all(content)?;
 
         Ok(())
