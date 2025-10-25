@@ -1,4 +1,4 @@
-import { mysqlTable, tinyint, varchar, datetime, json, int } from 'drizzle-orm/mysql-core';
+import { mysqlTable, tinyint, varchar, datetime, int, text } from 'drizzle-orm/mysql-core';
 import { InferSelectModel } from 'drizzle-orm';
 import { generateId } from '~~/server/utils/db';
 
@@ -23,7 +23,7 @@ export const deploymentSchema = mysqlTable('Deployment', {
   triggerer: varchar('triggerer', { length: 191 }).default('Lagoss'),
   commit: varchar('commit', { length: 191 }),
   isProduction: tinyint('isProduction').default(0).notNull(),
-  assets: json('assets').notNull(),
+  assets: text('assets').notNull(),
 });
 export type Deployment = InferSelectModel<typeof deploymentSchema>;
 
@@ -50,7 +50,7 @@ export const envVariableSchema = mysqlTable('EnvVariable', {
 });
 export type EnvVariable = InferSelectModel<typeof envVariableSchema>;
 
-// TODO: rename to project
+// TODO: rename to app
 export const projectSchema = mysqlTable('Function', {
   id: varchar('id', { length: 191 }).notNull().primaryKey().$defaultFn(generateId),
   createdAt: datetime('createdAt').notNull(),

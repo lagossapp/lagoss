@@ -51,24 +51,21 @@ export default defineEventHandler(async event => {
   const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.projectId, project.id)).execute();
 
   // TODO: promote using deploy twice first with prod=false and then with prod=true
-  await redis.publish(
-    'promote',
-    JSON.stringify({
-      previousDeploymentId: previousProductionDeployment?.id || '',
-      functionId: project.id,
-      functionName: project.name,
-      deploymentId: deploymentId,
-      domains: domains.map(({ domain }) => domain),
-      memory: project.memory,
-      tickTimeout: project.totalTimeout,
-      totalTimeout: project.totalTimeout,
-      cron: project.cron,
-      cronRegion: project.cronRegion,
-      env: envStringToObject(env),
-      isProduction: true,
-      assets: deployment.assets,
-    }),
-  );
+  await redis.publish('promote', {
+    previousDeploymentId: previousProductionDeployment?.id || '',
+    functionId: project.id,
+    functionName: project.name,
+    deploymentId: deploymentId,
+    domains: domains.map(({ domain }) => domain),
+    memory: project.memory,
+    tickTimeout: project.totalTimeout,
+    totalTimeout: project.totalTimeout,
+    cron: project.cron,
+    cronRegion: project.cronRegion,
+    env: envStringToObject(env),
+    isProduction: true,
+    assets: parseAssets(deployment.assets),
+  });
 
   return { ok: true };
 });
