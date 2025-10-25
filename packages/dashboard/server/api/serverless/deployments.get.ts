@@ -29,18 +29,21 @@ export default defineEventHandler(async event => {
     .where(cronRegion ? or(isNull(projectSchema.cron), eq(projectSchema.cronRegion, cronRegion)) : undefined);
 
   return Promise.all(
-    deployments.map(async ({ Deployment: deployment, Function: project }) => {
+    deployments.map(async deployment => {
+      const d = deployment.Deployment;
+      const project = deployment.Function;
+
       if (!project) {
-        throw new Error(`Project ${deployment.projectId} not found`);
+        throw new Error('Project not found');
       }
 
       const domains = await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id));
       const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.projectId, project.id));
 
       return {
-        id: deployment.id,
-        isProduction: deployment.isProduction === 1,
-        assets: parseAssets(deployment.assets),
+        id: d.id,
+        isProduction: d.isProduction === 1,
+        assets: d.assets,
         functionId: project.id,
         functionName: project.name,
         memory: project.memory,

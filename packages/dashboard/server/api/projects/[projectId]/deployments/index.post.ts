@@ -55,7 +55,7 @@ export default defineEventHandler(async event => {
       updatedAt: new Date(),
       triggerer: user.email,
       isProduction: 0,
-      assets: JSON.stringify(input.assets.map(({ name }) => name)),
+      assets: input.assets.map(({ name }) => name),
     })
     .execute();
 

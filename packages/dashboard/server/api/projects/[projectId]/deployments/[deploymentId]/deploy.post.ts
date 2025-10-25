@@ -64,20 +64,23 @@ export default defineEventHandler(async event => {
   const domains = await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id)).execute();
   const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.projectId, project.id)).execute();
 
-  await redis.publish('deploy', {
-    functionId: project.id, // TODO: rename to projectId
-    functionName: project.name, // TODO: rename to projectName
-    deploymentId: deployment.id,
-    domains: domains.map(({ domain }) => domain),
-    memory: project.memory,
-    tickTimeout: project.tickTimeout,
-    totalTimeout: project.totalTimeout,
-    cron: project.cron,
-    cronRegion: project.cronRegion,
-    env: envStringToObject(env),
-    isProduction: deployment.isProduction === 1,
-    assets: parseAssets(deployment.assets),
-  });
+  await redis.publish(
+    'deploy',
+    JSON.stringify({
+      functionId: project.id, // TODO: rename to projectId
+      functionName: project.name, // TODO: rename to projectName
+      deploymentId: deployment.id,
+      domains: domains.map(({ domain }) => domain),
+      memory: project.memory,
+      tickTimeout: project.tickTimeout,
+      totalTimeout: project.totalTimeout,
+      cron: project.cron,
+      cronRegion: project.cronRegion,
+      env: envStringToObject(env),
+      isProduction: deployment.isProduction,
+      assets: deployment.assets,
+    }),
+  );
 
   return {
     url: getFullCurrentDomain({

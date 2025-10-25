@@ -1,4 +1,4 @@
-import { deploymentSchema, domainSchema } from '~~/server/db/schema';
+import { deploymentSchema, domainSchema, } from '~~/server/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { getFullCurrentDomain, getFullDomain } from '~~/app/composables/utils';
 
