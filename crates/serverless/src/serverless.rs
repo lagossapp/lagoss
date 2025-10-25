@@ -24,7 +24,6 @@ use lagoss_runtime_isolate::{
 use lagoss_runtime_utils::{
     assets::{find_asset, handle_asset},
     response::{handle_response, ResponseEvent, FAVICON_URL, PAGE_403, PAGE_404},
-    DEPLOYMENTS_DIR,
 };
 use lagoss_serverless_downloader::Downloader;
 use lagoss_serverless_pubsub::PubSubListener;
@@ -167,9 +166,8 @@ where
     let url = req.uri().path();
 
     if let Some(asset) = find_asset(url, &deployment.assets) {
-        let root = Path::new(env::current_dir().unwrap().as_path())
-            .join(DEPLOYMENTS_DIR)
-            .join(&deployment.id);
+        let root =
+            Path::new(env::current_dir().unwrap().as_path()).join(deployment.get_assets_dir()?);
 
         let run_result = match handle_asset(root, asset) {
             Ok((response_builder, body)) => RunResult::Response(response_builder, body, None),

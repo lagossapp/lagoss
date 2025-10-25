@@ -18,9 +18,7 @@ pub fn create_deployments_folder() -> Result<()> {
 pub fn rm_deployment(deployment_id: &str) -> Result<()> {
     #[cfg(not(feature = "test"))]
     {
-        fs::remove_file(Path::new(DEPLOYMENTS_DIR).join(deployment_id.to_owned() + ".js"))?;
-        // It's possible that the folder doesn't exists if the deployment has no assets
-        fs::remove_dir_all(Path::new(DEPLOYMENTS_DIR).join(deployment_id)).unwrap_or(());
+        fs::remove_dir_all(Path::new(DEPLOYMENTS_DIR).join(deployment_id))?;
     }
 
     info!(deployment = deployment_id; "Deleted deployment");

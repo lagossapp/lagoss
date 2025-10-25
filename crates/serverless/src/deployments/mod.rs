@@ -187,17 +187,15 @@ async fn delete_old_deployments(deployments: &[Deployment]) -> Result<()> {
     let mut deleted_deployments = 0;
 
     for local_deployment_file in local_deployments_files {
-        let local_deployment_file_name = local_deployment_file?
+        let local_deployment_id = local_deployment_file?
             .file_name()
             .into_string()
             .unwrap_or_else(|_| "".into());
 
-        // Skip folders
-        if !local_deployment_file_name.ends_with(".js") {
+        // TODO: improve check to only delete folders
+        if local_deployment_id.ends_with(".js") {
             continue;
         }
-
-        let local_deployment_id = local_deployment_file_name.replace(".js", "");
 
         if !deployments
             .iter()

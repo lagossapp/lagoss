@@ -68,7 +68,7 @@ impl Deployment {
         Ok(path)
     }
 
-    fn get_assets_dir(&self) -> Result<std::path::PathBuf> {
+    pub fn get_assets_dir(&self) -> Result<std::path::PathBuf> {
         let path = self.get_deployment_path()?.join("assets");
 
         Ok(path)
@@ -103,17 +103,17 @@ impl Deployment {
     }
 
     pub fn write_asset(&self, asset: &str, content: &[u8]) -> Result<()> {
-        let asset = asset.replace("public/", "");
-        let asset = asset.as_str();
+        // let asset = asset.replace("public/", "");
+        // let asset = asset.as_str();
 
         let dir = self.get_assets_dir()?.join(
             Path::new(asset)
                 .parent()
                 .ok_or_else(|| anyhow!("Could not get parent of {}", asset))?,
         );
-        fs::create_dir_all(dir.clone())?;
+        fs::create_dir_all(dir)?;
 
-        let mut file = File::create(dir.join(asset))?;
+        let mut file = File::create(self.get_assets_dir()?.join(asset))?;
         file.write_all(content)?;
 
         Ok(())
