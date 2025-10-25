@@ -155,7 +155,6 @@ where
     if !deployment.has_code() {
         if let Err(error) = download_deployment(&deployment, Arc::clone(&downloader)).await {
             error!("Failed to download deployment {}: {}", deployment.id, error);
-            // TODO: should we tell the user about this?
             return Ok(Response::builder().status(500).body(PAGE_500.into())?);
         }
     }
