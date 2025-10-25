@@ -23,7 +23,7 @@ use lagoss_runtime_isolate::{
 };
 use lagoss_runtime_utils::{
     assets::{find_asset, handle_asset},
-    response::{handle_response, ResponseEvent, FAVICON_URL, PAGE_403, PAGE_404},
+    response::{handle_response, ResponseEvent, FAVICON_URL, PAGE_403, PAGE_404, PAGE_500},
     DEPLOYMENTS_DIR,
 };
 use lagoss_serverless_downloader::Downloader;
@@ -155,9 +155,8 @@ where
     if !deployment.has_code() {
         if let Err(error) = download_deployment(&deployment, Arc::clone(&downloader)).await {
             error!("Failed to download deployment {}: {}", deployment.id, error);
-            return Ok(Response::builder()
-                .status(500)
-                .body(Body::from("Failed to download deployment."))?);
+            // TODO: should we tell the user about this?
+            return Ok(Response::builder().status(500).body(PAGE_500.into())?);
         }
     }
 
