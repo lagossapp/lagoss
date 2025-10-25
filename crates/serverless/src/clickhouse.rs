@@ -5,7 +5,6 @@ use std::env;
 
 #[derive(Row, Serialize, Deserialize)]
 pub struct LogRow {
-    pub request_id: String,
     pub function_id: String,
     pub deployment_id: String,
     pub level: String,
@@ -16,7 +15,6 @@ pub struct LogRow {
 
 #[derive(Row, Serialize, Deserialize)]
 pub struct RequestRow {
-    pub request_id: String,
     pub function_id: String,
     pub deployment_id: String,
     pub region: String,
