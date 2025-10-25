@@ -346,10 +346,10 @@ where
     let insertion_interval = Duration::from_secs(1);
     let inserters = Arc::new(Mutex::new((
         client
-            .inserter::<RequestRow>("serverless.requests")?
+            .inserter::<RequestRow>("serverless.requests")
             .with_period(Some(insertion_interval)),
         client
-            .inserter::<LogRow>("serverless.logs")?
+            .inserter::<LogRow>("serverless.logs")
             .with_period(Some(insertion_interval)),
     )));
 
