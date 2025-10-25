@@ -1,7 +1,9 @@
 use crate::{
     clickhouse::{LogRow, RequestRow},
     cronjob::Cronjob,
-    deployments::{cache::run_cache_clear_task, pubsub::listen_pub_sub, Deployments},
+    deployments::{
+        cache::run_cache_clear_task, download_deployment, pubsub::listen_pub_sub, Deployments,
+    },
     get_region, SNAPSHOT_BLOB,
 };
 use anyhow::Result;
@@ -95,14 +97,18 @@ async fn handle_error(
     }
 }
 
-async fn handle_request(
+async fn handle_request<D>(
     req: Request<Body>,
     deployments: Deployments,
     last_requests: Arc<DashMap<String, Instant>>,
     workers: Workers,
     inserters: Arc<Mutex<(Inserter<RequestRow>, Inserter<LogRow>)>>,
+    downloader: Arc<D>,
     log_sender: flume::Sender<(String, String, Metadata)>,
-) -> Result<Response<Body>> {
+) -> Result<Response<Body>>
+where
+    D: Downloader,
+{
     let request_id = match req.headers().get(X_LAGOSS_ID) {
         Some(x_lagoss_id) => x_lagoss_id.to_str().unwrap_or("").to_string(),
         None => String::new(),
@@ -144,6 +150,15 @@ async fn handle_request(
         warn!(req:? = req, hostname = hostname, request = request_id; "Cron deployment cannot be called directly");
 
         return Ok(Response::builder().status(403).body(PAGE_403.into())?);
+    }
+
+    if !deployment.has_code() {
+        if let Err(error) = download_deployment(&deployment, Arc::clone(&downloader)).await {
+            error!("Failed to download deployment {}: {}", deployment.id, error);
+            return Ok(Response::builder()
+                .status(500)
+                .body(Body::from("Failed to download deployment."))?);
+        }
     }
 
     let (sender, receiver) = flume::unbounded();
@@ -283,6 +298,7 @@ async fn handle_request(
                             bytes_out: bytes as u32,
                             cpu_time_micros,
                             timestamp,
+                            // TODO: add request id and response code
                         })
                         .await
                         .unwrap_or(());
@@ -370,7 +386,6 @@ where
     drop(cron_deployments);
 
     listen_pub_sub(
-        Arc::clone(&downloader),
         Arc::clone(&deployments),
         Arc::clone(&workers),
         Arc::clone(&cronjob),
@@ -427,6 +442,7 @@ where
         let last_requests = Arc::clone(&last_requests);
         let workers = Arc::clone(&workers);
         let inserters = Arc::clone(&inserters);
+        let downloader = Arc::clone(&downloader);
         let log_sender = log_sender.clone();
 
         async move {
@@ -437,6 +453,7 @@ where
                     Arc::clone(&last_requests),
                     Arc::clone(&workers),
                     Arc::clone(&inserters),
+                    Arc::clone(&downloader),
                     log_sender.clone(),
                 )
             }))

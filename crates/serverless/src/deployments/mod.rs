@@ -107,14 +107,7 @@ struct DeploymentData {
     cron: Option<String>,
 }
 
-pub async fn get_deployments<D>(
-    api_url: String,
-    api_token: String,
-    downloader: Arc<D>,
-) -> Result<Deployments>
-where
-    D: Downloader,
-{
+pub async fn get_deployments(api_url: String, api_token: String) -> Result<Deployments> {
     let deployments = Arc::new(DashMap::new());
     let mut deployments_list: HashMap<String, Deployment> = HashMap::new();
 
@@ -125,11 +118,18 @@ where
         .header("Authorization", format!("Bearer {}", api_token))
         .header("x-lagoss-region", get_region())
         .send()
-        .await?
-        .json::<Vec<DeploymentData>>()
         .await?;
 
-    deployments_response.into_iter().for_each(
+    if !deployments_response.status().is_success() {
+        return Err(anyhow!(
+            "Failed to fetch deployments: {}",
+            deployments_response.status()
+        ));
+    }
+
+    let deployments_json = deployments_response.json::<Vec<DeploymentData>>().await?;
+
+    deployments_json.into_iter().for_each(
         |DeploymentData {
              id,
              function_id,
@@ -171,28 +171,20 @@ where
         error!("Failed to delete old deployments: {:?}", error);
     }
 
-    futures::future::join_all(deployments_list.into_iter().map(|deployment| async {
-        if !deployment.has_code() {
-            if let Err(error) = download_deployment(&deployment, Arc::clone(&downloader)).await {
-                error!("Failed to download deployment {}: {}", deployment.id, error);
-                return;
-            }
-        }
-
+    for deployment in deployments_list {
         let deployment = Arc::new(deployment);
 
         for domain in deployment.get_domains() {
-            deployments.insert(domain, Arc::clone(&deployment));
+            deployments.insert(domain.clone(), Arc::clone(&deployment));
         }
-    }))
-    .await;
+    }
 
     Ok(deployments)
 }
 
 async fn delete_old_deployments(deployments: &[Deployment]) -> Result<()> {
-    info!("Deleting old deployments");
     let local_deployments_files = fs::read_dir(Path::new(DEPLOYMENTS_DIR))?;
+    let mut deleted_deployments = 0;
 
     for local_deployment_file in local_deployments_files {
         let local_deployment_file_name = local_deployment_file?
@@ -212,9 +204,10 @@ async fn delete_old_deployments(deployments: &[Deployment]) -> Result<()> {
             .any(|deployment| deployment.id == local_deployment_id)
         {
             rm_deployment(&local_deployment_id)?;
+            deleted_deployments += 1;
         }
     }
-    info!("Old deployments deleted");
+    info!("Deleted {} old deployment(s)", deleted_deployments);
 
     Ok(())
 }
