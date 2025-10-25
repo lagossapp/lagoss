@@ -177,6 +177,7 @@ impl Cronjob {
                                     .await
                                     .0
                                     .write(&RequestRow {
+                                        request_id: "cron-todo".to_string(), // TODO
                                         function_id: deployment.function_id.clone(),
                                         deployment_id: deployment.id.clone(),
                                         region: get_region().clone(),

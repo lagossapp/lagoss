@@ -82,6 +82,7 @@ async fn handle_error(
         .await
         .1
         .write(&LogRow {
+            request_id: request_id.to_string(),
             function_id,
             deployment_id,
             level: level.to_string(),
@@ -105,7 +106,7 @@ async fn handle_request(
 ) -> Result<Response<Body>> {
     let request_id = match req.headers().get(X_LAGOSS_ID) {
         Some(x_lagoss_id) => x_lagoss_id.to_str().unwrap_or("").to_string(),
-        None => String::new(),
+        None => uuid::Uuid::new_v4().to_string(),
     };
 
     let hostname = match req.headers().get(HOST) {
@@ -276,6 +277,7 @@ async fn handle_request(
                         .await
                         .0
                         .write(&RequestRow {
+                            request_id: request_id.clone(),
                             function_id: deployment_handle.function_id.clone(),
                             deployment_id: deployment_handle.id.clone(),
                             region: get_region().clone(),
@@ -402,6 +404,7 @@ where
             if let Err(error) = inserters
                 .1
                 .write(&LogRow {
+                    request_id: "cron-todo".to_string(), // TODO: use proper request id
                     function_id: log
                         .2
                         .as_ref()
