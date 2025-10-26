@@ -43,21 +43,22 @@ pub fn sign(algorithm: Algorithm, key_value: Vec<u8>, data: Vec<u8>) -> Result<V
                 &hashed,
             )?)
         }
+
         Algorithm::Ecdsa(sha) => match sha {
             Sha::Sha256 => {
                 let curve = &ring::signature::ECDSA_P256_SHA256_FIXED_SIGNING;
-                let key_pair = EcdsaKeyPair::from_pkcs8(curve, &key_value)?;
-
                 let rng = SystemRandom::new();
+                let key_pair = EcdsaKeyPair::from_pkcs8(curve, &key_value, &rng)?;
+
                 let signature = key_pair.sign(&rng, &data)?;
 
                 Ok(signature.as_ref().to_vec())
             }
             Sha::Sha384 => {
                 let curve = &ring::signature::ECDSA_P384_SHA384_FIXED_SIGNING;
-                let key_pair = EcdsaKeyPair::from_pkcs8(curve, &key_value)?;
-
                 let rng = SystemRandom::new();
+                let key_pair = EcdsaKeyPair::from_pkcs8(curve, &key_value, &rng)?;
+
                 let signature = key_pair.sign(&rng, &data)?;
 
                 Ok(signature.as_ref().to_vec())
