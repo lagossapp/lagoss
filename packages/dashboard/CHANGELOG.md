@@ -1,5 +1,12 @@
 # @lagoss/dashboard
 
+## [0.7.2](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard@0.7.1...@lagoss/dashboard@0.7.2) (2025-10-25)
+
+
+### Bug Fixes
+
+* correctly delete project and all deployments and fix redis updates ([#218](https://github.com/lagossapp/lagoss/issues/218)) ([995ad9a](https://github.com/lagossapp/lagoss/commit/995ad9a5110d41745d47b50d1baee428151e6c9e))
+
 ## [0.7.1](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard@0.7.0...@lagoss/dashboard@0.7.1) (2025-10-24)
 
 
