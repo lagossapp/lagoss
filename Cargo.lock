@@ -1762,7 +1762,7 @@ dependencies = [
  "num-traits",
  "p256",
  "p384",
- "rand 0.8.5",
+ "rand 0.9.2",
  "ring",
  "rsa",
  "sha1",

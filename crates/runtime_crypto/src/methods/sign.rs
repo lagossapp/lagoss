@@ -31,7 +31,7 @@ pub fn sign(algorithm: Algorithm, key_value: Vec<u8>, data: Vec<u8>) -> Result<V
         }
         Algorithm::RsaPss(salt_length) => {
             let private_key = RsaPrivateKey::from_pkcs1_der(&key_value)?;
-            let mut rng = OsRng;
+            let mut rng = SystemRandom::new();
             let mut hasher = Sha256::new();
             hasher.update(&data);
 
