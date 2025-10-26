@@ -84,7 +84,7 @@ pub fn generate_key(algorithm: KeyGenAlgorithm) -> Result<Vec<u8>> {
 
                 length as usize
             } else {
-                hash.digest_algorithm().block_len
+                hash.digest_algorithm().block_len()
             };
 
             let rng = ring::rand::SystemRandom::new();
