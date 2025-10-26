@@ -1,5 +1,18 @@
 # @lagoss/serverless
 
+## [0.5.0](https://github.com/lagossapp/lagoss/compare/@lagoss/serverless@0.4.5...@lagoss/serverless@0.5.0) (2025-10-26)
+
+
+### Features
+
+* download deployment files on demand ([#217](https://github.com/lagossapp/lagoss/issues/217)) ([253a70c](https://github.com/lagossapp/lagoss/commit/253a70cb252c3cafd396cd87643378ea7ad8c248))
+
+
+### Bug Fixes
+
+* **deps:** update rust crate flume to 0.11.0 ([#188](https://github.com/lagossapp/lagoss/issues/188)) ([4ee9ddb](https://github.com/lagossapp/lagoss/commit/4ee9ddb02b95ed7c1abc986f3cafa1ee25fc934b))
+* **deps:** update rust crate metrics-exporter-prometheus to 0.17.0 ([#191](https://github.com/lagossapp/lagoss/issues/191)) ([4de9aff](https://github.com/lagossapp/lagoss/commit/4de9afff7a4bf24a47d7f93a8dc480ee0d2be226))
+
 ## 0.4.5
 
 ### Patch Changes
