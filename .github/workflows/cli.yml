@@ -114,7 +114,7 @@ jobs:
         run: |
           cd crates/cli
           pnpm build:js
-          pnpm publish --access public
+          pnpm publish --access public --no-git-checks
 
   publish-preview:
     name: Publish package preview
