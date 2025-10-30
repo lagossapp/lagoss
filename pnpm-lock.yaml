@@ -97,7 +97,7 @@ importers:
     dependencies:
       drizzle-orm:
         specifier: ^0.44.2
-        version: 0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0)
+        version: 0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0)
     devDependencies:
       '@aws-sdk/client-s3':
         specifier: ^3.840.0
@@ -116,7 +116,7 @@ importers:
         version: 1.2.6
       '@nuxt/ui':
         specifier: ^4.0.1
-        version: 4.0.1(@babel/parser@7.28.4)(axios@1.12.2)(db0@0.3.2(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(embla-carousel@8.6.0)(focus-trap@7.6.5)(ioredis@5.8.1)(jwt-decode@4.0.0)(magicast@0.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))(vue-router@4.5.1(vue@3.5.22(typescript@5.8.3)))(vue@3.5.22(typescript@5.8.3))(zod@3.25.74)
+        version: 4.0.1(@babel/parser@7.28.4)(axios@1.12.2)(db0@0.3.2(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(embla-carousel@8.6.0)(focus-trap@7.6.5)(ioredis@5.8.1)(jwt-decode@4.0.0)(magicast@0.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))(vue-router@4.5.1(vue@3.5.22(typescript@5.8.3)))(vue@3.5.22(typescript@5.8.3))(zod@3.25.74)
       '@scaleway/use-random-name':
         specifier: ^1.0.7
         version: 1.0.7(react@18.3.1)
@@ -155,7 +155,7 @@ importers:
         version: 6.10.1
       nuxt:
         specifier: ^4.1.3
-        version: 4.1.3(@parcel/watcher@2.5.1)(@types/node@24.9.2)(@vue/compiler-sfc@3.5.22)(db0@0.3.2(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(eslint@8.57.1)(ioredis@5.8.1)(less@4.1.3)(lightningcss@1.30.1)(magicast@0.3.5)(mysql2@3.14.1)(optionator@0.9.4)(rollup@4.52.4)(terser@5.18.0)(tsx@4.20.3)(typescript@5.8.3)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))(yaml@2.8.0)
+        version: 4.1.3(@parcel/watcher@2.5.1)(@types/node@24.9.2)(@vue/compiler-sfc@3.5.22)(db0@0.3.2(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(eslint@8.57.1)(ioredis@5.8.1)(less@4.1.3)(lightningcss@1.30.1)(magicast@0.3.5)(mysql2@3.14.1)(optionator@0.9.4)(rollup@4.52.4)(terser@5.18.0)(tsx@4.20.3)(typescript@5.8.3)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))(yaml@2.8.0)
       nuxt-monaco-editor:
         specifier: ^1.3.2
         version: 1.3.2(magicast@0.3.5)(monaco-editor@0.52.2)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))
@@ -4177,8 +4177,8 @@ packages:
     resolution: {integrity: sha512-/B4e/4pwnx25QwD5xXgdpo1S+077a2VZdosXbItE/oNmUgQwZydGDz9qJYmnQl/b+5IX0rLfwRhrPnroGtrg8Q==}
     hasBin: true
 
-  drizzle-orm@0.44.2:
-    resolution: {integrity: sha512-zGAqBzWWkVSFjZpwPOrmCrgO++1kZ5H/rZ4qTGeGOe18iXGVJWf3WPfHOVwFIbmi8kHjfJstC6rJomzGx8g/dQ==}
+  drizzle-orm@0.44.7:
+    resolution: {integrity: sha512-quIpnYznjU9lHshEOAYLoZ9s3jweleHlZIAWR/jX9gAWNg/JhQ1wj0KGRf7/Zm+obRrYd9GjPVJg790QY9N5AQ==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -10140,7 +10140,7 @@ snapshots:
       - utf-8-validate
       - vue
 
-  '@nuxt/fonts@0.11.4(db0@0.3.2(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(ioredis@5.8.1)(magicast@0.3.5)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))':
+  '@nuxt/fonts@0.11.4(db0@0.3.2(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(ioredis@5.8.1)(magicast@0.3.5)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))':
     dependencies:
       '@nuxt/devtools-kit': 2.6.5(magicast@0.3.5)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))
       '@nuxt/kit': 3.19.3(magicast@0.3.5)
@@ -10161,7 +10161,7 @@ snapshots:
       ufo: 1.6.1
       unifont: 0.4.1
       unplugin: 2.3.10
-      unstorage: 1.17.1(db0@0.3.2(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(ioredis@5.8.1)
+      unstorage: 1.17.1(db0@0.3.2(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(ioredis@5.8.1)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -10290,13 +10290,13 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/ui@4.0.1(@babel/parser@7.28.4)(axios@1.12.2)(db0@0.3.2(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(embla-carousel@8.6.0)(focus-trap@7.6.5)(ioredis@5.8.1)(jwt-decode@4.0.0)(magicast@0.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))(vue-router@4.5.1(vue@3.5.22(typescript@5.8.3)))(vue@3.5.22(typescript@5.8.3))(zod@3.25.74)':
+  '@nuxt/ui@4.0.1(@babel/parser@7.28.4)(axios@1.12.2)(db0@0.3.2(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(embla-carousel@8.6.0)(focus-trap@7.6.5)(ioredis@5.8.1)(jwt-decode@4.0.0)(magicast@0.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))(vue-router@4.5.1(vue@3.5.22(typescript@5.8.3)))(vue@3.5.22(typescript@5.8.3))(zod@3.25.74)':
     dependencies:
       '@ai-sdk/vue': 2.0.60(vue@3.5.22(typescript@5.8.3))(zod@3.25.74)
       '@iconify/vue': 5.0.0(vue@3.5.22(typescript@5.8.3))
       '@internationalized/date': 3.10.0
       '@internationalized/number': 3.6.5
-      '@nuxt/fonts': 0.11.4(db0@0.3.2(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(ioredis@5.8.1)(magicast@0.3.5)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))
+      '@nuxt/fonts': 0.11.4(db0@0.3.2(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(ioredis@5.8.1)(magicast@0.3.5)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))
       '@nuxt/icon': 2.0.0(magicast@0.3.5)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))(vue@3.5.22(typescript@5.8.3))
       '@nuxt/kit': 4.1.3(magicast@0.3.5)
       '@nuxt/schema': 4.1.3
@@ -12990,9 +12990,9 @@ snapshots:
 
   dayjs@1.11.18: {}
 
-  db0@0.3.2(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1):
+  db0@0.3.2(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1):
     optionalDependencies:
-      drizzle-orm: 0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0)
+      drizzle-orm: 0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0)
       mysql2: 3.14.1
 
   debug@4.4.3:
@@ -13109,7 +13109,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0):
+  drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0):
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
       '@prisma/client': 5.0.0(prisma@5.0.0)
@@ -15015,7 +15015,7 @@ snapshots:
     dependencies:
       typescript: 5.8.3
 
-  nitropack@2.12.6(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1):
+  nitropack@2.12.6(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.0
       '@rollup/plugin-alias': 5.1.1(rollup@4.52.4)
@@ -15036,7 +15036,7 @@ snapshots:
       cookie-es: 2.0.0
       croner: 9.1.0
       crossws: 0.3.5
-      db0: 0.3.2(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1)
+      db0: 0.3.2(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1)
       defu: 6.1.4
       destr: 2.0.5
       dot-prop: 9.0.0
@@ -15082,7 +15082,7 @@ snapshots:
       unenv: 2.0.0-rc.21
       unimport: 5.4.1
       unplugin-utils: 0.3.1
-      unstorage: 1.17.1(db0@0.3.2(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(ioredis@5.8.1)
+      unstorage: 1.17.1(db0@0.3.2(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(ioredis@5.8.1)
       untyped: 2.0.0
       unwasm: 0.3.11
       youch: 4.1.0-beta.11
@@ -15179,7 +15179,7 @@ snapshots:
       - magicast
       - vite
 
-  nuxt@4.1.3(@parcel/watcher@2.5.1)(@types/node@24.9.2)(@vue/compiler-sfc@3.5.22)(db0@0.3.2(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(eslint@8.57.1)(ioredis@5.8.1)(less@4.1.3)(lightningcss@1.30.1)(magicast@0.3.5)(mysql2@3.14.1)(optionator@0.9.4)(rollup@4.52.4)(terser@5.18.0)(tsx@4.20.3)(typescript@5.8.3)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))(yaml@2.8.0):
+  nuxt@4.1.3(@parcel/watcher@2.5.1)(@types/node@24.9.2)(@vue/compiler-sfc@3.5.22)(db0@0.3.2(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(eslint@8.57.1)(ioredis@5.8.1)(less@4.1.3)(lightningcss@1.30.1)(magicast@0.3.5)(mysql2@3.14.1)(optionator@0.9.4)(rollup@4.52.4)(terser@5.18.0)(tsx@4.20.3)(typescript@5.8.3)(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(terser@5.18.0)(tsx@4.20.3)(yaml@2.8.0))(yaml@2.8.0):
     dependencies:
       '@nuxt/cli': 3.29.0(magicast@0.3.5)
       '@nuxt/devalue': 2.0.2
@@ -15214,7 +15214,7 @@ snapshots:
       mlly: 1.8.0
       mocked-exports: 0.1.1
       nanotar: 0.2.0
-      nitropack: 2.12.6(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1)
+      nitropack: 2.12.6(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1)
       nypm: 0.6.2
       ofetch: 1.4.1
       ohash: 2.0.11
@@ -15238,7 +15238,7 @@ snapshots:
       unimport: 5.4.1
       unplugin: 2.3.10
       unplugin-vue-router: 0.15.0(@vue/compiler-sfc@3.5.22)(typescript@5.8.3)(vue-router@4.5.1(vue@3.5.22(typescript@5.8.3)))(vue@3.5.22(typescript@5.8.3))
-      unstorage: 1.17.1(db0@0.3.2(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(ioredis@5.8.1)
+      unstorage: 1.17.1(db0@0.3.2(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(ioredis@5.8.1)
       untyped: 2.0.0
       vue: 3.5.22(typescript@5.8.3)
       vue-bundle-renderer: 2.2.0
@@ -16912,7 +16912,7 @@ snapshots:
       picomatch: 4.0.3
       webpack-virtual-modules: 0.6.2
 
-  unstorage@1.17.1(db0@0.3.2(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(ioredis@5.8.1):
+  unstorage@1.17.1(db0@0.3.2(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1))(ioredis@5.8.1):
     dependencies:
       anymatch: 3.1.3
       chokidar: 4.0.3
@@ -16923,7 +16923,7 @@ snapshots:
       ofetch: 1.4.1
       ufo: 1.6.1
     optionalDependencies:
-      db0: 0.3.2(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1)
+      db0: 0.3.2(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1)
       ioredis: 5.8.1
 
   untun@0.1.3:
