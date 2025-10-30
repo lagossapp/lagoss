@@ -1,5 +1,12 @@
 # @lagoss/cli
 
+## [0.12.2](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.12.1...@lagoss/cli@0.12.2) (2025-10-30)
+
+
+### Bug Fixes
+
+* add it-token for cli   ([#233](https://github.com/lagossapp/lagoss/issues/233)) ([74d6996](https://github.com/lagossapp/lagoss/commit/74d699631388eb7881b505fecd9a58c1caed872a))
+
 ## [0.12.1](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.12.0...@lagoss/cli@0.12.1) (2025-10-30)
 
 
