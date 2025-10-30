@@ -1,5 +1,33 @@
 # @lagoss/cli
 
+## [0.12.2](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.12.1...@lagoss/cli@0.12.2) (2025-10-30)
+
+
+### Bug Fixes
+
+* add it-token for cli   ([#233](https://github.com/lagossapp/lagoss/issues/233)) ([74d6996](https://github.com/lagossapp/lagoss/commit/74d699631388eb7881b505fecd9a58c1caed872a))
+
+## [0.12.1](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.12.0...@lagoss/cli@0.12.1) (2025-10-30)
+
+
+### Bug Fixes
+
+* disable git checks for pnpm publish ([#229](https://github.com/lagossapp/lagoss/issues/229)) ([2c97411](https://github.com/lagossapp/lagoss/commit/2c974111d224dbe85a7b56ca7b40aaca6828542e))
+
+## [0.12.0](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.11.0...@lagoss/cli@0.12.0) (2025-10-30)
+
+
+### Features
+
+* add env vars for cli config and improve arguments + output ([#211](https://github.com/lagossapp/lagoss/issues/211)) ([1ea69b5](https://github.com/lagossapp/lagoss/commit/1ea69b5f34acae34ec53c004eac7f9bd29eff53d))
+* support static dir uploading and detect app folder ([#213](https://github.com/lagossapp/lagoss/issues/213)) ([e14021d](https://github.com/lagossapp/lagoss/commit/e14021ddaa15cf8d5df3b2eab5fd2a55fd01ebcf))
+
+
+### Bug Fixes
+
+* **deps:** update rust crate console to 0.16.0 ([#185](https://github.com/lagossapp/lagoss/issues/185)) ([25ca7aa](https://github.com/lagossapp/lagoss/commit/25ca7aaee7e17661b289919ce6f375f0a9f86d40))
+* **deps:** update rust crate dialoguer to 0.12.0 ([#186](https://github.com/lagossapp/lagoss/issues/186)) ([06e89d5](https://github.com/lagossapp/lagoss/commit/06e89d521ab3eaeeee302179720f529eab084abe))
+
 ## [0.11.0](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.10.2...@lagoss/cli@0.11.0) (2025-10-08)
 
 ### Features
