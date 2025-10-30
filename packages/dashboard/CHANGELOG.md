@@ -1,5 +1,49 @@
 # @lagoss/dashboard
 
+## [0.7.2](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard@0.7.1...@lagoss/dashboard@0.7.2) (2025-10-25)
+
+
+### Bug Fixes
+
+* correctly delete project and all deployments and fix redis updates ([#218](https://github.com/lagossapp/lagoss/issues/218)) ([995ad9a](https://github.com/lagossapp/lagoss/commit/995ad9a5110d41745d47b50d1baee428151e6c9e))
+
+## [0.7.1](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard@0.7.0...@lagoss/dashboard@0.7.1) (2025-10-24)
+
+
+### Bug Fixes
+
+* handle db connection lost ([#215](https://github.com/lagossapp/lagoss/issues/215)) ([d8f95f9](https://github.com/lagossapp/lagoss/commit/d8f95f926803d94b58884286c2e764298d644820))
+* use boolean for is-production in serverless api ([#214](https://github.com/lagossapp/lagoss/issues/214)) ([ab6b0bb](https://github.com/lagossapp/lagoss/commit/ab6b0bb0135b635d1ce288ef79b26b4ed1f78b7b))
+
+## [0.7.0](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard@0.6.4...@lagoss/dashboard@0.7.0) (2025-10-08)
+
+
+### Features
+
+* ✨ enhance deployments ui & nuxt update ([#194](https://github.com/lagossapp/lagoss/issues/194)) ([e0642ea](https://github.com/lagossapp/lagoss/commit/e0642eab1c4c6d95f83046b0bb3f660a21e9d7ff))
+* improve and cleanup nuxt config and corresponding docs ([#200](https://github.com/lagossapp/lagoss/issues/200)) ([1a337e2](https://github.com/lagossapp/lagoss/commit/1a337e2a8d5321462212d4d6a27af8649cebe84a))
+* use rest api with cli ([#161](https://github.com/lagossapp/lagoss/issues/161)) ([de3b00e](https://github.com/lagossapp/lagoss/commit/de3b00ebba75b4cba7dcfcdd8030d535c83eb447))
+* use rest api with cli ([#193](https://github.com/lagossapp/lagoss/issues/193)) ([4581e10](https://github.com/lagossapp/lagoss/commit/4581e103afe447c9006c71cf43a332da00b4db92))
+
+
+### Bug Fixes
+
+* **dashboard:** fix authentication with redirect uri ([#197](https://github.com/lagossapp/lagoss/issues/197)) ([d1fac13](https://github.com/lagossapp/lagoss/commit/d1fac1346bc754718210f2b074e1e94dd398c437))
+* **deps:** update dependency @react-email/container to v0.0.14 ([#69](https://github.com/lagossapp/lagoss/issues/69)) ([e4099c8](https://github.com/lagossapp/lagoss/commit/e4099c8937d5cd07519cec7f3094c1eeb7fab31b))
+* **deps:** update dependency @react-email/container to v0.0.15 ([#129](https://github.com/lagossapp/lagoss/issues/129)) ([90478d9](https://github.com/lagossapp/lagoss/commit/90478d9ee5cf2d377c626eccd53a405f42bae425))
+* **deps:** update dependency @react-email/head to ^0.0.12 ([#130](https://github.com/lagossapp/lagoss/issues/130)) ([30a3a95](https://github.com/lagossapp/lagoss/commit/30a3a95a9d0030324b5ab688ba60d5d7765cbd73))
+* **deps:** update dependency @react-email/hr to ^0.0.10 ([#71](https://github.com/lagossapp/lagoss/issues/71)) ([0e1ce44](https://github.com/lagossapp/lagoss/commit/0e1ce444bf63aee09243651e38eed49f7726818c))
+* **deps:** update dependency @react-email/hr to ^0.0.11 ([#131](https://github.com/lagossapp/lagoss/issues/131)) ([45693a6](https://github.com/lagossapp/lagoss/commit/45693a671d2b6171b05d374a670d90bf984aef79))
+* **deps:** update dependency @react-email/html to ^0.0.11 ([#132](https://github.com/lagossapp/lagoss/issues/132)) ([4967bd6](https://github.com/lagossapp/lagoss/commit/4967bd6d4a550d524a3e0822349b5835a9640222))
+* **deps:** update dependency @react-email/img to ^0.0.10 ([#73](https://github.com/lagossapp/lagoss/issues/73)) ([caaf8a5](https://github.com/lagossapp/lagoss/commit/caaf8a56f9631ef2f3df70c76e30b88857fb2f34))
+* **deps:** update dependency @react-email/img to ^0.0.11 ([#133](https://github.com/lagossapp/lagoss/issues/133)) ([381d380](https://github.com/lagossapp/lagoss/commit/381d380baea45bfc6c191e94e90146889970092c))
+* **deps:** update dependency @react-email/preview to ^0.0.11 ([#74](https://github.com/lagossapp/lagoss/issues/74)) ([c5a9bd8](https://github.com/lagossapp/lagoss/commit/c5a9bd8e05163c72dc6512d8a09dd32808874d78))
+* **deps:** update dependency @react-email/preview to ^0.0.12 ([#134](https://github.com/lagossapp/lagoss/issues/134)) ([9c6b329](https://github.com/lagossapp/lagoss/commit/9c6b3295d6ade69ac8fbd3f533fbb26d04ff659f))
+* **deps:** update dependency @react-email/render to ^0.0.17 ([#75](https://github.com/lagossapp/lagoss/issues/75)) ([06a02cf](https://github.com/lagossapp/lagoss/commit/06a02cff8bc5857d74aee93914dd62105bac9610))
+* **deps:** update dependency @react-email/section to ^0.0.15 ([#76](https://github.com/lagossapp/lagoss/issues/76)) ([0f136b2](https://github.com/lagossapp/lagoss/commit/0f136b2651a697ad4c8e3af4616d74b8abcb1924))
+* **deps:** update dependency @react-email/section to ^0.0.16 ([#135](https://github.com/lagossapp/lagoss/issues/135)) ([3afeaed](https://github.com/lagossapp/lagoss/commit/3afeaed3c9914a9c436819e30ff700fc49aa5bf9))
+* **deps:** update dependency @react-email/text to ^0.0.11 ([#136](https://github.com/lagossapp/lagoss/issues/136)) ([0e2000b](https://github.com/lagossapp/lagoss/commit/0e2000b7424c0d4a96de09f141f4e3b2af478cca))
+
 ## [0.4.7](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard-v0.4.6...@lagoss/dashboard@0.4.7) (2024-11-29)
 
 

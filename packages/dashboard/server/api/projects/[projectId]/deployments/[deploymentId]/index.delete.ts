@@ -1,16 +1,10 @@
-import { deploymentSchema, domainSchema, envVariableSchema } from '~~/server/db/schema';
+import { deploymentSchema } from '~~/server/db/schema';
 import { eq, and } from 'drizzle-orm';
-import { useRedis } from '~~/server/lib/redis';
-import { envStringToObject } from '~~/app/composables/utils';
-import { useS3 } from '~~/server/lib/s3';
-import { DeleteObjectCommand, DeleteObjectsCommand } from '@aws-sdk/client-s3';
+import { deleteDeployment } from '~~/server/utils/deployment';
 
 export default defineEventHandler(async event => {
   const db = await useDB();
   const project = await requireProject(event);
-  const config = useRuntimeConfig(event);
-  const s3 = await useS3();
-  const redis = await useRedis();
 
   const deploymentId = getRouterParam(event, 'deploymentId');
   if (!deploymentId) {
@@ -41,54 +35,7 @@ export default defineEventHandler(async event => {
     });
   }
 
-  await db.delete(deploymentSchema).where(eq(deploymentSchema.id, deploymentId)).execute();
-
-  const deletePromises = [
-    s3.send(
-      new DeleteObjectCommand({
-        Bucket: config.s3.bucket,
-        Key: `${deployment.id}.js`,
-      }),
-    ),
-  ];
-
-  if (Array.isArray(deployment.assets) && deployment.assets.length > 0) {
-    deletePromises.push(
-      s3.send(
-        new DeleteObjectsCommand({
-          Bucket: config.s3.bucket,
-          Delete: {
-            Objects: deployment.assets.map(asset => ({
-              Key: `${deployment.id}/${asset}`,
-            })),
-          },
-        }),
-      ),
-    );
-  }
-
-  await Promise.all(deletePromises);
-
-  const domains = await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id)).execute();
-  const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.projectId, project.id)).execute();
-
-  await redis.publish(
-    'undeploy',
-    JSON.stringify({
-      functionId: project.id, // TODO: rename to projectId
-      functionName: project.name, // TODO: rename to projectName
-      deploymentId: deployment.id,
-      domains: domains.map(({ domain }) => domain),
-      memory: project.memory,
-      tickTimeout: project.tickTimeout,
-      totalTimeout: project.totalTimeout,
-      cron: project.cron,
-      cronRegion: project.cronRegion,
-      env: envStringToObject(env),
-      isProduction: deployment.isProduction,
-      assets: deployment.assets,
-    }),
-  );
+  await deleteDeployment(deployment, event);
 
   return { ok: true };
 });

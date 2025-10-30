@@ -1,5 +1,5 @@
 use crate::utils::{
-    create_deployment, get_theme, print_progress, resolve_path, Config, ApiClient,
+    create_deployment, get_theme, print_progress, ApiClient, ApplicationConfig, Config,
 };
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm, Input, Select};
@@ -24,7 +24,7 @@ impl Display for Organization {
 pub type OrganizationsResponse = Vec<Organization>;
 
 #[derive(Serialize, Debug)]
-struct CreateProjectRequest {
+struct CreateApplicationRequest {
     name: String,
     domains: Vec<String>,
     env: Vec<String>,
@@ -32,120 +32,125 @@ struct CreateProjectRequest {
 }
 
 #[derive(Deserialize, Debug)]
-struct CreateProjectResponse {
+struct CreateApplicationResponse {
     id: String,
 }
 
 #[derive(Deserialize, Debug)]
-pub struct Project {
+pub struct Application {
     pub id: String,
     pub name: String,
 }
 
-impl Display for Project {
+impl Display for Application {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.name)
     }
 }
 
-pub type ProjectsResponse = Vec<Project>;
+pub type ApplicationsResponse = Vec<Application>;
 
 pub async fn deploy(
+    config: &Config,
     path: Option<PathBuf>,
-    client: Option<PathBuf>,
-    public_dir: Option<PathBuf>,
+    assets_dir: Option<PathBuf>,
     is_production: bool,
 ) -> Result<()> {
-    let config = Config::new()?;
-
     if config.token.is_none() {
         return Err(anyhow!(
             "You are not logged in. Please log in with `lagoss login`",
         ));
     }
 
-    let (root, mut project_config) = resolve_path(path, client, public_dir)?;
+    let application_config = get_application_config(config, path, assets_dir).await?;
 
-    if project_config.function_id.is_empty() {
-        println!(
-            "{}",
-            style("No previous Deployment found...").black().bright()
-        );
-        println!();
-
-        let client = ApiClient::new(config.clone());
-
-        let organizations = client
-            .get::<OrganizationsResponse>("/api/organizations")
-            .await?;
-
-        let index = Select::with_theme(get_theme())
-            .items(&organizations)
-            .default(0)
-            .with_prompt("Which Organization would you like to deploy to?")
-            .interact()?;
-        let organization = &organizations[index];
-
-        match Confirm::with_theme(get_theme())
-            .with_prompt("Link to an existing project?")
-            .default(false)
-            .interact()?
-        {
-            true => {
-                let projects = client
-                    .get::<ProjectsResponse>(&format!(
-                        "/api/organizations/{}/projects",
-                        organization.id
-                    ))
-                    .await?;
-
-                let index = Select::with_theme(get_theme())
-                    .items(&projects)
-                    .default(0)
-                    .with_prompt("Which project would you like to link?")
-                    .interact()?;
-                let project = &projects[index];
-
-                project_config.function_id.clone_from(&project.id);
-                project_config.organization_id.clone_from(&organization.id);
-                project_config.write(&root)?;
-
-                println!();
-                create_deployment(config, &project_config, is_production, &root, true).await?;
-            }
-            false => {
-                let name = Input::<String>::with_theme(get_theme())
-                    .with_prompt("What's the name of this new project?")
-                    .interact_text()?;
-
-                println!();
-                let message = format!("Creating project {name}");
-                let end_progress = print_progress(&message);
-
-                let project = client
-                    .post::<CreateProjectRequest, CreateProjectResponse>(
-                        &format!("/api/organizations/{}/projects", organization.id),
-                        CreateProjectRequest {
-                            name,
-                            domains: Vec::new(),
-                            env: Vec::new(),
-                            cron: None,
-                        },
-                    )
-                    .await?;
-
-                end_progress();
-
-                project_config.function_id.clone_from(&project.id);
-                project_config.organization_id.clone_from(&organization.id);
-                project_config.write(&root)?;
-
-                create_deployment(config, &project_config, is_production, &root, true).await?;
-            }
-        }
-    } else {
-        create_deployment(config, &project_config, is_production, &root, true).await?;
-    }
+    create_deployment(config, &application_config, is_production, true).await?;
 
     Ok(())
+}
+
+async fn get_application_config(
+    config: &Config,
+    path: Option<PathBuf>,
+    assets_dir: Option<PathBuf>,
+) -> Result<ApplicationConfig> {
+    let mut app_config = ApplicationConfig::load(path, assets_dir, None)?;
+
+    if !app_config.application_id.is_empty() {
+        return Ok(app_config);
+    }
+
+    println!(
+        "{}",
+        style("Could not find a linked application.")
+            .black()
+            .bright()
+    );
+
+    let client = ApiClient::new(config.clone());
+
+    let organizations = client
+        .get::<OrganizationsResponse>("/api/organizations")
+        .await?;
+
+    let index = Select::with_theme(get_theme())
+        .items(&organizations)
+        .default(0)
+        .with_prompt("Which Organization would you like to deploy to?")
+        .interact()?;
+    let organization = &organizations[index];
+
+    match Confirm::with_theme(get_theme())
+        .with_prompt("Link to an existing application?")
+        .default(false)
+        .interact()?
+    {
+        true => {
+            let applications = client
+                .get::<ApplicationsResponse>(&format!(
+                    "/api/organizations/{}/projects",
+                    organization.id
+                ))
+                .await?;
+
+            let index = Select::with_theme(get_theme())
+                .items(&applications)
+                .default(0)
+                .with_prompt("Which application would you like to link?")
+                .interact()?;
+            let application = &applications[index];
+
+            app_config.application_id.clone_from(&application.id);
+            app_config.write()?;
+
+            Ok(app_config)
+        }
+        false => {
+            let name = Input::<String>::with_theme(get_theme())
+                .with_prompt("What's the name of this new application?")
+                .interact_text()?;
+
+            let message = format!("Creating an application {name}");
+            let end_progress = print_progress(&message);
+
+            let application = client
+                .post::<CreateApplicationRequest, CreateApplicationResponse>(
+                    &format!("/api/organizations/{}/projects", organization.id),
+                    CreateApplicationRequest {
+                        name,
+                        domains: Vec::new(),
+                        env: Vec::new(),
+                        cron: None,
+                    },
+                )
+                .await?;
+
+            end_progress();
+
+            app_config.application_id.clone_from(&application.id);
+            app_config.write()?;
+
+            Ok(app_config)
+        }
+    }
 }

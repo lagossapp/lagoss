@@ -9,7 +9,7 @@ pub fn print_progress(message: &str) -> impl Fn() + '_ {
     let index_progress = ProgressBar::new_spinner();
     index_progress.set_style(ProgressStyle::default_spinner());
     index_progress.set_message(
-        style(format!("{}...", message))
+        style(format!("{} ...", message))
             .black()
             .bright()
             .to_string(),
@@ -57,6 +57,5 @@ pub fn get_theme() -> &'static dyn Theme {
         unchecked_item_prefix: style("✔".to_string()).for_stderr().black(),
         picked_item_prefix: style("❯".to_string()).for_stderr().green(),
         unpicked_item_prefix: style(" ".to_string()).for_stderr(),
-        inline_selections: true,
     })
 }
