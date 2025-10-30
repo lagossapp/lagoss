@@ -1,5 +1,12 @@
 # @lagoss/cli
 
+## [0.12.1](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.12.0...@lagoss/cli@0.12.1) (2025-10-30)
+
+
+### Bug Fixes
+
+* disable git checks for pnpm publish ([#229](https://github.com/lagossapp/lagoss/issues/229)) ([2c97411](https://github.com/lagossapp/lagoss/commit/2c974111d224dbe85a7b56ca7b40aaca6828542e))
+
 ## [0.12.0](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.11.0...@lagoss/cli@0.12.0) (2025-10-30)
 
 
