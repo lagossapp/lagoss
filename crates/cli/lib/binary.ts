@@ -66,7 +66,8 @@ export class Binary {
   }
 
   async _isUpToDate() {
-    return (await this._isInstalled()) && this.version === this._getInstalledVersion();
+    const isInstalled = await this._isInstalled();
+    return isInstalled && this.version === this._getInstalledVersion();
   }
 
   async install() {
