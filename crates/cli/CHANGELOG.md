@@ -1,5 +1,12 @@
 # @lagoss/cli
 
+## [0.12.3](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.12.2...@lagoss/cli@0.12.3) (2025-10-30)
+
+
+### Bug Fixes
+
+* cli release and improve js wrapper ([#235](https://github.com/lagossapp/lagoss/issues/235)) ([592e79a](https://github.com/lagossapp/lagoss/commit/592e79a80e5b467ca8ff04fb64ddc84b913c898f))
+
 ## [0.12.2](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.12.1...@lagoss/cli@0.12.2) (2025-10-30)
 
 
