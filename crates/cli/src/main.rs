@@ -48,12 +48,18 @@ enum Commands {
         /// Deploy to production
         #[clap(visible_alias = "production", long)]
         prod: bool,
+        /// Application id or name
+        #[clap(long, value_parser)]
+        app_id_or_name: Option<String>,
     },
     /// Delete an existing application
     Rm {
         /// Path to a handler file or directory containing an application
         #[clap(value_parser, default_value = ".")]
         path: Option<PathBuf>,
+        /// Application id or name
+        #[clap(long, value_parser)]
+        app_id_or_name: Option<String>,
     },
     /// Start a local dev server to test an application
     Dev {
@@ -93,12 +99,18 @@ enum Commands {
         /// Path to a handler file or directory containing an application
         #[clap(value_parser, default_value = ".")]
         path: Option<PathBuf>,
+        /// Application id or name
+        #[clap(long, value_parser)]
+        app_id_or_name: Option<String>,
     },
     /// List all the deployments for an application
     Ls {
         /// Path to a handler file or directory containing an application
         #[clap(value_parser, default_value = ".")]
         path: Option<PathBuf>,
+        /// Application id or name
+        #[clap(long, value_parser)]
+        app_id_or_name: Option<String>,
     },
     /// Undeploy a given deployment
     Undeploy {
@@ -107,6 +119,9 @@ enum Commands {
         /// Path to a directory containing an application
         #[clap(value_parser)]
         path: Option<PathBuf>,
+        /// Application id or name
+        #[clap(long, value_parser)]
+        app_id_or_name: Option<String>,
     },
     /// Promote the given preview deployment to production
     Promote {
@@ -115,6 +130,9 @@ enum Commands {
         /// Path to a handler file or directory containing an application
         #[clap(value_parser, default_value = ".")]
         path: Option<PathBuf>,
+        /// Application id or name
+        #[clap(long, value_parser)]
+        app_id_or_name: Option<String>,
     },
 }
 
@@ -131,10 +149,16 @@ async fn main() {
         if let Err(err) = match command {
             Commands::Login => commands::login(&config).await,
             Commands::Logout => commands::logout(&config),
-            Commands::Deploy { path, assets, prod } => {
-                commands::deploy(&config, path, assets, prod).await
-            }
-            Commands::Rm { path } => commands::rm(&config, path).await,
+            Commands::Deploy {
+                path,
+                assets,
+                prod,
+                app_id_or_name,
+            } => commands::deploy(&config, path, assets, prod, app_id_or_name).await,
+            Commands::Rm {
+                path,
+                app_id_or_name,
+            } => commands::rm(&config, path, app_id_or_name).await,
             Commands::Dev {
                 path,
                 assets,
@@ -156,16 +180,24 @@ async fn main() {
                 .await
             }
             Commands::Build { path, assets } => commands::build(path, assets),
-            Commands::Link { path } => commands::link(&config, path).await,
-            Commands::Ls { path } => commands::ls(&config, path).await,
+            Commands::Link {
+                path,
+                app_id_or_name,
+            } => commands::link(&config, path, app_id_or_name).await,
+            Commands::Ls {
+                path,
+                app_id_or_name,
+            } => commands::ls(&config, path, app_id_or_name).await,
             Commands::Undeploy {
                 deployment_id,
                 path,
-            } => commands::undeploy(&config, deployment_id, path).await,
+                app_id_or_name,
+            } => commands::undeploy(&config, deployment_id, path, app_id_or_name).await,
             Commands::Promote {
                 deployment_id,
                 path,
-            } => commands::promote(&config, deployment_id, path).await,
+                app_id_or_name,
+            } => commands::promote(&config, deployment_id, path, app_id_or_name).await,
         } {
             println!("{} {}", style("✕").red(), err);
             exit(1);
