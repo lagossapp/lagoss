@@ -1,9 +1,6 @@
-import { Binary } from './binary-install';
 import os from 'node:os';
-import path from 'node:path';
-import packageJson from '../package.json' assert { type: 'json' };
 
-function getPlatform() {
+export function getPlatform() {
   const type = os.type();
   const arch = os.arch();
 
@@ -43,14 +40,4 @@ function getPlatform() {
   }
 
   throw new Error(`Unsupported platform: ${type} ${arch}`);
-}
-
-export function getBinary() {
-  const { platform, name } = getPlatform();
-  const { name: packageName, version } = packageJson;
-
-  const url = `https://github.com/lagossapp/lagoss/releases/download/${packageName}@${version}/${platform}.tar.gz`;
-  const installationDirectory = path.join(os.homedir(), '.lagoss');
-
-  return new Binary(url, { name, installationDirectory, version });
 }

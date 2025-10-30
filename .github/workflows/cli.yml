@@ -13,6 +13,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  id-token: write # Required for OIDC
+  contents: write # Required to create releases
+
 jobs:
   release-cli:
     name: Release artifact ${{ matrix.target }} (${{ matrix.os }})
@@ -81,7 +85,8 @@ jobs:
         run: pnpm run --filter=@lagoss/js-runtime build
       - name: Build CLI
         run: |
-          cd crates/cli && cargo build --release --target ${{ matrix.target }}
+          cd crates/cli
+          cargo build --release --target ${{ matrix.target }}
           mkdir -p builds/${{ matrix.asset_name }}
           cp ../../target/${{ matrix.target }}/release/${{ matrix.input }} builds/${{ matrix.asset_name }}/${{ matrix.output }}
           tar -C builds -czvf ${{ matrix.asset_name }}.tar.gz ${{ matrix.asset_name }}
@@ -92,9 +97,28 @@ jobs:
           path: crates/cli/${{ matrix.asset_name }}.tar.gz
       - name: Release
         uses: softprops/action-gh-release@v2
-        if: github.ref_type == 'tag'
         with:
           files: crates/cli/${{ matrix.asset_name }}.tar.gz
+
+  release-cli-npm:
+    name: Release CLI package to npm
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Release CLI package to npm
+        run: |
+          cd crates/cli
+          pnpm build:js
+          pnpm publish --access public --no-git-checks
 
   publish-preview:
     name: Publish package preview
@@ -110,9 +134,8 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-      - name: Build CLI
-        run: pnpm run --filter @lagoss/cli build:js
       - name: Publish preview to pkg.pr.new
         run: |
           cd crates/cli
+          pnpm build:js
           pnpm dlx pkg-pr-new publish
