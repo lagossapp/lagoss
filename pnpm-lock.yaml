@@ -134,7 +134,7 @@ importers:
         version: 2.61.0
       dayjs:
         specifier: ^1.11.13
-        version: 1.11.13
+        version: 1.11.18
       dotenv:
         specifier: ^17.0.0
         version: 17.2.3
@@ -4002,8 +4002,8 @@ packages:
   dataloader@1.4.0:
     resolution: {integrity: sha512-68s5jYdlvasItOJnCuI2Q9s4q98g0pCyL3HrcKJu8KNugUl8ahgmZYg38ysLTgQjjXX3H8CJLkAvWrclWfcalw==}
 
-  dayjs@1.11.13:
-    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
+  dayjs@1.11.18:
+    resolution: {integrity: sha512-zFBQ7WFRvVRhKcWoUh+ZA1g2HVgUbsZm9sbddh8EC5iv93sui8DVVz1Npvz+r6meo9VKfa8NyLWBsQK1VvIKPA==}
 
   db0@0.3.2:
     resolution: {integrity: sha512-xzWNQ6jk/+NtdfLyXEipbX55dmDSeteLFt/ayF+wZUU5bzKgmrDOxmInUTbyVRp46YwnJdkDA1KhB7WIXFofJw==}
@@ -12985,7 +12985,7 @@ snapshots:
 
   dataloader@1.4.0: {}
 
-  dayjs@1.11.13: {}
+  dayjs@1.11.18: {}
 
   db0@0.3.2(drizzle-orm@0.44.2(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.14.1)(prisma@5.0.0))(mysql2@3.14.1):
     optionalDependencies:
