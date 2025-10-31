@@ -25,6 +25,7 @@ jobs:
       - uses: lagossapp/github-action@latest
         with:
           lagoss_token: ${{ secrets.LAGOSS_TOKEN }}
+          app_id_or_name: docs
       - name: Log deployment URL
         run: |
           url=$(grep -o 'https://[^[:space:]]*' lagoss.output)
