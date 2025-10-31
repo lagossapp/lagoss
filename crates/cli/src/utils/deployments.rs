@@ -82,12 +82,7 @@ pub fn bundle_application(
         }
 
         None => {
-            println!(
-                "{}",
-                style("Using static site handler as no handler was provided.")
-                    .black()
-                    .bright()
-            );
+            println!("Using static site handler as no handler was provided.");
             // TODO: improve static site handler
             // if no handler is provided, we create a default one that redirects to /404.html
             Vec::from(str::trim(
@@ -142,8 +137,13 @@ console.log('Handling request for', request.url);
     if let Some(assets) = &application_config.assets {
         let assets = root.join(assets);
         let msg = format!(
-            "Processing assets {}",
-            get_pretty_path(root, application_config.assets.clone().unwrap().as_path()),
+            "Processing assets from {}",
+            style(get_pretty_path(
+                root,
+                application_config.assets.clone().unwrap().as_path()
+            ))
+            .black()
+            .bright()
         );
         let end_progress = print_progress(&msg);
 
@@ -301,10 +301,7 @@ pub async fn create_deployment(
         .await?;
 
     println!();
-    println!(
-        " {} Application successfully deployed!",
-        style("◼").magenta()
-    );
+    println!("🚀 Application successfully deployed!");
 
     if !is_production {
         println!(

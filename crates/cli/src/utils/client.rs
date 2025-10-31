@@ -42,7 +42,12 @@ impl ApiClient {
                 Ok(response) => Ok(response),
                 Err(_) => Err(anyhow!("Failed to deserialize response: {}", body)),
             },
-            false => Err(anyhow!("Request failed with status: {}", status)),
+            false => Err(anyhow!(
+                "Request {}: {} failed with status: {}",
+                method,
+                url,
+                status
+            )),
         }
     }
 
