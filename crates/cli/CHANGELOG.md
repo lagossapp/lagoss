@@ -1,5 +1,12 @@
 # @lagoss/cli
 
+## [0.13.0](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.12.3...@lagoss/cli@0.13.0) (2025-10-31)
+
+
+### Features
+
+* support passing app id or name to cli ([#237](https://github.com/lagossapp/lagoss/issues/237)) ([ed84c14](https://github.com/lagossapp/lagoss/commit/ed84c14f532a49f7f2ea5de0efa0376ba35192b2))
+
 ## [0.12.3](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.12.2...@lagoss/cli@0.12.3) (2025-10-30)
 
 
