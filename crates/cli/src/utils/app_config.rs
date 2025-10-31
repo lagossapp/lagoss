@@ -56,9 +56,8 @@ impl ApplicationConfig {
         // load existing config or create new one
         let mut application_config = if let Some(config_path) = application_config_path.clone() {
             println!(
-                "{} {}",
-                style("Using configuration file from").black().bright(),
-                config_path.display()
+                "Using configuration file from {}",
+                style(config_path.display()).black().bright()
             );
             let content = fs::read_to_string(config_path.clone())?;
             let mut app_config = serde_json::from_str::<ApplicationConfig>(&content)?;
@@ -70,17 +69,17 @@ impl ApplicationConfig {
                 .to_path_buf();
 
             println!(
-                "{} Using project root: {}",
-                style("✓").green().bright(),
-                root.canonicalize()?.display()
+                "Using project root {}",
+                style(root.canonicalize()?.display()).black().bright()
             );
             app_config.path = root;
             app_config
         } else {
             println!(
-                "{} {}",
-                style("No configuration found at").black().bright(),
-                path.display()
+                "{}",
+                style(format!("No configuration found at {}", path.display()))
+                    .black()
+                    .bright()
             );
             ApplicationConfig {
                 path: path.clone(),
@@ -257,9 +256,8 @@ fn detect_application_config(
         let detected = detect_handler(root);
         if let Some(ref handler) = detected {
             println!(
-                "{} Handler detected: {}",
-                style("✓").green().bright(),
-                get_pretty_path(root, handler)
+                "Handler detected {}",
+                style(get_pretty_path(root, handler)).black().bright()
             );
         }
         detected
@@ -271,9 +269,8 @@ fn detect_application_config(
             let detected = detect_assets_directory(root);
             if let Some(ref detected) = detected {
                 println!(
-                    "{} Assets directory detected: {}",
-                    style("✓").green().bright(),
-                    get_pretty_path(root, detected)
+                    "Assets directory detected {}",
+                    style(get_pretty_path(root, detected)).black().bright()
                 );
             }
             detected

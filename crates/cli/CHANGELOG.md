@@ -1,5 +1,12 @@
 # @lagoss/cli
 
+## [0.14.0](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.13.0...@lagoss/cli@0.14.0) (2025-10-31)
+
+
+### Features
+
+* improve cli logging ([#248](https://github.com/lagossapp/lagoss/issues/248)) ([9af895a](https://github.com/lagossapp/lagoss/commit/9af895a98dfaee3d5477f217eaa779c4dceefaa8))
+
 ## [0.13.0](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.12.3...@lagoss/cli@0.13.0) (2025-10-31)
 
 
