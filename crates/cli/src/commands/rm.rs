@@ -1,4 +1,6 @@
-use crate::utils::{get_theme, print_progress, ApiClient, ApplicationConfig, Config};
+use crate::utils::{
+    get_theme, lookup_application_id, print_progress, ApiClient, ApplicationConfig, Config,
+};
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm};
 use serde::Deserialize;
@@ -10,14 +12,20 @@ struct DeleteApplicationResponse {
     ok: bool,
 }
 
-pub async fn rm(config: &Config, directory: Option<PathBuf>) -> Result<()> {
+pub async fn rm(
+    config: &Config,
+    directory: Option<PathBuf>,
+    app_id_or_name: Option<String>,
+) -> Result<()> {
     if config.token.is_none() {
         return Err(anyhow!(
             "You are not logged in. Please log in with `lagoss login`",
         ));
     }
 
-    let application_config = ApplicationConfig::load(directory, None, None)?;
+    let app_id = lookup_application_id(config, app_id_or_name).await?;
+
+    let application_config = ApplicationConfig::load(directory, None, app_id)?;
 
     if application_config.application_id.is_empty() {
         return Err(anyhow!(
