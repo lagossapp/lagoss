@@ -1,19 +1,27 @@
-name: Release cli
+name: CLI
 
 on:
   push:
     tags:
       - '@lagoss/cli@*'
-  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'crates/cli/**'
+      - '.github/workflows/cli.yml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  id-token: write # Required for OIDC
+  contents: write # Required to create releases
+
 jobs:
   release-cli:
-    name: Create Artifact ${{ matrix.target }} (${{ matrix.os }})
+    name: Release artifact ${{ matrix.target }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    if: github.ref_type == 'tag'
     strategy:
       fail-fast: false
       matrix:
@@ -77,18 +85,57 @@ jobs:
         run: pnpm run --filter=@lagoss/js-runtime build
       - name: Build CLI
         run: |
-          cd crates/cli && cargo build --release --target ${{ matrix.target }}
+          cd crates/cli
+          cargo build --release --target ${{ matrix.target }}
           mkdir -p builds/${{ matrix.asset_name }}
           cp ../../target/${{ matrix.target }}/release/${{ matrix.input }} builds/${{ matrix.asset_name }}/${{ matrix.output }}
           tar -C builds -czvf ${{ matrix.asset_name }}.tar.gz ${{ matrix.asset_name }}
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.asset_name }}
           path: crates/cli/${{ matrix.asset_name }}.tar.gz
-      - name: Upload to release
-        uses: softprops/action-gh-release@v1
-        if: github.event_name == 'push'
+      - name: Release
+        uses: softprops/action-gh-release@v2
         with:
           files: crates/cli/${{ matrix.asset_name }}.tar.gz
-          token: ${{ secrets.GITHUB_TOKEN }}
+
+  release-cli-npm:
+    name: Release CLI package to npm
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Release CLI package to npm
+        run: |
+          cd crates/cli
+          pnpm build:js
+          pnpm publish --access public --no-git-checks
+
+  publish-preview:
+    name: Publish package preview
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Publish preview to pkg.pr.new
+        run: |
+          cd crates/cli
+          pnpm build:js
+          pnpm dlx pkg-pr-new publish

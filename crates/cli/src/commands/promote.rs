@@ -1,4 +1,6 @@
-use crate::utils::{get_root, get_theme, print_progress, ApiClient, Config, FunctionConfig};
+use crate::utils::{
+    get_theme, lookup_application_id, print_progress, ApiClient, ApplicationConfig, Config,
+};
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm};
 use serde::Deserialize;
@@ -10,37 +12,41 @@ struct PromoteDeploymentResponse {
     ok: bool,
 }
 
-pub async fn promote(deployment_id: String, directory: Option<PathBuf>) -> Result<()> {
-    let config = Config::new()?;
-
+pub async fn promote(
+    config: &Config,
+    deployment_id: String,
+    directory: Option<PathBuf>,
+    app_id_or_name: Option<String>,
+) -> Result<()> {
     if config.token.is_none() {
         return Err(anyhow!(
             "You are not logged in. Please log in with `lagoss login`",
         ));
     }
 
-    let root = get_root(directory);
-    let project_config = FunctionConfig::load(&root, None, None)?;
+    let app_id = lookup_application_id(config, app_id_or_name).await?;
 
-    if project_config.function_id.is_empty() {
+    let application_config = ApplicationConfig::load(directory, None, app_id)?;
+
+    if application_config.application_id.is_empty() {
         return Err(anyhow!(
-            "This directory is not linked to a project. Please link it with `lagoss link`"
+            "This directory is not linked to an application. Please link it with `lagoss link`"
         ));
     }
 
     match Confirm::with_theme(get_theme())
-        .with_prompt("Do you really want to promote this Deployment to production?")
+        .with_prompt("Do you really want to promote this deployment to production?")
         .default(true)
         .interact()?
     {
         true => {
             println!();
-            let end_progress = print_progress("Promoting Deployment");
-            let res = ApiClient::new(config)
+            let end_progress = print_progress("Promoting deployment");
+            let res = ApiClient::new(config.clone())
                 .post::<(), PromoteDeploymentResponse>(
                     &format!(
                         "/api/projects/{}/deployments/{}/promote",
-                        project_config.function_id, deployment_id
+                        application_config.application_id, deployment_id
                     ),
                     (),
                 )

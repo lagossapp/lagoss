@@ -23,7 +23,7 @@ impl ApiClient {
             .client
             .request(
                 method.parse()?,
-                format!("{}{}", self.config.site_url.clone(), url),
+                format!("{}{}", self.config.console_url.clone(), url),
             )
             .header("content-type", "application/json")
             .header("x-lagoss-token", self.config.token.as_ref().unwrap());
@@ -40,7 +40,6 @@ impl ApiClient {
         match status.is_success() {
             true => match serde_json::from_str::<R>(&body) {
                 Ok(response) => Ok(response),
-                // TODO: drop TrpcErrorResult
                 Err(_) => Err(anyhow!("Failed to deserialize response: {}", body)),
             },
             false => Err(anyhow!("Request failed with status: {}", status)),

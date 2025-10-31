@@ -1,27 +1,32 @@
 use crate::{
-    commands::deploy::{OrganizationsResponse, ProjectsResponse},
-    utils::{get_root, get_theme, ApiClient, Config, FunctionConfig},
+    commands::deploy::{ApplicationsResponse, OrganizationsResponse},
+    utils::{get_theme, lookup_application_id, ApiClient, ApplicationConfig, Config},
 };
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Select};
 use std::path::PathBuf;
 
-pub async fn link(directory: Option<PathBuf>) -> Result<()> {
-    let config = Config::new()?;
-
+pub async fn link(
+    config: &Config,
+    directory: Option<PathBuf>,
+    app_id_or_name: Option<String>,
+) -> Result<()> {
     if config.token.is_none() {
         return Err(anyhow!(
             "You are not logged in. Please log in with `lagoss login`",
         ));
     }
 
-    let root = get_root(directory);
-    let project_config = FunctionConfig::load(&root, None, None)?;
+    let app_id = lookup_application_id(config, app_id_or_name).await?;
 
-    match !project_config.function_id.is_empty() {
-        true => Err(anyhow!("This directory is already linked to a project")),
+    let mut application_config = ApplicationConfig::load(directory, None, app_id)?;
+
+    match !application_config.application_id.is_empty() {
+        true => Err(anyhow!(
+            "This directory is already linked to an application"
+        )),
         false => {
-            let client = ApiClient::new(config);
+            let client = ApiClient::new(config.clone());
 
             let organizations = client
                 .get::<OrganizationsResponse>("/api/organizations")
@@ -34,27 +39,27 @@ pub async fn link(directory: Option<PathBuf>) -> Result<()> {
                 .interact()?;
             let organization = &organizations[index];
 
-            let projects = client
-                .get::<ProjectsResponse>(&format!(
+            let applications = client
+                .get::<ApplicationsResponse>(&format!(
                     "/api/organizations/{}/projects",
                     organization.id
                 ))
                 .await?;
 
             let index = Select::with_theme(get_theme())
-                .items(&projects)
+                .items(&applications)
                 .default(0)
-                .with_prompt("Which project would you like to link?")
+                .with_prompt("Which application would you like to link?")
                 .interact()?;
-            let project = &projects[index];
+            let application = &applications[index];
 
-            let mut project_config = FunctionConfig::load(&root, None, None)?;
-            project_config.function_id.clone_from(&project.id);
-            project_config.organization_id.clone_from(&organization.id);
-            project_config.write(&root)?;
+            application_config
+                .application_id
+                .clone_from(&application.id);
+            application_config.write()?;
 
             println!();
-            println!(" {} Project linked!", style("◼").magenta());
+            println!(" {} Application linked!", style("◼").magenta());
 
             Ok(())
         }

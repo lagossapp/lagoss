@@ -3,14 +3,16 @@ use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
 
+use crate::CliArgs;
+
 #[cfg(debug_assertions)]
-fn get_site_url() -> String {
+fn get_console_url() -> String {
     "http://localhost:3000".to_string()
 }
 
 #[cfg(not(debug_assertions))]
-fn get_site_url() -> String {
-    "https://app.lagoss.com".to_string()
+fn get_console_url() -> String {
+    "https://console.lagoss.com".to_string()
 }
 
 fn get_config_path() -> Result<PathBuf> {
@@ -23,7 +25,7 @@ fn get_config_path() -> Result<PathBuf> {
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Config {
     pub token: Option<String>,
-    pub site_url: String,
+    pub console_url: String,
 }
 
 impl Config {
@@ -31,17 +33,10 @@ impl Config {
         let path = get_config_path()?;
 
         if !path.exists() {
-            fs::create_dir_all(
-                path.parent()
-                    .ok_or_else(|| anyhow!("Could not find parent of {:?}", path))?,
-            )?;
-
             let config = Config {
                 token: None,
-                site_url: get_site_url(),
+                console_url: get_console_url(),
             };
-
-            fs::write(path, serde_json::to_string(&config)?)?;
 
             return Ok(config);
         }
@@ -52,8 +47,29 @@ impl Config {
         Ok(config)
     }
 
+    pub fn from_args(args: &CliArgs) -> Result<Self> {
+        let mut config = Config::new()?;
+
+        if let Some(console_url) = args.console_url.as_ref() {
+            config.console_url = console_url.to_string();
+        }
+
+        if let Some(token) = args.token.as_ref() {
+            config.token = Some(token.to_string());
+        }
+
+        Ok(config)
+    }
+
     pub fn save(&self) -> Result<()> {
         let path = get_config_path()?;
+
+        if !path.exists() {
+            fs::create_dir_all(
+                path.parent()
+                    .ok_or_else(|| anyhow!("Could not find parent of {:?}", path))?,
+            )?;
+        }
 
         fs::write(path, serde_json::to_string(&self)?)?;
         Ok(())

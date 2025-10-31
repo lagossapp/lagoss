@@ -1,6 +1,9 @@
 use anyhow::{anyhow, Result};
 use hmac::Mac;
-use ring::signature::{EcdsaKeyPair, KeyPair};
+use ring::{
+    rand::SystemRandom,
+    signature::{EcdsaKeyPair, KeyPair},
+};
 use rsa::{
     pkcs1::DecodeRsaPrivateKey,
     pkcs1v15::Pkcs1v15Sign,
@@ -52,9 +55,11 @@ pub fn verify(
         }
         Algorithm::Ecdsa(sha) => match sha {
             Sha::Sha256 => {
+                let rng = SystemRandom::new();
                 let private_key = EcdsaKeyPair::from_pkcs8(
                     &ring::signature::ECDSA_P256_SHA256_FIXED_SIGNING,
                     &key_value,
+                    &rng,
                 )?;
 
                 let public_key_bytes = private_key.public_key().as_ref();
@@ -66,9 +71,11 @@ pub fn verify(
                 Ok(public_key.verify(&data, &signature).is_ok())
             }
             Sha::Sha384 => {
+                let rng = SystemRandom::new();
                 let private_key = EcdsaKeyPair::from_pkcs8(
                     &ring::signature::ECDSA_P384_SHA384_FIXED_SIGNING,
                     &key_value,
+                    &rng,
                 )?;
 
                 let public_key_bytes = private_key.public_key().as_ref();

@@ -1,13 +1,27 @@
 #!/usr/bin/env node
 
+import path from 'node:path';
+import os from 'node:os';
 import updateNotifier from 'update-notifier';
-import { getBinary } from './get-binary';
-import packageJson from '../package.json' assert { type: 'json' };
 
-function run() {
+import packageJson from '../package.json' assert { type: 'json' };
+import { Binary } from './binary';
+import { getPlatform } from './utils';
+
+export function getBinary() {
+  const { platform, name } = getPlatform();
+  const { name: packageName, version } = packageJson;
+
+  const url = `https://github.com/lagossapp/lagoss/releases/download/${packageName}@${version}/${platform}.tar.gz`;
+  const installationDirectory = path.join(os.homedir(), '.lagoss');
+
+  return new Binary(url, { name, installationDirectory, version });
+}
+
+async function run() {
   updateNotifier({ pkg: packageJson }).notify();
 
-  getBinary().run();
+  await getBinary().run();
 }
 
 async function install() {

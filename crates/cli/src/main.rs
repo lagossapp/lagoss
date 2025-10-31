@@ -3,6 +3,8 @@ use dialoguer::console::style;
 use serde::Deserialize;
 use std::{path::PathBuf, process::exit};
 
+use crate::utils::Config;
+
 mod commands;
 mod utils;
 
@@ -15,12 +17,18 @@ struct PackageJson {
 
 #[derive(Parser, Debug)]
 #[command(author, about, long_about = None, arg_required_else_help = true)]
-struct Cli {
+struct CliArgs {
     #[clap(subcommand)]
     command: Option<Commands>,
     /// Print version information
     #[clap(short, long)]
     version: bool,
+    /// Your Lagoss API token
+    #[clap(short, long, env = "LAGOSS_TOKEN")]
+    token: Option<String>,
+    /// Api endpoint of Lagoss to use (default: https://console.lagoss.com)
+    #[clap(short, long, env = "LAGOSS_CONSOLE_URL")]
+    console_url: Option<String>,
 }
 
 #[derive(Subcommand, Debug)]
@@ -29,42 +37,42 @@ enum Commands {
     Login,
     /// Log out of Lagoss
     Logout,
-    /// Deploy a new or existing Function
+    /// Deploy a new or existing application
     Deploy {
-        /// Path to a file or a directory containing a Function
-        #[clap(value_parser)]
+        /// Path to a handler file or directory containing an application
+        #[clap(value_parser, default_value = ".")]
         path: Option<PathBuf>,
-        /// Path to a client-side script
+        /// Folder of static assets to be served
         #[clap(short, long, value_parser)]
-        client: Option<PathBuf>,
-        /// Path to a public directory to serve assets from
-        #[clap(short, long, value_parser)]
-        public_dir: Option<PathBuf>,
-        /// Deploy as a production deployment
+        assets: Option<PathBuf>,
+        /// Deploy to production
         #[clap(visible_alias = "production", long)]
         prod: bool,
+        /// Application id or name
+        #[clap(long, value_parser)]
+        app_id_or_name: Option<String>,
     },
-    /// Delete an existing Function
+    /// Delete an existing application
     Rm {
-        /// Path to a directory containing a Function
-        #[clap(value_parser)]
-        directory: Option<PathBuf>,
-    },
-    /// Start a local dev server to test a Functon
-    Dev {
-        /// Path to a file or a directory containing a Function
-        #[clap(value_parser)]
+        /// Path to a handler file or directory containing an application
+        #[clap(value_parser, default_value = ".")]
         path: Option<PathBuf>,
-        /// Path to a client-side script
+        /// Application id or name
+        #[clap(long, value_parser)]
+        app_id_or_name: Option<String>,
+    },
+    /// Start a local dev server to test an application
+    Dev {
+        /// Path to a handler file or directory containing an application
+        #[clap(value_parser, default_value = ".")]
+        path: Option<PathBuf>,
+        /// Folder of static assets to be served
         #[clap(short, long, value_parser)]
-        client: Option<PathBuf>,
-        /// Path to a public directory to serve assets from
-        #[clap(short, long, value_parser)]
-        public_dir: Option<PathBuf>,
+        assets: Option<PathBuf>,
         /// Port to start dev server on
         #[clap(long)]
         port: Option<u16>,
-        /// Hostname to start dev server on
+        /// Hostname to listen on
         #[clap(long)]
         hostname: Option<String>,
         /// Path to a custom environment variables file to use
@@ -77,67 +85,83 @@ enum Commands {
         #[clap(visible_alias = "production", long)]
         prod: bool,
     },
-    /// Build a Function without deploying it
+    /// Build an application without deploying it
     Build {
-        /// Path to a file or a directory containing a Function
+        /// Path to a handler file or directory containing an application
+        #[clap(value_parser, default_value = ".")]
+        path: Option<PathBuf>,
+        /// Folder of static assets to be served
+        #[clap(short, long, value_parser)]
+        assets: Option<PathBuf>,
+    },
+    /// Link a local folder to an already deployed application
+    Link {
+        /// Path to a handler file or directory containing an application
+        #[clap(value_parser, default_value = ".")]
+        path: Option<PathBuf>,
+        /// Application id or name
+        #[clap(long, value_parser)]
+        app_id_or_name: Option<String>,
+    },
+    /// List all the deployments for an application
+    Ls {
+        /// Path to a handler file or directory containing an application
+        #[clap(value_parser, default_value = ".")]
+        path: Option<PathBuf>,
+        /// Application id or name
+        #[clap(long, value_parser)]
+        app_id_or_name: Option<String>,
+    },
+    /// Undeploy a given deployment
+    Undeploy {
+        /// ID of the deployment to undeploy
+        deployment_id: String,
+        /// Path to a directory containing an application
         #[clap(value_parser)]
         path: Option<PathBuf>,
-        /// Path to a client-side script
-        #[clap(short, long, value_parser)]
-        client: Option<PathBuf>,
-        /// Path to a public directory to serve assets from
-        #[clap(short, long, value_parser)]
-        public_dir: Option<PathBuf>,
+        /// Application id or name
+        #[clap(long, value_parser)]
+        app_id_or_name: Option<String>,
     },
-    /// Link a local Function file to an already deployed Function
-    Link {
-        /// Path to a directory containing a Function
-        #[clap(value_parser)]
-        directory: Option<PathBuf>,
-    },
-    /// List all the Deployments for a Function
-    Ls {
-        /// Path to a directory containing a Function
-        #[clap(value_parser)]
-        directory: Option<PathBuf>,
-    },
-    /// Undeploy the given Deployment
-    Undeploy {
-        /// ID of the Deployment to undeploy
-        deployment_id: String,
-        /// Path to a directory containing a Function
-        #[clap(value_parser)]
-        directory: Option<PathBuf>,
-    },
-    /// Promote the given preview Deployment to production
+    /// Promote the given preview deployment to production
     Promote {
-        /// ID of the Deployment to promote
+        /// ID of the deployment to promote
         deployment_id: String,
-        /// Path to a directory containing a Function
-        #[clap(value_parser)]
-        directory: Option<PathBuf>,
+        /// Path to a handler file or directory containing an application
+        #[clap(value_parser, default_value = ".")]
+        path: Option<PathBuf>,
+        /// Application id or name
+        #[clap(long, value_parser)]
+        app_id_or_name: Option<String>,
     },
 }
 
 #[tokio::main]
 async fn main() {
-    let args = Cli::parse();
+    let args = CliArgs::parse();
+
+    let config = Config::from_args(&args).unwrap_or_else(|err| {
+        println!("{} {}", style("✕").red(), err);
+        exit(1);
+    });
 
     if let Some(command) = args.command {
         if let Err(err) = match command {
-            Commands::Login => commands::login().await,
-            Commands::Logout => commands::logout(),
+            Commands::Login => commands::login(&config).await,
+            Commands::Logout => commands::logout(&config),
             Commands::Deploy {
                 path,
-                client,
-                public_dir,
+                assets,
                 prod,
-            } => commands::deploy(path, client, public_dir, prod).await,
-            Commands::Rm { directory } => commands::rm(directory).await,
+                app_id_or_name,
+            } => commands::deploy(&config, path, assets, prod, app_id_or_name).await,
+            Commands::Rm {
+                path,
+                app_id_or_name,
+            } => commands::rm(&config, path, app_id_or_name).await,
             Commands::Dev {
                 path,
-                client,
-                public_dir,
+                assets,
                 port,
                 hostname,
                 env,
@@ -146,8 +170,7 @@ async fn main() {
             } => {
                 commands::dev(
                     path,
-                    client,
-                    public_dir,
+                    assets,
                     port,
                     hostname,
                     env,
@@ -156,21 +179,25 @@ async fn main() {
                 )
                 .await
             }
-            Commands::Build {
+            Commands::Build { path, assets } => commands::build(path, assets),
+            Commands::Link {
                 path,
-                client,
-                public_dir,
-            } => commands::build(path, client, public_dir),
-            Commands::Link { directory } => commands::link(directory).await,
-            Commands::Ls { directory } => commands::ls(directory).await,
+                app_id_or_name,
+            } => commands::link(&config, path, app_id_or_name).await,
+            Commands::Ls {
+                path,
+                app_id_or_name,
+            } => commands::ls(&config, path, app_id_or_name).await,
             Commands::Undeploy {
                 deployment_id,
-                directory,
-            } => commands::undeploy(deployment_id, directory).await,
+                path,
+                app_id_or_name,
+            } => commands::undeploy(&config, deployment_id, path, app_id_or_name).await,
             Commands::Promote {
                 deployment_id,
-                directory,
-            } => commands::promote(deployment_id, directory).await,
+                path,
+                app_id_or_name,
+            } => commands::promote(&config, deployment_id, path, app_id_or_name).await,
         } {
             println!("{} {}", style("✕").red(), err);
             exit(1);

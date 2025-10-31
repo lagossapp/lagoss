@@ -65,7 +65,7 @@ async fn main() -> Result<()> {
 
     let api_url = env::var("LAGOSS_URL").expect("LAGOSS_URL must be set");
     let api_token = env::var("LAGOSS_API_TOKEN").expect("LAGOSS_API_TOKEN must be set");
-    let deployments = get_deployments(api_url, api_token, Arc::clone(&downloader)).await?;
+    let deployments = get_deployments(api_url, api_token).await?;
 
     let serverless = start(deployments, addr, downloader, pubsub, client).await?;
     tokio::spawn(serverless).await?;

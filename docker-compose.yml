@@ -38,7 +38,7 @@ services:
       - grafana:/var/lib/grafana
 
   clickhouse:
-    image: clickhouse:25.9.2
+    image: clickhouse:25.9.5
     ulimits:
       nofile:
         soft: 262144

@@ -1,4 +1,4 @@
-use crate::utils::{bundle_function, resolve_path, Assets};
+use crate::utils::{bundle_application, ApplicationConfig, Assets};
 use anyhow::{anyhow, Error, Result};
 use chrono::offset::Local;
 use dialoguer::console::style;
@@ -74,7 +74,7 @@ fn parse_environment_variables(
 // threads to manage, and we don't manager logs and metrics.
 async fn handle_request(
     req: Request<Body>,
-    public_dir: Option<PathBuf>,
+    assets_dir: Option<PathBuf>,
     ip: String,
     assets: Arc<Mutex<Assets>>,
     isolate_tx: flume::Sender<IsolateEvent>,
@@ -93,7 +93,7 @@ async fn handle_request(
             style("(asset)").black().bright()
         );
 
-        let run_result = match handle_asset(public_dir.unwrap(), asset) {
+        let run_result = match handle_asset(assets_dir.unwrap(), asset) {
             Ok((response_builder, body)) => RunResult::Response(response_builder, body, None),
             Err(error) => RunResult::Error(format!("Could not retrieve asset ({asset}): {error}")),
         };
@@ -175,16 +175,15 @@ async fn handle_request(
 #[allow(clippy::too_many_arguments)]
 pub async fn dev(
     path: Option<PathBuf>,
-    client: Option<PathBuf>,
-    public_dir: Option<PathBuf>,
+    assets_dir: Option<PathBuf>,
     port: Option<u16>,
     hostname: Option<String>,
     env: Option<PathBuf>,
     allow_code_generation: bool,
     prod: bool,
 ) -> Result<()> {
-    let (root, function_config) = resolve_path(path.clone(), client, public_dir)?;
-    let (index, assets) = bundle_function(&function_config, &root, prod)?;
+    let application_config = ApplicationConfig::load(path, assets_dir, None)?;
+    let (index, assets) = bundle_application(&application_config, prod)?;
 
     let index = Arc::new(Mutex::new(index));
     let assets = Arc::new(Mutex::new(assets));
@@ -198,15 +197,16 @@ pub async fn dev(
     )
     .parse()?;
 
-    let server_public_dir = function_config
+    let server_assets_dir = application_config
         .assets
         .as_ref()
-        .map(|assets| root.join(assets));
+        .map(|assets| application_config.path.join(assets));
 
-    let environment_variables = match parse_environment_variables(path, env) {
-        Ok(env) => env,
-        Err(err) => return Err(anyhow!("Could not load environment variables: {:?}", err)),
-    };
+    let environment_variables =
+        match parse_environment_variables(Some(application_config.path.clone()), env) {
+            Ok(env) => env,
+            Err(err) => return Err(anyhow!("Could not load environment variables: {:?}", err)),
+        };
 
     let (isolate_tx, isolate_rx) = flume::unbounded();
     let (log_sender, log_receiver) = flume::unbounded();
@@ -255,7 +255,7 @@ pub async fn dev(
     let tx_handle = isolate_tx.clone();
 
     let server = Server::bind(&addr).serve(make_service_fn(move |conn: &AddrStream| {
-        let public_dir = server_public_dir.clone();
+        let assets_dir = server_assets_dir.clone();
         let assets = Arc::clone(&assets_handle);
         let tx = tx_handle.clone();
 
@@ -266,7 +266,7 @@ pub async fn dev(
             Ok::<_, Infallible>(service_fn(move |req| {
                 handle_request(
                     req,
-                    public_dir.clone(),
+                    assets_dir.clone(),
                     ip.clone(),
                     Arc::clone(&assets),
                     tx.clone(),
@@ -281,10 +281,12 @@ pub async fn dev(
         Config::default().with_poll_interval(Duration::from_secs(1)),
     )?;
 
-    watcher.watch(
-        &root.join(function_config.index.clone()),
-        RecursiveMode::NonRecursive,
-    )?;
+    if let Some(handler) = &application_config.handler {
+        watcher.watch(
+            &application_config.path.join(handler.clone()),
+            RecursiveMode::NonRecursive,
+        )?;
+    }
 
     tokio::spawn(async move {
         for event in rx.into_iter().flatten() {
@@ -299,7 +301,7 @@ pub async fn dev(
                 print!("\x1B[2J\x1B[1;1H");
                 println!("{}", style("File modified, updating...").black().bright());
 
-                let (new_index, new_assets) = bundle_function(&function_config, &root, prod)?;
+                let (new_index, new_assets) = bundle_application(&application_config, prod)?;
 
                 *assets.lock().await = new_assets;
                 *index.lock().await = new_index;
