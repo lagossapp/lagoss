@@ -30,7 +30,7 @@ services:
       - prometheus:/prometheus
 
   grafana:
-    image: grafana/grafana:12.2.0
+    image: grafana/grafana:12.2.1
     ports:
       - 3001:3000
     volumes:
