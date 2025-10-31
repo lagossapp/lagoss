@@ -1,5 +1,6 @@
 use crate::utils::{
-    create_deployment, get_theme, print_progress, ApiClient, ApplicationConfig, Config,
+    create_deployment, get_theme, lookup_application_id, print_progress, ApiClient,
+    ApplicationConfig, Config,
 };
 use anyhow::{anyhow, Result};
 use dialoguer::{console::style, Confirm, Input, Select};
@@ -55,6 +56,7 @@ pub async fn deploy(
     path: Option<PathBuf>,
     assets_dir: Option<PathBuf>,
     is_production: bool,
+    app_id_or_name: Option<String>,
 ) -> Result<()> {
     if config.token.is_none() {
         return Err(anyhow!(
@@ -62,7 +64,8 @@ pub async fn deploy(
         ));
     }
 
-    let application_config = get_application_config(config, path, assets_dir).await?;
+    let application_config =
+        get_application_config(config, path, assets_dir, app_id_or_name).await?;
 
     create_deployment(config, &application_config, is_production, true).await?;
 
@@ -73,8 +76,11 @@ async fn get_application_config(
     config: &Config,
     path: Option<PathBuf>,
     assets_dir: Option<PathBuf>,
+    app_id_or_name: Option<String>,
 ) -> Result<ApplicationConfig> {
-    let mut app_config = ApplicationConfig::load(path, assets_dir, None)?;
+    let app_id = lookup_application_id(config, app_id_or_name).await?;
+
+    let mut app_config = ApplicationConfig::load(path, assets_dir, app_id)?;
 
     if !app_config.application_id.is_empty() {
         return Ok(app_config);

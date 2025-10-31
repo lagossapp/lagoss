@@ -21,7 +21,7 @@ pub async fn login(config: &Config) -> Result<()> {
     // TODO: find open port for webserver
     let callback = "http://localhost:1234/cli";
 
-    let url = config.site_url.clone() + "/cli?callback=" + callback;
+    let url = config.console_url.clone() + "/cli?callback=" + callback;
 
     // TODO: open webserver for callback
 

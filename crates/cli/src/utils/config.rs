@@ -6,12 +6,12 @@ use std::path::PathBuf;
 use crate::CliArgs;
 
 #[cfg(debug_assertions)]
-fn get_site_url() -> String {
+fn get_console_url() -> String {
     "http://localhost:3000".to_string()
 }
 
 #[cfg(not(debug_assertions))]
-fn get_site_url() -> String {
+fn get_console_url() -> String {
     "https://console.lagoss.com".to_string()
 }
 
@@ -25,7 +25,7 @@ fn get_config_path() -> Result<PathBuf> {
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Config {
     pub token: Option<String>,
-    pub site_url: String,
+    pub console_url: String,
 }
 
 impl Config {
@@ -35,7 +35,7 @@ impl Config {
         if !path.exists() {
             let config = Config {
                 token: None,
-                site_url: get_site_url(),
+                console_url: get_console_url(),
             };
 
             return Ok(config);
@@ -50,8 +50,8 @@ impl Config {
     pub fn from_args(args: &CliArgs) -> Result<Self> {
         let mut config = Config::new()?;
 
-        if let Some(site_url) = args.site_url.as_ref() {
-            config.site_url = site_url.to_string();
+        if let Some(console_url) = args.console_url.as_ref() {
+            config.console_url = console_url.to_string();
         }
 
         if let Some(token) = args.token.as_ref() {

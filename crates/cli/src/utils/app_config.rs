@@ -1,5 +1,5 @@
 use super::{validate_assets_dir, validate_code_file};
-use crate::utils::{get_pretty_path, get_theme};
+use crate::utils::{get_pretty_path, get_theme, ApiClient, Config};
 use anyhow::{anyhow, Result};
 use dialoguer::console::style;
 use dialoguer::{Confirm, Input};
@@ -172,6 +172,44 @@ pub fn find_application_config_path(root: &Path) -> Option<PathBuf> {
     }
 
     None
+}
+
+#[derive(Deserialize, Debug)]
+struct ApplicationResponse {
+    id: String,
+}
+
+pub async fn lookup_application_id(
+    config: &Config,
+    id_or_name: Option<String>,
+) -> Result<Option<String>> {
+    if id_or_name.is_none() {
+        return Ok(None);
+    }
+
+    let client = ApiClient::new(config.clone());
+
+    if let Ok(application) = client
+        .get::<ApplicationResponse>(&format!("/api/projects/{}", id_or_name.clone().unwrap()))
+        .await
+    {
+        return Ok(Some(application.id));
+    }
+
+    // try by name if not found by id
+    match client
+        .get::<ApplicationResponse>(&format!(
+            "/api/projects/by-name/{}",
+            id_or_name.clone().unwrap()
+        ))
+        .await
+    {
+        Ok(application) => Ok(Some(application.id)),
+        Err(_) => Err(anyhow!(
+            "Could not find application by id or name for '{}'.",
+            id_or_name.unwrap()
+        )),
+    }
 }
 
 fn detect_handler(root: &Path) -> Option<PathBuf> {

@@ -23,7 +23,7 @@ impl ApiClient {
             .client
             .request(
                 method.parse()?,
-                format!("{}{}", self.config.site_url.clone(), url),
+                format!("{}{}", self.config.console_url.clone(), url),
             )
             .header("content-type", "application/json")
             .header("x-lagoss-token", self.config.token.as_ref().unwrap());
