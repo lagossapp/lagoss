@@ -1,5 +1,12 @@
 # @lagoss/dashboard
 
+## [0.7.3](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard@0.7.2...@lagoss/dashboard@0.7.3) (2025-10-31)
+
+
+### Bug Fixes
+
+* correct publishing to redis ([#247](https://github.com/lagossapp/lagoss/issues/247)) ([5bf9ee0](https://github.com/lagossapp/lagoss/commit/5bf9ee0a995dedec001dd31c5a0a7fb4b941698c))
+
 ## [0.7.2](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard@0.7.1...@lagoss/dashboard@0.7.2) (2025-10-25)
 
 

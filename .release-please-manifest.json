@@ -1,5 +1,5 @@
 {
-  "packages/dashboard": "0.7.2",
+  "packages/dashboard": "0.7.3",
   "crates/serverless": "0.5.0",
   "crates/cli": "0.14.0"
 }
