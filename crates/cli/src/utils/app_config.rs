@@ -204,21 +204,11 @@ pub async fn lookup_application_id(
         ))
         .await
     {
-        Ok(application) => {
-            println!(
-                "{} Application found by name: {}",
-                style("✓").green().bright(),
-                id_or_name.unwrap()
-            );
-            Ok(Some(application.id))
-        }
-        Err(_) => {
-            println!(
-                "{} Could not find application by id or name.",
-                style("✗").red().bright()
-            );
-            Ok(None) // ignore errors and just continue as no id_or_name given
-        }
+        Ok(application) => Ok(Some(application.id)),
+        Err(_) => Err(anyhow!(
+            "Could not find application by id or name for '{}'.",
+            id_or_name.unwrap()
+        )),
     }
 }
 
