@@ -47,10 +47,12 @@ export async function useRedis(): Promise<RedisClient> {
 
   await redisClient.connect();
 
+  const originalPublish = redisClient.publish.bind(redisClient);
+
   Object.assign(redisClient, {
     publish: async (channel: string, payload: unknown) => {
       const message = typeof payload === 'string' ? payload : JSON.stringify(payload);
-      return redisClient.publish(channel, message);
+      return originalPublish(channel, message);
     },
   });
 
