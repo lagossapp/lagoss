@@ -27,8 +27,8 @@ struct CliArgs {
     #[clap(short, long, env = "LAGOSS_TOKEN")]
     token: Option<String>,
     /// Api endpoint of Lagoss to use (default: https://console.lagoss.com)
-    #[clap(short, long, env = "LAGOSS_SITE_URL")]
-    site_url: Option<String>,
+    #[clap(short, long, env = "LAGOSS_CONSOLE_URL")]
+    console_url: Option<String>,
 }
 
 #[derive(Subcommand, Debug)]
