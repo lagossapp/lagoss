@@ -158,7 +158,7 @@ importers:
         version: 4.1.3(@parcel/watcher@2.5.1)(@types/node@24.9.2)(@vue/compiler-sfc@3.5.22)(db0@0.3.2(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.15.3)(prisma@5.0.0))(mysql2@3.15.3))(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.15.3)(prisma@5.0.0))(eslint@8.57.1)(ioredis@5.8.1)(less@4.1.3)(lightningcss@1.30.2)(magicast@0.3.5)(mysql2@3.15.3)(optionator@0.9.4)(rollup@4.52.4)(terser@5.18.0)(tsx@4.20.6)(typescript@5.8.3)(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0))(yaml@2.8.0)
       nuxt-monaco-editor:
         specifier: ^1.3.2
-        version: 1.3.2(magicast@0.3.5)(monaco-editor@0.54.0)(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0))
+        version: 1.4.0(magicast@0.3.5)(monaco-editor@0.54.0)(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0))
       redis:
         specifier: ^4.7.0
         version: 4.7.1
@@ -1665,10 +1665,6 @@ packages:
 
   '@nuxt/icon@2.1.0':
     resolution: {integrity: sha512-m+XQrgzeK5gQ1HkB7G7u1os6egoD07fiHKijG7NPxqT5yZUGOjKJ7X/Le10l3QWRKyCB+IiU0t+eUqSvh+SULg==}
-
-  '@nuxt/kit@3.19.3':
-    resolution: {integrity: sha512-ze46EW5xW+UxDvinvPkYt2MzR355Az1lA3bpX8KDialgnCwr+IbkBij/udbUEC6ZFbidPkfK1eKl4ESN7gMY+w==}
-    engines: {node: '>=18.12.0'}
 
   '@nuxt/kit@3.20.0':
     resolution: {integrity: sha512-EoF1Gf0SPj9vxgAIcGEH+a4PRLC7Dwsy21K6f5+POzylT8DgssN8zL5pwXC+X7OcfzBrwYFh7mM7phvh7ubgeg==}
@@ -4697,10 +4693,6 @@ packages:
     resolution: {integrity: sha512-Rx/WycZ60HOaqLKAi6cHRKKI7zxWbJ31MhntmtwMoaTeF7XFH9hhBp8vITaMidfljRQ6eYWCKkaTK+ykVJHP2A==}
     engines: {node: '>= 0.8'}
 
-  fs-extra@11.3.2:
-    resolution: {integrity: sha512-Xr9F6z6up6Ws+NjzMCZc6WXg2YFRlrLP9NQDO3VQrWrfiojdhS56TzueT88ze0uBdCTwEIhQ3ptnmKeWGFAe0A==}
-    engines: {node: '>=14.14'}
-
   fs-extra@7.0.1:
     resolution: {integrity: sha512-YJDaCJZEnBmcbw13fvdAM9AwNOJwOzrE4pqMqBq5nFiEqXUqHwlK4B+3pUw6JNvfSPtX05xFHtYy/1ni01eGCw==}
     engines: {node: '>=6 <7 || >=8'}
@@ -5271,9 +5263,6 @@ packages:
 
   jsonfile@4.0.0:
     resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}
-
-  jsonfile@6.2.0:
-    resolution: {integrity: sha512-FGuPw30AdOIUTRMC2OMRtQV+jkVj2cfPqSeWXv1NEAJ1qZ5zb1X6z1mFhbfOB/iy3ssJCD+3KuZ8r8C3uVFlAg==}
 
   jsonparse@1.3.1:
     resolution: {integrity: sha512-POQXvpdL69+CluYsillJ7SUhKvytYjW9vG/GKpnf+xP8UWgYEM/RaMzHHofbALDiKbbP1W8UEYmgGl39WkPZsg==}
@@ -5939,8 +5928,8 @@ packages:
   number-allocator@1.0.14:
     resolution: {integrity: sha512-OrL44UTVAvkKdOdRQZIJpLkAdjXGTRda052sN4sO77bKEzYYqWKMBjQvrJFzqygI99gL6Z4u2xctPW1tB8ErvA==}
 
-  nuxt-monaco-editor@1.3.2:
-    resolution: {integrity: sha512-yA91ecXDgD6z2EddnsByfND9lBjbNs2BG0lg25yPC9Ge0A0N3u0cBXNNmDrhew8o+yXQSHqy8AykaRiBAeSYWQ==}
+  nuxt-monaco-editor@1.4.0:
+    resolution: {integrity: sha512-uRvPr3FbuSFV4LIHNUJMTAJnrfggBVP+o8WsIJiN8iRK5u+ejN4Nhuz1u5bM90et30p0S3YYvvB/YNPsNKoD0g==}
     peerDependencies:
       monaco-editor: '*'
 
@@ -7415,10 +7404,6 @@ packages:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
     engines: {node: '>= 4.0.0'}
 
-  universalify@2.0.1:
-    resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
-    engines: {node: '>= 10.0.0'}
-
   unplugin-auto-import@20.2.0:
     resolution: {integrity: sha512-vfBI/SvD9hJqYNinipVOAj5n8dS8DJXFlCKFR5iLDp2SaQwsfdnfLXgZ+34Kd3YY3YEY9omk8XQg0bwos3Q8ug==}
     engines: {node: '>=14'}
@@ -7731,8 +7716,8 @@ packages:
       '@nuxt/kit':
         optional: true
 
-  vite-plugin-static-copy@3.1.0:
-    resolution: {integrity: sha512-ONFBaYoN1qIiCxMCfeHI96lqLza7ujx/QClIXp4kEULUbyH2qLgYoaL8JHhk3FWjSB4TpzoaN3iMCyCFldyXzw==}
+  vite-plugin-static-copy@3.1.4:
+    resolution: {integrity: sha512-iCmr4GSw4eSnaB+G8zc2f4dxSuDjbkjwpuBLLGvQYR9IW7rnDzftnUjOH5p4RYR+d4GsiBqXRvzuFhs5bnzVyw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
       vite: ^5.0.0 || ^6.0.0 || ^7.0.0
@@ -10204,7 +10189,7 @@ snapshots:
 
   '@nuxt/devtools-kit@2.6.5(magicast@0.3.5)(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0))':
     dependencies:
-      '@nuxt/kit': 3.19.3(magicast@0.3.5)
+      '@nuxt/kit': 3.20.0(magicast@0.3.5)
       execa: 8.0.1
       vite: 7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0)
     transitivePeerDependencies:
@@ -10233,7 +10218,7 @@ snapshots:
     dependencies:
       '@nuxt/devtools-kit': 2.6.5(magicast@0.3.5)(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0))
       '@nuxt/devtools-wizard': 2.6.5
-      '@nuxt/kit': 3.19.3(magicast@0.3.5)
+      '@nuxt/kit': 3.20.0(magicast@0.3.5)
       '@vue/devtools-core': 7.7.7(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0))(vue@3.5.22(typescript@5.8.3))
       '@vue/devtools-kit': 7.7.7
       birpc: 2.6.1
@@ -10260,7 +10245,7 @@ snapshots:
       structured-clone-es: 1.0.0
       tinyglobby: 0.2.15
       vite: 7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0)
-      vite-plugin-inspect: 11.3.3(@nuxt/kit@3.19.3(magicast@0.3.5))(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0))
+      vite-plugin-inspect: 11.3.3(@nuxt/kit@3.20.0(magicast@0.3.5))(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0))
       vite-plugin-vue-tracer: 1.0.0(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0))(vue@3.5.22(typescript@5.8.3))
       which: 5.0.0
       ws: 8.18.3
@@ -10337,34 +10322,6 @@ snapshots:
       - supports-color
       - vite
       - vue
-
-  '@nuxt/kit@3.19.3(magicast@0.3.5)':
-    dependencies:
-      c12: 3.3.0(magicast@0.3.5)
-      consola: 3.4.2
-      defu: 6.1.4
-      destr: 2.0.5
-      errx: 0.1.0
-      exsolve: 1.0.7
-      ignore: 7.0.5
-      jiti: 2.6.1
-      klona: 2.0.6
-      knitwork: 1.2.0
-      mlly: 1.8.0
-      ohash: 2.0.11
-      pathe: 2.0.3
-      pkg-types: 2.3.0
-      rc9: 2.1.2
-      scule: 1.3.0
-      semver: 7.7.3
-      std-env: 3.9.0
-      tinyglobby: 0.2.15
-      ufo: 1.6.1
-      unctx: 2.4.1
-      unimport: 5.4.1
-      untyped: 2.0.0
-    transitivePeerDependencies:
-      - magicast
 
   '@nuxt/kit@3.20.0(magicast@0.3.5)':
     dependencies:
@@ -10464,7 +10421,7 @@ snapshots:
 
   '@nuxt/telemetry@2.6.6(magicast@0.3.5)':
     dependencies:
-      '@nuxt/kit': 3.19.3(magicast@0.3.5)
+      '@nuxt/kit': 3.20.0(magicast@0.3.5)
       citty: 0.1.6
       consola: 3.4.2
       destr: 2.0.5
@@ -13685,12 +13642,6 @@ snapshots:
 
   fresh@2.0.0: {}
 
-  fs-extra@11.3.2:
-    dependencies:
-      graceful-fs: 4.2.11
-      jsonfile: 6.2.0
-      universalify: 2.0.1
-
   fs-extra@7.0.1:
     dependencies:
       graceful-fs: 4.2.11
@@ -14259,12 +14210,6 @@ snapshots:
   jsonc-parser@3.3.1: {}
 
   jsonfile@4.0.0:
-    optionalDependencies:
-      graceful-fs: 4.2.11
-
-  jsonfile@6.2.0:
-    dependencies:
-      universalify: 2.0.1
     optionalDependencies:
       graceful-fs: 4.2.11
 
@@ -15189,12 +15134,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  nuxt-monaco-editor@1.3.2(magicast@0.3.5)(monaco-editor@0.54.0)(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0)):
+  nuxt-monaco-editor@1.4.0(magicast@0.3.5)(monaco-editor@0.54.0)(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0)):
     dependencies:
-      '@nuxt/kit': 3.19.3(magicast@0.3.5)
+      '@nuxt/kit': 4.2.0(magicast@0.3.5)
       defu: 6.1.4
       monaco-editor: 0.54.0
-      vite-plugin-static-copy: 3.1.0(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0))
+      vite-plugin-static-copy: 3.1.4(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0))
     transitivePeerDependencies:
       - magicast
       - vite
@@ -16912,8 +16857,6 @@ snapshots:
 
   universalify@0.1.2: {}
 
-  universalify@2.0.1: {}
-
   unplugin-auto-import@20.2.0(@nuxt/kit@4.2.0(magicast@0.3.5))(@vueuse/core@13.9.0(vue@3.5.22(typescript@5.8.3))):
     dependencies:
       local-pkg: 1.1.2
@@ -17188,7 +17131,7 @@ snapshots:
       optionator: 0.9.4
       typescript: 5.8.3
 
-  vite-plugin-inspect@11.3.3(@nuxt/kit@3.19.3(magicast@0.3.5))(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0)):
+  vite-plugin-inspect@11.3.3(@nuxt/kit@3.20.0(magicast@0.3.5))(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0)):
     dependencies:
       ansis: 4.1.0
       debug: 4.4.3
@@ -17201,14 +17144,13 @@ snapshots:
       vite: 7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0)
       vite-dev-rpc: 1.1.0(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0))
     optionalDependencies:
-      '@nuxt/kit': 3.19.3(magicast@0.3.5)
+      '@nuxt/kit': 3.20.0(magicast@0.3.5)
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-static-copy@3.1.0(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0)):
+  vite-plugin-static-copy@3.1.4(vite@7.1.12(@types/node@24.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.18.0)(tsx@4.20.6)(yaml@2.8.0)):
     dependencies:
       chokidar: 3.6.0
-      fs-extra: 11.3.2
       p-map: 7.0.3
       picocolors: 1.1.1
       tinyglobby: 0.2.15
