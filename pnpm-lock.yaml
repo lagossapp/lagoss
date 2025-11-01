@@ -68,7 +68,7 @@ importers:
         version: link:../runtime
       '@types/node':
         specifier: ^24.0.10
-        version: 24.0.10
+        version: 24.9.1
       '@types/update-notifier':
         specifier: ^6.0.8
         version: 6.0.8
@@ -202,7 +202,7 @@ importers:
     devDependencies:
       '@types/node':
         specifier: ^24.0.10
-        version: 24.0.10
+        version: 24.9.1
 
   packages/integrations/sveltekit:
     dependencies:
@@ -2976,8 +2976,8 @@ packages:
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
 
-  '@types/node@24.0.10':
-    resolution: {integrity: sha512-ENHwaH+JIRTDIEEbDK6QSQntAYGtbvdDXnMXnZaZ6k13Du1dPMmprkEHIL7ok2Wl2aZevetwTAb5S+7yIF+enA==}
+  '@types/node@24.9.1':
+    resolution: {integrity: sha512-QoiaXANRkSXK6p0Duvt56W208du4P9Uye9hWLWgGMDTEoKPhuenzNcC4vGUmrNkiOKTlIrBoyNQYNpSwfEZXSg==}
 
   '@types/node@24.9.2':
     resolution: {integrity: sha512-uWN8YqxXxqFMX2RqGOrumsKeti4LlmIMIyV0lgut4jx7KQBcBiW6vkDtIBvHnHIquwNfJhk8v2OtmO8zXWHfPA==}
@@ -7394,9 +7394,6 @@ packages:
 
   undici-types@7.16.0:
     resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
-
-  undici-types@7.8.0:
-    resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
 
   undici@5.28.4:
     resolution: {integrity: sha512-72RFADWFqKmUb2hmmvNODKL3p9hcB6Gt2DOQMis1SEBaV6a4MH8soBvzg+95CYhCKPFedut2JY9bMfrDl9D23g==}
@@ -11866,9 +11863,9 @@ snapshots:
 
   '@types/node@12.20.55': {}
 
-  '@types/node@24.0.10':
+  '@types/node@24.9.1':
     dependencies:
-      undici-types: 7.8.0
+      undici-types: 7.16.0
 
   '@types/node@24.9.2':
     dependencies:
@@ -16932,8 +16929,6 @@ snapshots:
       unplugin: 2.3.10
 
   undici-types@7.16.0: {}
-
-  undici-types@7.8.0: {}
 
   undici@5.28.4:
     dependencies:
