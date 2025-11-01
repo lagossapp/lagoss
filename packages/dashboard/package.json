@@ -33,7 +33,7 @@
     "dotenv": "^17.0.0",
     "drizzle-kit": "^0.31.4",
     "is-in-subnet": "^4.0.1",
-    "monaco-editor": "^0.52.0",
+    "monaco-editor": "^0.54.0",
     "mysql2": "^3.14.1",
     "nodemailer": "^6.9.16",
     "nuxt": "^4.1.3",
