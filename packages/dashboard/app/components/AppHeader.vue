@@ -11,7 +11,7 @@
           v-if="app.playground"
           label="Playground"
           size="md"
-          color="blue"
+          color="primary"
           icon="i-ion-edit"
           :to="`/organizations/${app.organizationId}/apps/${app.name}/playground`"
         />
