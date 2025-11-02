@@ -21,7 +21,7 @@ async function getDeploymentCode(deploymentId: string) {
   const content = await s3.send(
     new GetObjectCommand({
       Bucket: config.s3.bucket,
-      Key: `${deploymentId}.js`,
+      Key: `${deploymentId}/index.js`,
     }),
   );
 

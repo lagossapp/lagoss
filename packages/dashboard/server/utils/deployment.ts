@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import { useRedis } from '~~/server/lib/redis';
 import { envStringToObject } from '~~/app/composables/utils';
 import { useS3 } from '~~/server/lib/s3';
-import { DeleteObjectCommand, DeleteObjectsCommand } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, DeleteObjectsCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 
 export async function deleteDeployment(deployment: Deployment, event: H3Event) {
   const db = await useDB();
@@ -15,31 +15,22 @@ export async function deleteDeployment(deployment: Deployment, event: H3Event) {
 
   await db.delete(deploymentSchema).where(eq(deploymentSchema.id, deployment.id)).execute();
 
-  const deletePromises = [
-    s3.send(
-      new DeleteObjectCommand({
-        Bucket: config.s3.bucket,
-        Key: `${deployment.id}.js`,
-      }),
-    ),
-  ];
+  const files = await s3.send(
+    new ListObjectsV2Command({
+      Bucket: config.s3.bucket,
+      Prefix: `${deployment.id}/`,
+    }),
+  );
 
-  const assets = parseAssets(deployment.assets);
-
-  if (Array.isArray(assets) && assets.length > 0) {
-    deletePromises.push(
+  const deletePromises =
+    files.Contents?.map(file =>
       s3.send(
-        new DeleteObjectsCommand({
+        new DeleteObjectCommand({
           Bucket: config.s3.bucket,
-          Delete: {
-            Objects: assets.map(asset => ({
-              Key: `${deployment.id}/${asset}`,
-            })),
-          },
+          Key: file.Key!,
         }),
       ),
-    );
-  }
+    ) || [];
 
   await Promise.all(deletePromises);
 

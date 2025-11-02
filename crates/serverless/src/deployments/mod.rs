@@ -25,7 +25,7 @@ pub async fn download_deployment<D>(deployment: &Deployment, downloader: Arc<D>)
 where
     D: Downloader,
 {
-    let path = format!("{}.js", deployment.id);
+    let path = format!("{}/index.js", deployment.id);
 
     match downloader.download(&path).await {
         Ok(object) => {
@@ -37,7 +37,7 @@ where
 
                 for asset in &deployment.assets {
                     futures.push(async {
-                        let path = format!("{}/{}", deployment.id, asset.clone());
+                        let path = format!("{}/assets/{}", deployment.id, asset.clone());
                         let future = downloader.download(&path);
 
                         (future.await, asset.clone())
