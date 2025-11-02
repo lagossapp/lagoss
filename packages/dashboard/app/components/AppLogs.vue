@@ -11,7 +11,7 @@
 
     <Card>
       <div v-if="logs?.length === 0">
-        <p class="font-bold text-neutral-500">No logs found for this project.</p>
+        <p class="font-bold text-neutral-500">No logs found for this app.</p>
 
         <p class="text-neutral-500">
           You can use <span class="rounded-md bg-neutral-200 px-1">console.log('Hello world!')</span> in your code to
@@ -19,8 +19,8 @@
         </p>
         <p class="text-neutral-500">
           Visit
-          <a :href="getFullCurrentDomain({ name: project.name })" target="_blank" class="text-blue-500 hover:underline"
-            >your project</a
+          <a :href="getFullCurrentDomain({ name: app.name })" target="_blank" class="text-blue-500 hover:underline"
+            >your app</a
           >
           to see the logs in action! 😉
         </p>
@@ -48,10 +48,10 @@
 <script setup lang="ts">
 import { dayjs } from '~~/lib/dayjs';
 
-import type { Project } from '~~/server/db/schema';
+import type { App } from '~~/server/db/schema';
 
 const props = defineProps<{
-  project: Project;
+  app: App;
 }>();
 
 const level = ref('all');
@@ -95,7 +95,7 @@ const timeFrames = [
   },
 ];
 
-const { data: logs, refresh: refreshLogs } = await useFetch(() => `/api/projects/${props.project.id}/logs`, {
+const { data: logs, refresh: refreshLogs } = await useFetch(() => `/api/apps/${props.app.id}/logs`, {
   query: computed(() => ({
     level: level.value,
     timeframe: timeframe.value,

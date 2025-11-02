@@ -1,6 +1,6 @@
 <template>
-  <div v-if="project" class="w-full">
-    <ProjectHeader :project="project" />
+  <div v-if="app" class="w-full">
+    <AppHeader :app="app" />
 
     <div class="mx-auto flex w-full max-w-4xl flex-col gap-4">
       <Card>
@@ -8,12 +8,12 @@
           <h2 class="text-xl">Name</h2>
 
           <p class="text-neutral-500">
-            Change the name of this project. Note that changing the name also changes the default domain.
+            Change the name of this app. Note that changing the name also changes the default domain.
           </p>
 
           <UFormField label="Name" required>
             <UFieldGroup size="md" orientation="horizontal">
-              <UInput v-if="project" v-model="project.name" placeholder="your-name" size="md" />
+              <UInput v-if="app" v-model="app.name" placeholder="your-name" size="md" />
               <UInput :model-value="`.${$config.public.root.domain}`" disabled class="cursor-default!" size="md" />
             </UFieldGroup>
           </UFormField>
@@ -31,7 +31,7 @@
           <p class="text-neutral-500">Environment variables are injected into your Function at runtime.</p>
 
           <div class="flex flex-col gap-2">
-            <div v-if="project" v-for="(envVariable, i) in project.envVariables" class="flex w-full gap-2">
+            <div v-if="app" v-for="(envVariable, i) in app.envVariables" class="flex w-full gap-2">
               <UInput v-model="envVariable.key" placeholder="Key" size="md" @paste.prevent="addPastedEnvVariables" />
               <UInput v-model="envVariable.value" placeholder="Value" size="md" icon="i-heroicons-key" />
               <UButton
@@ -67,11 +67,11 @@
         </p>
 
         <div class="flex gap-4">
-          <span>{{ project.name }}.{{ $config.public.root.domain }}</span>
+          <span>{{ app.name }}.{{ $config.public.root.domain }}</span>
           <span class="text-neutral-500">Default domain</span>
         </div>
 
-        <div v-for="domain in project.domains" :key="domain" class="flex items-center gap-2">
+        <div v-for="domain in app.domains" :key="domain" class="flex items-center gap-2">
           <span>{{ domain }}</span>
           <UButton icon="i-heroicons-minus" color="neutral" variant="outline" @click="removeDomain(domain)" />
         </div>
@@ -93,11 +93,11 @@
 
           <UFormField label="Expression" required>
             <UInput
-              v-if="project"
-              :model-value="project.cron || ''"
+              v-if="app"
+              :model-value="app.cron || ''"
               placeholder="* */12 * * *"
               size="md"
-              @update:model-value="project.cron = $event"
+              @update:model-value="app.cron = $event"
             />
           </UFormField>
 
@@ -113,12 +113,12 @@
         <h2 class="text-xl">Delete</h2>
 
         <p>
-          Delete the project "{{ project?.name }}.{{ $config.public.root.domain }}" and all of its deployments and
-          domains. This action is not reversible, so continue with extreme caution.
+          Delete the app "{{ app?.name }}.{{ $config.public.root.domain }}" and all of its deployments and domains. This
+          action is not reversible, so continue with extreme caution.
         </p>
 
         <div class="border-error flex w-full border-t pt-2">
-          <UButton type="submit" label="Delete" size="md" color="error" class="ml-auto" @click="deleteProject" />
+          <UButton type="submit" label="Delete" size="md" color="error" class="ml-auto" @click="deleteApp" />
         </div>
       </Card>
     </div>
@@ -129,32 +129,32 @@
 const router = useRouter();
 const toast = useToast();
 
-const { project: dbProject, refreshProject } = useProject();
+const { app: dbApp, refreshApp } = useApp();
 
-const project = ref<typeof dbProject.value>();
+const app = ref<typeof dbApp.value>();
 watch(
-  dbProject,
+  dbApp,
   () => {
-    project.value = dbProject.value;
+    app.value = dbApp.value;
   },
   { immediate: true },
 );
 
 function addEnvVariable() {
-  project.value?.envVariables.push({ key: '', value: '' });
+  app.value?.envVariables.push({ key: '', value: '' });
 }
 
 function removeEnvVariable(index: number) {
-  if (!project.value) return;
-  project.value = {
-    ...project.value,
-    envVariables: project.value.envVariables.filter((_, i) => i !== index),
+  if (!app.value) return;
+  app.value = {
+    ...app.value,
+    envVariables: app.value.envVariables.filter((_, i) => i !== index),
   };
 }
 
 function addPastedEnvVariables(event: ClipboardEvent) {
-  if (!project.value) {
-    throw new Error('Project not found');
+  if (!app.value) {
+    throw new Error('App not found');
   }
   if (event.clipboardData === null) return;
 
@@ -172,139 +172,139 @@ function addPastedEnvVariables(event: ClipboardEvent) {
       }
     }
 
-    project.value = {
-      ...project.value,
-      envVariables: project.value.envVariables.filter(({ key, value }) => !pastedEnv[key] && key && value),
+    app.value = {
+      ...app.value,
+      envVariables: app.value.envVariables.filter(({ key, value }) => !pastedEnv[key] && key && value),
     };
-    project.value?.envVariables?.push(...Object.entries(pastedEnv).map(([key, value]) => ({ key, value })));
+    app.value?.envVariables?.push(...Object.entries(pastedEnv).map(([key, value]) => ({ key, value })));
   }
 }
 
 async function removeDomain(domain: string) {
-  if (!project.value) {
-    throw new Error('Project not found');
+  if (!app.value) {
+    throw new Error('App not found');
   }
   if (!confirm(`Are you sure you want to remove the domain "${domain}"?`)) return;
 
-  await $fetch(`/api/projects/${project.value.id}`, {
+  await $fetch(`/api/apps/${app.value.id}`, {
     method: 'PATCH',
     body: {
-      domains: project.value.domains?.filter(_domain => _domain !== domain),
+      domains: app.value.domains?.filter(_domain => _domain !== domain),
     },
   });
 
   toast.add({
     title: 'Domain removed',
-    description: `The domain "${domain}" was removed from the project "${project.value.name}".`,
+    description: `The domain "${domain}" was removed from the app "${app.value.name}".`,
     color: 'success',
   });
 
-  await refreshProject();
+  await refreshApp();
 }
 
 async function saveName() {
-  if (!project.value) {
-    throw new Error('Project not found');
+  if (!app.value) {
+    throw new Error('App not found');
   }
 
-  await $fetch(`/api/projects/${project.value.id}`, {
+  await $fetch(`/api/apps/${app.value.id}`, {
     method: 'PATCH',
     body: {
-      name: project.value.name,
+      name: app.value.name,
     },
   });
 
   toast.add({
-    title: 'Project updated',
-    description: `The project "${project.value.name}" was updated.`,
+    title: 'App updated',
+    description: `The app "${app.value.name}" was updated.`,
     color: 'success',
   });
 
-  await router.push(`/organizations/${project.value.organizationId}/projects/${project.value.name}`);
+  await router.push(`/organizations/${app.value.organizationId}/apps/${app.value.name}`);
 
-  await refreshProject();
+  await refreshApp();
 }
 
 async function saveEnvironmentVariables() {
-  if (!project.value) {
-    throw new Error('Project not found');
+  if (!app.value) {
+    throw new Error('App not found');
   }
 
-  await $fetch(`/api/projects/${project.value.id}`, {
+  await $fetch(`/api/apps/${app.value.id}`, {
     method: 'PATCH',
     body: {
-      envVariables: project.value.envVariables.filter(({ key, value }) => key && value),
+      envVariables: app.value.envVariables.filter(({ key, value }) => key && value),
     },
   });
 
   toast.add({
     title: 'Environment variables updated',
-    description: `The environment variables for the project "${project.value.name}" were updated.`,
+    description: `The environment variables for the app "${app.value.name}" were updated.`,
     color: 'success',
   });
 
-  await refreshProject();
+  await refreshApp();
 }
 
 const newDomain = ref('');
 async function addDomain() {
-  if (!project.value) {
-    throw new Error('Project not found');
+  if (!app.value) {
+    throw new Error('App not found');
   }
   if (!newDomain.value) return;
   const _newDomain = newDomain.value;
   newDomain.value = '';
-  if (project.value.domains.some(domain => domain === _newDomain)) return;
+  if (app.value.domains.some(domain => domain === _newDomain)) return;
 
-  await $fetch(`/api/projects/${project.value.id}`, {
+  await $fetch(`/api/apps/${app.value.id}`, {
     method: 'PATCH',
     body: {
-      domains: [...project.value.domains, _newDomain],
+      domains: [...app.value.domains, _newDomain],
     },
   });
 
   toast.add({
     title: 'Domains updated',
-    description: `The domains for the project "${project.value.name}" were updated.`,
+    description: `The domains for the app "${app.value.name}" were updated.`,
     color: 'success',
   });
 
-  await refreshProject();
+  await refreshApp();
 }
 
 async function saveCron() {
-  if (!project.value) {
-    throw new Error('Project not found');
+  if (!app.value) {
+    throw new Error('App not found');
   }
 
-  await $fetch(`/api/projects/${project.value.id}`, {
+  await $fetch(`/api/apps/${app.value.id}`, {
     method: 'PATCH',
     body: {
-      cron: project.value.cron,
+      cron: app.value.cron,
     },
   });
 
   toast.add({
     title: 'Cron updated',
-    description: `The cron for the project "${project.value.name}" was updated.`,
+    description: `The cron for the app "${app.value.name}" was updated.`,
     color: 'success',
   });
 
-  await refreshProject();
+  await refreshApp();
 }
 
-async function deleteProject() {
-  if (!project.value) {
-    throw new Error('Project not found');
+async function deleteApp() {
+  if (!app.value) {
+    throw new Error('App not found');
   }
 
-  if (prompt('Are you sure you want to delete this project? Type "DELETE" to confirm.') !== 'DELETE') return;
+  if (prompt('Are you sure you want to delete this app? Type "DELETE" to confirm.') !== 'DELETE') return;
 
-  await $fetch(`/api/projects/${project.value.id}`, { method: 'DELETE' });
+  await $fetch(`/api/apps/${app.value.id}`, { method: 'DELETE' });
 
   toast.add({
-    title: 'Project deleted',
-    description: `The project "${project.value.name}" was deleted.`,
+    title: 'App deleted',
+    description: `The app "${app.value.name}" was deleted.`,
   });
 
   await router.push(`/`);

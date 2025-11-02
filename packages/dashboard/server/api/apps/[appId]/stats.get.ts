@@ -1,7 +1,7 @@
 import { useClickHouse } from '~~/server/lib/clickhouse';
 
 export default defineEventHandler(async event => {
-  const project = await requireProject(event);
+  const app = await requireApp(event);
   const clickhouse = await useClickHouse();
 
   const result = (await clickhouse
@@ -10,7 +10,7 @@ export default defineEventHandler(async event => {
 count(*) as requests
 FROM serverless.requests
 WHERE
-function_id = '${project.id}'
+function_id = '${app.id}'
 AND
 timestamp >= toStartOfMonth(now())`,
     )

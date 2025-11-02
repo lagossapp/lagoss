@@ -4,23 +4,23 @@ export const ORGANIZATION_NAME_MIN_LENGTH = 3;
 export const ORGANIZATION_NAME_MAX_LENGTH = 64;
 export const ORGANIZATION_DESCRIPTION_MAX_LENGTH = 256;
 
-export const PROJECT_NAME_MIN_LENGTH = 3;
-export const PROJECT_NAME_MAX_LENGTH = 64;
+export const APP_NAME_MIN_LENGTH = 3;
+export const APP_NAME_MAX_LENGTH = 64;
 
-export const PROJECT_MEMORY = 128; // 128MB
+export const APP_MEMORY = 128; // 128MB
 
-export const MAX_PROJECT_SIZE_MB = 10 * 1024 * 1024; // 10MB
+export const MAX_APP_SIZE_MB = 10 * 1024 * 1024; // 10MB
 export const MAX_ASSET_SIZE_MB = 10 * 1024 * 1024; // 10MB
 
 export const ENVIRONMENT_VARIABLE_KEY_MAX_LENGTH = 64;
 export const ENVIRONMENT_VARIABLE_VALUE_MAX_SIZE = 5 * 1024; // 5KB
-export const ENVIRONMENT_VARIABLES_PER_PROJECT = 100;
+export const ENVIRONMENT_VARIABLES_PER_APP = 100;
 
-export const CUSTOM_DOMAINS_PER_PROJECT = 10;
+export const CUSTOM_DOMAINS_PER_APP = 10;
 
 export const PRESIGNED_URL_EXPIRES_SECONDS = 60 * 60; // 1 hour
 
-export const PROJECT_NAME_REGEX = /^[a-z0-9-]+$/;
+export const APP_NAME_REGEX = /^[a-z0-9-]+$/;
 
 export const REGIONS = {
   'ashburn-us-east': 'Ashburn (us-east)',
@@ -41,6 +41,6 @@ export const REGIONS = {
 
 export type Regions = keyof typeof REGIONS;
 
-export const DEFAULT_PROJECT = `export function handler(request) {
+export const DEFAULT_APP = `export function handler(request) {
   return new Response("Hello World!")
 }`;

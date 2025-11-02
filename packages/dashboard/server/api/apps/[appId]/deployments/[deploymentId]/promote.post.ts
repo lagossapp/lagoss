@@ -5,7 +5,7 @@ import { envStringToObject } from '~~/app/composables/utils';
 
 export default defineEventHandler(async event => {
   const db = await useDB();
-  const project = await requireProject(event);
+  const app = await requireApp(event);
   const redis = await useRedis();
 
   const deploymentId = getRouterParam(event, 'deploymentId');
@@ -20,7 +20,7 @@ export default defineEventHandler(async event => {
     db
       .select()
       .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.projectId, project.id)))
+      .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.appId, app.id)))
       .execute(),
   );
   if (!deployment) {
@@ -34,7 +34,7 @@ export default defineEventHandler(async event => {
     db
       .select()
       .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.projectId, project.id), eq(deploymentSchema.isProduction, 1)))
+      .where(and(eq(deploymentSchema.appId, app.id), eq(deploymentSchema.isProduction, 1)))
       .execute(),
   );
   if (previousProductionDeployment) {
@@ -47,21 +47,21 @@ export default defineEventHandler(async event => {
 
   await db.update(deploymentSchema).set({ isProduction: 1 }).where(eq(deploymentSchema.id, deploymentId)).execute();
 
-  const domains = await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id)).execute();
-  const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.projectId, project.id)).execute();
+  const domains = await db.select().from(domainSchema).where(eq(domainSchema.appId, app.id)).execute();
+  const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.appId, app.id)).execute();
 
   // TODO: promote using deploy twice first with prod=false and then with prod=true
   await redis.publish('promote', {
     previousDeploymentId: previousProductionDeployment?.id || '',
-    functionId: project.id,
-    functionName: project.name,
+    functionId: app.id,
+    functionName: app.name,
     deploymentId: deploymentId,
     domains: domains.map(({ domain }) => domain),
-    memory: project.memory,
-    tickTimeout: project.totalTimeout,
-    totalTimeout: project.totalTimeout,
-    cron: project.cron,
-    cronRegion: project.cronRegion,
+    memory: app.memory,
+    tickTimeout: app.totalTimeout,
+    totalTimeout: app.totalTimeout,
+    cron: app.cron,
+    cronRegion: app.cronRegion,
     env: envStringToObject(env),
     isProduction: true,
     assets: parseAssets(deployment.assets),

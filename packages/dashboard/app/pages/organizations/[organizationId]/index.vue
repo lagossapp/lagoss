@@ -12,30 +12,30 @@
           label="New playground"
           color="blue"
           class="ml-auto"
-          :loading="creatingProject === 'playground'"
-          :disabled="creatingProject === 'normal'"
-          @click="createProject(true)"
+          :loading="creatingApp === 'playground'"
+          :disabled="creatingApp === 'normal'"
+          @click="createApp(true)"
         /> -->
 
         <UButton
           icon="i-ion-plus"
-          label="New project"
-          :loading="creatingProject === 'normal'"
-          :disabled="creatingProject === 'playground'"
-          @click="createProject(false)"
+          label="New app"
+          :loading="creatingApp === 'normal'"
+          :disabled="creatingApp === 'playground'"
+          @click="createApp(false)"
         />
       </div>
 
       <p class="mt-2 flex gap-1">
-        <span class="font-bold text-neutral-500">{{ projects?.length }}</span>
-        <span class="text-neutral-500">projects</span>
+        <span class="font-bold text-neutral-500">{{ apps?.length }}</span>
+        <span class="text-neutral-500">apps</span>
       </p>
 
       <UContainer
-        v-if="projects?.length === 0"
+        v-if="apps?.length === 0"
         class="mt-4 w-full rounded-sm border border-neutral-200 py-16 text-center hover:shadow-sm"
       >
-        <p class="text-neutral-500">No projects yet! Please create a playground or a new project.</p>
+        <p class="text-neutral-500">No apps yet! Please create a playground or a new app.</p>
         <!-- <a href="https://docs.lagoss.io" target="_blank" class="text-blue-500">
           Quickstart guide!
         </a> -->
@@ -43,18 +43,18 @@
 
       <div class="mt-4 grid grid-cols-2 gap-4">
         <router-link
-          v-for="project in projects"
-          :key="project.id"
-          :to="`/organizations/${project.organizationId}/projects/${project.name}`"
+          v-for="app in apps"
+          :key="app.id"
+          :to="`/organizations/${app.organizationId}/apps/${app.name}`"
           class="w-full"
         >
           <Card class="relative flex w-full items-center justify-between" clickable>
             <div>
-              <p>{{ project.name }}</p>
-              <p class="text-xs text-neutral-500">{{ dayjs().to(project.updatedAt) }}</p>
+              <p>{{ app.name }}</p>
+              <p class="text-xs text-neutral-500">{{ dayjs().to(app.updatedAt) }}</p>
             </div>
-            <UBadge class="absolute right-4 top-4" color="primary" variant="soft">{{
-              project.playground ? 'Playground' : 'Project'
+            <UBadge class="absolute top-4 right-4" color="primary" variant="soft">{{
+              app.playground ? 'Playground' : 'App'
             }}</UBadge>
           </Card>
         </router-link>
@@ -72,27 +72,27 @@ const organizationId = computed(() => route.params.organizationId as string);
 
 const { data: organization } = await useFetch(() => `/api/organizations/${organizationId.value}`);
 
-const { data: projects } = await useFetch(() => `/api/organizations/${organizationId.value}/projects`);
+const { data: apps } = await useFetch(() => `/api/organizations/${organizationId.value}/apps`);
 
-const creatingProject = ref<'playground' | 'normal'>();
-async function createProject(playground = false) {
-  creatingProject.value = playground ? 'playground' : 'normal';
+const creatingApp = ref<'playground' | 'normal'>();
+async function createApp(playground = false) {
+  creatingApp.value = playground ? 'playground' : 'normal';
 
   try {
-    const project = await $fetch(`/api/organizations/${organizationId.value}/projects`, {
+    const app = await $fetch(`/api/organizations/${organizationId.value}/apps`, {
       method: 'POST',
       body: {
         playground,
       },
     });
 
-    if (!project) {
-      throw new Error('Failed to create project');
+    if (!app) {
+      throw new Error('Failed to create app');
     }
 
-    await router.push(`/organizations/${project.organizationId}/projects/${project.name}`);
+    await router.push(`/organizations/${app.organizationId}/apps/${app.name}`);
   } finally {
-    creatingProject.value = undefined;
+    creatingApp.value = undefined;
   }
 }
 </script>

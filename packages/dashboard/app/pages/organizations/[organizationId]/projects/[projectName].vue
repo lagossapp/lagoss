@@ -1,20 +1,16 @@
 <template>
   <div class="flex h-full w-full">
     <span v-if="pending">loading ...</span>
-    <NuxtPage v-else-if="project" />
-    <span v-else>Project not found!</span>
+    <NuxtPage v-else-if="app" />
+    <span v-else>App not found!</span>
   </div>
 </template>
 
 <script setup lang="ts">
 const route = useRoute();
-const projectName = computed(() => route.params.projectName as string);
-const {
-  data: project,
-  pending,
-  refresh: refreshProject,
-} = await useFetch(() => `/api/projects/by-name/${projectName.value}`);
+const appName = computed(() => route.params.appName as string);
+const { data: app, pending, refresh: refreshApp } = await useFetch(() => `/api/apps/by-name/${appName.value}`);
 
-provide('project', project);
-provide('refreshProject', refreshProject);
+provide('app', app);
+provide('refreshApp', refreshApp);
 </script>

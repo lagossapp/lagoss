@@ -4,7 +4,7 @@ import { deleteDeployment } from '~~/server/utils/deployment';
 
 export default defineEventHandler(async event => {
   const db = await useDB();
-  const project = await requireProject(event);
+  const app = await requireApp(event);
 
   const deploymentId = getRouterParam(event, 'deploymentId');
   if (!deploymentId) {
@@ -18,7 +18,7 @@ export default defineEventHandler(async event => {
     db
       .select()
       .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.projectId, project.id)))
+      .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.appId, app.id)))
       .execute(),
   );
   if (!deployment) {

@@ -106,17 +106,17 @@
 </template>
 
 <script setup lang="ts">
-import type { Project } from '~~/server/db/schema';
+import type { App } from '~~/server/db/schema';
 import { FREE_PLAN } from '~~/server/lib/plans';
 import type { AnalyticsTimeframe } from '~~/server/lib/types';
 
 const props = defineProps<{
-  project: Project;
+  app: App;
   showGraphs?: boolean;
 }>();
-const project = toRef(props, 'project');
+const app = toRef(props, 'app');
 
-// TODO: use the plan from the project / organization
+// TODO: use the plan from the app / organization
 const plan = computed(() => FREE_PLAN);
 
 function formatBytes(bytes = 0) {
@@ -152,7 +152,7 @@ function formatNumber(number = 0) {
 const timeframe = ref('Last 24 hours');
 
 // TODO: refresh data every 10 seconds
-const { data: usage } = await useFetch(() => `/api/projects/${project.value.id}/usage`, {
+const { data: usage } = await useFetch(() => `/api/apps/${app.value.id}/usage`, {
   query: computed(() => ({ timeframe: timeframe.value })),
 });
 

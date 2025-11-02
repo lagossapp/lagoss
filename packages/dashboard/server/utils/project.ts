@@ -1,123 +1,117 @@
 import type { H3Event } from 'h3';
-import { Organization, organizationMemberSchema, organizationSchema, projectSchema } from '~~/server/db/schema';
+import { Organization, organizationMemberSchema, organizationSchema, appSchema } from '~~/server/db/schema';
 import { and, eq, or, SQL } from 'drizzle-orm';
 import type { Plan } from '~~/server/lib/plans';
-import { PROJECT_NAME_REGEX } from '~~/server/lib/constants';
+import { APP_NAME_REGEX } from '~~/server/lib/constants';
 import { randomName } from '@scaleway/use-random-name';
 
-export async function requireProject(event: H3Event) {
+export async function requireApp(event: H3Event) {
   const db = await useDB();
   const user = await requireUser(event);
 
-  let projectIdSql: SQL | undefined = undefined;
+  let appIdSql: SQL | undefined = undefined;
 
-  const projectId = getRouterParam(event, 'projectId');
-  if (projectId) {
-    projectIdSql = eq(projectSchema.id, projectId);
+  const appId = getRouterParam(event, 'appId');
+  if (appId) {
+    appIdSql = eq(appSchema.id, appId);
   }
 
-  const projectName = getRouterParam(event, 'projectName');
-  if (projectName) {
-    projectIdSql = eq(projectSchema.name, projectName);
+  const appName = getRouterParam(event, 'appName');
+  if (appName) {
+    appIdSql = eq(appSchema.name, appName);
   }
 
-  if (!projectIdSql) {
+  if (!appIdSql) {
     throw createError({
-      message: 'Missing projectId parameter',
+      message: 'Missing appId parameter',
       status: 400,
     });
   }
 
-  const project = await getFirst(
+  const app = await getFirst(
     db
       .select()
-      .from(projectSchema)
-      .leftJoin(organizationSchema, eq(projectSchema.organizationId, organizationSchema.id))
-      .leftJoin(organizationMemberSchema, eq(projectSchema.organizationId, organizationMemberSchema.organizationId))
-      .where(
-        and(projectIdSql, or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id))),
-      )
+      .from(appSchema)
+      .leftJoin(organizationSchema, eq(appSchema.organizationId, organizationSchema.id))
+      .leftJoin(organizationMemberSchema, eq(appSchema.organizationId, organizationMemberSchema.organizationId))
+      .where(and(appIdSql, or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id))))
       .execute(),
   );
 
-  if (!project) {
+  if (!app) {
     throw createError({
-      message: 'Project not found',
+      message: 'App not found',
       status: 404,
     });
   }
 
-  return project.Function;
+  return app.Function;
 }
 
-async function isProjectNameUnique(name: string): Promise<boolean> {
+async function isAppNameUnique(name: string): Promise<boolean> {
   const db = await useDB();
-  const result = await getFirst(db.select().from(projectSchema).where(eq(projectSchema.name, name)).execute());
+  const result = await getFirst(db.select().from(appSchema).where(eq(appSchema.name, name)).execute());
 
   return result === undefined;
 }
 
-function isProjectNameAllowed(name: string): boolean {
-  return PROJECT_NAME_REGEX.test(name);
+function isAppNameAllowed(name: string): boolean {
+  return APP_NAME_REGEX.test(name);
 }
 
-function isProjectNameBlacklisted(name: string): boolean {
+function isAppNameBlacklisted(name: string): boolean {
   const config = useRuntimeConfig();
-  return config.projects.blacklistedNames.includes(name.toLowerCase());
+  return config.apps.blacklistedNames.includes(name.toLowerCase());
 }
 
-export async function findUniqueProjectName() {
+export async function findUniqueAppName() {
   const name = randomName();
 
-  if (!(await isProjectNameUnique(name))) {
-    return findUniqueProjectName();
+  if (!(await isAppNameUnique(name))) {
+    return findUniqueAppName();
   }
 
   return name;
 }
 
-export async function checkCanCreateProject({
-  projectName,
+export async function checkCanCreateApp({
+  appName,
   organization,
   plan,
 }: {
-  projectName: string;
+  appName: string;
   organization: Organization;
   plan: Plan;
 }) {
   const db = await useDB();
 
-  if (!(await isProjectNameUnique(projectName))) {
+  if (!(await isAppNameUnique(appName))) {
     throw createError({
       statusCode: 400,
-      message: 'A project with the same name already exists',
+      message: 'An app with the same name already exists',
     });
   }
 
-  if (!isProjectNameAllowed(projectName)) {
+  if (!isAppNameAllowed(appName)) {
     throw createError({
       statusCode: 400,
-      message: 'Project name must only contain lowercase alphanumeric characters and dashes',
+      message: 'App name must only contain lowercase alphanumeric characters and dashes',
     });
   }
 
-  if (isProjectNameBlacklisted(projectName)) {
+  if (isAppNameBlacklisted(appName)) {
     throw createError({
       statusCode: 400,
-      message: `Project name "${projectName}" is not allowed`,
+      message: `App name "${appName}" is not allowed`,
     });
   }
 
-  const projects = await db
-    .select()
-    .from(projectSchema)
-    .where(eq(projectSchema.organizationId, organization.id))
-    .execute();
+  const apps = await db.select().from(appSchema).where(eq(appSchema.organizationId, organization.id)).execute();
 
-  if (projects.length >= plan.maxProjects) {
+  if (apps.length >= plan.maxApps) {
     throw createError({
       statusCode: 400,
-      message: `You have reached the maximum number of projects allowed for your plan`,
+      message: `You have reached the maximum number of apps allowed for your plan`,
     });
   }
 }

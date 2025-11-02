@@ -1,18 +1,18 @@
-import type { Project } from '~~/server/db/schema';
+import type { App } from '~~/server/db/schema';
 
-export function useProject() {
-  const project = inject<Ref<Project>>('project');
-  if (!project) {
-    throw new Error('useProject() is called without provider.');
+export function useApp() {
+  const app = inject<Ref<App>>('app');
+  if (!app) {
+    throw new Error('useApp() is called without provider.');
   }
 
-  const refreshProject = inject<() => Promise<void>>('refreshProject');
-  if (!refreshProject) {
-    throw new Error('useProject() is called without provider.');
+  const refreshApp = inject<() => Promise<void>>('refreshApp');
+  if (!refreshApp) {
+    throw new Error('useApp() is called without provider.');
   }
 
   return {
-    project,
-    refreshProject,
+    app,
+    refreshApp,
   };
 }

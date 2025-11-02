@@ -1,7 +1,7 @@
-import { organizationMemberSchema, organizationSchema, projectSchema } from '~~/server/db/schema';
+import { organizationMemberSchema, organizationSchema, appSchema } from '~~/server/db/schema';
 import { and, eq, or } from 'drizzle-orm';
 import { z } from 'zod';
-import { PROJECT_MEMORY } from '~~/server/lib/constants';
+import { APP_MEMORY } from '~~/server/lib/constants';
 import { getPlanOfOrganization } from '~~/server/lib/plans';
 
 export default defineEventHandler(async event => {
@@ -53,18 +53,18 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const name = input.name || (await findUniqueProjectName());
+  const name = input.name || (await findUniqueAppName());
 
   const plan = getPlanOfOrganization(organization);
 
-  await checkCanCreateProject({
-    projectName: name,
+  await checkCanCreateApp({
+    appName: name,
     organization,
     plan,
   });
 
   const res = await db
-    .insert(projectSchema)
+    .insert(appSchema)
     .values({
       organizationId,
       // playground: input.playground, // TODO: set playground
@@ -73,23 +73,23 @@ export default defineEventHandler(async event => {
       cronRegion: 'us-east-1', // TODO: set default region
       createdAt: new Date(),
       updatedAt: new Date(),
-      memory: PROJECT_MEMORY,
+      memory: APP_MEMORY,
       tickTimeout: plan.tickTimeout,
       totalTimeout: plan.totalTimeout,
     })
     .$returningId();
 
-  const projectId = res.at(0)?.id;
-  if (!projectId) {
+  const appId = res.at(0)?.id;
+  if (!appId) {
     throw createError({
-      message: 'Failed to create project',
+      message: 'Failed to create app',
       statusCode: 500,
     });
   }
 
-  const project = await getFirst(db.select().from(projectSchema).where(eq(projectSchema.id, projectId)).execute());
+  const app = await getFirst(db.select().from(appSchema).where(eq(appSchema.id, appId)).execute());
 
-  // TODO: create first deployment (at least for playground projects) with default code
+  // TODO: create first deployment (at least for playground apps) with default code
 
-  return project;
+  return app;
 });

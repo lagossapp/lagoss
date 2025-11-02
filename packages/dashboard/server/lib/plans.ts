@@ -3,32 +3,32 @@ import type { Organization } from '../db/schema';
 
 export type Plan = {
   type: 'free' | 'pro';
-  maxProjects: number;
+  maxApps: number;
   freeRequests: number;
   tickTimeout: number;
   totalTimeout: number;
   organizationMembers: number;
-  maxAssetsPerProject: number;
+  maxAssetsPerApp: number;
 };
 
 export const FREE_PLAN: Plan = {
   type: 'free',
-  maxProjects: 10,
+  maxApps: 10,
   freeRequests: 3000000,
   tickTimeout: 200,
   totalTimeout: 5000,
   organizationMembers: 1,
-  maxAssetsPerProject: 100,
+  maxAssetsPerApp: 100,
 };
 
 export const PRO_PLAN: Plan = {
   type: 'pro',
-  maxProjects: 50,
+  maxApps: 50,
   freeRequests: 5000000,
   tickTimeout: 500,
   totalTimeout: 30000,
   organizationMembers: 10,
-  maxAssetsPerProject: 1000,
+  maxAssetsPerApp: 1000,
 };
 
 export function getPlanOfOrganization(organization: Organization) {

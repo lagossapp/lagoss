@@ -1,7 +1,7 @@
 import { useClickHouse } from '~~/server/lib/clickhouse';
 
 export default defineEventHandler(async event => {
-  const project = await requireProject(event);
+  const app = await requireApp(event);
   const clickhouse = await useClickHouse();
 
   const { level, timeframe } = getQuery<{ level?: string; timeframe?: string }>(event);
@@ -14,7 +14,7 @@ message,
 timestamp
 FROM serverless.logs
 WHERE
-function_id = '${project.id}'
+function_id = '${app.id}'
 AND
 timestamp >= toDateTime(now() - INTERVAL ${
         timeframe === 'Last hour' ? '1 HOUR' : timeframe === 'Last 24 hours' ? '1 DAY' : '1 WEEK'

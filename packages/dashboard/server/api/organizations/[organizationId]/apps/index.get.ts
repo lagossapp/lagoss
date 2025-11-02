@@ -1,4 +1,4 @@
-import { organizationMemberSchema, organizationSchema, projectSchema } from '~~/server/db/schema';
+import { organizationMemberSchema, organizationSchema, appSchema } from '~~/server/db/schema';
 import { eq, and, or } from 'drizzle-orm';
 
 export default defineEventHandler(async event => {
@@ -13,18 +13,18 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const projects = await db
+  const apps = await db
     .select()
-    .from(projectSchema)
-    .leftJoin(organizationSchema, eq(projectSchema.organizationId, organizationSchema.id))
-    .leftJoin(organizationMemberSchema, eq(projectSchema.organizationId, organizationMemberSchema.organizationId))
+    .from(appSchema)
+    .leftJoin(organizationSchema, eq(appSchema.organizationId, organizationSchema.id))
+    .leftJoin(organizationMemberSchema, eq(appSchema.organizationId, organizationMemberSchema.organizationId))
     .where(
       and(
-        eq(projectSchema.organizationId, organizationId),
+        eq(appSchema.organizationId, organizationId),
         or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id)),
       ),
     )
     .execute();
 
-  return projects.map(project => project.Function);
+  return apps.map(app => app.Function);
 });

@@ -1,4 +1,4 @@
-import { deploymentSchema, domainSchema, envVariableSchema, projectSchema } from '~~/server/db/schema';
+import { deploymentSchema, domainSchema, envVariableSchema, appSchema } from '~~/server/db/schema';
 import { eq, isNull, or } from 'drizzle-orm';
 
 export default defineEventHandler(async event => {
@@ -25,28 +25,28 @@ export default defineEventHandler(async event => {
   const deployments = await db
     .select()
     .from(deploymentSchema)
-    .leftJoin(projectSchema, eq(deploymentSchema.projectId, projectSchema.id))
-    .where(cronRegion ? or(isNull(projectSchema.cron), eq(projectSchema.cronRegion, cronRegion)) : undefined);
+    .leftJoin(appSchema, eq(deploymentSchema.appId, appSchema.id))
+    .where(cronRegion ? or(isNull(appSchema.cron), eq(appSchema.cronRegion, cronRegion)) : undefined);
 
   return Promise.all(
-    deployments.map(async ({ Deployment: deployment, Function: project }) => {
-      if (!project) {
-        throw new Error(`Project ${deployment.projectId} not found`);
+    deployments.map(async ({ Deployment: deployment, Function: app }) => {
+      if (!app) {
+        throw new Error(`App ${deployment.appId} not found`);
       }
 
-      const domains = await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id));
-      const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.projectId, project.id));
+      const domains = await db.select().from(domainSchema).where(eq(domainSchema.appId, app.id));
+      const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.appId, app.id));
 
       return {
         id: deployment.id,
         isProduction: deployment.isProduction === 1,
         assets: parseAssets(deployment.assets),
-        functionId: project.id,
-        functionName: project.name,
-        memory: project.memory,
-        tickTimeout: project.tickTimeout,
-        totalTimeout: project.totalTimeout,
-        cron: project.cron,
+        functionId: app.id,
+        functionName: app.name,
+        memory: app.memory,
+        tickTimeout: app.tickTimeout,
+        totalTimeout: app.totalTimeout,
+        cron: app.cron,
         domains: domains.map(d => d.domain),
         env: env.reduce(
           (acc, e) => {

@@ -3,13 +3,9 @@ import { deploymentSchema } from '~~/server/db/schema';
 
 export default defineEventHandler(async event => {
   const db = await useDB();
-  const project = await requireProject(event);
+  const app = await requireApp(event);
 
-  const deployments = await db
-    .select()
-    .from(deploymentSchema)
-    .where(eq(deploymentSchema.projectId, project.id))
-    .execute();
+  const deployments = await db.select().from(deploymentSchema).where(eq(deploymentSchema.appId, app.id)).execute();
 
   return deployments.map(deployment => ({
     ...deployment,

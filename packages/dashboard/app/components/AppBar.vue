@@ -56,7 +56,7 @@
     </UPopover>
 
     <template v-if="selectedOrganization">
-      <TabButton :to="`/organizations/${selectedOrganization.id}`" label="Projects" />
+      <TabButton :to="`/organizations/${selectedOrganization.id}`" label="Apps" />
       <TabButton :to="`/organizations/${selectedOrganization.id}/settings`" label="Settings" />
     </template>
 

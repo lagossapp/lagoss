@@ -1,7 +1,7 @@
 import { useClickHouse } from '~~/server/lib/clickhouse';
 
 export default defineEventHandler(async event => {
-  const project = await requireProject(event);
+  const app = await requireApp(event);
   const clickhouse = await useClickHouse();
 
   const { timeframe } = getQuery<{ level?: string; timeframe?: string }>(event);
@@ -18,7 +18,7 @@ export default defineEventHandler(async event => {
   ${groupBy}(timestamp) AS time
 FROM serverless.requests
 WHERE
-  function_id = '${project.id}'
+  function_id = '${app.id}'
 AND
   timestamp >= now() - INTERVAL  ${timeframe === 'Last 24 hours' ? 1 : timeframe === 'Last 7 days' ? 7 : 30} DAY
 GROUP BY time`,

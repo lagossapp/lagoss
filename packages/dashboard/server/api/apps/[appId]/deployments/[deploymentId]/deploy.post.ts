@@ -6,7 +6,7 @@ import { envStringToObject, getFullCurrentDomain } from '~~/app/composables/util
 
 export default defineEventHandler(async event => {
   const db = await useDB();
-  const project = await requireProject(event);
+  const app = await requireApp(event);
   const redis = await useRedis();
 
   const deploymentId = getRouterParam(event, 'deploymentId');
@@ -21,7 +21,7 @@ export default defineEventHandler(async event => {
     db
       .select()
       .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.projectId, project.id)))
+      .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.appId, app.id)))
       .execute(),
   );
   if (!deployment) {
@@ -41,7 +41,7 @@ export default defineEventHandler(async event => {
     db
       .select()
       .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.projectId, project.id), eq(deploymentSchema.isProduction, 1)))
+      .where(and(eq(deploymentSchema.appId, app.id), eq(deploymentSchema.isProduction, 1)))
       .execute(),
   );
 
@@ -49,7 +49,7 @@ export default defineEventHandler(async event => {
     await db
       .update(deploymentSchema)
       .set({ isProduction: 0 })
-      .where(eq(deploymentSchema.projectId, deployment.projectId))
+      .where(eq(deploymentSchema.appId, deployment.appId))
       .execute();
   }
 
@@ -61,19 +61,19 @@ export default defineEventHandler(async event => {
     .where(eq(deploymentSchema.id, deploymentId))
     .execute();
 
-  const domains = await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id)).execute();
-  const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.projectId, project.id)).execute();
+  const domains = await db.select().from(domainSchema).where(eq(domainSchema.appId, app.id)).execute();
+  const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.appId, app.id)).execute();
 
   await redis.publish('deploy', {
-    functionId: project.id, // TODO: rename to projectId
-    functionName: project.name, // TODO: rename to projectName
+    functionId: app.id, // TODO: rename to appId
+    functionName: app.name, // TODO: rename to appName
     deploymentId: deployment.id,
     domains: domains.map(({ domain }) => domain),
-    memory: project.memory,
-    tickTimeout: project.tickTimeout,
-    totalTimeout: project.totalTimeout,
-    cron: project.cron,
-    cronRegion: project.cronRegion,
+    memory: app.memory,
+    tickTimeout: app.tickTimeout,
+    totalTimeout: app.totalTimeout,
+    cron: app.cron,
+    cronRegion: app.cronRegion,
     env: envStringToObject(env),
     isProduction: deployment.isProduction === 1,
     assets: parseAssets(deployment.assets),
@@ -81,7 +81,7 @@ export default defineEventHandler(async event => {
 
   return {
     url: getFullCurrentDomain({
-      name: deployment.isProduction ? project.name : deployment.id,
+      name: deployment.isProduction ? app.name : deployment.id,
     }),
   };
 });

@@ -11,7 +11,7 @@ import { getPlanOfOrganization } from '~~/server/lib/plans';
 export default defineEventHandler(async event => {
   const db = await useDB();
   const user = await requireUser(event);
-  const project = await requireProject(event);
+  const app = await requireApp(event);
   const s3 = await useS3();
 
   const input = await z
@@ -27,7 +27,7 @@ export default defineEventHandler(async event => {
     .parseAsync(await readBody(event));
 
   const organization = await getFirst(
-    db.select().from(organizationSchema).where(eq(organizationSchema.id, project.organizationId)).execute(),
+    db.select().from(organizationSchema).where(eq(organizationSchema.id, app.organizationId)).execute(),
   );
   if (!organization) {
     throw createError({
@@ -38,10 +38,10 @@ export default defineEventHandler(async event => {
 
   const plan = getPlanOfOrganization(organization);
 
-  if (input.assets.length > plan.maxAssetsPerProject) {
+  if (input.assets.length > plan.maxAssetsPerApp) {
     throw createError({
       status: 400,
-      message: `You can only deploy up to ${plan.maxAssetsPerProject} assets.`,
+      message: `You can only deploy up to ${plan.maxAssetsPerApp} assets.`,
     });
   }
 
@@ -50,7 +50,7 @@ export default defineEventHandler(async event => {
     .insert(deploymentSchema)
     .values({
       id: deploymentId,
-      projectId: project.id,
+      appId: app.id,
       createdAt: new Date(),
       updatedAt: new Date(),
       triggerer: user.email,

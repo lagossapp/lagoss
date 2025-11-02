@@ -34,13 +34,13 @@ async function getDeploymentCode(deploymentId: string) {
 
 export default defineEventHandler(async event => {
   const db = await useDB();
-  const project = await requireProject(event);
+  const app = await requireApp(event);
 
   const deployment = await getFirst(
     db
       .select()
       .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.projectId, project.id), eq(deploymentSchema.isProduction, 1)))
+      .where(and(eq(deploymentSchema.appId, app.id), eq(deploymentSchema.isProduction, 1)))
       .execute(),
   );
 

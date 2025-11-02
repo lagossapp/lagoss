@@ -1,6 +1,6 @@
 <template>
-  <div v-if="project" class="w-full">
-    <ProjectHeader :project="project" />
+  <div v-if="app" class="w-full">
+    <AppHeader :app="app" />
 
     <div class="mx-auto flex max-w-4xl flex-col gap-4">
       <UContainer
@@ -52,11 +52,11 @@ import type { DropdownMenuItem } from '@nuxt/ui';
 import { dayjs } from '~~/lib/dayjs';
 import type { Deployment } from '~~/server/db/schema';
 
-const { project } = useProject();
+const { app } = useApp();
 const toast = useToast();
 
 const { data: deployments, refresh: refreshDeployments } = await useFetch(
-  () => `/api/projects/${project.value.id}/deployments`,
+  () => `/api/apps/${app.value.id}/deployments`,
 );
 
 const promotingDeploymentId = ref<string>();
@@ -66,7 +66,7 @@ async function promoteDeployment(deployment: Deployment) {
 
   promotingDeploymentId.value = deployment.id;
   try {
-    await $fetch(`/api/projects/${project.value.id}/deployments/${deployment.id}/deploy`, {
+    await $fetch(`/api/apps/${app.value.id}/deployments/${deployment.id}/deploy`, {
       method: 'POST',
       body: {
         isProduction: true,
@@ -86,7 +86,7 @@ async function deleteDeployment(deployment: Deployment) {
 
   deletingDeploymentId.value = deployment.id;
   try {
-    await $fetch(`/api/projects/${project.value.id}/deployments/${deployment.id}`, {
+    await $fetch(`/api/apps/${app.value.id}/deployments/${deployment.id}`, {
       method: 'DELETE',
     });
     await refreshDeployments();

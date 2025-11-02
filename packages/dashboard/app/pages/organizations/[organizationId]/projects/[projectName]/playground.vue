@@ -1,5 +1,5 @@
 <template>
-  <div v-if="project" class="flex h-screen w-screen">
+  <div v-if="app" class="flex h-screen w-screen">
     <div class="w-1/2">
       <header class="flex h-16 items-center justify-between border-b border-neutral-200 px-4 py-2">
         <div class="flex items-center gap-4">
@@ -9,10 +9,10 @@
           </router-link>
 
           <router-link
-            :to="`/organizations/${project.organizationId}/projects/${project.name}`"
+            :to="`/organizations/${app.organizationId}/apps/${app.name}`"
             class="font-bold hover:underline"
-            title="Back to project"
-            >{{ project.name }}</router-link
+            title="Back to app"
+            >{{ app.name }}</router-link
           >
         </div>
 
@@ -45,7 +45,7 @@
           </button>
         </div>
 
-        <ProjectLogs :project="project" />
+        <AppLogs :app="app" />
       </div>
     </div>
     <div class="relative h-full w-1/2 border-l border-neutral-300/70">
@@ -79,7 +79,7 @@ definePageMeta({
 
 const iframeEl = ref<HTMLIFrameElement>();
 
-const { project } = useProject();
+const { app } = useApp();
 
 const code = ref('');
 const changed = ref(false);
@@ -87,7 +87,7 @@ watch(code, () => {
   changed.value = true;
 });
 
-const { data: codeFromDB } = await useFetch(() => `/api/projects/${project.value.id}/code`);
+const { data: codeFromDB } = await useFetch(() => `/api/apps/${app.value.id}/code`);
 watch(
   codeFromDB,
   _code => {
@@ -111,14 +111,14 @@ const isDeploying = ref(false);
 async function saveAndDeploy() {
   isDeploying.value = true;
 
-  if (!project.value) return;
+  if (!app.value) return;
 
   try {
     // create deployment
-    const deployment = await $fetch(`/api/projects/${project.value.id}/deployments`, {
+    const deployment = await $fetch(`/api/apps/${app.value.id}/deployments`, {
       method: 'POST',
       body: {
-        projectId: project.value.id,
+        appId: app.value.id,
         functionSize: new TextEncoder().encode(code.value).length,
         assets: [],
       },
@@ -137,7 +137,7 @@ async function saveAndDeploy() {
     });
 
     // deploy
-    await $fetch(`/api/projects/${project.value.id}/deployments/${deployment.deploymentId}/deploy`, {
+    await $fetch(`/api/apps/${app.value.id}/deployments/${deployment.deploymentId}/deploy`, {
       method: 'POST',
       body: { isProduction: true },
     });
@@ -150,5 +150,5 @@ async function saveAndDeploy() {
   }
 }
 
-const url = computed(() => project.value && getFullCurrentDomain({ name: project.value.name }));
+const url = computed(() => app.value && getFullCurrentDomain({ name: app.value.name }));
 </script>

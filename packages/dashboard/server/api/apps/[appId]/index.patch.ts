@@ -1,10 +1,10 @@
-import { domainSchema, envVariableSchema, projectSchema } from '~~/server/db/schema';
+import { domainSchema, envVariableSchema, appSchema } from '~~/server/db/schema';
 import { eq, and, notInArray } from 'drizzle-orm';
 import { z } from 'zod';
 
 export default defineEventHandler(async event => {
   const db = await useDB();
-  const project = await requireProject(event);
+  const app = await requireApp(event);
 
   const input = await z
     .object({
@@ -24,22 +24,22 @@ export default defineEventHandler(async event => {
 
   if (input.name || input.cron) {
     await db
-      .update(projectSchema)
+      .update(appSchema)
       .set({
-        name: input.name || project.name,
-        cron: input.cron || project.cron,
+        name: input.name || app.name,
+        cron: input.cron || app.cron,
       })
-      .where(eq(projectSchema.id, project.id))
+      .where(eq(appSchema.id, app.id))
       .execute();
   }
 
   if (input.domains && input.domains.length > 0) {
     await db
       .delete(domainSchema)
-      .where(and(eq(domainSchema.projectId, project.id), notInArray(domainSchema.domain, input.domains)))
+      .where(and(eq(domainSchema.appId, app.id), notInArray(domainSchema.domain, input.domains)))
       .execute();
 
-    const domains = await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id)).execute();
+    const domains = await db.select().from(domainSchema).where(eq(domainSchema.appId, app.id)).execute();
     await Promise.all(
       input.domains
         .filter(domain => !domains.find(({ domain: existingDomain }) => existingDomain === domain))
@@ -48,7 +48,7 @@ export default defineEventHandler(async event => {
             .insert(domainSchema)
             .values({
               domain,
-              projectId: project.id,
+              appId: app.id,
               createdAt: new Date(),
               updatedAt: new Date(),
             })
@@ -64,7 +64,7 @@ export default defineEventHandler(async event => {
       .delete(envVariableSchema)
       .where(
         and(
-          eq(envVariableSchema.projectId, project.id),
+          eq(envVariableSchema.appId, app.id),
           notInArray(
             envVariableSchema.key,
             input.envVariables.map(({ key }) => key.toLocaleUpperCase()),
@@ -73,11 +73,7 @@ export default defineEventHandler(async event => {
       )
       .execute();
 
-    const envVariables = await db
-      .select()
-      .from(envVariableSchema)
-      .where(eq(envVariableSchema.projectId, project.id))
-      .execute();
+    const envVariables = await db.select().from(envVariableSchema).where(eq(envVariableSchema.appId, app.id)).execute();
 
     const changes: Promise<unknown>[] = [];
     for await (const { key, value } of input.envVariables) {
@@ -98,7 +94,7 @@ export default defineEventHandler(async event => {
             .values({
               key: key.toLocaleUpperCase(),
               value,
-              projectId: project.id,
+              appId: app.id,
               createdAt: new Date(),
               updatedAt: new Date(),
             })
@@ -111,12 +107,8 @@ export default defineEventHandler(async event => {
     // TODO: update deployments
   }
 
-  const domains = await db.select().from(domainSchema).where(eq(domainSchema.projectId, project.id)).execute();
-  const envVariables = await db
-    .select()
-    .from(envVariableSchema)
-    .where(eq(envVariableSchema.projectId, project.id))
-    .execute();
+  const domains = await db.select().from(domainSchema).where(eq(domainSchema.appId, app.id)).execute();
+  const envVariables = await db.select().from(envVariableSchema).where(eq(envVariableSchema.appId, app.id)).execute();
 
-  return { ...project, envVariables, domains };
+  return { ...app, envVariables, domains };
 });

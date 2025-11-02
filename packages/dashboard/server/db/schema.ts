@@ -17,9 +17,9 @@ export const deploymentSchema = mysqlTable('Deployment', {
   id: varchar('id', { length: 191 }).notNull().primaryKey().$defaultFn(generateId),
   createdAt: datetime('createdAt').notNull(),
   updatedAt: datetime('updatedAt').notNull(),
-  projectId: varchar('functionId', { length: 191 })
+  appId: varchar('functionId', { length: 191 })
     .notNull()
-    .references(() => projectSchema.id),
+    .references(() => appSchema.id),
   triggerer: varchar('triggerer', { length: 191 }).default('Lagoss'),
   commit: varchar('commit', { length: 191 }),
   isProduction: tinyint('isProduction').default(0).notNull(),
@@ -32,9 +32,9 @@ export const domainSchema = mysqlTable('Domain', {
   createdAt: datetime('createdAt').notNull(),
   updatedAt: datetime('updatedAt').notNull(),
   domain: varchar('domain', { length: 191 }).notNull(),
-  projectId: varchar('functionId', { length: 191 })
+  appId: varchar('functionId', { length: 191 })
     .notNull()
-    .references(() => projectSchema.id),
+    .references(() => appSchema.id),
 });
 export type Domain = InferSelectModel<typeof domainSchema>;
 
@@ -44,14 +44,14 @@ export const envVariableSchema = mysqlTable('EnvVariable', {
   updatedAt: datetime('updatedAt').notNull(),
   key: varchar('key', { length: 64 }).notNull(),
   value: varchar('value', { length: 5120 }).notNull(),
-  projectId: varchar('functionId', { length: 191 })
+  appId: varchar('functionId', { length: 191 })
     .notNull()
-    .references(() => projectSchema.id),
+    .references(() => appSchema.id),
 });
 export type EnvVariable = InferSelectModel<typeof envVariableSchema>;
 
 // TODO: rename to app
-export const projectSchema = mysqlTable('Function', {
+export const appSchema = mysqlTable('Function', {
   id: varchar('id', { length: 191 }).notNull().primaryKey().$defaultFn(generateId),
   createdAt: datetime('createdAt').notNull(),
   updatedAt: datetime('updatedAt').notNull(),
@@ -66,7 +66,7 @@ export const projectSchema = mysqlTable('Function', {
   totalTimeout: int('totalTimeout').notNull().default(5000),
   // playground: tinyint('playground').notNull().default(0),
 });
-export type Project = InferSelectModel<typeof projectSchema>;
+export type App = InferSelectModel<typeof appSchema>;
 
 export const organizationSchema = mysqlTable('Organization', {
   id: varchar('id', { length: 191 }).notNull().primaryKey().$defaultFn(generateId),
