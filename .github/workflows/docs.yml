@@ -26,6 +26,7 @@ jobs:
         with:
           lagoss_token: ${{ secrets.LAGOSS_TOKEN }}
           app_id_or_name: docs
+          prod: true
       - name: Log deployment URL
         run: |
           url=$(grep -o 'https://[^[:space:]]*' lagoss.output)
