@@ -36,9 +36,9 @@ export default defineNuxtConfig({
       password: '',
       database: 'serverless',
     },
-    projects: {
-      blacklistedNames: process.env.BLACKLISTED_PROJECT_NAMES
-        ? process.env.BLACKLISTED_PROJECT_NAMES.split(',')
+    apps: {
+      blacklistedNames: process.env.BLACKLISTED_APP_NAMES
+        ? process.env.BLACKLISTED_APP_NAMES.split(',')
         : ['lagoss', 'api', 'app', 'console', 'dash', 'www', 'docs', 'status', 's3', 'clickhouse'],
     },
     serverless: {
@@ -80,7 +80,7 @@ export default defineNuxtConfig({
         password: 'lagoss',
         database: 'serverless',
       },
-      projects: {
+      apps: {
         blacklistedNames: [],
       },
       serverless: {

@@ -235,7 +235,7 @@ pub async fn create_deployment(
     } = client
         .post::<CreateDeploymentRequest, CreateDeploymentResponse>(
             &format!(
-                "/api/projects/{}/deployments",
+                "/api/apps/{}/deployments",
                 application_config.application_id
             ),
             CreateDeploymentRequest {
@@ -279,7 +279,7 @@ pub async fn create_deployment(
         let response = client
             .post::<(), PromoteDeploymentResponse>(
                 &format!(
-                    "/api/projects/{}/deployments/{}/promote",
+                    "/api/apps/{}/deployments/{}/promote",
                     application_config.application_id, deployment_id
                 ),
                 (),
@@ -295,7 +295,7 @@ pub async fn create_deployment(
 
     let deployment = client
         .get::<GetDeploymentResponse>(&format!(
-            "/api/projects/{}/deployments/{}",
+            "/api/apps/{}/deployments/{}",
             application_config.application_id, deployment_id
         ))
         .await?;

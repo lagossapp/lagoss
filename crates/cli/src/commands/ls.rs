@@ -38,7 +38,7 @@ pub async fn ls(
 
     let deployments = ApiClient::new(config.clone())
         .get::<DeploymentsResponse>(&format!(
-            "/api/projects/{}/deployments",
+            "/api/apps/{}/deployments",
             application_config.application_id
         ))
         .await?;

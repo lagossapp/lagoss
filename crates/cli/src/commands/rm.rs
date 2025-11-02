@@ -45,7 +45,7 @@ pub async fn rm(
             let res = ApiClient::new(config.clone())
                 .delete::<DeleteApplicationResponse>(
                 &format!(
-                        "/api/projects/{}",
+                        "/api/apps/{}",
                         application_config.application_id,
                     ),
                 )

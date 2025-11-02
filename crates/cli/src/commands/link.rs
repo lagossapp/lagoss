@@ -41,7 +41,7 @@ pub async fn link(
 
             let applications = client
                 .get::<ApplicationsResponse>(&format!(
-                    "/api/organizations/{}/projects",
+                    "/api/organizations/{}/apps",
                     organization.id
                 ))
                 .await?;

@@ -6,7 +6,7 @@
   </picture>
   <h1 align="center">Lagoss</h1>
   <p align="center">
-    Deploy Serverless Functions at the Edge
+    Deploy Serverless Apps at the Edge
     <br />
     <br />
     <a href="https://github.com/lagossapp/lagoss/actions/workflows/wpt.yml" alt="web-platform-tests"><img src="https://wpt.lagoss.com" /></a>
@@ -19,7 +19,7 @@
 
 ## About
 
-Lagoss is a fork of [Lagon](https://github.com/lagonapp/lagon) an open-source runtime and platform that allows developers to run TypeScript and JavaScript Serverless Functions.
+Lagoss is a fork of [Lagon](https://github.com/lagonapp/lagon) an open-source runtime and platform that allows developers to run TypeScript and JavaScript Serverless Apps.
 
 > [!NOTE]
 > The project was forked from [Lagon](https://github.com/lagonapp/lagon) with the
@@ -30,13 +30,12 @@ Lagoss is a fork of [Lagon](https://github.com/lagonapp/lagon) an open-source ru
 
 ## Packages
 
-- **[cli](./crates/cli)** CLI to manage Functions
+- **[cli](./crates/cli)** CLI to manage Apps
 - **[dashboard](./packages/dashboard)** Dashboard and API
 - **[docs](./packages/docs)** Documentation website
 - **[js-runtime](./packages/js-runtime)** JavaScript code for the Runtime, containing the Web APIs
 - **[runtime](./crates/runtime)** Rust JavaScript Runtime, using V8 Isolates
-- **[serverless](./crates/serverless)** HTTP entrypoint for Functions, using the Runtime and exporting metrics
-- **[ui](./packages/ui)** Design system
+- **[serverless](./crates/serverless)** HTTP entrypoint for Apps, using the Runtime and exporting metrics
 - **[wpt-runner](./crates/wpt-runner)** Run web-platform-tests on Lagoss
 
 ## Features
@@ -45,7 +44,7 @@ Lagoss is a fork of [Lagon](https://github.com/lagonapp/lagon) an open-source ru
 - Native Web APIs like `Request`, `Response`...
 - 100% open-source
 - Deploy APIs, SSR(ed) websites, Webhooks endpoints, Cron jobs...
-- CLI to manage Functions and develop locally
+- CLI to manage Apps and develop locally
 - Deploy at the Edge using the Cloud version, or self-host it
 
 ## Contributing

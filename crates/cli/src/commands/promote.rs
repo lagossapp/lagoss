@@ -45,7 +45,7 @@ pub async fn promote(
             let res = ApiClient::new(config.clone())
                 .post::<(), PromoteDeploymentResponse>(
                     &format!(
-                        "/api/projects/{}/deployments/{}/promote",
+                        "/api/apps/{}/deployments/{}/promote",
                         application_config.application_id, deployment_id
                     ),
                     (),

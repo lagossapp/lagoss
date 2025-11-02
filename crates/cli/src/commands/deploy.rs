@@ -114,7 +114,7 @@ async fn get_application_config(
         true => {
             let applications = client
                 .get::<ApplicationsResponse>(&format!(
-                    "/api/organizations/{}/projects",
+                    "/api/organizations/{}/apps",
                     organization.id
                 ))
                 .await?;
@@ -141,7 +141,7 @@ async fn get_application_config(
 
             let application = client
                 .post::<CreateApplicationRequest, CreateApplicationResponse>(
-                    &format!("/api/organizations/{}/projects", organization.id),
+                    &format!("/api/organizations/{}/apps", organization.id),
                     CreateApplicationRequest {
                         name,
                         domains: Vec::new(),
