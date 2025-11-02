@@ -45,7 +45,7 @@ pub async fn undeploy(
 
             client
                 .delete::<UndeployDeploymentResponse>(&format!(
-                    "/api/projects/{}/deployments/{}",
+                    "/api/apps/{}/deployments/{}",
                     application_config.application_id, deployment_id
                 ))
                 .await?;

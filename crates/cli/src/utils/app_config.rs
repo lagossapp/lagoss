@@ -69,7 +69,7 @@ impl ApplicationConfig {
                 .to_path_buf();
 
             println!(
-                "Using project root {}",
+                "Using app root {}",
                 style(root.canonicalize()?.display()).black().bright()
             );
             app_config.path = root;
@@ -189,7 +189,7 @@ pub async fn lookup_application_id(
     let client = ApiClient::new(config.clone());
 
     if let Ok(application) = client
-        .get::<ApplicationResponse>(&format!("/api/projects/{}", id_or_name.clone().unwrap()))
+        .get::<ApplicationResponse>(&format!("/api/apps/{}", id_or_name.clone().unwrap()))
         .await
     {
         return Ok(Some(application.id));
@@ -198,7 +198,7 @@ pub async fn lookup_application_id(
     // try by name if not found by id
     match client
         .get::<ApplicationResponse>(&format!(
-            "/api/projects/by-name/{}",
+            "/api/apps/by-name/{}",
             id_or_name.clone().unwrap()
         ))
         .await
