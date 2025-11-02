@@ -24,7 +24,7 @@ jobs:
         run: pnpm run --filter @lagoss/docs build
       - uses: lagossapp/github-action@latest
         with:
-          lagoss_token: ${{ secrets.LAGOSS_TOKEN }}
+          token: ${{ secrets.LAGOSS_TOKEN }}
           app_id_or_name: docs
           prod: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
       - name: Log deployment URL
