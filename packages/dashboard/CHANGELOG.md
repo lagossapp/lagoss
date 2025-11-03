@@ -1,5 +1,14 @@
 # @lagoss/dashboard
 
+## [0.8.0](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard@0.7.3...@lagoss/dashboard@0.8.0) (2025-11-03)
+
+
+### Features
+
+* add org settings and improve project list ([#279](https://github.com/lagossapp/lagoss/issues/279)) ([3e616d9](https://github.com/lagossapp/lagoss/commit/3e616d9031467f5bed3349c882e612fd9d6a431e))
+* rename project to app ([#274](https://github.com/lagossapp/lagoss/issues/274)) ([4acc892](https://github.com/lagossapp/lagoss/commit/4acc892cb8ec8361e1246472717e6de8f88438ea))
+* reorganize s3 and serverless folders ([#277](https://github.com/lagossapp/lagoss/issues/277)) ([0b5cef4](https://github.com/lagossapp/lagoss/commit/0b5cef429f942b693cd01a2107f8f5d600457259))
+
 ## [0.7.3](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard@0.7.2...@lagoss/dashboard@0.7.3) (2025-10-31)
 
 
