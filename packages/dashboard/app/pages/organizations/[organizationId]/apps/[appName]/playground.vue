@@ -73,13 +73,15 @@
 </template>
 
 <script setup lang="ts">
+import { inject } from '~/composables/useInjectProvide';
+
 definePageMeta({
   layout: 'borderless',
 });
 
 const iframeEl = ref<HTMLIFrameElement>();
 
-const { app } = useApp();
+const app = inject('app');
 
 const code = ref('');
 const changed = ref(false);

@@ -1,11 +1,11 @@
 <template>
   <div v-if="app" class="w-full">
-    <AppHeader :app="app" />
+    <AppHeader :app="dbApp" />
 
     <div class="mx-auto flex w-full max-w-4xl flex-col gap-4">
       <Card>
-        <form @submit.prevent="saveName" class="flex flex-col items-start gap-4">
-          <h2 class="text-xl">Name</h2>
+        <form @submit.prevent="saveGeneral" class="flex flex-col items-start gap-4">
+          <h2 class="text-xl">General</h2>
 
           <p class="text-neutral-500">
             Change the name of this app. Note that changing the name also changes the default domain.
@@ -13,7 +13,7 @@
 
           <UFormField label="Name" required>
             <UFieldGroup size="md" orientation="horizontal">
-              <UInput v-if="app" v-model="app.name" placeholder="your-name" size="md" />
+              <UInput v-model="app.name" placeholder="your-name" size="md" />
               <UInput :model-value="`.${$config.public.root.domain}`" disabled class="cursor-default!" size="md" />
             </UFieldGroup>
           </UFormField>
@@ -31,7 +31,7 @@
           <p class="text-neutral-500">Environment variables are injected into your Function at runtime.</p>
 
           <div class="flex flex-col gap-2">
-            <div v-if="app" v-for="(envVariable, i) in app.envVariables" class="flex w-full gap-2">
+            <div v-for="(envVariable, i) in app.envVariables" class="flex w-full gap-2">
               <UInput v-model="envVariable.key" placeholder="Key" size="md" @paste.prevent="addPastedEnvVariables" />
               <UInput v-model="envVariable.value" placeholder="Value" size="md" icon="i-heroicons-key" />
               <UButton
@@ -67,7 +67,7 @@
         </p>
 
         <div class="flex gap-4">
-          <span>{{ app.name }}.{{ $config.public.root.domain }}</span>
+          <span>{{ dbApp.name }}.{{ $config.public.root.domain }}</span>
           <span class="text-neutral-500">Default domain</span>
         </div>
 
@@ -93,7 +93,6 @@
 
           <UFormField label="Expression" required>
             <UInput
-              v-if="app"
               :model-value="app.cron || ''"
               placeholder="* */12 * * *"
               size="md"
@@ -113,8 +112,8 @@
         <h2 class="text-xl">Delete</h2>
 
         <p>
-          Delete the app "{{ app?.name }}.{{ $config.public.root.domain }}" and all of its deployments and domains. This
-          action is not reversible, so continue with extreme caution.
+          Delete the app "{{ dbApp?.name }}.{{ $config.public.root.domain }}" and all of its deployments and domains.
+          This action is not reversible, so continue with extreme caution.
         </p>
 
         <div class="border-error flex w-full border-t pt-2">
@@ -126,16 +125,23 @@
 </template>
 
 <script setup lang="ts">
+import { inject } from '~/composables/useInjectProvide';
+
 const router = useRouter();
 const toast = useToast();
 
-const { app: dbApp, refreshApp } = useApp();
+const dbApp = inject('app');
+const refreshApp = inject('refreshApp');
+
+function deepCopy<T>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj));
+}
 
 const app = ref<typeof dbApp.value>();
 watch(
   dbApp,
   () => {
-    app.value = dbApp.value;
+    app.value = deepCopy(dbApp.value);
   },
   { immediate: true },
 );
@@ -202,7 +208,7 @@ async function removeDomain(domain: string) {
   await refreshApp();
 }
 
-async function saveName() {
+async function saveGeneral() {
   if (!app.value) {
     throw new Error('App not found');
   }

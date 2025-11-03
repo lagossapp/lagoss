@@ -115,3 +115,8 @@ export async function checkCanCreateApp({
     });
   }
 }
+
+export function getDeploymentDomain({ name }: { name: string }): string {
+  const config = useRuntimeConfig();
+  return `${config.public.root.schema}://${name}.${config.public.root.domain}`;
+}

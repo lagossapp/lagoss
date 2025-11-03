@@ -1,5 +1,5 @@
 import { organizationMemberSchema, organizationSchema, appSchema } from '~~/server/db/schema';
-import { eq, and, or } from 'drizzle-orm';
+import { eq, and, or, desc } from 'drizzle-orm';
 
 export default defineEventHandler(async event => {
   const db = await useDB();
@@ -24,6 +24,7 @@ export default defineEventHandler(async event => {
         or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id)),
       ),
     )
+    .orderBy(desc(appSchema.updatedAt))
     .execute();
 
   return apps.map(app => app.Function);

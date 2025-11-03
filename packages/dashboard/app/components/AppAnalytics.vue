@@ -106,18 +106,18 @@
 </template>
 
 <script setup lang="ts">
-import type { App } from '~~/server/db/schema';
-import { FREE_PLAN } from '~~/server/lib/plans';
+import type { App, Organization } from '~~/server/db/schema';
+import { getPlanOfOrganization } from '~~/server/lib/plans';
 import type { AnalyticsTimeframe } from '~~/server/lib/types';
 
 const props = defineProps<{
   app: App;
+  org: Organization;
   showGraphs?: boolean;
 }>();
 const app = toRef(props, 'app');
 
-// TODO: use the plan from the app / organization
-const plan = computed(() => FREE_PLAN);
+const plan = computed(() => getPlanOfOrganization(props.org));
 
 function formatBytes(bytes = 0) {
   if (bytes === 0) return '0 bytes';

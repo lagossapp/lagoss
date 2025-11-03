@@ -41,21 +41,30 @@
         </a> -->
       </UContainer>
 
-      <div class="mt-4 grid grid-cols-2 gap-4">
+      <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <router-link
           v-for="app in apps"
           :key="app.id"
           :to="`/organizations/${app.organizationId}/apps/${app.name}`"
           class="w-full"
         >
-          <Card class="relative flex w-full items-center justify-between" clickable>
-            <div>
-              <p>{{ app.name }}</p>
-              <p class="text-xs text-neutral-500">{{ dayjs().to(app.updatedAt) }}</p>
+          <Card class="relative w-full overflow-hidden p-4 transition hover:shadow-lg" clickable>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center gap-2">
+                <AppFavicon :app="app" />
+                <div class="min-w-0">
+                  <p class="truncate font-semibold">{{ app.name }}</p>
+                  <p class="truncate text-sm text-neutral-500">{{ getCurrentDomain(app) }}</p>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between text-xs text-neutral-500">
+                <span :title="dayjs(app.updatedAt).format('DD.MM.YYYY HH:mm')"
+                  >Updated {{ dayjs().to(app.updatedAt) }}</span
+                >
+                <UBadge class="ml-2" color="primary" variant="soft">{{ app.playground ? 'Playground' : 'App' }}</UBadge>
+              </div>
             </div>
-            <UBadge class="absolute top-4 right-4" color="primary" variant="soft">{{
-              app.playground ? 'Playground' : 'App'
-            }}</UBadge>
           </Card>
         </router-link>
       </div>
@@ -65,21 +74,20 @@
 
 <script setup lang="ts">
 import { dayjs } from '~~/lib/dayjs';
+import { inject } from '~/composables/useInjectProvide';
 
-const route = useRoute();
 const router = useRouter();
-const organizationId = computed(() => route.params.organizationId as string);
 
-const { data: organization } = await useFetch(() => `/api/organizations/${organizationId.value}`);
+const organization = inject('org');
 
-const { data: apps } = await useFetch(() => `/api/organizations/${organizationId.value}/apps`);
+const { data: apps } = await useFetch(() => `/api/organizations/${organization.value.id}/apps`);
 
 const creatingApp = ref<'playground' | 'normal'>();
 async function createApp(playground = false) {
   creatingApp.value = playground ? 'playground' : 'normal';
 
   try {
-    const app = await $fetch(`/api/organizations/${organizationId.value}/apps`, {
+    const app = await $fetch(`/api/organizations/${organization.value.id}/apps`, {
       method: 'POST',
       body: {
         playground,
