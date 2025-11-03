@@ -82,12 +82,12 @@ export default defineEventHandler(async event => {
     });
   };
 
-  const codeUrl = await getPresignedUrl(`${deployment.id}.js`, input.functionSize);
+  const codeUrl = await getPresignedUrl(`${deployment.id}/index.js`, input.functionSize);
   const assetsUrls: Record<string, string> = {};
 
   await Promise.all(
     input.assets.map(async ({ name, size }) => {
-      const url = await getPresignedUrl(`${deployment.id}/${name}`, size);
+      const url = await getPresignedUrl(`${deployment.id}/assets/${name}`, size);
       assetsUrls[name] = url;
     }),
   );
