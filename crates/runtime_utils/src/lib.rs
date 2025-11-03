@@ -63,39 +63,54 @@ impl Deployment {
     pub fn get_code(&self) -> Result<String> {
         let path = Path::new(env::current_dir()?.as_path())
             .join(DEPLOYMENTS_DIR)
-            .join(self.id.clone() + ".js");
+            .join(self.id.clone())
+            .join("index.js");
         let code = fs::read_to_string(path)?;
 
         Ok(code)
     }
 
     pub fn has_code(&self) -> bool {
-        let path = Path::new(DEPLOYMENTS_DIR).join(self.id.clone() + ".js");
+        let path = Path::new(DEPLOYMENTS_DIR)
+            .join(self.id.clone())
+            .join("index.js");
 
         path.exists()
     }
 
     pub fn write_code(&self, code: &[u8]) -> Result<()> {
-        let mut file = File::create(Path::new(DEPLOYMENTS_DIR).join(self.id.clone() + ".js"))?;
+        let dir = Path::new(DEPLOYMENTS_DIR).join(self.id.clone());
+        fs::create_dir_all(dir)?;
 
+        let mut file = File::create(
+            Path::new(DEPLOYMENTS_DIR)
+                .join(self.id.clone())
+                .join("index.js"),
+        )?;
         file.write_all(code)?;
 
         Ok(())
     }
 
     pub fn write_asset(&self, asset: &str, content: &[u8]) -> Result<()> {
-        let asset = asset.replace("public/", "");
-        let asset = asset.as_str();
+        // let asset = asset.replace("public/", "");
 
-        let dir = Path::new(DEPLOYMENTS_DIR).join(self.id.clone()).join(
-            Path::new(asset)
-                .parent()
-                .ok_or_else(|| anyhow!("Could not get parent of {}", asset))?,
-        );
+        let dir = Path::new(DEPLOYMENTS_DIR)
+            .join(self.id.clone())
+            .join("assets")
+            .join(
+                Path::new(asset)
+                    .parent()
+                    .ok_or_else(|| anyhow!("Could not get parent of {}", asset))?,
+            );
         fs::create_dir_all(dir)?;
 
-        let mut file =
-            File::create(Path::new(DEPLOYMENTS_DIR).join(self.id.clone() + "/" + asset))?;
+        let mut file = File::create(
+            Path::new(DEPLOYMENTS_DIR)
+                .join(self.id.clone())
+                .join("assets")
+                .join(asset),
+        )?;
         file.write_all(content)?;
 
         Ok(())

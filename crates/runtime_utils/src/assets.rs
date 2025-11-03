@@ -27,7 +27,7 @@ pub fn find_asset<'a>(url: &'a str, assets: &'a HashSet<String>) -> Option<&'a s
 }
 
 pub fn handle_asset(root: PathBuf, asset: &str) -> Result<(Builder, Body)> {
-    let path = root.join(asset);
+    let path = root.join("assets").join(asset);
     let body = fs::read(path)?;
 
     let content_type = Path::new(asset).extension().map_or(

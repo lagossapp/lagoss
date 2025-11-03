@@ -161,7 +161,7 @@ pub async fn get_deployments(api_url: String, api_token: String) -> Result<Deplo
 
     let deployments_list: Vec<Deployment> = deployments_list.values().cloned().collect();
 
-    info!("Found {} deployment(s) to deploy", deployments_list.len());
+    info!("Found {} deployment(s) to host", deployments_list.len());
 
     if let Err(error) = create_deployments_folder() {
         error!("Could not create deployments folder: {}", error);
@@ -206,7 +206,10 @@ async fn delete_old_deployments(deployments: &[Deployment]) -> Result<()> {
             deleted_deployments += 1;
         }
     }
-    info!("Deleted {} old deployment(s)", deleted_deployments);
+
+    if deleted_deployments > 0 {
+        info!("Deleted {} old deployment(s)", deleted_deployments);
+    }
 
     Ok(())
 }
