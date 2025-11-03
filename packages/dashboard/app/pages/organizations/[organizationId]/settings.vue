@@ -129,14 +129,13 @@
 
 <script setup lang="ts">
 import { dayjs } from '~~/lib/dayjs';
-import { inject } from '~/composables/useInjectProvide';
 import { getPlanOfOrganization } from '~~/server/lib/plans';
 import { ref, computed } from 'vue';
 
 const router = useRouter();
 const toast = useToast();
-const organization = inject('org');
-const refreshOrg = inject('refreshOrg');
+const organization = typedInject('org');
+const refreshOrg = typedInject('refreshOrg');
 
 const plan = computed(() => getPlanOfOrganization(organization.value));
 
