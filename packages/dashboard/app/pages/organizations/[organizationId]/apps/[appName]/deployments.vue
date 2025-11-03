@@ -29,9 +29,9 @@
             </a>
             <span v-if="deployment.isProduction" class="ml-2">(Production)</span>
           </div>
-          <span class="text-neutral-500">{{ dayjs().to(deployment.createdAt) }}</span>
           <span v-if="promotingDeploymentId === deployment.id">promoting deployment to production ...</span>
-          <span v-if="deletingDeploymentId === deployment.id">deleting deployment ...</span>
+          <span v-else-if="deletingDeploymentId === deployment.id">deleting deployment ...</span>
+          <span v-else class="text-neutral-500">{{ dayjs().to(deployment.createdAt) }}</span>
         </div>
 
         <div class="ml-auto flex flex-col">
@@ -49,10 +49,11 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui';
+import { inject } from '~/composables/useInjectProvide';
 import { dayjs } from '~~/lib/dayjs';
 import type { Deployment } from '~~/server/db/schema';
 
-const { app } = useApp();
+const app = inject('app');
 const toast = useToast();
 
 const { data: deployments, refresh: refreshDeployments } = await useFetch(

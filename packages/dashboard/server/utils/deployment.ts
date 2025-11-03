@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import { useRedis } from '~~/server/lib/redis';
 import { envStringToObject } from '~~/app/composables/utils';
 import { useS3 } from '~~/server/lib/s3';
-import { DeleteObjectCommand, DeleteObjectsCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
+import { DeleteObjectsCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 
 export async function deleteDeployment(deployment: Deployment, event: H3Event) {
   const db = await useDB();
@@ -22,15 +22,22 @@ export async function deleteDeployment(deployment: Deployment, event: H3Event) {
     }),
   );
 
-  const deletePromises =
-    files.Contents?.map(file =>
+  const objectKeys = files.Contents?.map(({ Key }) => Key).filter(Boolean) as string[] | undefined;
+
+  const deletePromises: Promise<unknown>[] = [];
+
+  if (objectKeys && objectKeys.length > 0) {
+    deletePromises.push(
       s3.send(
-        new DeleteObjectCommand({
+        new DeleteObjectsCommand({
           Bucket: config.s3.bucket,
-          Key: file.Key!,
+          Delete: {
+            Objects: objectKeys.map(Key => ({ Key })),
+          },
         }),
       ),
-    ) || [];
+    );
+  }
 
   await Promise.all(deletePromises);
 
