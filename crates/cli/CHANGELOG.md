@@ -1,5 +1,12 @@
 # @lagoss/cli
 
+## [0.15.0](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.14.0...@lagoss/cli@0.15.0) (2025-11-03)
+
+
+### Features
+
+* rename project to app ([#274](https://github.com/lagossapp/lagoss/issues/274)) ([4acc892](https://github.com/lagossapp/lagoss/commit/4acc892cb8ec8361e1246472717e6de8f88438ea))
+
 ## [0.14.0](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.13.0...@lagoss/cli@0.14.0) (2025-10-31)
 
 
