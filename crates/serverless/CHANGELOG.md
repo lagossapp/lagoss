@@ -1,5 +1,12 @@
 # @lagoss/serverless
 
+## [0.6.0](https://github.com/lagossapp/lagoss/compare/@lagoss/serverless@0.5.0...@lagoss/serverless@0.6.0) (2025-11-03)
+
+
+### Features
+
+* reorganize s3 and serverless folders ([#277](https://github.com/lagossapp/lagoss/issues/277)) ([0b5cef4](https://github.com/lagossapp/lagoss/commit/0b5cef429f942b693cd01a2107f8f5d600457259))
+
 ## [0.5.0](https://github.com/lagossapp/lagoss/compare/@lagoss/serverless@0.4.5...@lagoss/serverless@0.5.0) (2025-10-26)
 
 
