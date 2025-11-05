@@ -9,7 +9,7 @@ mod s3_bucket;
 pub use fake::FakeDownloader;
 pub use s3_bucket::S3BucketDownloader;
 
-pub fn get_bucket() -> Result<Bucket> {
+pub fn get_bucket() -> Result<Box<Bucket>> {
     let bucket_name = env::var("S3_BUCKET").expect("S3_BUCKET must be set");
     let bucket_region = env::var("S3_REGION").expect("S3_REGION must be set");
     let credentials = Credentials::new(

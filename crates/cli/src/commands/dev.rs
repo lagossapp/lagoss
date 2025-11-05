@@ -148,13 +148,10 @@ async fn handle_request(
                 println!("{} Unexpected stream result", style("✕").red());
             }
             ResponseEvent::Timeout => {
-                println!("{} Function execution timed out", style("✕").red());
+                println!("{} App execution timed out", style("✕").red());
             }
             ResponseEvent::MemoryLimit => {
-                println!(
-                    "{} Function execution reached memory limit",
-                    style("✕").red()
-                );
+                println!("{} App execution reached memory limit", style("✕").red());
             }
             ResponseEvent::Error(error) => {
                 println!("{} {}", style("✕").red(), error.as_str());

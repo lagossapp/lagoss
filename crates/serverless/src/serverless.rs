@@ -53,34 +53,34 @@ async fn handle_error(
 ) {
     let (level, message) = match result {
         ResponseEvent::Timeout => {
-            increment_counter!("lagoss_isolate_timeouts", "deployment" => deployment_id.clone(), "function" => app_id.clone());
+            increment_counter!("lagoss_isolate_timeouts", "deployment" => deployment_id.clone(), "app" => app_id.clone());
 
             let message = "Function execution timed out";
-            warn!(deployment = deployment_id, function = app_id, request = request_id; "{}", message);
+            warn!(deployment = deployment_id, app = app_id, request = request_id; "{}", message);
 
             ("warn", message.into())
         }
         ResponseEvent::MemoryLimit => {
-            increment_counter!("lagoss_isolate_memory_limits", "deployment" => deployment_id.clone(), "function" => app_id.clone());
+            increment_counter!("lagoss_isolate_memory_limits", "deployment" => deployment_id.clone(), "app" => app_id.clone());
 
             let message = "Function execution memory limit reached";
-            warn!(deployment = deployment_id, function = app_id, request = request_id; "{}", message);
+            warn!(deployment = deployment_id, app = app_id, request = request_id; "{}", message);
 
             ("warn", message.into())
         }
         ResponseEvent::UnexpectedStreamResult => {
-            increment_counter!("lagoss_isolate_unexpected_stream_results", "deployment" => deployment_id.clone(), "function" => app_id.clone());
+            increment_counter!("lagoss_isolate_unexpected_stream_results", "deployment" => deployment_id.clone(), "app" => app_id.clone());
 
             let message = "Function execution returned an unexpected stream result";
-            warn!(deployment = deployment_id, function = app_id, request = request_id; "{}", message);
+            warn!(deployment = deployment_id, app = app_id, request = request_id; "{}", message);
 
             ("warn", message.into())
         }
         ResponseEvent::Error(error) => {
-            increment_counter!("lagoss_isolate_errors", "deployment" => deployment_id.clone(), "function" => app_id.clone());
+            increment_counter!("lagoss_isolate_errors", "deployment" => deployment_id.clone(), "app" => app_id.clone());
 
             let message = format!("Function execution error: {}", error);
-            error!(deployment = deployment_id, function = app_id, request = request_id; "{}", message);
+            error!(deployment = deployment_id, app = app_id, request = request_id; "{}", message);
 
             ("error", message)
         }
@@ -220,8 +220,8 @@ where
 
             std::thread::Builder::new().name(String::from("isolate-") + deployment.id.as_str()).spawn(move || {
                 handle.block_on(async move {
-                    increment_gauge!("lagoss_isolates", 1.0, "deployment" => deployment.id.clone(), "function" => deployment.function_id.clone());
-                    info!(deployment = deployment.id, function = deployment.function_id, request = request_id_handle; "Creating new isolate");
+                    increment_gauge!("lagoss_isolates", 1.0, "deployment" => deployment.id.clone(), "app" => deployment.function_id.clone());
+                    info!(deployment = deployment.id, app = deployment.function_id, request = request_id_handle; "Creating new isolate");
 
                     let code = deployment.get_code().unwrap_or_else(|error| {
                         error!(deployment = deployment.id, request = request_id_handle; "Error while getting deployment code: {}", error);
@@ -242,18 +242,18 @@ where
                             if let Some(metadata) = metadata.as_ref().as_ref() {
                                 let labels = [
                                     ("deployment", metadata.0.clone()),
-                                    ("function", metadata.1.clone()),
+                                    ("app", metadata.1.clone()),
                                 ];
 
                                 decrement_gauge!("lagoss_isolates", 1.0, &labels);
-                                info!(deployment = metadata.0, function = metadata.1; "Dropping isolate");
+                                info!(deployment = metadata.0, app = metadata.1; "Dropping isolate");
                             }
                         }))
                         .on_statistics_callback(Box::new(|metadata, statistics| {
                             if let Some(metadata) = metadata.as_ref().as_ref() {
                                 let labels = [
                                     ("deployment", metadata.0.clone()),
-                                    ("function", metadata.1.clone()),
+                                    ("app", metadata.1.clone()),
                                 ];
 
                                 histogram!(

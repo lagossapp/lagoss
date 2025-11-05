@@ -82,9 +82,9 @@ where
 
                 while let Ok(result) = rx.recv_async().await {
                     match result {
-                        RunResult::Stream(StreamResult::Start(_response_builder)) => {
+                        RunResult::Stream(StreamResult::Start(response_builder)) => {
                             response_builder_tx
-                                .send_async(_response_builder)
+                                .send_async(response_builder)
                                 .await
                                 .unwrap_or(());
                         }
