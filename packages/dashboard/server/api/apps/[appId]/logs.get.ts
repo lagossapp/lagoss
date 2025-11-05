@@ -1,29 +1,50 @@
 import { useClickHouse } from '~~/server/lib/clickhouse';
 
+const timeframes: Record<string, string> = {
+  'Last hour': '1 HOUR',
+  'Last 24 hours': '1 DAY',
+  'Last week': '1 WEEK',
+};
+
+const levels = ['all', 'info', 'warning', 'error'];
+
 export default defineEventHandler(async event => {
   const app = await requireApp(event);
   const clickhouse = await useClickHouse();
 
-  const { level, timeframe } = getQuery<{ level?: string; timeframe?: string }>(event);
+  const { level: _level, timeframe: _timeframe } = getQuery<{ level?: string; timeframe?: string }>(event);
+  const level = _level && levels.includes(_level) ? _level : 'all';
+  const timeframe = _timeframe ? timeframes[_timeframe] : undefined;
 
-  const result = (await clickhouse
-    .query(
-      `SELECT
-level,
-message,
-timestamp
-FROM serverless.logs
+  const result = await clickhouse.query({
+    query: `
+SELECT
+  request_id,
+  deployment_id,
+  level,
+  region,
+  message,
+  timestamp
+FROM logs
 WHERE
-function_id = '${app.id}'
+  app_id = '${app.id}'
 AND
-timestamp >= toDateTime(now() - INTERVAL ${
-        timeframe === 'Last hour' ? '1 HOUR' : timeframe === 'Last 24 hours' ? '1 DAY' : '1 WEEK'
-      })
-${level !== 'all' ? `AND level = '${level}'` : ''}
+  timestamp >= toDateTime(now() - INTERVAL '${timeframe ?? timeframes['Last hour']}')
+  ${level !== 'all' ? `AND level = '${level}'` : ''}
 ORDER BY timestamp DESC
-LIMIT 100`,
-    )
-    .toPromise()) as { level: string; message: string; timestamp: string }[];
+LIMIT 100
+`.trim(),
+    format: 'JSONEachRow',
+  });
 
-  return result;
+  const rows = await result.json<{
+    request_id: string;
+    deployment_id: string;
+    level: string;
+    region: string;
+    message: string;
+    timestamp: string;
+  }>();
+
+  return rows;
 });
