@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 v8 = "0.74.3"
-hyper = { version = "0.14.27", features = ["client", "http1", "http2", "tcp"] }
+http = "1.0"
+bytes = "1.5"
 anyhow = "1.0.72"
 lagoss-runtime-v8-utils = { path = "../runtime_v8_utils" }

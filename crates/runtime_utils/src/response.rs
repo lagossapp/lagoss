@@ -119,6 +119,7 @@ where
             Ok(response)
         }
         RunResult::Response(response_builder, body, elapsed) => {
+            let bytes = body.len();
             let response = build_response(response_builder, &deployment, body)?;
             let bytes = response.body().size_hint().exact().unwrap_or(0);
 
@@ -146,7 +147,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hyper::{body::to_bytes, Response};
+    use hyper::Response;
     use std::time::Duration;
 
     #[tokio::test]
@@ -165,7 +166,7 @@ mod tests {
 
             assert_eq!(response.status(), 200);
             assert_eq!(
-                to_bytes(response.body_mut()).await.unwrap(),
+                hyper::body::to_bytes(response.body_mut()).await.unwrap(),
                 Bytes::from("Hello World")
             );
             assert!(response.headers().get(X_ROBOTS_TAGS).is_some());

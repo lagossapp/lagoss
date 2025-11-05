@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.72"
 lagoss-runtime-http = { path = "../runtime_http" }
-hyper = { version = "0.14.27", features = ["stream"] }
+hyper = { version = "1.7.0" }
 flume = "0.11.0"
 tokio = { version = "1", features = ["rt-multi-thread"] }
 
