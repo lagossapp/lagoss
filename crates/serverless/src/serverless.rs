@@ -192,7 +192,7 @@ where
         last_requests.insert(deployment.id.clone(), Instant::now());
 
         let (parts, body) = req.into_parts();
-        let body = hyper::body::to_bytes(body).await?;
+        let body = http_body_util::BodyExt::collect(body).await?;
 
         bytes_in = body.len() as u32;
         let request = (parts, body);

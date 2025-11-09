@@ -2,9 +2,9 @@ use crate::Deployment;
 use anyhow::Result;
 use flume::Receiver;
 use hyper::{
-    body::{Bytes, HttpBody},
+    body::{Bytes, Incoming},
     http::response::Builder,
-    Body, Response,
+    Response,
 };
 use lagoss_runtime_http::{RunResult, StreamResult};
 use std::{future::Future, sync::Arc};
@@ -28,8 +28,8 @@ const X_ROBOTS_TAGS: &str = "x-robots-tag";
 fn build_response(
     response_builder: Builder,
     deployment: &Deployment,
-    body: Body,
-) -> Result<Response<Body>> {
+    body: Bytes,
+) -> Result<Response<Bytes>> {
     // We automatically add a X-Robots-Tag: noindex header to
     // all preview deployments to prevent them from being
     // indexed by search engines
@@ -45,7 +45,7 @@ pub async fn handle_response<F>(
     rx: Receiver<RunResult>,
     deployment: Arc<Deployment>,
     on_event: impl FnOnce(ResponseEvent) -> F + Send + Sync + 'static,
-) -> Result<Response<Body>>
+) -> Result<Response<Bytes>>
 where
     F: Future<Output = Result<()>> + Send,
 {
@@ -54,7 +54,7 @@ where
     match result {
         RunResult::Stream(stream_result) => {
             let (stream_tx, stream_rx) = flume::unbounded::<Result<Bytes, std::io::Error>>();
-            let body = Body::wrap_stream(stream_rx.into_stream());
+            let body = Incoming::wrap_stream(stream_rx.into_stream());
 
             let (response_builder_tx, response_builder_rx) = flume::bounded(1);
             let mut total_bytes = 0;
@@ -121,7 +121,6 @@ where
         RunResult::Response(response_builder, body, elapsed) => {
             let bytes = body.len();
             let response = build_response(response_builder, &deployment, body)?;
-            let bytes = response.body().size_hint().exact().unwrap_or(0);
 
             let event =
                 ResponseEvent::Bytes(bytes as usize, elapsed.map(|duration| duration.as_micros()));
@@ -139,7 +138,7 @@ where
             let event = ResponseEvent::Error(result);
             on_event(event).await?;
 
-            Ok(Response::builder().status(500).body(PAGE_500.into())?)
+            Ok(Response::builder().status(500).body(PAGE_500)?)
         }
     }
 }
@@ -166,7 +165,9 @@ mod tests {
 
             assert_eq!(response.status(), 200);
             assert_eq!(
-                hyper::body::to_bytes(response.body_mut()).await.unwrap(),
+                http_body_util::BodyExt::collect(response.body_mut())
+                    .await
+                    .unwrap(),
                 Bytes::from("Hello World")
             );
             assert!(response.headers().get(X_ROBOTS_TAGS).is_some());
@@ -203,7 +204,9 @@ mod tests {
 
             assert_eq!(response.status(), 200);
             assert_eq!(
-                to_bytes(response.body_mut()).await.unwrap(),
+                http_body_util::BodyExt::collect(response.body_mut())
+                    .await
+                    .unwrap(),
                 Bytes::from("Hello World")
             );
             assert!(response.headers().get(X_ROBOTS_TAGS).is_none());
@@ -236,7 +239,9 @@ mod tests {
 
             assert_eq!(response.status(), 200);
             assert_eq!(
-                to_bytes(response.body_mut()).await.unwrap(),
+                http_body_util::BodyExt::collect(response.body_mut())
+                    .await
+                    .unwrap(),
                 Bytes::from("Hello world")
             );
             assert!(response.headers().get(X_ROBOTS_TAGS).is_some());
@@ -285,7 +290,9 @@ mod tests {
 
             assert_eq!(response.status(), 200);
             assert_eq!(
-                to_bytes(response.body_mut()).await.unwrap(),
+                http_body_util::BodyExt::collect(response.body_mut())
+                    .await
+                    .unwrap(),
                 Bytes::from("Hello world")
             );
             assert!(response.headers().get(X_ROBOTS_TAGS).is_none());
@@ -330,7 +337,9 @@ mod tests {
 
             assert_eq!(response.status(), 200);
             assert_eq!(
-                to_bytes(response.body_mut()).await.unwrap(),
+                http_body_util::BodyExt::collect(response.body_mut())
+                    .await
+                    .unwrap(),
                 Bytes::from("Hello world")
             );
             assert!(response.headers().get(X_ROBOTS_TAGS).is_some());

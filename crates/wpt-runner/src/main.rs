@@ -156,7 +156,7 @@ export function handler() {{
 
     let (request_tx, request_rx) = flume::unbounded();
     let (parts, body) = Request::new(Body::empty()).into_parts();
-    let body = hyper::body::to_bytes(body).await.unwrap();
+    let body = http_body_util::BodyExt::collect(body).await.unwrap();
     let request = (parts, body);
 
     tx.send_async(IsolateEvent::Request(IsolateRequest {

@@ -9,6 +9,7 @@ lagoss-runtime-http = { path = "../runtime_http" }
 hyper = { version = "1.7.0" }
 flume = "0.11.0"
 tokio = { version = "1", features = ["rt-multi-thread"] }
+http-body-util = "0.1.3"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["macros"] }

@@ -116,7 +116,7 @@ async fn handle_request(
         );
 
         let (mut parts, body) = req.into_parts();
-        let body = hyper::body::to_bytes(body).await?;
+        let body = http_body_util::BodyExt::collect(body).await?;
 
         parts.headers.insert(X_FORWARDED_FOR, ip.parse()?);
         parts.headers.insert(X_FORWARDED_PROTO, "http".parse()?);

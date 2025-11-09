@@ -1,4 +1,4 @@
-use hyper::{header::CONTENT_TYPE, Body, Request, Response};
+use hyper::{body::Incoming, header::CONTENT_TYPE, Request, Response};
 use lagoss_runtime_isolate::options::IsolateOptions;
 use serial_test::serial;
 
@@ -23,7 +23,7 @@ async fn set_timeout() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("test"),
+        Incoming::from("test"),
     )
     .await;
 }
@@ -57,7 +57,7 @@ async fn set_timeout_not_blocking_response() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello!"),
+        Incoming::from("Hello!"),
     )
     .await;
     assert_eq!(
@@ -90,7 +90,7 @@ async fn set_timeout_clear() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("second"),
+        Incoming::from("second"),
     )
     .await;
 }
@@ -118,7 +118,7 @@ async fn set_timeout_clear_correct() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("first"),
+        Incoming::from("first"),
     )
     .await;
 }
@@ -173,7 +173,7 @@ async fn set_interval() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello world"),
+        Incoming::from("Hello world"),
     )
     .await;
 }
@@ -212,7 +212,7 @@ async fn queue_microtask() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello world"),
+        Incoming::from("Hello world"),
     )
     .await;
 }
@@ -273,7 +273,7 @@ async fn timers_order() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello world"),
+        Incoming::from("Hello world"),
     )
     .await;
 }
