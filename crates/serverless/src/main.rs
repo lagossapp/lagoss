@@ -1,6 +1,7 @@
 use anyhow::Result;
 use lagoss_runtime::{options::RuntimeOptions, Runtime};
-use lagoss_serverless::clickhouse::{create_client, run_migrations};
+use lagoss_serverless::clickhouse::client::create_client;
+use lagoss_serverless::clickhouse::migrations::run_migrations;
 use lagoss_serverless::deployments::get_deployments;
 use lagoss_serverless::get_region;
 use lagoss_serverless::serverless::start;
@@ -60,7 +61,7 @@ async fn main() -> Result<()> {
     let url = env::var("REDIS_URL").expect("REDIS_URL must be set");
     let pubsub = RedisPubSub::new(url);
 
-    let client = create_client();
+    let client = create_client().await?;
     run_migrations(&client).await?;
 
     let api_url = env::var("LAGOSS_URL").expect("LAGOSS_URL must be set");

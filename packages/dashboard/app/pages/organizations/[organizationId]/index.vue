@@ -74,11 +74,10 @@
 
 <script setup lang="ts">
 import { dayjs } from '~~/lib/dayjs';
-import { inject } from '~/composables/useInjectProvide';
 
 const router = useRouter();
 
-const organization = inject('org');
+const organization = typedInject('org');
 
 const { data: apps } = await useFetch(() => `/api/organizations/${organization.value.id}/apps`);
 

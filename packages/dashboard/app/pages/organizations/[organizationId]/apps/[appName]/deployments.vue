@@ -49,11 +49,10 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui';
-import { inject } from '~/composables/useInjectProvide';
 import { dayjs } from '~~/lib/dayjs';
 import type { Deployment } from '~~/server/db/schema';
 
-const app = inject('app');
+const app = typedInject('app');
 const toast = useToast();
 
 const { data: deployments, refresh: refreshDeployments } = await useFetch(

@@ -125,13 +125,11 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from '~/composables/useInjectProvide';
-
 const router = useRouter();
 const toast = useToast();
 
-const dbApp = inject('app');
-const refreshApp = inject('refreshApp');
+const dbApp = typedInject('app');
+const refreshApp = typedInject('refreshApp');
 
 function deepCopy<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));

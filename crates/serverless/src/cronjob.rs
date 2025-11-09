@@ -65,7 +65,7 @@ impl Cronjob {
                 .add(Job::new_async(cron.as_str(), move |_, _| {
                     let labels = [
                         ("deployment", deployment.id.clone()),
-                        ("function", deployment.function_id.clone()),
+                        ("app", deployment.function_id.clone()),
                     ];
 
                     let deployment = Arc::clone(&deployment);
@@ -88,7 +88,7 @@ impl Cronjob {
                                 let deployment  = deployment_handle;
 
                                 increment_gauge!("lagoss_isolates", 1.0, &labels);
-                                info!(deployment = deployment.id.clone(), function = deployment.function_id.clone(); "Creating new cron isolate");
+                                info!(deployment = deployment.id.clone(), app = deployment.function_id.clone(); "Creating new cron isolate");
 
                                 let options = IsolateOptions::new(code)
                                     .environment_variables(deployment.environment_variables.clone())
@@ -105,18 +105,18 @@ impl Cronjob {
                                         if let Some(metadata) = metadata.as_ref().as_ref() {
                                             let labels = [
                                                 ("deployment", metadata.0.clone()),
-                                                ("function", metadata.1.clone()),
+                                                ("app", metadata.1.clone()),
                                             ];
 
                                             decrement_gauge!("lagoss_isolates", 1.0, &labels);
-                                            info!(deployment = metadata.0, function = metadata.1; "Dropping cron isolate");
+                                            info!(deployment = metadata.0, app = metadata.1; "Dropping cron isolate");
                                         }
                                     }))
                                     .on_statistics_callback(Box::new(|metadata, statistics| {
                                         if let Some(metadata) = metadata.as_ref().as_ref() {
                                             let labels = [
                                                 ("deployment", metadata.0.clone()),
-                                                ("function", metadata.1.clone()),
+                                                ("app", metadata.1.clone()),
                                             ];
 
                                             histogram!(
@@ -151,11 +151,11 @@ impl Cronjob {
                             RunResult::Stream(_) => {
                                 warn!(
                                     deployment = deployment.id,
-                                    function = deployment.function_id;
-                                    "Cron Functions can't return a stream",
+                                    app = deployment.function_id;
+                                    "Cron apps can't return a stream",
                                 );
 
-                                (String::from("warn"), String::from("Cron Functions can't return a stream"))
+                                (String::from("warn"), String::from("Cron apps can't return a stream"))
                             }
                             RunResult::Response(response_builder, body, elapsed) => {
                                 let response = response_builder.body(body).unwrap();
@@ -163,7 +163,7 @@ impl Cronjob {
                                 let body = body::to_bytes(response.into_body()).await.unwrap_or_else(|error| {
                                     error!(
                                         deployment = deployment.id,
-                                        function = deployment.function_id;
+                                        app = deployment.function_id;
                                         "Error while reading response body: {}", error,
                                     );
 
@@ -177,13 +177,17 @@ impl Cronjob {
                                     .await
                                     .0
                                     .write(&RequestRow {
-                                        function_id: deployment.function_id.clone(),
+                                        id: Uuid::new_v4().to_string(), // TODO: use actual request id
+                                        app_id: deployment.function_id.clone(),
                                         deployment_id: deployment.id.clone(),
                                         region: get_region().clone(),
                                         bytes_in: 0,
                                         bytes_out: 0,
                                         cpu_time_micros: elapsed.map(|duration| duration.as_micros()),
                                         timestamp,
+                                        http_method: "GET".to_string(), // TODO: use actual cron method
+                                        url: "/".to_string(), // TODO: use actual cron URL
+                                        response_status_code: status.as_u16(),
                                     })
                                     .await
                                     .unwrap_or(());
@@ -194,7 +198,7 @@ impl Cronjob {
                                 if status == 200 {
                                     info!(
                                         deployment = deployment.id,
-                                        function = deployment.function_id;
+                                        app = deployment.function_id;
                                         "Cron execution successful{}",
                                         maybe_body,
                                     );
@@ -204,7 +208,7 @@ impl Cronjob {
 
                                     error!(
                                         deployment = deployment.id,
-                                        function = deployment.function_id;
+                                        app = deployment.function_id;
                                         "Cron execution failed with status {}{}",
                                         status,
                                         maybe_body,
@@ -216,7 +220,7 @@ impl Cronjob {
                             RunResult::Timeout => {
                                 warn!(
                                     deployment = deployment.id,
-                                    function = deployment.function_id;
+                                    app = deployment.function_id;
                                     "Cron execution timed out",
                                 );
 
@@ -225,7 +229,7 @@ impl Cronjob {
                             RunResult::MemoryLimit => {
                                 warn!(
                                     deployment = deployment.id,
-                                    function = deployment.function_id;
+                                    app = deployment.function_id;
                                     "Cron execution memory limit reached",
                                 );
 
@@ -234,7 +238,7 @@ impl Cronjob {
                             RunResult::Error(error) => {
                                 error!(
                                     deployment = deployment.id,
-                                    function = deployment.function_id;
+                                    app = deployment.function_id;
                                     "Cron execution error: {}",
                                     error,
                                 );

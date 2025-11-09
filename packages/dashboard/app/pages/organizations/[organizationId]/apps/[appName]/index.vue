@@ -9,8 +9,6 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from '~/composables/useInjectProvide';
-
-const app = inject('app');
-const org = inject('org');
+const app = typedInject('app');
+const org = typedInject('org');
 </script>
