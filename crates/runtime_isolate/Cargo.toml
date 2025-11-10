@@ -17,7 +17,7 @@ uuid = { version = "1.4.1", features = ["v4", "fast-rng"] }
 lagoss-runtime-v8-utils = { path = "../runtime_v8_utils" }
 lagoss-runtime-http = { path = "../runtime_http" }
 lagoss-runtime-crypto = { path = "../runtime_crypto" }
-reqwest = { version = "0.12.24", default-features = false, features = ["rustls-tls"] }
+reqwest = { version = "0.11.18", default-features = false, features = ["rustls-tls"] }
 
 [features]
 default = []

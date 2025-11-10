@@ -5,11 +5,11 @@ use s3::Bucket;
 use super::Downloader;
 
 pub struct S3BucketDownloader {
-    bucket: Bucket,
+    bucket: Box<Bucket>,
 }
 
 impl S3BucketDownloader {
-    pub fn new(bucket: Bucket) -> Self {
+    pub fn new(bucket: Box<Bucket>) -> Self {
         Self { bucket }
     }
 }
