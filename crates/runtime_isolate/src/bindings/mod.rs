@@ -1,4 +1,5 @@
 use crate::Isolate;
+use bytes::Bytes;
 use compression::{
     compression_create_binding, compression_finish_binding, compression_write_binding,
 };
@@ -12,7 +13,7 @@ use crypto::{
     derive_bits_binding, derive_bits_init, digest_init, generate_key_binding, generate_key_init,
 };
 use fetch::{fetch_binding, fetch_init};
-use hyper::{body::Bytes, HeaderMap};
+use http::HeaderMap;
 use lagoss_runtime_http::response_to_v8;
 use lagoss_runtime_v8_utils::{v8_boolean, v8_string, v8_uint8array};
 use pull_stream::pull_stream_binding;

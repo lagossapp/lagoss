@@ -1,5 +1,6 @@
 use anyhow::{anyhow, Result};
-use hyper::{body::Bytes, http::request::Parts, Body, Method, Request};
+use bytes::Bytes;
+use http::{request::Parts, Method, Request};
 use lagoss_runtime_v8_utils::{
     extract_v8_headers_object, extract_v8_string, v8_headers_object, v8_string,
 };
@@ -50,7 +51,7 @@ pub fn request_to_v8<'a>(
 pub fn request_from_v8<'a>(
     scope: &mut v8::HandleScope<'a>,
     request: v8::Local<'a, v8::Value>,
-) -> Result<Request<Body>> {
+) -> Result<Request<Bytes>> {
     let request = match request.to_object(scope) {
         Some(request) => request,
         None => return Err(anyhow!("Request is not an object")),
@@ -58,12 +59,12 @@ pub fn request_from_v8<'a>(
 
     let mut request_builder = Request::builder();
 
-    let mut body = Body::empty();
+    let mut body = Bytes::new();
     let body_key = v8_string(scope, "b");
 
     if let Some(body_value) = request.get(scope, body_key.into()) {
         if !body_value.is_null_or_undefined() {
-            body = Body::from(extract_v8_string(body_value, scope)?);
+            body = Bytes::from(extract_v8_string(body_value, scope)?);
         }
     }
 

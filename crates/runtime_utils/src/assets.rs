@@ -1,5 +1,5 @@
 use anyhow::Result;
-use hyper::{body::Bytes, header::CONTENT_TYPE, http::response::Builder, Body, Response};
+use hyper::{body::Bytes, header::CONTENT_TYPE, http::response::Builder, Response};
 use std::{
     collections::HashSet,
     fs,
@@ -26,7 +26,7 @@ pub fn find_asset<'a>(url: &'a str, assets: &'a HashSet<String>) -> Option<&'a s
         .map(|asset| asset.as_str())
 }
 
-pub fn handle_asset(root: PathBuf, asset: &str) -> Result<(Builder, Body)> {
+pub fn handle_asset(root: PathBuf, asset: &str) -> Result<(Builder, Bytes)> {
     let path = root.join("assets").join(asset);
     let body = fs::read(path)?;
 
@@ -48,7 +48,7 @@ pub fn handle_asset(root: PathBuf, asset: &str) -> Result<(Builder, Body)> {
 
     Ok((
         Response::builder().header(CONTENT_TYPE, content_type),
-        Body::from(Bytes::from(body)),
+        Bytes::from(body),
     ))
 }
 

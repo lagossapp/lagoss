@@ -160,7 +160,7 @@ impl Cronjob {
                             RunResult::Response(response_builder, body, elapsed) => {
                                 let response = response_builder.body(body).unwrap();
                                 let status = response.status();
-                                let body = body::to_bytes(response.into_body()).await.unwrap_or_else(|error| {
+                                let body = http_body_util::BodyExt::collect(response.into_body()).await.unwrap_or_else(|error| {
                                     error!(
                                         deployment = deployment.id,
                                         function = deployment.function_id;

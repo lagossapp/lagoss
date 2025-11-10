@@ -1,5 +1,5 @@
 use anyhow::{anyhow, Result};
-use hyper::{header::HeaderName, http::HeaderValue, HeaderMap};
+use http::{HeaderMap, HeaderName, HeaderValue};
 
 pub fn extract_v8_string(
     value: v8::Local<v8::Value>,
