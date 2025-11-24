@@ -7,4 +7,4 @@ edition = "2021"
 lagoss-runtime-utils = { path = "../runtime_utils" }
 anyhow = "1.0.72"
 async-trait = "0.1.72"
-rust-s3 = "0.37.0"
+rust-s3 = "0.33"
