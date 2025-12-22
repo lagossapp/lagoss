@@ -18,7 +18,7 @@ mod utils;
 #[tokio::test]
 #[serial]
 async fn return_404_no_deployment_found() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let serverless = start(
         Arc::new(DashMap::new()),
         "127.0.0.1:4000".parse().unwrap(),
@@ -39,7 +39,7 @@ async fn return_404_no_deployment_found() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn return_403_cron_deployment() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -77,7 +77,7 @@ async fn return_403_cron_deployment() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn return_500_unknown_code() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -115,7 +115,7 @@ async fn return_500_unknown_code() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn return_502_timeout_execution() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -153,7 +153,7 @@ async fn return_502_timeout_execution() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn return_502_timeout_init() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -191,7 +191,7 @@ async fn return_502_timeout_init() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn return_500_code_invalid() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -229,7 +229,7 @@ async fn return_500_code_invalid() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn return_500_throw_error() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),

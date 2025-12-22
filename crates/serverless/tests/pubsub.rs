@@ -12,7 +12,7 @@ mod utils;
 #[tokio::test]
 #[serial]
 async fn deploy_undeploy() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let pubsub = FakePubSub::default();
     let tx = pubsub.get_tx();
     let serverless = start(
@@ -85,7 +85,7 @@ async fn deploy_undeploy() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn assign_correct_domains_prod() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let pubsub = FakePubSub::default();
     let tx = pubsub.get_tx();
     let serverless = start(
@@ -146,7 +146,7 @@ async fn assign_correct_domains_prod() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn assign_correct_domains_dev() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let pubsub = FakePubSub::default();
     let tx = pubsub.get_tx();
     let serverless = start(
@@ -207,7 +207,7 @@ async fn assign_correct_domains_dev() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn skip_cron_not_same_region() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let pubsub = FakePubSub::default();
     let tx = pubsub.get_tx();
     let serverless = start(
@@ -251,7 +251,7 @@ async fn skip_cron_not_same_region() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn warn_cron_direct_access() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let pubsub = FakePubSub::default();
     let tx = pubsub.get_tx();
     let serverless = start(
@@ -275,7 +275,7 @@ async fn warn_cron_direct_access() -> Result<()> {
     "tickTimeout": 1000,
     "totalTimeout": 1000,
     "cron": "* * * * *",
-    "cronRegion": "local",
+    "cronRegion": "local-test",
     "env": {},
     "isProduction": true,
     "assets": []
@@ -283,7 +283,7 @@ async fn warn_cron_direct_access() -> Result<()> {
         .into(),
     ))
     .await?;
-    tokio::time::sleep(Duration::from_millis(100)).await;
+    tokio::time::sleep(Duration::from_millis(500)).await;
 
     let response = reqwest::get("http://127.0.0.1:4000").await?;
     assert_eq!(response.status(), 403);

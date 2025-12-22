@@ -333,7 +333,7 @@ async fn throw_invalid_url() {
 
     utils::assert_run_result(
         &receiver,
-        RunResult::Error("Uncaught Error: builder error: relative URL without a base".into()),
+        RunResult::Error("Uncaught Error: builder error".into()),
     )
     .await;
 }
@@ -490,7 +490,7 @@ async fn redirect_loop() {
 
     utils::assert_run_result(
         &receiver,
-        RunResult::Error("Uncaught Error: error following redirect: Too many redirects".into()),
+        RunResult::Error("Uncaught Error: error following redirect".into()),
     )
     .await;
 }

@@ -45,6 +45,7 @@ flume = "0.11.0"
 [dev-dependencies]
 serial_test = "2.0.0"
 clickhouse = { version = "0.13", features = ["test-util"] }
+lagoss-runtime-utils = { path = "../runtime_utils", features = ["test"] }
 
 [features]
 default = []

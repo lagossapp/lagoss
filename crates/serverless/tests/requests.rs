@@ -17,7 +17,7 @@ mod utils;
 #[tokio::test]
 #[serial]
 async fn returns_correct_http() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -58,7 +58,7 @@ async fn returns_correct_http() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn returns_correct_path() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -107,7 +107,7 @@ async fn returns_correct_path() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn forwards_headers() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -135,7 +135,12 @@ async fn forwards_headers() -> Result<()> {
     .await?;
     tokio::spawn(serverless);
 
-    let response = reqwest::get("http://127.0.0.1:4000").await?;
+    let client = reqwest::Client::new();
+    let response = client
+        .get("http://127.0.0.1:4000")
+        .header("Accept-Encoding", "gzip")
+        .send()
+        .await?;
     assert_eq!(response.status(), 200);
     assert_eq!(response.headers()["accept"], "*/*");
     assert_eq!(response.headers()["accept-encoding"], "gzip");
@@ -148,7 +153,7 @@ async fn forwards_headers() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn stream_sequentially() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),

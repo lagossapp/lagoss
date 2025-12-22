@@ -7,7 +7,7 @@ use crate::utils::mock::Mock;
 
 mod mock;
 
-pub fn setup() -> Client {
+pub async fn setup() -> Client {
     static START: Once = Once::new();
 
     START.call_once(|| {
@@ -16,7 +16,7 @@ pub fn setup() -> Client {
         Runtime::new(RuntimeOptions::default());
     });
 
-    let mock = Mock::new();
+    let mock = Mock::new().await;
     mock.add(handlers::record::<RequestRow>());
     mock.add(handlers::record::<LogRow>());
     Client::default().with_url(mock.url())

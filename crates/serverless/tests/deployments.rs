@@ -15,7 +15,7 @@ mod utils;
 #[tokio::test]
 #[serial]
 async fn simple() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -53,7 +53,7 @@ async fn simple() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn custom_domains() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let deployments = Arc::new(DashMap::new());
     let deployment = Arc::new(Deployment {
         id: "simple".into(),
@@ -99,7 +99,7 @@ async fn custom_domains() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn reuse_isolate() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -141,7 +141,7 @@ async fn reuse_isolate() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn reuse_isolate_across_domains() -> Result<()> {
-    let client = utils::setup();
+    let client = utils::setup().await;
     let deployments = Arc::new(DashMap::new());
     let deployment = Arc::new(Deployment {
         id: "counter".into(),

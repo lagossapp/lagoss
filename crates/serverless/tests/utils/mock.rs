@@ -36,13 +36,13 @@ pub struct Mock {
 
 impl Mock {
     #[allow(clippy::new_without_default)]
-    pub fn new() -> Self {
+    pub async fn new() -> Self {
         let (tx, rx) = channel::mpsc::unbounded::<HandlerFn>();
         let rx = Arc::new(Mutex::new(rx));
         let responses_left = Arc::new(AtomicUsize::new(0));
         let responses_left_0 = responses_left.clone();
 
-        let (addr_tx, addr_rx) = std::sync::mpsc::channel();
+        let (addr_tx, addr_rx) = tokio::sync::oneshot::channel();
 
         // Spawn the server in a background task
         tokio::spawn(async move {
@@ -65,7 +65,12 @@ impl Mock {
                         let responses_left = responses_left.clone();
                         async move {
                             let (parts, body) = req.into_parts();
-                            let bytes = body.collect().await.unwrap().to_bytes();
+                            let bytes = match timeout(Duration::from_secs(5), body.collect()).await
+                            {
+                                Ok(Ok(c)) => c.to_bytes(),
+                                Ok(Err(e)) => panic!("Body error: {}", e),
+                                Err(_) => panic!("Body timeout"),
+                            };
                             let req = Request::from_parts(parts, bytes);
 
                             let handler_fn = {
@@ -97,7 +102,7 @@ impl Mock {
             }
         });
 
-        let addr = addr_rx.recv().unwrap();
+        let addr = addr_rx.await.unwrap();
 
         Self {
             url: format!("http://{addr}"),
