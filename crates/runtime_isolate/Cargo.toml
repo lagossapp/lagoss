@@ -7,7 +7,8 @@ edition = "2021"
 v8 = "0.74.3"
 tokio = { version = "1", features = ["rt-multi-thread"] }
 futures = "0.3.28"
-hyper = { version = "0.14.27", features = ["client"] }
+hyper = { version = "1.0" }
+http-body-util = "0.1"
 flume = "0.11.0"
 anyhow = "1.0.72"
 log = { version = "0.4.19", features = ["std", "kv_unstable"] }
@@ -17,7 +18,7 @@ uuid = { version = "1.4.1", features = ["v4", "fast-rng"] }
 lagoss-runtime-v8-utils = { path = "../runtime_v8_utils" }
 lagoss-runtime-http = { path = "../runtime_http" }
 lagoss-runtime-crypto = { path = "../runtime_crypto" }
-reqwest = { version = "0.11.18", default-features = false, features = ["rustls-tls"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
 
 [features]
 default = []

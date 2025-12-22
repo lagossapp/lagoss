@@ -1,11 +1,16 @@
 use crate::utils::{bundle_application, ApplicationConfig, Assets};
 use anyhow::{anyhow, Error, Result};
+use bytes::Bytes;
 use chrono::offset::Local;
 use dialoguer::console::style;
 use envfile::EnvFile;
-use hyper::server::conn::AddrStream;
-use hyper::service::{make_service_fn, service_fn};
-use hyper::{Body, Request, Response, Server};
+use http_body_util::{combinators::BoxBody, BodyExt, Full};
+use hyper::service::service_fn;
+use hyper::{Request, Response};
+use hyper_util::{
+    rt::{TokioExecutor, TokioIo},
+    server::conn::auto::Builder as ServerBuilder,
+};
 use lagoss_runtime::{options::RuntimeOptions, Runtime};
 use lagoss_runtime_http::{
     RunResult, X_FORWARDED_FOR, X_FORWARDED_HOST, X_FORWARDED_PROTO, X_LAGOSS_ID, X_LAGOSS_REGION,
@@ -19,10 +24,10 @@ use lagoss_runtime_utils::Deployment;
 use notify::event::ModifyKind;
 use notify::{Config, EventKind, RecommendedWatcher, RecursiveMode, Watcher};
 use std::collections::HashMap;
-use std::convert::Infallible;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::Duration;
+use tokio::net::TcpListener;
 use tokio::runtime::Handle;
 use tokio::sync::Mutex;
 
@@ -73,12 +78,12 @@ fn parse_environment_variables(
 // except that we don't have multiple deployments and such multiple
 // threads to manage, and we don't manager logs and metrics.
 async fn handle_request(
-    req: Request<Body>,
+    req: Request<hyper::body::Incoming>,
     assets_dir: Option<PathBuf>,
     ip: String,
     assets: Arc<Mutex<Assets>>,
     isolate_tx: flume::Sender<IsolateEvent>,
-) -> Result<Response<Body>> {
+) -> Result<Response<BoxBody<Bytes, std::io::Error>>> {
     let url = req.uri().path();
 
     let (tx, rx) = flume::unbounded();
@@ -102,7 +107,7 @@ async fn handle_request(
     } else if url == FAVICON_URL {
         tx.send_async(RunResult::Response(
             Response::builder().status(404),
-            Body::empty(),
+            Full::default(),
             None,
         ))
         .await
@@ -116,7 +121,7 @@ async fn handle_request(
         );
 
         let (mut parts, body) = req.into_parts();
-        let body = hyper::body::to_bytes(body).await?;
+        let body = body.collect().await?.to_bytes();
 
         parts.headers.insert(X_FORWARDED_FOR, ip.parse()?);
         parts.headers.insert(X_FORWARDED_PROTO, "http".parse()?);
@@ -188,9 +193,9 @@ pub async fn dev(
     let index = Arc::new(Mutex::new(index));
     let assets = Arc::new(Mutex::new(assets));
 
-    let runtime =
+    let _runtime =
         Runtime::new(RuntimeOptions::default().allow_code_generation(allow_code_generation));
-    let addr = format!(
+    let addr: std::net::SocketAddr = format!(
         "{}:{}",
         hostname.unwrap_or_else(|| "127.0.0.1".into()),
         port.unwrap_or(1234)
@@ -253,27 +258,6 @@ pub async fn dev(
 
     let assets_handle = Arc::clone(&assets);
     let tx_handle = isolate_tx.clone();
-
-    let server = Server::bind(&addr).serve(make_service_fn(move |conn: &AddrStream| {
-        let assets_dir = server_assets_dir.clone();
-        let assets = Arc::clone(&assets_handle);
-        let tx = tx_handle.clone();
-
-        let addr = conn.remote_addr();
-        let ip = addr.ip().to_string();
-
-        async move {
-            Ok::<_, Infallible>(service_fn(move |req| {
-                handle_request(
-                    req,
-                    assets_dir.clone(),
-                    ip.clone(),
-                    Arc::clone(&assets),
-                    tx.clone(),
-                )
-            }))
-        }
-    }));
 
     let (tx, rx) = std::sync::mpsc::channel();
     let mut watcher = RecommendedWatcher::new(
@@ -339,8 +323,35 @@ pub async fn dev(
     );
     println!();
 
-    server.await?;
-    runtime.dispose();
+    let listener = TcpListener::bind(addr).await?;
 
-    Ok(())
+    loop {
+        let (stream, addr) = listener.accept().await?;
+        let io = TokioIo::new(stream);
+
+        let assets_dir = server_assets_dir.clone();
+        let assets = Arc::clone(&assets_handle);
+        let tx = tx_handle.clone();
+        let ip = addr.ip().to_string();
+
+        tokio::task::spawn(async move {
+            if let Err(err) = ServerBuilder::new(TokioExecutor::new())
+                .serve_connection(
+                    io,
+                    service_fn(move |req| {
+                        handle_request(
+                            req,
+                            assets_dir.clone(),
+                            ip.clone(),
+                            Arc::clone(&assets),
+                            tx.clone(),
+                        )
+                    }),
+                )
+                .await
+            {
+                eprintln!("Error serving connection: {:?}", err);
+            }
+        });
+    }
 }
