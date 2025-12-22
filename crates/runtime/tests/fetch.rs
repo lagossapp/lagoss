@@ -1,5 +1,7 @@
+use bytes::Bytes;
+use http_body_util::Full;
 use httptest::{matchers::*, responders::*, Expectation, Server};
-use hyper::{header::CONTENT_TYPE, Body, Request, Response};
+use hyper::{header::CONTENT_TYPE, Request, Response};
 use lagoss_runtime_http::RunResult;
 use lagoss_runtime_isolate::options::IsolateOptions;
 
@@ -26,7 +28,7 @@ async fn basic_fetch() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello, World"),
+        Full::new(Bytes::from("Hello, World")),
     )
     .await;
 }
@@ -55,7 +57,7 @@ async fn request_method() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello, World"),
+        Full::new(Bytes::from("Hello, World")),
     )
     .await;
 }
@@ -84,7 +86,7 @@ async fn request_method_fallback() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello, World"),
+        Full::new(Bytes::from("Hello, World")),
     )
     .await;
 }
@@ -118,7 +120,7 @@ async fn request_headers() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello, World"),
+        Full::new(Bytes::from("Hello, World")),
     )
     .await;
 }
@@ -152,7 +154,7 @@ async fn request_headers_class() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello, World"),
+        Full::new(Bytes::from("Hello, World")),
     )
     .await;
 }
@@ -185,7 +187,7 @@ async fn request_body() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello, World"),
+        Full::new(Bytes::from("Hello, World")),
     )
     .await;
 }
@@ -220,7 +222,9 @@ async fn response_headers() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("content-length: 0 content-type: text/plain;charset=UTF-8 x-token: hello"),
+        Full::new(Bytes::from(
+            "content-length: 0 content-type: text/plain;charset=UTF-8 x-token: hello",
+        )),
     )
     .await;
 }
@@ -252,7 +256,7 @@ async fn response_status() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Moved: 200"),
+        Full::new(Bytes::from("Moved: 200")),
     )
     .await;
 }
@@ -280,7 +284,7 @@ async fn response_json() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from(r#"object {"hello":"world"}"#),
+        Full::new(Bytes::from(r#"object {"hello":"world"}"#)),
     )
     .await;
 }
@@ -305,7 +309,12 @@ async fn response_array_buffer() {
     )));
     send(Request::default());
 
-    utils::assert_response(&receiver, Response::builder(), Body::from("Hello, World")).await;
+    utils::assert_response(
+        &receiver,
+        Response::builder(),
+        Full::new(Bytes::from("Hello, World")),
+    )
+    .await;
 }
 
 #[tokio::test]
@@ -384,7 +393,7 @@ async fn abort_signal() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Aborted"),
+        Full::new(Bytes::from("Aborted")),
     )
     .await;
 }
@@ -410,7 +419,7 @@ async fn redirect() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("200"),
+        Full::new(Bytes::from("200")),
     )
     .await;
 }
@@ -440,7 +449,7 @@ async fn redirect_relative_url() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("200"),
+        Full::new(Bytes::from("200")),
     )
     .await;
 }
@@ -531,7 +540,7 @@ export async function handler() {{
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("ok"),
+        Full::new(Bytes::from("ok")),
     )
     .await;
 }
@@ -551,7 +560,7 @@ async fn fetch_https() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("200"),
+        Full::new(Bytes::from("200")),
     )
     .await;
 
@@ -593,7 +602,7 @@ async fn fetch_set_content_length() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Ok"),
+        Full::new(Bytes::from("Ok")),
     )
     .await;
 }
@@ -629,7 +638,7 @@ async fn fetch_input_request() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello, World"),
+        Full::new(Bytes::from("Hello, World")),
     )
     .await;
 }
@@ -671,7 +680,7 @@ async fn fetch_input_request_init() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello, World"),
+        Full::new(Bytes::from("Hello, World")),
     )
     .await;
 }

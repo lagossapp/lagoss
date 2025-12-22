@@ -1,4 +1,6 @@
-use hyper::{header::CONTENT_TYPE, Body, Request, Response};
+use bytes::Bytes;
+use http_body_util::Full;
+use hyper::{header::CONTENT_TYPE, Request, Response};
 use lagoss_runtime_http::RunResult;
 use lagoss_runtime_isolate::options::IsolateOptions;
 use std::time::Duration;
@@ -21,7 +23,7 @@ async fn crypto_random_uuid() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("string 36 false"),
+        Full::new(Bytes::from("string 36 false")),
     )
     .await;
 }
@@ -42,7 +44,7 @@ async fn crypto_get_random_values() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("true 3 3 false false"),
+        Full::new(Bytes::from("true 3 3 false false")),
     )
     .await;
 }
@@ -63,7 +65,7 @@ async fn crypto_get_random_values_update_in_place() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("3 false"),
+        Full::new(Bytes::from("3 false")),
     )
     .await;
 }

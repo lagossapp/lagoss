@@ -31,7 +31,7 @@ clickhouse = { version = "0.13", features = ["inserter"] }
 bytes = "1.4.0"
 serde = { version = "1.0", features = ["derive"] }
 uuid = { version = "1.4.0", features = ["v4", "fast-rng"] }
-reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json", "stream"] }
 
 # Jemalloc does not work on Windows
 [target.'cfg(not(target_env = "msvc"))'.dependencies]
@@ -44,7 +44,7 @@ flume = "0.11.0"
 
 [dev-dependencies]
 serial_test = "2.0.0"
-clickhouse = { version = "0.11.5", features = ["test-util"] }
+clickhouse = { version = "0.13", features = ["test-util"] }
 
 [features]
 default = []
