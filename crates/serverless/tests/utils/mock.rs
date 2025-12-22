@@ -3,7 +3,6 @@
 // https://github.com/loyd/clickhouse.rs/blob/master/src/test/mock.rs
 use std::{
     convert::Infallible,
-    net::SocketAddr,
     sync::{
         atomic::{AtomicUsize, Ordering},
         Arc,
@@ -111,7 +110,7 @@ impl Mock {
         &self.url
     }
 
-    pub fn add<H: Handler>(&self, mut handler: H) -> H::Control {
+    pub fn add<H: Handler>(&self, handler: H) -> H::Control {
         let (h_fn, control) = handler.make();
         self.responses_left.fetch_add(1, Ordering::Relaxed);
         self.tx
