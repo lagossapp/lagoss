@@ -175,12 +175,11 @@ mod tests {
             .unwrap();
 
             assert_eq!(response.status(), 200);
+            assert!(response.headers().get(X_ROBOTS_TAGS).is_some());
             assert_eq!(
                 response.into_body().collect().await.unwrap().to_bytes(),
                 Bytes::from("Hello World")
             );
-            // response was consumed by into_body(), so we can't check headers on it anymore
-            // assert!(response.headers().get(X_ROBOTS_TAGS).is_some());
         });
 
         tx.send_async(RunResult::Response(
@@ -213,11 +212,11 @@ mod tests {
             .unwrap();
 
             assert_eq!(response.status(), 200);
+            assert!(response.headers().get(X_ROBOTS_TAGS).is_none());
             assert_eq!(
                 response.into_body().collect().await.unwrap().to_bytes(),
                 Bytes::from("Hello World")
             );
-            // assert!(response.headers().get(X_ROBOTS_TAGS).is_none());
         });
 
         tx.send_async(RunResult::Response(
@@ -246,11 +245,11 @@ mod tests {
             .unwrap();
 
             assert_eq!(response.status(), 200);
+            assert!(response.headers().get(X_ROBOTS_TAGS).is_some());
             assert_eq!(
                 response.into_body().collect().await.unwrap().to_bytes(),
                 Bytes::from("Hello world")
             );
-            // assert!(response.headers().get(X_ROBOTS_TAGS).is_some());
         });
 
         tx.send_async(RunResult::Stream(StreamResult::Start(Response::builder())))
@@ -295,11 +294,11 @@ mod tests {
             .unwrap();
 
             assert_eq!(response.status(), 200);
+            assert!(response.headers().get(X_ROBOTS_TAGS).is_none());
             assert_eq!(
                 response.into_body().collect().await.unwrap().to_bytes(),
                 Bytes::from("Hello world")
             );
-            // assert!(response.headers().get(X_ROBOTS_TAGS).is_none());
         });
 
         tx.send_async(RunResult::Stream(StreamResult::Start(Response::builder())))
@@ -340,11 +339,11 @@ mod tests {
             .unwrap();
 
             assert_eq!(response.status(), 200);
+            assert!(response.headers().get(X_ROBOTS_TAGS).is_some());
             assert_eq!(
                 response.into_body().collect().await.unwrap().to_bytes(),
                 Bytes::from("Hello world")
             );
-            // assert!(response.headers().get(X_ROBOTS_TAGS).is_some());
         });
 
         tx.send_async(RunResult::Stream(StreamResult::Data(b"Hello".to_vec())))
