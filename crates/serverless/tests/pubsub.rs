@@ -275,7 +275,7 @@ async fn warn_cron_direct_access() -> Result<()> {
     "tickTimeout": 1000,
     "totalTimeout": 1000,
     "cron": "* * * * *",
-    "cronRegion": "local-test",
+    "cronRegion": "local",
     "env": {},
     "isProduction": true,
     "assets": []

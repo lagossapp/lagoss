@@ -16,12 +16,15 @@ pub fn create_deployments_folder() -> Result<()> {
 }
 
 pub fn rm_deployment(deployment_id: &str) -> Result<()> {
-    // TODO: use some compiler flag instead of env var
-    let skip = std::env::var("LAGOSS_TEST_SKIP_RM_DEPLOYMENT").is_ok();
-    if !skip {
-        let path = Path::new(DEPLOYMENTS_DIR).join(deployment_id);
-        if path.exists() {
-            fs::remove_dir_all(path)?;
+    #[cfg(not(test))]
+    {
+        // TODO: use some compiler flag instead of env var
+        let skip = std::env::var("LAGOSS_TEST_SKIP_RM_DEPLOYMENT").is_ok();
+        if !skip {
+            let path = Path::new(DEPLOYMENTS_DIR).join(deployment_id);
+            if path.exists() {
+                fs::remove_dir_all(path)?;
+            }
         }
     }
 
