@@ -11,7 +11,7 @@ pub async fn setup() -> Client {
     static START: Once = Once::new();
 
     START.call_once(|| {
-        std::env::set_var("LAGOSS_TEST", "true");
+        std::env::set_var("LAGOSS_TEST_SKIP_RM_DEPLOYMENT", "true");
         dotenv::dotenv().expect("Failed to load .env file");
         Runtime::new(RuntimeOptions::default());
     });
