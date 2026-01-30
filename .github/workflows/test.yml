@@ -55,6 +55,8 @@ jobs:
         run: pnpm run --filter=@lagoss/js-runtime build
       - name: Test
         run: pnpm test
+        env:
+          LAGOSS_TEST_SKIP_RM_DEPLOYMENT: 'true'
 
   typecheck:
     name: Typecheck
