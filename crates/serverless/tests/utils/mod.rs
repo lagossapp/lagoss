@@ -16,7 +16,7 @@ pub async fn setup() -> Client {
         Runtime::new(RuntimeOptions::default());
     });
 
-    let mock = Mock::new().await;
+    let mock = Mock::new();
     mock.add(handlers::record::<RequestRow>());
     mock.add(handlers::record::<LogRow>());
     Client::default().with_url(mock.url())

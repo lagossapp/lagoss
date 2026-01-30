@@ -283,7 +283,7 @@ async fn warn_cron_direct_access() -> Result<()> {
         .into(),
     ))
     .await?;
-    tokio::time::sleep(Duration::from_millis(500)).await;
+    tokio::time::sleep(Duration::from_millis(100)).await;
 
     let response = reqwest::get("http://127.0.0.1:4000").await?;
     assert_eq!(response.status(), 403);
