@@ -4,6 +4,7 @@
 !crates/**/Cargo.toml
 !crates/**/Cargo.lock
 !crates/**/*.rs
+!crates/serverless/migrations/*.sql
 !crates/runtime/icudtl.dat
 !crates/runtime_utils/public/*.html
 !packages/js-runtime/src/

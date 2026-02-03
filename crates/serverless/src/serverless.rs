@@ -79,14 +79,20 @@ async fn handle_error(
         _ => ("warn", "Unknown result".into()),
     };
 
-    if let Err(error) = inserters.lock().await.1.write(&LogRow {
-        function_id,
-        deployment_id,
-        level: level.to_string(),
-        message,
-        region: get_region().clone(),
-        timestamp: UNIX_EPOCH.elapsed().unwrap().as_secs() as u32,
-    }) {
+    if let Err(error) = inserters
+        .lock()
+        .await
+        .1
+        .write(&LogRow {
+            function_id,
+            deployment_id,
+            level: level.to_string(),
+            message,
+            region: get_region().clone(),
+            timestamp: UNIX_EPOCH.elapsed().unwrap().as_secs() as u32,
+        })
+        .await
+    {
         error!("Error while writing log: {}", error);
     }
 }
@@ -294,7 +300,7 @@ where
                 ResponseEvent::Bytes(bytes, cpu_time_micros) => {
                     let timestamp = UNIX_EPOCH.elapsed().unwrap().as_secs() as u32;
 
-                    inserters
+                    if let Err(error) = inserters
                         .lock()
                         .await
                         .0
@@ -307,7 +313,14 @@ where
                             cpu_time_micros,
                             timestamp,
                         })
-                        .unwrap_or(());
+                        .await
+                    {
+                        error!(
+                            deployment = deployment_handle.id,
+                            app = deployment_handle.function_id;
+                            "Error while inserting request log: {}", error,
+                        );
+                    }
                 }
                 ResponseEvent::UnexpectedStreamResult(result) => {
                     handle_error(
@@ -355,10 +368,10 @@ where
     let insertion_interval = Duration::from_secs(1);
     let inserters = Arc::new(Mutex::new((
         client
-            .inserter::<RequestRow>("serverless.requests")?
+            .inserter::<RequestRow>("requests")
             .with_period(Some(insertion_interval)),
         client
-            .inserter::<LogRow>("serverless.logs")?
+            .inserter::<LogRow>("logs")
             .with_period(Some(insertion_interval)),
     )));
 
@@ -420,20 +433,24 @@ where
     tokio::spawn(async move {
         while let Ok(log) = log_receiver.recv_async().await {
             let mut inserters = inserters_handle.lock().await;
-            if let Err(error) = inserters.1.write(&LogRow {
-                function_id: log
-                    .2
-                    .as_ref()
-                    .map_or_else(String::new, |metadata| metadata.1.clone()),
-                deployment_id: log
-                    .2
-                    .as_ref()
-                    .map_or_else(String::new, |metadata| metadata.0.clone()),
-                level: log.0,
-                message: log.1,
-                region: get_region().clone(),
-                timestamp: UNIX_EPOCH.elapsed().unwrap().as_secs() as u32,
-            }) {
+            if let Err(error) = inserters
+                .1
+                .write(&LogRow {
+                    function_id: log
+                        .2
+                        .as_ref()
+                        .map_or_else(String::new, |metadata| metadata.1.clone()),
+                    deployment_id: log
+                        .2
+                        .as_ref()
+                        .map_or_else(String::new, |metadata| metadata.0.clone()),
+                    level: log.0,
+                    message: log.1,
+                    region: get_region().clone(),
+                    timestamp: UNIX_EPOCH.elapsed().unwrap().as_secs() as u32,
+                })
+                .await
+            {
                 error!("Error while writing log: {}", error);
             }
         }
