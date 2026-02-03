@@ -135,7 +135,12 @@ async fn forwards_headers() -> Result<()> {
     .await?;
     tokio::spawn(serverless);
 
-    let response = reqwest::get("http://127.0.0.1:4000").await?;
+    let client = reqwest::Client::new();
+    let response = client
+        .get("http://127.0.0.1:4000")
+        .header("Accept-Encoding", "gzip")
+        .send()
+        .await?;
     assert_eq!(response.status(), 200);
     assert_eq!(response.headers()["accept"], "*/*");
     assert_eq!(response.headers()["accept-encoding"], "gzip");

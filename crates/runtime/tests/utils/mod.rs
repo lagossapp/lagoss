@@ -1,7 +1,6 @@
-use hyper::{
-    http::{response::Builder, Request},
-    Body,
-};
+use bytes::Bytes;
+use http_body_util::{BodyExt, Full};
+use hyper::http::{response::Builder, Request};
 use lagoss_runtime::{options::RuntimeOptions, Runtime};
 use lagoss_runtime_http::{RunResult, StreamResult};
 use lagoss_runtime_isolate::{options::IsolateOptions, Isolate, IsolateEvent, IsolateRequest};
@@ -26,7 +25,7 @@ pub fn setup_allow_codegen() {
     });
 }
 
-type SendRequest = Box<dyn Fn(Request<Body>)>;
+type SendRequest = Box<dyn Fn(Request<Full<Bytes>>)>;
 
 #[allow(dead_code)]
 pub fn create_isolate(options: IsolateOptions) -> (SendRequest, flume::Receiver<RunResult>) {
@@ -45,13 +44,13 @@ pub fn create_isolate(options: IsolateOptions) -> (SendRequest, flume::Receiver<
         })
     });
 
-    let send_isolate_event = Box::new(move |req: Request<Body>| {
+    let send_isolate_event = Box::new(move |req: Request<Full<Bytes>>| {
         let request_tx = request_tx.clone();
         let sender = sender.clone();
 
         tokio::spawn(async move {
             let (parts, body) = req.into_parts();
-            let body = hyper::body::to_bytes(body).await.unwrap();
+            let body = body.collect().await.unwrap().to_bytes();
             let request = (parts, body);
 
             request_tx
@@ -79,13 +78,13 @@ pub fn create_isolate_without_snapshot(
         })
     });
 
-    let send_isolate_event = Box::new(move |req: Request<Body>| {
+    let send_isolate_event = Box::new(move |req: Request<Full<Bytes>>| {
         let request_tx = request_tx.clone();
         let sender = sender.clone();
 
         tokio::spawn(async move {
             let (parts, body) = req.into_parts();
-            let body = hyper::body::to_bytes(body).await.unwrap();
+            let body = body.collect().await.unwrap().to_bytes();
             let request = (parts, body);
 
             request_tx
@@ -152,22 +151,25 @@ pub async fn assert_run_result(receiver: &flume::Receiver<RunResult>, run_result
                     _ => unreachable!(),
                 };
 
-                assert_response_inner((response, Body::empty()), (result_response, Body::empty()))
-                    .await;
+                assert_response_inner(
+                    (response, Full::default()),
+                    (result_response, Full::default()),
+                )
+                .await;
             }
         },
     }
 }
 
-async fn assert_response_inner(first: (Builder, Body), second: (Builder, Body)) {
+async fn assert_response_inner(first: (Builder, Full<Bytes>), second: (Builder, Full<Bytes>)) {
     let first = first.0.body(first.1).unwrap();
     let second = second.0.body(second.1).unwrap();
 
     assert_eq!(first.status(), second.status(), "Status mismatch");
     assert_eq!(first.headers(), second.headers(), "Headers mismatch");
 
-    let body1 = hyper::body::to_bytes(first.into_body()).await.unwrap();
-    let body2 = hyper::body::to_bytes(second.into_body()).await.unwrap();
+    let body1 = first.into_body().collect().await.unwrap().to_bytes();
+    let body2 = second.into_body().collect().await.unwrap().to_bytes();
 
     assert_eq!(body1, body2, "Body mismatch");
 }
@@ -176,7 +178,7 @@ async fn assert_response_inner(first: (Builder, Body), second: (Builder, Body)) 
 pub async fn assert_response(
     receiver: &flume::Receiver<RunResult>,
     response_builder: Builder,
-    body: Body,
+    body: Full<Bytes>,
 ) {
     let result = receiver.recv_async().await.unwrap().as_response();
 

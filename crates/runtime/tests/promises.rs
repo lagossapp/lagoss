@@ -1,5 +1,7 @@
+use bytes::Bytes;
+use http_body_util::Full;
 use httptest::{matchers::*, responders::*, Expectation, Server};
-use hyper::{header::CONTENT_TYPE, Body, Request, Response};
+use hyper::{header::CONTENT_TYPE, Request, Response};
 use lagoss_runtime_isolate::options::IsolateOptions;
 
 mod utils;
@@ -13,12 +15,12 @@ async fn execute_async_handler() {
 }"
         .into(),
     ));
-    send(Request::default());
+    send(Request::builder().body(Full::new(Bytes::new())).unwrap());
 
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Async handler"),
+        Full::new(Bytes::from("Async handler")),
     )
     .await;
 }
@@ -39,12 +41,12 @@ async fn execute_promise() {
     return new Response(body);
 }}"
     )));
-    send(Request::default());
+    send(Request::builder().body(Full::new(Bytes::new())).unwrap());
 
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello, World"),
+        Full::new(Bytes::from("Hello, World")),
     )
     .await;
 }

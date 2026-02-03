@@ -1,6 +1,8 @@
+use bytes::Bytes;
+use http_body_util::Full;
 use hyper::{
     header::{CONTENT_TYPE, HOST},
-    Body, Method, Request, Response,
+    Method, Request, Response,
 };
 use lagoss_runtime_http::{RunResult, StreamResult};
 use lagoss_runtime_isolate::options::IsolateOptions;
@@ -16,12 +18,12 @@ async fn execute_function() {
 }"
         .into(),
     ));
-    send(Request::default());
+    send(Request::builder().body(Full::new(Bytes::new())).unwrap());
 
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello world"),
+        Full::new(Bytes::from("Hello world")),
     )
     .await;
 }
@@ -37,12 +39,12 @@ async fn execute_function_export_as() {
 export { hello as handler }"
             .into(),
     ));
-    send(Request::default());
+    send(Request::builder().body(Full::new(Bytes::new())).unwrap());
 
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello world"),
+        Full::new(Bytes::from("Hello world")),
     )
     .await;
 }
@@ -56,21 +58,21 @@ async fn execute_function_twice() {
 }"
         .into(),
     ));
-    send(Request::default());
+    send(Request::builder().body(Full::new(Bytes::new())).unwrap());
 
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello world"),
+        Full::new(Bytes::from("Hello world")),
     )
     .await;
 
-    send(Request::default());
+    send(Request::builder().body(Full::new(Bytes::new())).unwrap());
 
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello world"),
+        Full::new(Bytes::from("Hello world")),
     )
     .await;
 }
@@ -91,12 +93,12 @@ async fn environment_variables() {
                 .collect(),
         ),
     );
-    send(Request::default());
+    send(Request::builder().body(Full::new(Bytes::new())).unwrap());
 
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello world"),
+        Full::new(Bytes::from("Hello world")),
     )
     .await;
 }
@@ -153,7 +155,7 @@ async fn get_body() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello world"),
+        Full::new(Bytes::from("Hello world")),
     )
     .await;
 }
@@ -179,7 +181,7 @@ async fn get_input() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("https://hello.world/hello"),
+        Full::new(Bytes::from("https://hello.world/hello")),
     )
     .await;
 }
@@ -197,14 +199,14 @@ async fn get_method() {
         Request::builder()
             .method(Method::POST)
             .header(CONTENT_TYPE, "text/plain;charset=UTF-8")
-            .body(Body::empty())
+            .body(Full::new(Bytes::new()))
             .unwrap(),
     );
 
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("POST"),
+        Full::new(Bytes::from("POST")),
     )
     .await;
 }
@@ -221,14 +223,14 @@ async fn get_headers() {
     send(
         Request::builder()
             .header("x-auth", "token")
-            .body(Body::empty())
+            .body(Full::new(Bytes::new()))
             .unwrap(),
     );
 
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("token"),
+        Full::new(Bytes::from("token")),
     )
     .await;
 }
@@ -247,14 +249,14 @@ async fn return_headers() {
 }"
         .into(),
     ));
-    send(Request::default());
+    send(Request::builder().body(Full::new(Bytes::new())).unwrap());
 
     utils::assert_response(
         &receiver,
         Response::builder()
             .header(CONTENT_TYPE, "text/html")
             .header("x-test", "test"),
-        Body::from("Hello world"),
+        Full::new(Bytes::from("Hello world")),
     )
     .await;
 }
@@ -273,14 +275,14 @@ async fn return_headers_from_headers_api() {
 }"
         .into(),
     ));
-    send(Request::default());
+    send(Request::builder().body(Full::new(Bytes::new())).unwrap());
 
     utils::assert_response(
         &receiver,
         Response::builder()
             .header(CONTENT_TYPE, "text/html")
             .header("x-test", "test"),
-        Body::from("Hello world"),
+        Full::new(Bytes::from("Hello world")),
     )
     .await;
 }
@@ -296,14 +298,14 @@ async fn return_status() {
 }"
         .into(),
     ));
-    send(Request::default());
+    send(Request::builder().body(Full::new(Bytes::new())).unwrap());
 
     utils::assert_response(
         &receiver,
         Response::builder()
             .header(CONTENT_TYPE, "text/plain;charset=UTF-8")
             .status(302),
-        Body::from("Moved permanently"),
+        Full::new(Bytes::from("Moved permanently")),
     )
     .await;
 }
@@ -319,9 +321,14 @@ async fn return_uint8array() {
 }"
         .into(),
     ));
-    send(Request::default());
+    send(Request::builder().body(Full::new(Bytes::new())).unwrap());
 
-    utils::assert_response(&receiver, Response::builder(), Body::from("Hello world")).await;
+    utils::assert_response(
+        &receiver,
+        Response::builder(),
+        Full::new(Bytes::from("Hello world")),
+    )
+    .await;
 }
 
 #[tokio::test]
@@ -339,12 +346,12 @@ async fn console_log() {
 }"
         .into(),
     ));
-    send(Request::default());
+    send(Request::builder().body(Full::new(Bytes::new())).unwrap());
 
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from(""),
+        Full::new(Bytes::from("")),
     )
     .await;
 }
@@ -358,12 +365,12 @@ async fn atob() {
 }"
         .into(),
     ));
-    send(Request::default());
+    send(Request::builder().body(Full::new(Bytes::new())).unwrap());
 
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("Hello"),
+        Full::new(Bytes::from("Hello")),
     )
     .await;
 }
@@ -377,12 +384,12 @@ async fn btoa() {
 }"
         .into(),
     ));
-    send(Request::default());
+    send(Request::builder().body(Full::new(Bytes::new())).unwrap());
 
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("SGVsbG8="),
+        Full::new(Bytes::from("SGVsbG8=")),
     )
     .await;
 }

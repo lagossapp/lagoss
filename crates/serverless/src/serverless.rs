@@ -7,14 +7,15 @@ use crate::{
     get_region, SNAPSHOT_BLOB,
 };
 use anyhow::Result;
+use bytes::Bytes;
 use clickhouse::{inserter::Inserter, Client};
 use dashmap::DashMap;
 use futures::lock::Mutex;
-use hyper::{
-    header::HOST,
-    http::response::Builder,
-    service::{make_service_fn, service_fn},
-    Body, Request, Response, Server,
+use http_body_util::{combinators::BoxBody, BodyExt, Full};
+use hyper::{header::HOST, http::response::Builder, service::service_fn, Request, Response};
+use hyper_util::{
+    rt::{TokioExecutor, TokioIo},
+    server::conn::auto::Builder as ServerBuilder,
 };
 use lagoss_runtime_http::{RunResult, X_LAGOSS_ID};
 use lagoss_runtime_isolate::{
@@ -32,7 +33,6 @@ use log::{error, info, warn};
 use metrics::{decrement_gauge, histogram, increment_counter, increment_gauge};
 use std::{
     collections::HashSet,
-    convert::Infallible,
     env,
     future::Future,
     net::SocketAddr,
@@ -107,14 +107,14 @@ async fn handle_error(
 }
 
 async fn handle_request<D>(
-    req: Request<Body>,
+    req: Request<hyper::body::Incoming>,
     deployments: Deployments,
     last_requests: Arc<DashMap<String, Instant>>,
     workers: Workers,
     inserters: Arc<Mutex<(Inserter<RequestRow>, Inserter<LogRow>)>>,
     downloader: Arc<D>,
     log_sender: flume::Sender<(String, String, Metadata)>,
-) -> Result<Response<Body>>
+) -> Result<Response<BoxBody<Bytes, std::io::Error>>>
 where
     D: Downloader,
 {
@@ -132,7 +132,11 @@ where
             );
             warn!(req:? = req, request = request_id; "No Host header found in request");
 
-            return Ok(Builder::new().status(404).body(PAGE_404.into())?);
+            return Ok(Builder::new().status(404).body(
+                Full::new(Bytes::from(PAGE_404))
+                    .map_err(|_| unreachable!())
+                    .boxed(),
+            )?);
         }
     };
 
@@ -146,7 +150,11 @@ where
             );
             warn!(req:? = req, hostname = hostname, request = request_id; "No deployment found for hostname");
 
-            return Ok(Response::builder().status(404).body(PAGE_404.into())?);
+            return Ok(Response::builder().status(404).body(
+                Full::new(Bytes::from(PAGE_404))
+                    .map_err(|_| unreachable!())
+                    .boxed(),
+            )?);
         }
     };
 
@@ -158,13 +166,21 @@ where
         );
         warn!(req:? = req, hostname = hostname, request = request_id; "Cron deployment cannot be called directly");
 
-        return Ok(Response::builder().status(403).body(PAGE_403.into())?);
+        return Ok(Response::builder().status(403).body(
+            Full::new(Bytes::from(PAGE_403))
+                .map_err(|_| unreachable!())
+                .boxed(),
+        )?);
     }
 
     if !deployment.has_code() {
         if let Err(error) = download_deployment(&deployment, Arc::clone(&downloader)).await {
             error!("Failed to download deployment {}: {}", deployment.id, error);
-            return Ok(Response::builder().status(500).body(PAGE_500.into())?);
+            return Ok(Response::builder().status(500).body(
+                Full::new(Bytes::from(PAGE_500))
+                    .map_err(|_| unreachable!())
+                    .boxed(),
+            )?);
         }
     }
 
@@ -196,7 +212,7 @@ where
         sender
             .send_async(RunResult::Response(
                 Response::builder().status(404),
-                Body::empty(),
+                Full::default(),
                 None,
             ))
             .await
@@ -205,7 +221,7 @@ where
         last_requests.insert(deployment.id.clone(), Instant::now());
 
         let (parts, body) = req.into_parts();
-        let body = hyper::body::to_bytes(body).await?;
+        let body = body.collect().await?.to_bytes();
 
         bytes_in = body.len() as u32;
         let request = (parts, body);
@@ -452,32 +468,47 @@ where
         }
     });
 
-    let server = Server::bind(&addr).serve(make_service_fn(move |_| {
-        let deployments = Arc::clone(&deployments);
-        let last_requests = Arc::clone(&last_requests);
-        let workers = Arc::clone(&workers);
-        let inserters = Arc::clone(&inserters);
-        let downloader = Arc::clone(&downloader);
-        let log_sender = log_sender.clone();
-
-        async move {
-            Ok::<_, Infallible>(service_fn(move |req| {
-                handle_request(
-                    req,
-                    Arc::clone(&deployments),
-                    Arc::clone(&last_requests),
-                    Arc::clone(&workers),
-                    Arc::clone(&inserters),
-                    Arc::clone(&downloader),
-                    log_sender.clone(),
-                )
-            }))
-        }
-    }));
+    let listener = tokio::net::TcpListener::bind(addr).await?;
 
     Ok(async move {
-        if let Err(error) = server.await {
-            error!("Server error: {}", error);
+        loop {
+            let (stream, _) = match listener.accept().await {
+                Ok(s) => s,
+                Err(e) => {
+                    error!("Error accepting connection: {}", e);
+                    continue;
+                }
+            };
+            let io = TokioIo::new(stream);
+
+            let deployments = Arc::clone(&deployments);
+            let last_requests = Arc::clone(&last_requests);
+            let workers = Arc::clone(&workers);
+            let inserters = Arc::clone(&inserters);
+            let downloader = Arc::clone(&downloader);
+            let log_sender = log_sender.clone();
+
+            tokio::task::spawn(async move {
+                if let Err(err) = ServerBuilder::new(TokioExecutor::new())
+                    .serve_connection(
+                        io,
+                        service_fn(move |req| {
+                            handle_request(
+                                req,
+                                Arc::clone(&deployments),
+                                Arc::clone(&last_requests),
+                                Arc::clone(&workers),
+                                Arc::clone(&inserters),
+                                Arc::clone(&downloader),
+                                log_sender.clone(),
+                            )
+                        }),
+                    )
+                    .await
+                {
+                    error!("Error serving connection: {:?}", err);
+                }
+            });
         }
     })
 }

@@ -12,7 +12,6 @@ pub fn setup() -> Client {
 
     START.call_once(|| {
         dotenv::dotenv().expect("Failed to load .env file");
-
         Runtime::new(RuntimeOptions::default());
     });
 
