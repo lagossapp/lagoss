@@ -2,7 +2,7 @@ use clickhouse::Client;
 use std::env;
 
 fn read_env_var(key: &str) -> String {
-    env::var(key).expect(format!("{} env variable has to be set", key).as_str())
+    env::var(key).unwrap_or_else(|_| panic!("{} env variable has to be set", key))
 }
 
 pub fn get_database_name() -> String {
