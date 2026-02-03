@@ -119,7 +119,7 @@ importers:
         version: 4.1.0(@babel/parser@7.28.5)(axios@1.13.1)(db0@0.3.4(drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.15.3)(prisma@5.0.0))(mysql2@3.15.3))(embla-carousel@8.6.0)(focus-trap@7.6.6)(ioredis@5.8.2)(jwt-decode@4.0.0)(magicast@0.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)(vite@7.1.12(@types/node@25.2.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))(vue-router@4.6.3(vue@3.5.22(typescript@5.8.3)))(vue@3.5.22(typescript@5.8.3))(zod@3.25.76)
       '@scaleway/use-random-name':
         specifier: ^1.0.7
-        version: 1.0.7(react@18.3.1)
+        version: 1.0.8(react@18.3.1)
       '@types/nodemailer':
         specifier: ^6.4.17
         version: 6.4.21(aws-crt@1.27.5)
@@ -2657,12 +2657,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@scaleway/random-name@5.1.2':
-    resolution: {integrity: sha512-WBiqKPnJdncl2mcA7t89rZrxaSIRF/eiyo69sbIiVsOj413+zg3Royzv4ddkRdNTnNg0l21GZpA6O8pfZyPAQQ==}
+  '@scaleway/random-name@5.1.3':
+    resolution: {integrity: sha512-LVzkcJ67CSU3T8NQMcIz89JIMh2Oo05E0mqNHPQtHYt5joHAbgEBPITZIq+6rO8Shzrzvw8WsRZKpEGYIKp+cA==}
     engines: {node: '>=20.x'}
 
-  '@scaleway/use-random-name@1.0.7':
-    resolution: {integrity: sha512-u7459pYQOUcU8eF+RtQVBYQ9Ea0nh//CBtRkI9mA38UZTUx3z35ySob0YTKbpQBXKpXz6Zy1isOPc8Z7mtQ1Tg==}
+  '@scaleway/use-random-name@1.0.8':
+    resolution: {integrity: sha512-qKX5Czcv5vdNAiAwqmEKEVyezhRZj+m6tVgoBfU3apecbN1rnXjRW4qiaMttUITMJMtV6EoQekok8arhXQYh7Q==}
     engines: {node: '>=20.x'}
     peerDependencies:
       react: '>=16.8'
@@ -11500,11 +11500,11 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.52.5':
     optional: true
 
-  '@scaleway/random-name@5.1.2': {}
+  '@scaleway/random-name@5.1.3': {}
 
-  '@scaleway/use-random-name@1.0.7(react@18.3.1)':
+  '@scaleway/use-random-name@1.0.8(react@18.3.1)':
     dependencies:
-      '@scaleway/random-name': 5.1.2
+      '@scaleway/random-name': 5.1.3
       react: 18.3.1
 
   '@sec-ant/readable-stream@0.4.1': {}
