@@ -83,14 +83,14 @@ async fn execute_migration(client: &Client, migration: &Migration) -> Result<()>
             continue;
         }
 
-        client.query(statement).execute().await.or_else(|e| {
-            Err(anyhow::anyhow!(
+        client.query(statement).execute().await.map_err(|e| {
+            anyhow::anyhow!(
                 "Failed to execute migration {} - {}: {}\nStatement: {}",
                 migration.version,
                 migration.name,
                 e,
                 statement
-            ))
+            )
         })?;
     }
 

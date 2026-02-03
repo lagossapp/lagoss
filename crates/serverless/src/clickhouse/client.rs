@@ -2,7 +2,7 @@ use clickhouse::Client;
 use std::env;
 
 fn read_env_var(key: &str) -> String {
-    env::var(key).expect(format!("{} env variable should be set", key).as_str())
+    env::var(key).unwrap_or_else(|_| panic!("{} env variable has to be set", key))
 }
 
 pub fn get_database_name() -> String {
@@ -12,6 +12,7 @@ pub fn get_database_name() -> String {
 pub async fn create_client() -> Result<Client, anyhow::Error> {
     let url = read_env_var("CLICKHOUSE_URL");
     let user = read_env_var("CLICKHOUSE_USER");
+    let database = read_env_var("CLICKHOUSE_DATABASE");
 
     let mut client = Client::default().with_url(url).with_user(user);
 
@@ -19,11 +20,9 @@ pub async fn create_client() -> Result<Client, anyhow::Error> {
         client = client.with_password(password);
     }
 
-    let database = get_database_name();
-
     // Ensure the database exists
     client
-        .query(format!("CREATE DATABASE IF NOT EXISTS {}", get_database_name()).as_str())
+        .query(format!("CREATE DATABASE IF NOT EXISTS {}", database).as_str())
         .execute()
         .await?;
 
