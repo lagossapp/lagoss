@@ -125,7 +125,6 @@ where
             });
 
             let response_builder = response_builder_rx.recv_async().await?;
-            let body = Body::wrap_stream(stream_rx.into_stream());
             let response = build_response(response_builder, &deployment, body)?;
 
             // Handle the event in a separate task after we've returned the response
@@ -145,8 +144,7 @@ where
             let body = Full::new(bytes).map_err(|_| unreachable!()).boxed();
             let response = build_response(response_builder, &deployment, body)?;
 
-            let event =
-                ResponseEvent::Bytes(bytes as usize, elapsed.map(|duration| duration.as_micros()));
+            let event = ResponseEvent::Bytes(len, elapsed.map(|duration| duration.as_micros()));
             on_event(event, clone_response_without_body(&response)).await?;
 
             Ok(response)
@@ -163,8 +161,6 @@ where
             Ok(response)
         }
         RunResult::Error(error) => {
-            let response = Response::builder().status(500).body(PAGE_500.into())?;
-
             let body = Full::new(Bytes::from(PAGE_500))
                 .map_err(|_| unreachable!())
                 .boxed();
@@ -185,7 +181,9 @@ fn clone_response_without_body(response: &Response<ResponseBody>) -> Response<Re
         builder = builder.header(key, value);
     }
 
-    builder.body(Full::default()).unwrap()
+    builder
+        .body(Full::default().map_err(|_| unreachable!()).boxed())
+        .unwrap()
 }
 
 #[cfg(test)]
