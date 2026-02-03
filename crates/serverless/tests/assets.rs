@@ -15,7 +15,7 @@ mod utils;
 #[tokio::test]
 #[serial]
 async fn html_assets() -> Result<()> {
-    let client = utils::setup().await;
+    let client = utils::setup();
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -70,7 +70,7 @@ async fn html_assets() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn assets_nested() -> Result<()> {
-    let client = utils::setup().await;
+    let client = utils::setup();
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -118,7 +118,7 @@ async fn assets_nested() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn set_content_type() -> Result<()> {
-    let client = utils::setup().await;
+    let client = utils::setup();
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),

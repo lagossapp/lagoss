@@ -12,7 +12,7 @@ mod utils;
 #[tokio::test]
 #[serial]
 async fn deploy_undeploy() -> Result<()> {
-    let client = utils::setup().await;
+    let client = utils::setup();
     let pubsub = FakePubSub::default();
     let tx = pubsub.get_tx();
     let serverless = start(
@@ -85,7 +85,7 @@ async fn deploy_undeploy() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn assign_correct_domains_prod() -> Result<()> {
-    let client = utils::setup().await;
+    let client = utils::setup();
     let pubsub = FakePubSub::default();
     let tx = pubsub.get_tx();
     let serverless = start(
@@ -146,7 +146,7 @@ async fn assign_correct_domains_prod() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn assign_correct_domains_dev() -> Result<()> {
-    let client = utils::setup().await;
+    let client = utils::setup();
     let pubsub = FakePubSub::default();
     let tx = pubsub.get_tx();
     let serverless = start(
@@ -207,7 +207,7 @@ async fn assign_correct_domains_dev() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn skip_cron_not_same_region() -> Result<()> {
-    let client = utils::setup().await;
+    let client = utils::setup();
     let pubsub = FakePubSub::default();
     let tx = pubsub.get_tx();
     let serverless = start(
@@ -251,7 +251,7 @@ async fn skip_cron_not_same_region() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn warn_cron_direct_access() -> Result<()> {
-    let client = utils::setup().await;
+    let client = utils::setup();
     let pubsub = FakePubSub::default();
     let tx = pubsub.get_tx();
     let serverless = start(

@@ -17,7 +17,7 @@ mod utils;
 #[tokio::test]
 #[serial]
 async fn returns_correct_http() -> Result<()> {
-    let client = utils::setup().await;
+    let client = utils::setup();
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -58,7 +58,7 @@ async fn returns_correct_http() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn returns_correct_path() -> Result<()> {
-    let client = utils::setup().await;
+    let client = utils::setup();
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -107,7 +107,7 @@ async fn returns_correct_path() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn forwards_headers() -> Result<()> {
-    let client = utils::setup().await;
+    let client = utils::setup();
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
@@ -153,7 +153,7 @@ async fn forwards_headers() -> Result<()> {
 #[tokio::test]
 #[serial]
 async fn stream_sequentially() -> Result<()> {
-    let client = utils::setup().await;
+    let client = utils::setup();
     let deployments = Arc::new(DashMap::new());
     deployments.insert(
         "127.0.0.1:4000".into(),
