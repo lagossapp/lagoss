@@ -1,4 +1,6 @@
-use hyper::{header::CONTENT_TYPE, Body, Request, Response};
+use bytes::Bytes;
+use http_body_util::Full;
+use hyper::{header::CONTENT_TYPE, Request, Response};
 use lagoss_runtime_http::RunResult;
 use lagoss_runtime_isolate::options::IsolateOptions;
 
@@ -57,7 +59,7 @@ export async function handler() {{
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("659 1179 true"),
+        Full::new(Bytes::from("659 1179 true")),
     )
     .await;
 }
@@ -79,7 +81,7 @@ export async function handler() {{
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("653 1179 true"),
+        Full::new(Bytes::from("653 1179 true")),
     )
     .await;
 }
@@ -101,7 +103,7 @@ export async function handler() {{
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("671 1179 true"),
+        Full::new(Bytes::from("671 1179 true")),
     )
     .await;
 }

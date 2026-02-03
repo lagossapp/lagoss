@@ -1,13 +1,15 @@
 use crate::Deployment;
 use anyhow::Result;
+use bytes::Bytes;
 use flume::Receiver;
-use hyper::{
-    body::{Bytes, HttpBody},
-    http::response::Builder,
-    Body, Response,
-};
+use futures::StreamExt;
+use http_body::Frame;
+use http_body_util::{combinators::BoxBody, BodyExt, Full, StreamBody};
+use hyper::{http::response::Builder, Response};
 use lagoss_runtime_http::{RunResult, StreamResult};
 use std::{future::Future, sync::Arc};
+
+type ResponseBody = BoxBody<Bytes, std::io::Error>;
 
 pub const PAGE_404: &str = include_str!("../public/404.html");
 pub const PAGE_403: &str = include_str!("../public/403.html");
@@ -28,8 +30,8 @@ const X_ROBOTS_TAGS: &str = "x-robots-tag";
 fn build_response(
     response_builder: Builder,
     deployment: &Deployment,
-    body: Body,
-) -> Result<Response<Body>> {
+    body: ResponseBody,
+) -> Result<Response<ResponseBody>> {
     // We automatically add a X-Robots-Tag: noindex header to
     // all preview deployments to prevent them from being
     // indexed by search engines
@@ -45,7 +47,7 @@ pub async fn handle_response<F>(
     rx: Receiver<RunResult>,
     deployment: Arc<Deployment>,
     on_event: impl FnOnce(ResponseEvent) -> F + Send + Sync + 'static,
-) -> Result<Response<Body>>
+) -> Result<Response<ResponseBody>>
 where
     F: Future<Output = Result<()>> + Send,
 {
@@ -54,7 +56,9 @@ where
     match result {
         RunResult::Stream(stream_result) => {
             let (stream_tx, stream_rx) = flume::unbounded::<Result<Bytes, std::io::Error>>();
-            let body = Body::wrap_stream(stream_rx.into_stream());
+            let body = BodyExt::boxed(StreamBody::new(
+                stream_rx.into_stream().map(|r| r.map(Frame::data)),
+            ));
 
             let (response_builder_tx, response_builder_rx) = flume::bounded(1);
             let mut total_bytes = 0;
@@ -119,11 +123,12 @@ where
             Ok(response)
         }
         RunResult::Response(response_builder, body, elapsed) => {
+            let bytes = body.collect().await?.to_bytes();
+            let len = bytes.len();
+            let body = Full::new(bytes).map_err(|_| unreachable!()).boxed();
             let response = build_response(response_builder, &deployment, body)?;
-            let bytes = response.body().size_hint().exact().unwrap_or(0);
 
-            let event =
-                ResponseEvent::Bytes(bytes as usize, elapsed.map(|duration| duration.as_micros()));
+            let event = ResponseEvent::Bytes(len, elapsed.map(|duration| duration.as_micros()));
             on_event(event).await?;
 
             Ok(response)
@@ -132,13 +137,19 @@ where
             let event = ResponseEvent::LimitsReached(result);
             on_event(event).await?;
 
-            Ok(Response::builder().status(502).body(PAGE_502.into())?)
+            let body = Full::new(Bytes::from(PAGE_502))
+                .map_err(|_| unreachable!())
+                .boxed();
+            Ok(Response::builder().status(502).body(body)?)
         }
         RunResult::Error(_) => {
             let event = ResponseEvent::Error(result);
             on_event(event).await?;
 
-            Ok(Response::builder().status(500).body(PAGE_500.into())?)
+            let body = Full::new(Bytes::from(PAGE_500))
+                .map_err(|_| unreachable!())
+                .boxed();
+            Ok(Response::builder().status(500).body(body)?)
         }
     }
 }
@@ -146,7 +157,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hyper::{body::to_bytes, Response};
+    use hyper::Response;
     use std::time::Duration;
 
     #[tokio::test]
@@ -155,7 +166,7 @@ mod tests {
 
         let handle = tokio::spawn(async move {
             let deployment = Arc::new(Deployment::default());
-            let mut response = handle_response(rx, deployment, |event| async move {
+            let response = handle_response(rx, deployment, |event| async move {
                 assert!(matches!(event, ResponseEvent::Bytes(11, None)));
 
                 Ok(())
@@ -164,16 +175,16 @@ mod tests {
             .unwrap();
 
             assert_eq!(response.status(), 200);
+            assert!(response.headers().get(X_ROBOTS_TAGS).is_some());
             assert_eq!(
-                to_bytes(response.body_mut()).await.unwrap(),
+                response.into_body().collect().await.unwrap().to_bytes(),
                 Bytes::from("Hello World")
             );
-            assert!(response.headers().get(X_ROBOTS_TAGS).is_some());
         });
 
         tx.send_async(RunResult::Response(
             Builder::new(),
-            Body::from("Hello World"),
+            Full::new(Bytes::from("Hello World")),
             None,
         ))
         .await
@@ -192,7 +203,7 @@ mod tests {
                 ..Deployment::default()
             });
 
-            let mut response = handle_response(rx, deployment, |event| async move {
+            let response = handle_response(rx, deployment, |event| async move {
                 assert!(matches!(event, ResponseEvent::Bytes(11, None)));
 
                 Ok(())
@@ -201,16 +212,16 @@ mod tests {
             .unwrap();
 
             assert_eq!(response.status(), 200);
+            assert!(response.headers().get(X_ROBOTS_TAGS).is_none());
             assert_eq!(
-                to_bytes(response.body_mut()).await.unwrap(),
+                response.into_body().collect().await.unwrap().to_bytes(),
                 Bytes::from("Hello World")
             );
-            assert!(response.headers().get(X_ROBOTS_TAGS).is_none());
         });
 
         tx.send_async(RunResult::Response(
             Builder::new(),
-            Body::from("Hello World"),
+            Full::new(Bytes::from("Hello World")),
             None,
         ))
         .await
@@ -225,7 +236,7 @@ mod tests {
 
         let handle = tokio::spawn(async move {
             let deployment = Arc::new(Deployment::default());
-            let mut response = handle_response(rx, deployment, |event| async move {
+            let response = handle_response(rx, deployment, |event| async move {
                 assert!(matches!(event, ResponseEvent::Bytes(11, Some(0))));
 
                 Ok(())
@@ -234,11 +245,11 @@ mod tests {
             .unwrap();
 
             assert_eq!(response.status(), 200);
+            assert!(response.headers().get(X_ROBOTS_TAGS).is_some());
             assert_eq!(
-                to_bytes(response.body_mut()).await.unwrap(),
+                response.into_body().collect().await.unwrap().to_bytes(),
                 Bytes::from("Hello world")
             );
-            assert!(response.headers().get(X_ROBOTS_TAGS).is_some());
         });
 
         tx.send_async(RunResult::Stream(StreamResult::Start(Response::builder())))
@@ -274,7 +285,7 @@ mod tests {
                 ..Deployment::default()
             });
 
-            let mut response = handle_response(rx, deployment, |event| async move {
+            let response = handle_response(rx, deployment, |event| async move {
                 assert!(matches!(event, ResponseEvent::Bytes(11, Some(0))));
 
                 Ok(())
@@ -283,11 +294,11 @@ mod tests {
             .unwrap();
 
             assert_eq!(response.status(), 200);
+            assert!(response.headers().get(X_ROBOTS_TAGS).is_none());
             assert_eq!(
-                to_bytes(response.body_mut()).await.unwrap(),
+                response.into_body().collect().await.unwrap().to_bytes(),
                 Bytes::from("Hello world")
             );
-            assert!(response.headers().get(X_ROBOTS_TAGS).is_none());
         });
 
         tx.send_async(RunResult::Stream(StreamResult::Start(Response::builder())))
@@ -319,7 +330,7 @@ mod tests {
 
         let handle = tokio::spawn(async move {
             let deployment = Arc::new(Deployment::default());
-            let mut response = handle_response(rx, deployment, |event| async move {
+            let response = handle_response(rx, deployment, |event| async move {
                 assert!(matches!(event, ResponseEvent::Bytes(11, Some(0))));
 
                 Ok(())
@@ -328,11 +339,11 @@ mod tests {
             .unwrap();
 
             assert_eq!(response.status(), 200);
+            assert!(response.headers().get(X_ROBOTS_TAGS).is_some());
             assert_eq!(
-                to_bytes(response.body_mut()).await.unwrap(),
+                response.into_body().collect().await.unwrap().to_bytes(),
                 Bytes::from("Hello world")
             );
-            assert!(response.headers().get(X_ROBOTS_TAGS).is_some());
         });
 
         tx.send_async(RunResult::Stream(StreamResult::Data(b"Hello".to_vec())))

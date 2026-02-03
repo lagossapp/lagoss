@@ -1,5 +1,6 @@
 use console::style;
-use hyper::{http::Request, Body};
+use hyper::Request;
+use bytes::Bytes;
 use lagoss_runtime::{options::RuntimeOptions, Runtime};
 use lagoss_runtime_http::RunResult;
 use lagoss_runtime_isolate::{options::IsolateOptions, Isolate, IsolateEvent, IsolateRequest};
@@ -155,8 +156,8 @@ export function handler() {{
     });
 
     let (request_tx, request_rx) = flume::unbounded();
-    let (parts, body) = Request::new(Body::empty()).into_parts();
-    let body = hyper::body::to_bytes(body).await.unwrap();
+    let (parts, body) = Request::new(String::new()).into_parts();
+    let body = Bytes::from(body);
     let request = (parts, body);
 
     tx.send_async(IsolateEvent::Request(IsolateRequest {

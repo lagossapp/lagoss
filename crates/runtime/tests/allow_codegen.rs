@@ -1,4 +1,6 @@
-use hyper::{header::CONTENT_TYPE, Body, Request, Response};
+use bytes::Bytes;
+use http_body_util::Full;
+use hyper::{header::CONTENT_TYPE, Request, Response};
 use lagoss_runtime_isolate::options::IsolateOptions;
 
 mod utils;
@@ -18,7 +20,7 @@ return new Response(result)
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("2"),
+        Full::new(Bytes::from("2")),
     )
     .await;
 }
@@ -38,7 +40,7 @@ async fn allow_function() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("2"),
+        Full::new(Bytes::from("2")),
     )
     .await;
 }

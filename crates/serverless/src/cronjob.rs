@@ -2,7 +2,8 @@ use anyhow::Result;
 use bytes::Bytes;
 use clickhouse::inserter::Inserter;
 use futures::lock::Mutex;
-use hyper::{body, Request};
+use http_body_util::BodyExt;
+use hyper::Request;
 use lagoss_runtime_http::RunResult;
 use lagoss_runtime_isolate::{
     options::{IsolateOptions, Metadata},
@@ -160,7 +161,7 @@ impl Cronjob {
                             RunResult::Response(response_builder, body, elapsed) => {
                                 let response = response_builder.body(body).unwrap();
                                 let status = response.status();
-                                let body = body::to_bytes(response.into_body()).await.unwrap_or_else(|error| {
+                                let body = response.into_body().collect().await.map(|c| c.to_bytes()).unwrap_or_else(|error| {
                                     error!(
                                         deployment = deployment.id,
                                         function = deployment.function_id;
@@ -185,7 +186,6 @@ impl Cronjob {
                                         cpu_time_micros: elapsed.map(|duration| duration.as_micros()),
                                         timestamp,
                                     })
-                                    .await
                                     .unwrap_or(());
 
                                 let body = String::from_utf8_lossy(&body);

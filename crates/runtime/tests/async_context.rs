@@ -1,4 +1,6 @@
-use hyper::{header::CONTENT_TYPE, Body, Request, Response};
+use bytes::Bytes;
+use http_body_util::Full;
+use hyper::{header::CONTENT_TYPE, Request, Response};
 use lagoss_runtime_isolate::options::IsolateOptions;
 
 mod utils;
@@ -25,7 +27,7 @@ export function handler() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("true"),
+        Full::new(Bytes::from("true")),
     )
     .await;
 }
@@ -49,7 +51,7 @@ export function handler() {
     ));
     send(Request::default());
 
-    utils::assert_response(&receiver, Response::builder(), Body::empty()).await;
+    utils::assert_response(&receiver, Response::builder(), Full::default()).await;
 }
 
 #[tokio::test]
@@ -72,7 +74,7 @@ export function handler() {
     ));
     send(Request::default());
 
-    utils::assert_response(&receiver, Response::builder(), Body::empty()).await;
+    utils::assert_response(&receiver, Response::builder(), Full::default()).await;
 }
 
 #[tokio::test]
@@ -109,7 +111,7 @@ export function handler() {
     ));
     send(Request::default());
 
-    utils::assert_response(&receiver, Response::builder(), Body::empty()).await;
+    utils::assert_response(&receiver, Response::builder(), Full::default()).await;
 }
 
 #[tokio::test]
@@ -158,7 +160,7 @@ export function handler() {
     ));
     send(Request::default());
 
-    utils::assert_response(&receiver, Response::builder(), Body::empty()).await;
+    utils::assert_response(&receiver, Response::builder(), Full::default()).await;
 }
 
 #[tokio::test]
@@ -192,7 +194,7 @@ export async function handler() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("2"),
+        Full::new(Bytes::from("2")),
     )
     .await;
 
@@ -201,7 +203,7 @@ export async function handler() {
     utils::assert_response(
         &receiver,
         Response::builder().header(CONTENT_TYPE, "text/plain;charset=UTF-8"),
-        Body::from("4"),
+        Full::new(Bytes::from("4")),
     )
     .await;
 

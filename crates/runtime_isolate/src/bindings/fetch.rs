@@ -1,5 +1,5 @@
 use anyhow::{anyhow, Result};
-use hyper::{Body, Request};
+use hyper::Request;
 use lagoss_runtime_http::request_from_v8;
 use reqwest::{redirect::Policy, Client, ClientBuilder};
 use std::sync::OnceLock;
@@ -10,7 +10,7 @@ use super::BindingResult;
 
 static CLIENT: OnceLock<Client> = OnceLock::new();
 
-type Arg = Request<Body>;
+type Arg = Request<String>;
 
 pub fn fetch_init(scope: &mut v8::HandleScope, args: v8::FunctionCallbackArguments) -> Result<Arg> {
     let id = scope
@@ -60,7 +60,7 @@ pub async fn fetch_binding(id: usize, arg: Arg) -> BindingResult {
     let (parts, body) = arg.into_parts();
 
     match client
-        .request(parts.method.into(), parts.uri.to_string())
+        .request(parts.method, parts.uri.to_string())
         .headers(parts.headers)
         .body(body)
         .send()

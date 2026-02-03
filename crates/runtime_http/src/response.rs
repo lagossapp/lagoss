@@ -1,5 +1,7 @@
 use anyhow::{anyhow, Result};
-use hyper::{body::Bytes, http::response::Builder, Body, HeaderMap, Response};
+use bytes::Bytes;
+use http_body_util::Full;
+use hyper::{http::response::Builder, HeaderMap, Response};
 use lagoss_runtime_v8_utils::{
     extract_v8_headers_object, extract_v8_integer, extract_v8_string, v8_headers_object,
     v8_integer, v8_string,
@@ -29,7 +31,7 @@ pub fn response_to_v8<'a>(
 pub fn response_from_v8<'a>(
     scope: &mut v8::HandleScope<'a>,
     response: v8::Local<'a, v8::Value>,
-) -> Result<(Builder, Body, bool)> {
+) -> Result<(Builder, Full<Bytes>, bool)> {
     let response = match response.to_object(scope) {
         Some(response) => response,
         None => return Err(anyhow!("Response is not an object")),
@@ -70,11 +72,11 @@ pub fn response_from_v8<'a>(
 
     return match response.get(scope, body_key.into()) {
         Some(body_value) => match body_value.is_null_or_undefined() {
-            true => Ok((response_builder, Body::empty(), true)),
+            true => Ok((response_builder, Full::default(), true)),
             false => {
                 let body = extract_v8_string(body_value, scope)?;
 
-                Ok((response_builder, body.into(), false))
+                Ok((response_builder, Full::new(Bytes::from(body)), false))
             }
         },
         None => Err(anyhow!("Could not find body")),

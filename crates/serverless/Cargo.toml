@@ -4,7 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-hyper = { version = "0.14.27", features = ["server", "http1", "runtime", "stream"] }
+hyper = { version = "1.0", features = ["server", "http1"] }
+hyper-util = { version = "0.1", features = ["tokio", "server", "server-auto"] }
+http-body-util = "0.1"
 tokio = { version = "1", features = ["rt-multi-thread", "sync", "time", "macros", "signal"] }
 tokio-util = { version = "0.7.8", features = ["rt"] }
 lagoss-runtime = { path = "../runtime" }
@@ -25,11 +27,11 @@ tokio-cron-scheduler = "0.9.4"
 # TODO: use a specific version of dashmap when the inline feature is released
 dashmap = { git = "https://github.com/xacrimon/dashmap.git", rev = "7f9522c5286cfbbb78df15f00f87b8331cb875d6", features = ["inline"] }
 futures = "0.3.28"
-clickhouse = "0.11.6"
+clickhouse = { version = "0.13", features = ["inserter"] }
 bytes = "1.4.0"
 serde = { version = "1.0", features = ["derive"] }
 uuid = { version = "1.4.0", features = ["v4", "fast-rng"] }
-reqwest = { version = "0.11.18", default-features = false, features = ["rustls-tls"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json", "stream"] }
 
 # Jemalloc does not work on Windows
 [target.'cfg(not(target_env = "msvc"))'.dependencies]
@@ -42,7 +44,8 @@ flume = "0.11.0"
 
 [dev-dependencies]
 serial_test = "2.0.0"
-clickhouse = { version = "0.11.5", features = ["test-util"] }
+clickhouse = { version = "0.13", features = ["test-util"] }
+lagoss-runtime-utils = { path = "../runtime_utils", features = ["test"] }
 
 [features]
 default = []
