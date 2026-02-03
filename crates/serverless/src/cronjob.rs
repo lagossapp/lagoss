@@ -173,7 +173,7 @@ impl Cronjob {
 
                                 let timestamp = UNIX_EPOCH.elapsed().unwrap().as_secs() as u32;
 
-                                inserters
+                                if let Err(error) = inserters
                                     .lock()
                                     .await
                                     .0
@@ -190,7 +190,14 @@ impl Cronjob {
                                         url: "/".to_string(), // TODO: use actual cron URL
                                         response_status_code: status.as_u16(),
                                     })
-                                    .unwrap_or(());
+                                    .await
+                                {
+                                    error!(
+                                        deployment = deployment.id,
+                                        app = deployment.function_id;
+                                        "Error while inserting request log: {}", error,
+                                    );
+                                }
 
                                 let body = String::from_utf8_lossy(&body);
                                 let maybe_body = if body.is_empty() { String::from("") } else { format!(": {body}") };
