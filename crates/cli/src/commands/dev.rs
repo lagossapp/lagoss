@@ -147,27 +147,19 @@ async fn handle_request(
         ..Deployment::default()
     });
 
-    handle_response(rx, deployment, |event| async move {
+    handle_response(rx, deployment, |event, _| async move {
         match event {
-            ResponseEvent::UnexpectedStreamResult(result) => {
-                println!(
-                    "{} Unexpected stream result: {:?}",
-                    style("✕").red(),
-                    result
-                );
+            ResponseEvent::UnexpectedStreamResult => {
+                println!("{} Unexpected stream result", style("✕").red());
             }
-            ResponseEvent::LimitsReached(result) => {
-                if result.is_timeout() {
-                    println!("{} Function execution timed out", style("✕").red());
-                } else {
-                    println!(
-                        "{} Function execution reached memory limit",
-                        style("✕").red()
-                    );
-                }
+            ResponseEvent::Timeout => {
+                println!("{} App execution timed out", style("✕").red());
             }
-            ResponseEvent::Error(result) => {
-                println!("{} {}", style("✕").red(), result.as_error().as_str());
+            ResponseEvent::MemoryLimit => {
+                println!("{} App execution reached memory limit", style("✕").red());
+            }
+            ResponseEvent::Error(error) => {
+                println!("{} {}", style("✕").red(), error.as_str());
             }
             _ => {}
         }

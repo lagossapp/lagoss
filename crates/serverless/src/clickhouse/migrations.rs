@@ -10,11 +10,23 @@ pub struct Migration {
 }
 
 /// List of all migrations in order
-pub const MIGRATIONS: &[Migration] = &[Migration {
-    version: 1,
-    name: "initial_schema",
-    sql: include_str!("../../migrations/001_initial_schema.sql"),
-}];
+pub const MIGRATIONS: &[Migration] = &[
+    Migration {
+        version: 1,
+        name: "initial_schema",
+        sql: include_str!("../../migrations/001_initial_schema.sql"),
+    },
+    Migration {
+        version: 2,
+        name: "add_missing_fields",
+        sql: include_str!("../../migrations/002_add_missing_fields.sql"),
+    },
+    Migration {
+        version: 3,
+        name: "rename_function_id_to_app_id",
+        sql: include_str!("../../migrations/003_rename_function_id_to_app_id.sql"),
+    },
+];
 
 /// Create the migrations tracking table
 async fn create_migrations_table(client: &Client) -> Result<()> {

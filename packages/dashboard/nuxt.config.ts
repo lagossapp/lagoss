@@ -34,7 +34,7 @@ export default defineNuxtConfig({
       url: '',
       user: '',
       password: '',
-      database: 'serverless',
+      database: 'lagoss',
     },
     apps: {
       blacklistedNames: process.env.BLACKLISTED_APP_NAMES
