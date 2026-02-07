@@ -15,7 +15,7 @@
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
-    "drizzle-orm": "^0.44.2"
+    "drizzle-orm": "^0.45.0"
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.840.0",
