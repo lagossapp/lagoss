@@ -23,7 +23,7 @@ metrics = "0.21.1"
 metrics-exporter-prometheus = { version = "0.18.0", default-features = false, features = ["http-listener"] }
 log = { version = "0.4.19", features = ["std", "kv_unstable", "kv_unstable_serde"] }
 anyhow = "1.0.72"
-tokio-cron-scheduler = "0.9.4"
+tokio-cron-scheduler = "0.15.0"
 # TODO: use a specific version of dashmap when the inline feature is released
 dashmap = { git = "https://github.com/xacrimon/dashmap.git", rev = "7f9522c5286cfbbb78df15f00f87b8331cb875d6", features = ["inline"] }
 futures = "0.3.28"
