@@ -35,7 +35,7 @@ reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"
 
 # Jemalloc does not work on Windows
 [target.'cfg(not(target_env = "msvc"))'.dependencies]
-tikv-jemallocator = "0.5"
+tikv-jemallocator = "0.6"
 
 [build-dependencies]
 lagoss-runtime = { path = "../runtime" }
