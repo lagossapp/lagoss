@@ -1,5 +1,21 @@
 # @lagoss/serverless
 
+## [0.7.0](https://github.com/lagossapp/lagoss/compare/@lagoss/serverless@0.6.0...@lagoss/serverless@0.7.0) (2026-02-24)
+
+
+### Features
+
+* add request logs ([#280](https://github.com/lagossapp/lagoss/issues/280)) ([1f62ac8](https://github.com/lagossapp/lagoss/commit/1f62ac86415e14d3553ec7245085425f5d5d2ffb))
+* **serverless:** update clickhouse client ([#287](https://github.com/lagossapp/lagoss/issues/287)) ([42601b4](https://github.com/lagossapp/lagoss/commit/42601b4ed27b93931742ffad2e25538db70b067c))
+
+
+### Bug Fixes
+
+* **deps:** update rust crate flume to 0.12.0 ([#333](https://github.com/lagossapp/lagoss/issues/333)) ([d7119a3](https://github.com/lagossapp/lagoss/commit/d7119a351c2de1c9ad8153f44bf4e4a178e17efb))
+* **deps:** update rust crate metrics-exporter-prometheus to 0.18.0 ([#334](https://github.com/lagossapp/lagoss/issues/334)) ([2b10a14](https://github.com/lagossapp/lagoss/commit/2b10a140121527b5933f6380377251d9429080cf))
+* **deps:** update rust crate tikv-jemallocator to 0.6 ([#336](https://github.com/lagossapp/lagoss/issues/336)) ([5436c7a](https://github.com/lagossapp/lagoss/commit/5436c7a0182b253ffea449df7b9864ffce6a1ca8))
+* **deps:** update rust crate tokio-cron-scheduler to 0.15.0 ([#337](https://github.com/lagossapp/lagoss/issues/337)) ([2b877bb](https://github.com/lagossapp/lagoss/commit/2b877bbcd7cbdd82eb2e0e89024c3f952bdfa63a))
+
 ## [0.6.0](https://github.com/lagossapp/lagoss/compare/@lagoss/serverless@0.5.0...@lagoss/serverless@0.6.0) (2025-11-03)
 
 
