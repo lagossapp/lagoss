@@ -181,7 +181,11 @@ where
                 .boxed();
             let response = Response::builder().status(502).body(body)?;
 
-            let event = ResponseEvent::MemoryLimit; // TODO: differentiate timeout and memory limit
+            let event = match result {
+                RunResult::Timeout => ResponseEvent::Timeout,
+                RunResult::MemoryLimit => ResponseEvent::MemoryLimit,
+                _ => unreachable!(),
+            };
             on_event(event, clone_response_without_body(&response)).await?;
 
             Ok(response)
