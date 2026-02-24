@@ -10,7 +10,7 @@
     "dev": "esbuild src/index.ts --format=esm --bundle --outdir=dist --watch",
     "test": "vitest --run",
     "build": "esbuild src/index.ts --format=esm --bundle --outdir=dist --minify-syntax --minify-whitespace",
-    "lint": "eslint --cache .",
+    "lint": "oxlint",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@edge-runtime/vm": "^3.2.0",
-    "vitest": "^1.6.0"
+    "vitest": "^1.6.0",
+    "oxlint": "^1.50.0"
   }
 }
