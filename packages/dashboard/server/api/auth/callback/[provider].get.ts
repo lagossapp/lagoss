@@ -55,6 +55,12 @@ export default defineEventHandler(async event => {
   const tokens = await github.oauthCallback(event);
 
   const oauthUser = await github.getUserInfo(tokens.accessToken);
+  if (!oauthUser.email) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Email not provided by OAuth provider',
+    });
+  }
 
   const dbUser = (await db.select().from(userSchema).where(eq(userSchema.email, oauthUser.email)))?.[0];
 

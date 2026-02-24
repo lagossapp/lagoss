@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3';
-import { Organization, organizationMemberSchema, organizationSchema, appSchema } from '~~/server/db/schema';
+import { type Organization, organizationMemberSchema, organizationSchema, appSchema } from '~~/server/db/schema';
 import { and, eq, or, SQL } from 'drizzle-orm';
 import type { Plan } from '~~/server/lib/plans';
 import { APP_NAME_REGEX } from '~~/server/lib/constants';

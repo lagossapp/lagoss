@@ -31,7 +31,7 @@ export const PRO_PLAN: Plan = {
   maxAssetsPerApp: 1000,
 };
 
-export function getPlanOfOrganization(organization: Organization) {
+export function getPlanOfOrganization(organization: { plan: string; planPeriodEnd: string | Date | null }): Plan {
   if (organization.plan === 'pro' && dayjs().isBefore(organization.planPeriodEnd)) {
     return PRO_PLAN;
   }

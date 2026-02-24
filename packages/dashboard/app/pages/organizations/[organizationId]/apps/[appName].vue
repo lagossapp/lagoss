@@ -11,6 +11,9 @@ const route = useRoute();
 const appName = computed(() => route.params.appName as string);
 const { data: app, pending, refresh: refreshApp } = await useFetch(() => `/api/apps/by-name/${appName.value}`);
 
-typedProvide('app', app);
+typedProvide(
+  'app',
+  computed(() => app.value!),
+);
 typedProvide('refreshApp', refreshApp);
 </script>

@@ -1,5 +1,5 @@
 import { mysqlTable, tinyint, varchar, datetime, int, text } from 'drizzle-orm/mysql-core';
-import { InferSelectModel } from 'drizzle-orm';
+import { type InferSelectModel } from 'drizzle-orm';
 import { generateId } from '~~/server/utils/db';
 
 export const userSchema = mysqlTable('User', {

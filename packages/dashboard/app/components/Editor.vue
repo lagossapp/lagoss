@@ -26,7 +26,7 @@ const editor = shallowRef<monaco.editor.IStandaloneCodeEditor>();
 onMounted(() => {
   nextTick(async () => {
     if (import.meta.client && editorEl.value) {
-      const { editor: monacoEditor } = await import('monaco-editor/esm/vs/editor/editor.api');
+      const { editor: monacoEditor } = await import('monaco-editor/esm/vs/editor/editor.api.js');
 
       editor.value = monacoEditor.create(editorEl.value, {
         automaticLayout: true,
@@ -41,12 +41,12 @@ onMounted(() => {
         overviewRulerBorder: false,
         theme: 'vs-dark',
       });
-      editor.value.onDidChangeModelContent(() => {
+      editor.value?.onDidChangeModelContent(() => {
         if (editor.value) {
           emit('update:model-value', editor.value.getValue());
         }
       });
-      editor.value.setValue(modelValue.value);
+      editor.value?.setValue(modelValue.value);
       // monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
       //     noSemanticValidation: false,
       //     noSyntaxValidation: false,

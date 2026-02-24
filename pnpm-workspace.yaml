@@ -1,8 +1,12 @@
 packages:
-  - 'packages/*'
-  - 'packages/integrations/*'
-  - 'crates/cli'
-  - 'crates/runtime'
-  - 'crates/serverless'
-  - 'crates/wpt-runner'
-  - 'crates/runtime_utils'
+  - packages/*
+  - packages/integrations/*
+  - crates/cli
+  - crates/runtime
+  - crates/serverless
+  - crates/wpt-runner
+  - crates/runtime_utils
+
+onlyBuiltDependencies:
+  - aws-crt
+  - esbuild
