@@ -25,12 +25,13 @@
     "astro-adapter"
   ],
   "scripts": {
-    "watch": "tsup-node src/index.ts src/server.ts --format esm --dts --watch",
-    "build": "tsup-node src/index.ts src/server.ts --format esm --dts",
+    "watch": "tsdown src/index.ts src/server.ts --format esm --dts --watch",
+    "build": "tsdown src/index.ts src/server.ts --format esm --dts",
     "lint": "eslint --cache .",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "astro": "^2.1.7"
+    "astro": "^2.1.7",
+    "tsdown": "^0.20.3"
   }
 }

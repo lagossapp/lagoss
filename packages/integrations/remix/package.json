@@ -22,8 +22,8 @@
     "remix"
   ],
   "scripts": {
-    "watch": "tsup src/index.ts --format esm --dts --watch",
-    "build": "tsup src/index.ts --format esm --dts",
+    "watch": "tsdown src/index.ts --format esm --dts --watch",
+    "build": "tsdown src/index.ts --format esm --dts",
     "lint": "eslint --cache .",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
@@ -31,6 +31,7 @@
     "@remix-run/server-runtime": "^1.12.0"
   },
   "devDependencies": {
-    "@types/node": "^24.0.10"
+    "@types/node": "^24.0.10",
+    "tsdown": "^0.20.3"
   }
 }
