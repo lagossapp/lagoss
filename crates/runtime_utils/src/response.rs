@@ -158,7 +158,9 @@ where
             let event_response = clone_response_without_body(&response);
             tokio::spawn(async move {
                 if let Ok(event) = event_rx.recv_async().await {
-                    on_event(event, event_response).await.unwrap_or(());
+                    if let Err(err) = on_event(event, event_response).await {
+                        eprintln!("Error while handling response event: {:?}", err);
+                    }
                 }
             });
 
