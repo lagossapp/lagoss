@@ -25,11 +25,13 @@
   "scripts": {
     "watch": "tsdown src/index.ts --format esm --dts --watch",
     "build": "tsdown src/index.ts --format esm --dts",
-    "lint": "eslint --cache .",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "peerDependencies": {
     "@sveltejs/kit": "^2.8.3",
     "tsdown": "^0.20.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
   }
 }

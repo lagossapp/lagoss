@@ -24,7 +24,6 @@
   "scripts": {
     "watch": "tsdown src/index.ts --format esm --dts --watch",
     "build": "tsdown src/index.ts --format esm --dts",
-    "lint": "eslint --cache .",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
@@ -32,6 +31,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.10",
-    "tsdown": "^0.20.3"
+    "tsdown": "^0.20.3",
+    "typescript": "^5.9.3"
   }
 }
