@@ -15,7 +15,7 @@
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
-    "drizzle-orm": "^0.44.2"
+    "drizzle-orm": "^0.45.0"
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.840.0",
@@ -33,7 +33,7 @@
     "dotenv": "^17.0.0",
     "drizzle-kit": "^0.31.4",
     "is-in-subnet": "^4.0.1",
-    "monaco-editor": "^0.54.0",
+    "monaco-editor": "^0.55.0",
     "mysql2": "^3.14.1",
     "nodemailer": "^6.9.16",
     "nuxt": "^4.1.3",
