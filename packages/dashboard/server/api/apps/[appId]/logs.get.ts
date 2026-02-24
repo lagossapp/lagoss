@@ -27,7 +27,7 @@ SELECT
   timestamp
 FROM logs
 WHERE
-  app_id = '${app.id}'
+  app_id = {appId:String}
 AND
   timestamp >= toDateTime(now() - INTERVAL '${timeframe ?? timeframes['Last hour']}')
   ${level !== 'all' ? `AND level = '${level}'` : ''}
@@ -35,6 +35,9 @@ ORDER BY timestamp DESC
 LIMIT 100
 `.trim(),
     format: 'JSONEachRow',
+    query_params: {
+      appId: app.id,
+    },
   });
 
   const rows = await result.json<{

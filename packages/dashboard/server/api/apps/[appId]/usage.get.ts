@@ -19,12 +19,15 @@ SELECT
   ${groupBy}(timestamp) AS time
 FROM requests
 WHERE
-  app_id = '${app.id}'
+  app_id = {appId:String}
 AND
   timestamp >= now() - INTERVAL ${intervalDays} DAY
 GROUP BY time
 `.trim(),
     format: 'JSONEachRow',
+    query_params: {
+      appId: app.id,
+    },
   });
 
   const rows = await result.json<{

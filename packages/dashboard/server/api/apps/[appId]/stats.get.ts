@@ -10,11 +10,14 @@ SELECT
   count(*) as requests
 FROM requests
 WHERE
-  app_id = '${app.id}'
+  app_id = {appId:String}
 AND
 timestamp >= toStartOfMonth(now())
 `.trim(),
     format: 'JSONEachRow',
+    query_params: {
+      appId: app.id,
+    },
   });
 
   const rows = await result.json<{ requests: number }>();
