@@ -42,6 +42,10 @@ const tabs = computed(() => [
     label: 'Deployments',
   },
   {
+    to: `/organizations/${props.app.organizationId}/apps/${props.app.name}/requests`,
+    label: 'Requests',
+  },
+  {
     to: `/organizations/${props.app.organizationId}/apps/${props.app.name}/logs`,
     label: 'Logs',
   },
