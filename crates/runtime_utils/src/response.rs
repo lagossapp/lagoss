@@ -64,6 +64,9 @@ where
             let (response_builder_tx, response_builder_rx) = flume::bounded(1);
             let (event_tx, event_rx) = flume::bounded(1);
             let mut total_bytes = 0;
+            // Buffer to hold data that arrives before Start
+            let mut buffered_data: Vec<Bytes> = Vec::new();
+            let mut stream_done = false;
 
             match stream_result {
                 StreamResult::Start(response) => {
@@ -71,19 +74,17 @@ where
                 }
                 StreamResult::Data(bytes) => {
                     total_bytes += bytes.len();
-
-                    let bytes = Bytes::from(bytes);
-                    stream_tx.send_async(Ok(bytes)).await.unwrap_or(());
+                    buffered_data.push(Bytes::from(bytes));
                 }
                 StreamResult::Done(_) => {
-                    // Close the stream by sending empty bytes
-                    stream_tx.send_async(Ok(Bytes::new())).await.unwrap_or(());
+                    stream_done = true;
                 }
             }
 
             // Spawn a task to handle the rest of the stream, so we can return the response immediately
             tokio::spawn(async move {
                 let mut event = None;
+                let mut start_received = buffered_data.is_empty() && !stream_done;
 
                 while let Ok(result) = rx.recv_async().await {
                     match result {
@@ -92,20 +93,45 @@ where
                                 .send_async(response_builder)
                                 .await
                                 .unwrap_or(());
+
+                            // Send any buffered data now that we have the response builder
+                            for bytes in buffered_data.drain(..) {
+                                stream_tx.send_async(Ok(bytes)).await.unwrap_or(());
+                            }
+
+                            // If stream was already done before Start arrived, close it now
+                            if stream_done {
+                                event = Some(ResponseEvent::Bytes(total_bytes, None));
+                                stream_tx.send_async(Ok(Bytes::new())).await.unwrap_or(());
+                                break;
+                            }
+
+                            start_received = true;
                         }
                         RunResult::Stream(StreamResult::Data(bytes)) => {
                             total_bytes += bytes.len();
-
                             let bytes = Bytes::from(bytes);
-                            stream_tx.send_async(Ok(bytes)).await.unwrap_or(());
+
+                            if start_received {
+                                stream_tx.send_async(Ok(bytes)).await.unwrap_or(());
+                            } else {
+                                buffered_data.push(bytes);
+                            }
                         }
                         RunResult::Stream(StreamResult::Done(elapsed)) => {
-                            event =
-                                Some(ResponseEvent::Bytes(total_bytes, Some(elapsed.as_micros())));
+                            if start_received {
+                                event = Some(ResponseEvent::Bytes(
+                                    total_bytes,
+                                    Some(elapsed.as_micros()),
+                                ));
 
-                            // Close the stream by sending empty bytes
-                            stream_tx.send_async(Ok(Bytes::new())).await.unwrap_or(());
-                            break;
+                                // Close the stream by sending empty bytes
+                                stream_tx.send_async(Ok(Bytes::new())).await.unwrap_or(());
+                                break;
+                            } else {
+                                // Start hasn't arrived yet, mark as done and wait for Start
+                                stream_done = true;
+                            }
                         }
                         _ => {
                             event = Some(ResponseEvent::UnexpectedStreamResult);
