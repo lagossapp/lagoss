@@ -20,9 +20,10 @@ pub const FAVICON_URL: &str = "/favicon.ico";
 #[derive(Debug)]
 pub enum ResponseEvent {
     Bytes(usize, Option<u128>),
-    UnexpectedStreamResult(RunResult),
-    LimitsReached(RunResult),
-    Error(RunResult),
+    UnexpectedStreamResult,
+    Timeout,
+    MemoryLimit,
+    Error(String),
 }
 
 const X_ROBOTS_TAGS: &str = "x-robots-tag";
@@ -46,7 +47,7 @@ fn build_response(
 pub async fn handle_response<F>(
     rx: Receiver<RunResult>,
     deployment: Arc<Deployment>,
-    on_event: impl FnOnce(ResponseEvent) -> F + Send + Sync + 'static,
+    on_event: impl FnOnce(ResponseEvent, Response<ResponseBody>) -> F + Send + Sync + 'static,
 ) -> Result<Response<ResponseBody>>
 where
     F: Future<Output = Result<()>> + Send,
@@ -61,7 +62,11 @@ where
             ));
 
             let (response_builder_tx, response_builder_rx) = flume::bounded(1);
+            let (event_tx, event_rx) = flume::bounded(1);
             let mut total_bytes = 0;
+            // Buffer to hold data that arrives before Start
+            let mut buffered_data: Vec<Bytes> = Vec::new();
+            let mut stream_done = false;
 
             match stream_result {
                 StreamResult::Start(response) => {
@@ -69,39 +74,67 @@ where
                 }
                 StreamResult::Data(bytes) => {
                     total_bytes += bytes.len();
-
-                    let bytes = Bytes::from(bytes);
-                    stream_tx.send_async(Ok(bytes)).await.unwrap_or(());
+                    buffered_data.push(Bytes::from(bytes));
                 }
                 StreamResult::Done(_) => {
-                    // Close the stream by sending empty bytes
-                    stream_tx.send_async(Ok(Bytes::new())).await.unwrap_or(());
+                    stream_done = true;
                 }
             }
 
+            // Spawn a task to handle the rest of the stream, so we can return the response immediately
             tokio::spawn(async move {
                 let mut event = None;
+                let mut start_received = buffered_data.is_empty() && !stream_done;
 
                 while let Ok(result) = rx.recv_async().await {
                     match result {
-                        RunResult::Stream(StreamResult::Start(response)) => {
-                            response_builder_tx.send_async(response).await.unwrap_or(());
+                        RunResult::Stream(StreamResult::Start(response_builder)) => {
+                            response_builder_tx
+                                .send_async(response_builder)
+                                .await
+                                .unwrap_or(());
+
+                            // Send any buffered data now that we have the response builder
+                            for bytes in buffered_data.drain(..) {
+                                stream_tx.send_async(Ok(bytes)).await.unwrap_or(());
+                            }
+
+                            // If stream was already done before Start arrived, close it now
+                            if stream_done {
+                                event = Some(ResponseEvent::Bytes(total_bytes, None));
+                                stream_tx.send_async(Ok(Bytes::new())).await.unwrap_or(());
+                                break;
+                            }
+
+                            start_received = true;
                         }
                         RunResult::Stream(StreamResult::Data(bytes)) => {
                             total_bytes += bytes.len();
-
                             let bytes = Bytes::from(bytes);
-                            stream_tx.send_async(Ok(bytes)).await.unwrap_or(());
+
+                            if start_received {
+                                stream_tx.send_async(Ok(bytes)).await.unwrap_or(());
+                            } else {
+                                buffered_data.push(bytes);
+                            }
                         }
                         RunResult::Stream(StreamResult::Done(elapsed)) => {
-                            event =
-                                Some(ResponseEvent::Bytes(total_bytes, Some(elapsed.as_micros())));
+                            if start_received {
+                                event = Some(ResponseEvent::Bytes(
+                                    total_bytes,
+                                    Some(elapsed.as_micros()),
+                                ));
 
-                            // Close the stream by sending empty bytes
-                            stream_tx.send_async(Ok(Bytes::new())).await.unwrap_or(());
+                                // Close the stream by sending empty bytes
+                                stream_tx.send_async(Ok(Bytes::new())).await.unwrap_or(());
+                                break;
+                            } else {
+                                // Start hasn't arrived yet, mark as done and wait for Start
+                                stream_done = true;
+                            }
                         }
                         _ => {
-                            event = Some(ResponseEvent::UnexpectedStreamResult(result));
+                            event = Some(ResponseEvent::UnexpectedStreamResult);
 
                             // Close the stream by sending empty bytes
                             stream_tx.send_async(Ok(Bytes::new())).await.unwrap_or(());
@@ -110,15 +143,26 @@ where
                     }
                 }
 
+                drop(stream_tx);
+
                 if let Some(event) = event {
-                    on_event(event).await.unwrap_or(());
+                    event_tx.send_async(event).await.unwrap_or(());
                 }
             });
 
             let response_builder = response_builder_rx.recv_async().await?;
             let response = build_response(response_builder, &deployment, body)?;
 
-            println!("send res");
+            // Handle the event in a separate task after we've returned the response
+            // Pass a response with the same status and headers but empty body
+            let event_response = clone_response_without_body(&response);
+            tokio::spawn(async move {
+                if let Ok(event) = event_rx.recv_async().await {
+                    if let Err(err) = on_event(event, event_response).await {
+                        eprintln!("Error while handling response event: {:?}", err);
+                    }
+                }
+            });
 
             Ok(response)
         }
@@ -129,29 +173,49 @@ where
             let response = build_response(response_builder, &deployment, body)?;
 
             let event = ResponseEvent::Bytes(len, elapsed.map(|duration| duration.as_micros()));
-            on_event(event).await?;
+            on_event(event, clone_response_without_body(&response)).await?;
 
             Ok(response)
         }
         RunResult::Timeout | RunResult::MemoryLimit => {
-            let event = ResponseEvent::LimitsReached(result);
-            on_event(event).await?;
-
             let body = Full::new(Bytes::from(PAGE_502))
                 .map_err(|_| unreachable!())
                 .boxed();
-            Ok(Response::builder().status(502).body(body)?)
-        }
-        RunResult::Error(_) => {
-            let event = ResponseEvent::Error(result);
-            on_event(event).await?;
+            let response = Response::builder().status(502).body(body)?;
 
+            let event = match result {
+                RunResult::Timeout => ResponseEvent::Timeout,
+                RunResult::MemoryLimit => ResponseEvent::MemoryLimit,
+                _ => unreachable!(),
+            };
+            on_event(event, clone_response_without_body(&response)).await?;
+
+            Ok(response)
+        }
+        RunResult::Error(error) => {
             let body = Full::new(Bytes::from(PAGE_500))
                 .map_err(|_| unreachable!())
                 .boxed();
-            Ok(Response::builder().status(500).body(body)?)
+            let response = Response::builder().status(500).body(body)?;
+
+            let event = ResponseEvent::Error(error);
+            on_event(event, clone_response_without_body(&response)).await?;
+
+            Ok(response)
         }
     }
+}
+
+fn clone_response_without_body(response: &Response<ResponseBody>) -> Response<ResponseBody> {
+    let mut builder = Response::builder().status(response.status());
+
+    for (key, value) in response.headers() {
+        builder = builder.header(key, value);
+    }
+
+    builder
+        .body(Full::default().map_err(|_| unreachable!()).boxed())
+        .unwrap()
 }
 
 #[cfg(test)]
@@ -166,7 +230,7 @@ mod tests {
 
         let handle = tokio::spawn(async move {
             let deployment = Arc::new(Deployment::default());
-            let response = handle_response(rx, deployment, |event| async move {
+            let response = handle_response(rx, deployment, |event, _| async move {
                 assert!(matches!(event, ResponseEvent::Bytes(11, None)));
 
                 Ok(())
@@ -203,7 +267,7 @@ mod tests {
                 ..Deployment::default()
             });
 
-            let response = handle_response(rx, deployment, |event| async move {
+            let response = handle_response(rx, deployment, |event, _| async move {
                 assert!(matches!(event, ResponseEvent::Bytes(11, None)));
 
                 Ok(())
@@ -236,7 +300,7 @@ mod tests {
 
         let handle = tokio::spawn(async move {
             let deployment = Arc::new(Deployment::default());
-            let response = handle_response(rx, deployment, |event| async move {
+            let response = handle_response(rx, deployment, |event, _| async move {
                 assert!(matches!(event, ResponseEvent::Bytes(11, Some(0))));
 
                 Ok(())
@@ -285,7 +349,7 @@ mod tests {
                 ..Deployment::default()
             });
 
-            let response = handle_response(rx, deployment, |event| async move {
+            let response = handle_response(rx, deployment, |event, _| async move {
                 assert!(matches!(event, ResponseEvent::Bytes(11, Some(0))));
 
                 Ok(())
@@ -330,7 +394,7 @@ mod tests {
 
         let handle = tokio::spawn(async move {
             let deployment = Arc::new(Deployment::default());
-            let response = handle_response(rx, deployment, |event| async move {
+            let response = handle_response(rx, deployment, |event, _| async move {
                 assert!(matches!(event, ResponseEvent::Bytes(11, Some(0))));
 
                 Ok(())

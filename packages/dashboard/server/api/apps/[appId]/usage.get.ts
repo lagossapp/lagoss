@@ -7,23 +7,36 @@ export default defineEventHandler(async event => {
   const { timeframe } = getQuery<{ level?: string; timeframe?: string }>(event);
 
   const groupBy = timeframe === 'Last 24 hours' ? 'toStartOfHour' : 'toStartOfDay';
+  const intervalDays = timeframe === 'Last 24 hours' ? 1 : timeframe === 'Last 7 days' ? 7 : 30;
 
-  const result = (await clickhouse
-    .query(
-      `SELECT
+  const result = await clickhouse.query({
+    query: `
+SELECT
   count(*) as requests,
   avg(cpu_time_micros) as cpuTime,
   sum(bytes_in) as bytesIn,
   sum(bytes_out) as bytesOut,
   ${groupBy}(timestamp) AS time
-FROM serverless.requests
+FROM requests
 WHERE
-  function_id = '${app.id}'
+  app_id = {appId:String}
 AND
-  timestamp >= now() - INTERVAL  ${timeframe === 'Last 24 hours' ? 1 : timeframe === 'Last 7 days' ? 7 : 30} DAY
-GROUP BY time`,
-    )
-    .toPromise()) as { requests: number; cpuTime: number; bytesIn: number; bytesOut: number; time: string }[];
+  timestamp >= now() - INTERVAL ${intervalDays} DAY
+GROUP BY time
+`.trim(),
+    format: 'JSONEachRow',
+    query_params: {
+      appId: app.id,
+    },
+  });
 
-  return result;
+  const rows = await result.json<{
+    requests: number;
+    cpuTime: number;
+    bytesIn: number;
+    bytesOut: number;
+    time: string;
+  }>();
+
+  return rows;
 });

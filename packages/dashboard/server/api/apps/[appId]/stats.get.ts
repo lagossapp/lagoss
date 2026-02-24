@@ -4,17 +4,25 @@ export default defineEventHandler(async event => {
   const app = await requireApp(event);
   const clickhouse = await useClickHouse();
 
-  const result = (await clickhouse
-    .query(
-      `SELECT
-count(*) as requests
-FROM serverless.requests
+  const result = await clickhouse.query({
+    query: `
+SELECT
+  count(*) as requests
+FROM requests
 WHERE
-function_id = '${app.id}'
+  app_id = {appId:String}
 AND
-timestamp >= toStartOfMonth(now())`,
-    )
-    .toPromise()) as { requests: number }[];
+timestamp >= toStartOfMonth(now())
+`.trim(),
+    format: 'JSONEachRow',
+    query_params: {
+      appId: app.id,
+    },
+  });
 
-  return result[0]?.requests || 0;
+  const rows = await result.json<{ requests: number }>();
+
+  const requests = rows[0]?.requests || 0;
+
+  return { requests };
 });

@@ -7,8 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import { provide } from '~/composables/useInjectProvide';
-
 const route = useRoute();
 const organizationId = computed(() => route.params.organizationId as string);
 
@@ -18,6 +16,6 @@ const {
   pending,
 } = await useFetch(() => `/api/organizations/${organizationId.value}`);
 
-provide('org', organization);
-provide('refreshOrg', refreshOrg);
+typedProvide('org', organization);
+typedProvide('refreshOrg', refreshOrg);
 </script>

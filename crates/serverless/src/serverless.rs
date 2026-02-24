@@ -45,34 +45,42 @@ use tokio::{runtime::Handle, sync::Mutex as TokioMutex};
 pub type Workers = Arc<DashMap<String, flume::Sender<IsolateEvent>>>;
 
 async fn handle_error(
-    result: RunResult,
-    function_id: String,
+    result: &ResponseEvent,
+    app_id: String,
     deployment_id: String,
     request_id: &str,
     inserters: Arc<Mutex<(Inserter<RequestRow>, Inserter<LogRow>)>>,
 ) {
     let (level, message) = match result {
-        RunResult::Timeout => {
-            increment_counter!("lagoss_isolate_timeouts", "deployment" => deployment_id.clone(), "function" => function_id.clone());
+        ResponseEvent::Timeout => {
+            increment_counter!("lagoss_isolate_timeouts", "deployment" => deployment_id.clone(), "app" => app_id.clone());
 
             let message = "Function execution timed out";
-            warn!(deployment = deployment_id, function = function_id, request = request_id; "{}", message);
+            warn!(deployment = deployment_id, app = app_id, request = request_id; "{}", message);
 
             ("warn", message.into())
         }
-        RunResult::MemoryLimit => {
-            increment_counter!("lagoss_isolate_memory_limits", "deployment" => deployment_id.clone(), "function" => function_id.clone());
+        ResponseEvent::MemoryLimit => {
+            increment_counter!("lagoss_isolate_memory_limits", "deployment" => deployment_id.clone(), "app" => app_id.clone());
 
             let message = "Function execution memory limit reached";
-            warn!(deployment = deployment_id, function = function_id, request = request_id; "{}", message);
+            warn!(deployment = deployment_id, app = app_id, request = request_id; "{}", message);
 
             ("warn", message.into())
         }
-        RunResult::Error(error) => {
-            increment_counter!("lagoss_isolate_errors", "deployment" => deployment_id.clone(), "function" => function_id.clone());
+        ResponseEvent::UnexpectedStreamResult => {
+            increment_counter!("lagoss_isolate_unexpected_stream_results", "deployment" => deployment_id.clone(), "app" => app_id.clone());
+
+            let message = "Function execution returned an unexpected stream result";
+            warn!(deployment = deployment_id, app = app_id, request = request_id; "{}", message);
+
+            ("warn", message.into())
+        }
+        ResponseEvent::Error(error) => {
+            increment_counter!("lagoss_isolate_errors", "deployment" => deployment_id.clone(), "app" => app_id.clone());
 
             let message = format!("Function execution error: {}", error);
-            error!(deployment = deployment_id, function = function_id, request = request_id; "{}", message);
+            error!(deployment = deployment_id, app = app_id, request = request_id; "{}", message);
 
             ("error", message)
         }
@@ -84,7 +92,8 @@ async fn handle_error(
         .await
         .1
         .write(&LogRow {
-            function_id,
+            request_id: request_id.to_string(),
+            app_id,
             deployment_id,
             level: level.to_string(),
             message,
@@ -111,7 +120,7 @@ where
 {
     let request_id = match req.headers().get(X_LAGOSS_ID) {
         Some(x_lagoss_id) => x_lagoss_id.to_str().unwrap_or("").to_string(),
-        None => String::new(),
+        None => uuid::Uuid::new_v4().to_string(),
     };
 
     let hostname = match req.headers().get(HOST) {
@@ -179,6 +188,8 @@ where
     let mut bytes_in = 0;
 
     let url = req.uri().path();
+    let url_string = url.to_string();
+    let http_method = req.method().to_string();
 
     if let Some(asset) = find_asset(url, &deployment.assets) {
         let root = Path::new(env::current_dir().unwrap().as_path())
@@ -194,8 +205,10 @@ where
             }
         };
 
+        // TODO: log asset request?
         sender.send_async(run_result).await.unwrap_or(());
     } else if url == FAVICON_URL {
+        // TODO: log favicon request?
         sender
             .send_async(RunResult::Response(
                 Response::builder().status(404),
@@ -223,12 +236,11 @@ where
 
             std::thread::Builder::new().name(String::from("isolate-") + deployment.id.as_str()).spawn(move || {
                 handle.block_on(async move {
-                    increment_gauge!("lagoss_isolates", 1.0, "deployment" => deployment.id.clone(), "function" => deployment.function_id.clone());
-                    info!(deployment = deployment.id, function = deployment.function_id, request = request_id_handle; "Creating new isolate");
+                    increment_gauge!("lagoss_isolates", 1.0, "deployment" => deployment.id.clone(), "app" => deployment.function_id.clone());
+                    info!(deployment = deployment.id, app = deployment.function_id, request = request_id_handle; "Creating new isolate");
 
                     let code = deployment.get_code().unwrap_or_else(|error| {
                         error!(deployment = deployment.id, request = request_id_handle; "Error while getting deployment code: {}", error);
-
                         "".into()
                     });
                     let options = IsolateOptions::new(code)
@@ -246,18 +258,18 @@ where
                             if let Some(metadata) = metadata.as_ref().as_ref() {
                                 let labels = [
                                     ("deployment", metadata.0.clone()),
-                                    ("function", metadata.1.clone()),
+                                    ("app", metadata.1.clone()),
                                 ];
 
                                 decrement_gauge!("lagoss_isolates", 1.0, &labels);
-                                info!(deployment = metadata.0, function = metadata.1; "Dropping isolate");
+                                info!(deployment = metadata.0, app = metadata.1; "Dropping isolate");
                             }
                         }))
                         .on_statistics_callback(Box::new(|metadata, statistics| {
                             if let Some(metadata) = metadata.as_ref().as_ref() {
                                 let labels = [
                                     ("deployment", metadata.0.clone()),
-                                    ("function", metadata.1.clone()),
+                                    ("app", metadata.1.clone()),
                                 ];
 
                                 histogram!(
@@ -290,64 +302,63 @@ where
             .unwrap_or(());
     }
 
-    let deployment_handle = Arc::clone(&deployment);
-
-    handle_response(receiver, deployment, move |event| {
+    let app_id = deployment.function_id.clone();
+    let deployment_id = deployment.id.clone();
+    let response = handle_response(receiver, deployment, move |event, response| {
         let inserters = Arc::clone(&inserters);
 
         async move {
-            match event {
-                ResponseEvent::Bytes(bytes, cpu_time_micros) => {
-                    let timestamp = UNIX_EPOCH.elapsed().unwrap().as_secs() as u32;
+            if !response.status().is_success() {
+                let inserters = Arc::clone(&inserters);
 
-                    if let Err(error) = inserters
-                        .lock()
-                        .await
-                        .0
-                        .write(&RequestRow {
-                            function_id: deployment_handle.function_id.clone(),
-                            deployment_id: deployment_handle.id.clone(),
-                            region: get_region().clone(),
-                            bytes_in,
-                            bytes_out: bytes as u32,
-                            cpu_time_micros,
-                            timestamp,
-                        })
-                        .await
-                    {
-                        error!(
-                            deployment = deployment_handle.id,
-                            app = deployment_handle.function_id;
-                            "Error while inserting request log: {}", error,
-                        );
-                    }
-                }
-                ResponseEvent::UnexpectedStreamResult(result) => {
-                    handle_error(
-                        result,
-                        deployment_handle.function_id.clone(),
-                        deployment_handle.id.clone(),
-                        &request_id,
-                        inserters,
-                    )
-                    .await;
-                }
-                ResponseEvent::LimitsReached(result) | ResponseEvent::Error(result) => {
-                    handle_error(
-                        result,
-                        deployment_handle.function_id.clone(),
-                        deployment_handle.id.clone(),
-                        &request_id,
-                        inserters,
-                    )
-                    .await;
-                }
+                handle_error(
+                    &event,
+                    app_id.clone(),
+                    deployment_id.clone(),
+                    &request_id,
+                    inserters,
+                )
+                .await;
             }
+
+            let timestamp = UNIX_EPOCH.elapsed().unwrap().as_secs() as u32;
+
+            let cpu_time_micros = match event {
+                ResponseEvent::Bytes(_, cpu_time_micros) => cpu_time_micros,
+                _ => None,
+            };
+
+            let bytes_out = match event {
+                ResponseEvent::Bytes(bytes, _) => bytes as u32,
+                _ => 0,
+            };
+
+            inserters
+                .lock()
+                .await
+                .0
+                .write(&RequestRow {
+                    id: request_id.clone(),
+                    app_id,
+                    deployment_id,
+                    region: get_region().clone(),
+                    bytes_in,
+                    bytes_out,
+                    cpu_time_micros,
+                    timestamp,
+                    response_status_code: response.status().as_u16(),
+                    url: url_string,
+                    http_method,
+                })
+                .await
+                .unwrap_or(());
 
             Ok(())
         }
     })
-    .await
+    .await?;
+
+    Ok(response)
 }
 
 pub async fn start<D, P>(
@@ -436,7 +447,8 @@ where
             if let Err(error) = inserters
                 .1
                 .write(&LogRow {
-                    function_id: log
+                    request_id: String::new(), // TODO: add request ID to logs
+                    app_id: log
                         .2
                         .as_ref()
                         .map_or_else(String::new, |metadata| metadata.1.clone()),
