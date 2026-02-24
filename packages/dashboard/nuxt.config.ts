@@ -1,7 +1,7 @@
 import { defineNuxtConfig } from 'nuxt/config';
 
 export default defineNuxtConfig({
-  modules: ['@nuxt/ui'],
+  modules: ['@nuxt/ui', '@nuxtjs/tailwindcss'],
 
   runtimeConfig: {
     auth: {
@@ -108,10 +108,6 @@ export default defineNuxtConfig({
       collections: ['heroicons', 'ion'],
       externalizeIconsJson: true,
     },
-  },
-
-  future: {
-    compatibilityVersion: 4,
   },
 
   compatibilityDate: '2025-05-15',
