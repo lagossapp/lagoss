@@ -13,5 +13,5 @@
     "docker:dashboard:build": "docker build -t ghcr.io/lagossapp/dashboard -f docker/Dockerfile.dashboard .",
     "release": "pnpm run --filter=@lagoss/astro --filter=@lagoss/remix build && pnpm changeset publish"
   },
-  "packageManager": "pnpm@10.17.1"
+  "packageManager": "pnpm@10.30.0"
 }
