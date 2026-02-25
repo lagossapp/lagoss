@@ -1,11 +1,12 @@
 FROM lukemathwalker/cargo-chef:latest-rust-1-alpine AS chef
+RUN apk add --no-cache openssl-dev pkgconfig curl
 WORKDIR /app
 
 FROM chef AS planner
 COPY . .
 RUN cargo chef prepare --recipe-path recipe.json
 
-FROM node:24.12.0-alpine as js-runtime
+FROM node:24.12.0-alpine AS js-runtime
 WORKDIR /app
 COPY ./packages/js-runtime/src/ ./src
 COPY ./packages/js-runtime/package.json ./
@@ -15,7 +16,9 @@ RUN npm run build
 
 FROM chef AS builder
 COPY --from=planner /app/recipe.json recipe.json
+# Build dependencies - this is the caching Docker layer!
 RUN cargo chef cook --release --recipe-path recipe.json
+# Build application
 COPY . .
 COPY --from=js-runtime /app/dist/index.js /app/crates/runtime_isolate/runtime.js
 RUN cargo build --release --bin lagoss-serverless
@@ -24,5 +27,4 @@ FROM alpine:3.21 AS runtime
 WORKDIR /app
 RUN apk add --no-cache ca-certificates libssl3 libgcc
 COPY --from=builder /app/target/release/lagoss-serverless /usr/local/bin
-
 ENTRYPOINT ["/usr/local/bin/lagoss-serverless"]
