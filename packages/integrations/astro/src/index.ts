@@ -13,6 +13,12 @@ export function getAdapter(args?: Options): AstroAdapter {
   return {
     name: '@lagoss/astro',
     serverEntrypoint: '@lagoss/astro/server.js',
+    supportedAstroFeatures: {
+      hybridOutput: 'stable',
+      staticOutput: 'stable',
+      serverOutput: 'stable',
+      sharpImageService: 'stable',
+    },
     args: args ?? {},
     exports: ['handler'],
   };

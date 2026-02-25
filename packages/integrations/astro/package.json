@@ -30,8 +30,11 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "astro": "^2.1.7",
+    "astro": "^5.17.3",
     "tsdown": "^0.20.3",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "esbuild": "^0.27.3"
   }
 }
