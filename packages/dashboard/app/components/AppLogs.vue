@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import { dayjs } from '~~/lib/dayjs';
 
-import type { App } from '~~/server/db/schema';
+import type { App } from '~/types';
 
 const props = defineProps<{
   app: App;

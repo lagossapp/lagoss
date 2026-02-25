@@ -1,7 +1,7 @@
 import type { InjectionKey, Ref } from 'vue';
 import { inject as vueInject, provide as vueProvide } from 'vue';
 
-import type { App, Organization } from '~~/server/db/schema';
+import type { App, Organization } from '~/types';
 
 export interface InjectKeys {
   app: Ref<App>;

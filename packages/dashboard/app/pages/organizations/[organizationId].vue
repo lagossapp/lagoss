@@ -16,6 +16,9 @@ const {
   pending,
 } = await useFetch(() => `/api/organizations/${organizationId.value}`);
 
-typedProvide('org', organization);
+typedProvide(
+  'org',
+  computed(() => organization.value!),
+);
 typedProvide('refreshOrg', refreshOrg);
 </script>

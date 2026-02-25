@@ -54,7 +54,7 @@ export class Github {
     return {
       name: githubUser.name,
       avatarUrl: githubUser.avatar_url,
-      email: (githubEmails.find(e => e.primary) ?? githubEmails[0]).email,
+      email: (githubEmails.find(e => e.primary) ?? githubEmails[0])?.email,
       remoteUserId: githubUser.id.toString(),
     };
   }

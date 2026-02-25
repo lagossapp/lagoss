@@ -2,24 +2,24 @@ import { describe, expect, it, vi } from 'vitest';
 import '../';
 
 describe('URLSearchParams', () => {
-  describe('instanciate', () => {
-    it('should instanciate without init', () => {
+  describe('instantiate', () => {
+    it('should instantiate without init', () => {
       expect(new URLSearchParams().toString()).toEqual('');
     });
 
-    it('should instanciate with init as string', () => {
+    it('should instantiate with init as string', () => {
       expect(new URLSearchParams('a=b&c=d').toString()).toEqual('a=b&c=d');
     });
 
-    it('should instanciate with init as string with ?', () => {
+    it('should instantiate with init as string with ?', () => {
       expect(new URLSearchParams('?a=b&c=d').toString()).toEqual('a=b&c=d');
     });
 
-    it('should instanciate with init as object', () => {
+    it('should instantiate with init as object', () => {
       expect(new URLSearchParams({ a: 'b', c: 'd' }).toString()).toEqual('a=b&c=d');
     });
 
-    it('should instanciate with init as array', () => {
+    it('should instantiate with init as array', () => {
       expect(
         new URLSearchParams([
           ['a', 'b'],
@@ -151,7 +151,7 @@ describe('URL', () => {
       );
     });
 
-    it.todo('should return the host without port if scheme match', () => {
+    it('should return the host without port if scheme match', () => {
       expect(new URL('https://developer.mozilla.org:443/en-US/docs/Web/API/URL/host').host).toEqual(
         'developer.mozilla.org',
       );

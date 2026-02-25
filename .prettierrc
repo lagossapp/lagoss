@@ -6,8 +6,5 @@
   "singleQuote": true,
   "trailingComma": "all",
   "bracketSpacing": true,
-  "arrowParens": "avoid",
-  "plugins": [
-    "prettier-plugin-tailwindcss"
-  ]
+  "arrowParens": "avoid"
 }

@@ -8,14 +8,14 @@
         <a :href="getFullCurrentDomain({ name: app.name })" rel="noopener noreferrer" target="_blank">
           <UButton label="Visit" size="md" icon="i-ion-ios-globe" />
         </a>
-        <UButton
+        <!-- <UButton
           v-if="app.playground"
           label="Playground"
           size="md"
           color="primary"
           icon="i-ion-edit"
           :to="`/organizations/${app.organizationId}/apps/${app.name}/playground`"
-        />
+        /> -->
       </div>
     </div>
 
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import type { App } from '~~/server/db/schema';
+import type { App } from '~/types';
 
 const props = defineProps<{
   app: App;
