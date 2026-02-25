@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
 
   mysql:
-    image: mariadb:12.1.2
+    image: mariadb:12.2.2
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: true
       MYSQL_DATABASE: lagoss
