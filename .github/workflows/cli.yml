@@ -91,7 +91,7 @@ jobs:
           cp ../../target/${{ matrix.target }}/release/${{ matrix.input }} builds/${{ matrix.asset_name }}/${{ matrix.output }}
           tar -C builds -czvf ${{ matrix.asset_name }}.tar.gz ${{ matrix.asset_name }}
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.asset_name }}
           path: crates/cli/${{ matrix.asset_name }}.tar.gz
