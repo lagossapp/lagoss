@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
 
   clickhouse:
-    image: clickhouse:25.12.4
+    image: clickhouse:25.12.5
     ulimits:
       nofile:
         soft: 262144
