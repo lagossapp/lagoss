@@ -52,7 +52,7 @@ jobs:
             input: lagoss-cli.exe
             output: lagoss.exe
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: true
       - uses: moonrepo/setup-rust@v1
@@ -63,7 +63,7 @@ jobs:
           override: true
       - uses: pnpm/action-setup@v4
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: 'pnpm'
@@ -91,7 +91,7 @@ jobs:
           cp ../../target/${{ matrix.target }}/release/${{ matrix.input }} builds/${{ matrix.asset_name }}/${{ matrix.output }}
           tar -C builds -czvf ${{ matrix.asset_name }}.tar.gz ${{ matrix.asset_name }}
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.asset_name }}
           path: crates/cli/${{ matrix.asset_name }}.tar.gz
@@ -105,10 +105,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref_type == 'tag'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: 'pnpm'
@@ -125,10 +125,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: 'pnpm'
