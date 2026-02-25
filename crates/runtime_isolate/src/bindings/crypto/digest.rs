@@ -7,7 +7,7 @@ use crate::bindings::{BindingResult, PromiseResult};
 type Arg = (String, Vec<u8>);
 
 pub fn digest_init(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     args: v8::FunctionCallbackArguments,
 ) -> Result<Arg> {
     let name = extract_algorithm_object_or_string(scope, args.get(0))?;

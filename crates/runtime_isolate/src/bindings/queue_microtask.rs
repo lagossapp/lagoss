@@ -1,7 +1,7 @@
 use lagoss_runtime_v8_utils::v8_exception;
 
 pub fn queue_microtask_binding(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     args: v8::FunctionCallbackArguments,
     mut _retval: v8::ReturnValue,
 ) {
@@ -12,6 +12,6 @@ pub fn queue_microtask_binding(
         scope.throw_exception(exception);
     }
 
-    let function = unsafe { v8::Local::<v8::Function>::cast(value) };
+    let function: v8::Local<v8::Function> = value.cast();
     scope.enqueue_microtask(function);
 }

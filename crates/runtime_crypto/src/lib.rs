@@ -75,7 +75,7 @@ pub enum KeyGenAlgorithm {
 }
 
 pub fn extract_algorithm_object(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     value: v8::Local<v8::Value>,
 ) -> Result<Algorithm> {
     if let Some(algorithm) = value.to_object(scope) {
@@ -143,7 +143,7 @@ pub fn extract_algorithm_object(
 }
 
 pub fn extract_algorithm_object_or_string(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     value: v8::Local<v8::Value>,
 ) -> Result<String> {
     if value.is_string() {
@@ -162,7 +162,7 @@ pub fn extract_algorithm_object_or_string(
 }
 
 pub fn extract_cryptokey_key_value(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     value: v8::Local<v8::Value>,
 ) -> Result<Vec<u8>> {
     if let Some(key) = value.to_object(scope) {
@@ -196,7 +196,7 @@ pub fn get_named_curve(curve: &str) -> Result<CryptoNamedCurve> {
 }
 
 pub fn extract_sha_hash(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     algorithm: v8::Local<v8::Object>,
 ) -> Result<Sha> {
     let hash_key = v8_string(scope, "hash");
@@ -209,7 +209,7 @@ pub fn extract_sha_hash(
 }
 
 pub fn extract_sign_verify_algorithm(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     value: v8::Local<v8::Value>,
 ) -> Result<Algorithm> {
     if value.is_string() {
@@ -260,7 +260,7 @@ pub fn extract_sign_verify_algorithm(
 }
 
 pub fn extract_derive_algorithm(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     value: v8::Local<v8::Value>,
 ) -> Result<DeriveAlgorithm> {
     if let Some(algorithm) = value.to_object(scope) {
@@ -348,7 +348,7 @@ pub fn extract_derive_algorithm(
 }
 
 pub fn extract_generate_key_algorithm(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     value: v8::Local<v8::Value>,
 ) -> Result<KeyGenAlgorithm> {
     if let Some(algorithm) = value.to_object(scope) {
