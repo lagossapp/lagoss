@@ -1,5 +1,4 @@
-FROM lukemathwalker/cargo-chef:latest-rust-1-alpine AS chef
-RUN apk add --no-cache openssl-dev pkgconfig curl
+FROM lukemathwalker/cargo-chef:latest-rust-1 AS chef
 WORKDIR /app
 
 FROM chef AS planner
@@ -23,8 +22,12 @@ COPY . .
 COPY --from=js-runtime /app/dist/index.js /app/crates/runtime_isolate/runtime.js
 RUN cargo build --release --bin lagoss-serverless
 
-FROM alpine:3.21 AS runtime
+FROM debian:trixie-slim AS runtime
 WORKDIR /app
-RUN apk add --no-cache ca-certificates libssl3 libgcc
+RUN apt-get update -y \
+    && apt-get install -y ca-certificates libssl1.0 libssl-dev \
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /app/target/release/lagoss-serverless /usr/local/bin
 ENTRYPOINT ["/usr/local/bin/lagoss-serverless"]
