@@ -22,12 +22,8 @@ COPY . .
 COPY --from=js-runtime /app/dist/index.js /app/crates/runtime_isolate/runtime.js
 RUN cargo build --release --bin lagoss-serverless
 
-FROM debian:trixie-slim AS runtime
+FROM gcr.io/distroless/cc-debian13 AS runtime
 WORKDIR /app
-RUN apt-get update -y \
-    && apt-get install -y ca-certificates libssl1.0 libssl-dev \
-    && apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
-COPY --from=builder /app/target/release/lagoss-serverless /usr/local/bin
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /app/target/release/lagoss-serverless /usr/local/bin/lagoss-serverless
 ENTRYPOINT ["/usr/local/bin/lagoss-serverless"]
