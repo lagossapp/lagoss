@@ -1,6 +1,6 @@
 services:
   valkey:
-    image: valkey/valkey:8.1.5
+    image: valkey/valkey:9.0.2
     command: valkey-server --save 20 1 --loglevel warning
     volumes:
       - valkey:/data
@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
 
   mysql:
-    image: mariadb:12.1.2
+    image: mariadb:12.2.2
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: true
       MYSQL_DATABASE: lagoss
@@ -30,7 +30,7 @@ services:
       - prometheus:/prometheus
 
   grafana:
-    image: grafana/grafana:12.3.2
+    image: grafana/grafana:12.3.4
     ports:
       - 3001:3000
     volumes:
@@ -38,7 +38,7 @@ services:
       - grafana:/var/lib/grafana
 
   clickhouse:
-    image: clickhouse/clickhouse-server:25.10.1-alpine
+    image: clickhouse/clickhouse-server:25.12.5-alpine
     ulimits:
       nofile:
         soft: 262144
