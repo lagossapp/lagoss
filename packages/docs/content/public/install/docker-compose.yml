@@ -54,10 +54,9 @@ services:
       NUXT_PUBLIC_ROOT_SCHEMA: ${LAGOSS_ROOT_SCHEMA}
     env_file: .env
     volumes:
-      - ./data/dashboard:/data
+      - ./data:/data
     depends_on:
       - valkey
-      - mysql
       - clickhouse
       - minio
     restart: unless-stopped
@@ -82,7 +81,6 @@ services:
     env_file: .env
     depends_on:
       - valkey
-      - mysql
       - clickhouse
       - minio
     restart: unless-stopped
@@ -98,6 +96,5 @@ services:
 
 volumes:
   valkey:
-  mysql:
   clickhouse:
   minio:
