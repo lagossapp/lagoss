@@ -23,7 +23,7 @@ jobs:
           script: |
             const images = []
 
-            if (context.eventName === 'pull_request') {
+            if (context.eventName === 'pull_request' || context.ref === 'refs/heads/main') {
               images.push('serverless', 'dashboard')
             }
 
