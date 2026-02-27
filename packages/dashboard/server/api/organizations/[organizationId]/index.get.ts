@@ -14,20 +14,18 @@ export default defineEventHandler(async event => {
   }
 
   const organization = (
-    await getFirst(
-      db
-        .select()
-        .from(organizationSchema)
-        .leftJoin(organizationMemberSchema, eq(organizationSchema.id, organizationMemberSchema.organizationId))
-        .where(
-          and(
-            eq(organizationSchema.id, organizationId),
-            or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id)),
-          ),
-        )
-        .execute(),
-    )
-  )?.Organization;
+    await db
+      .select()
+      .from(organizationSchema)
+      .leftJoin(organizationMemberSchema, eq(organizationSchema.id, organizationMemberSchema.organizationId))
+      .where(
+        and(
+          eq(organizationSchema.id, organizationId),
+          or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id)),
+        ),
+      )
+      .get()
+  )?.organizations;
 
   if (!organization) {
     throw createError({

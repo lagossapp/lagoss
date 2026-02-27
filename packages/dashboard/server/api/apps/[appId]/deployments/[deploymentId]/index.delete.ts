@@ -14,13 +14,11 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const deployment = await getFirst(
-    db
-      .select()
-      .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.appId, app.id)))
-      .execute(),
-  );
+  const deployment = await db
+    .select()
+    .from(deploymentSchema)
+    .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.appId, app.id)))
+    .get();
   if (!deployment) {
     throw createError({
       status: 404,
@@ -28,7 +26,7 @@ export default defineEventHandler(async event => {
     });
   }
 
-  if (deployment.isProduction === 1) {
+  if (deployment.isProduction) {
     throw createError({
       status: 400,
       message: 'Cannot delete a production deployment, promote another deployment first.',

@@ -36,13 +36,11 @@ export default defineEventHandler(async event => {
   const db = await useDB();
   const app = await requireApp(event);
 
-  const deployment = await getFirst(
-    db
-      .select()
-      .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.appId, app.id), eq(deploymentSchema.isProduction, 1)))
-      .execute(),
-  );
+  const deployment = await db
+    .select()
+    .from(deploymentSchema)
+    .where(and(eq(deploymentSchema.appId, app.id), eq(deploymentSchema.isProduction, true)))
+    .get();
 
   if (!deployment) {
     throw createError({

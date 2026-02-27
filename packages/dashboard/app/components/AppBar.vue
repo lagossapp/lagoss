@@ -31,7 +31,6 @@
               :to="`/organizations/${organization.id}`"
               variant="ghost"
               class="w-full"
-              @click="selectOrganization(organization.id)"
             >
               <UAvatar :alt="organization.name" size="xs" />
               <span class="truncate">{{ organization.name }}</span>
@@ -113,7 +112,7 @@ const isDark = computed({
   },
 });
 
-const { user, logout, selectOrganization } = await useAuth();
+const { user, logout } = await useAuth();
 
 const { data: organizations } = await useFetch('/api/organizations');
 

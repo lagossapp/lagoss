@@ -6,19 +6,8 @@ services:
       - valkey:/data
     restart: unless-stopped
 
-  mysql:
-    image: mariadb:12.2.2
-    environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: true
-      MYSQL_DATABASE: lagoss
-      MYSQL_USER: lagoss
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    volumes:
-      - mysql:/var/lib/mysql
-    restart: unless-stopped
-
   clickhouse:
-    image: clickhouse:25.12.5
+    image: clickhouse/clickhouse-server:25.12.5-alpine
     ulimits:
       nofile:
         soft: 262144
@@ -46,7 +35,7 @@ services:
   dashboard:
     image: ghcr.io/lagossapp/dashboard:${LAGOSS_VERSION:-latest}
     environment:
-      NUXT_DATABASE_URL: mysql://lagoss:${MYSQL_PASSWORD}@mariadb/lagoss
+      NUXT_DATABASE_URL: file:/data/lagoss.sqlite
       NUXT_REDIS_URL: redis://valkey:6379
       NUXT_S3_ENDPOINT: http://minio:9002
       NUXT_S3_REGION: unknown
@@ -64,9 +53,10 @@ services:
       NUXT_PUBLIC_ROOT_DOMAIN: ${LAGOSS_ROOT_DOMAIN}
       NUXT_PUBLIC_ROOT_SCHEMA: ${LAGOSS_ROOT_SCHEMA}
     env_file: .env
+    volumes:
+      - ./data:/data
     depends_on:
       - valkey
-      - mysql
       - clickhouse
       - minio
     restart: unless-stopped
@@ -91,7 +81,6 @@ services:
     env_file: .env
     depends_on:
       - valkey
-      - mysql
       - clickhouse
       - minio
     restart: unless-stopped
@@ -107,6 +96,5 @@ services:
 
 volumes:
   valkey:
-  mysql:
   clickhouse:
   minio:

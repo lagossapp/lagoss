@@ -17,7 +17,7 @@ export default defineEventHandler(async event => {
   const { name, description } = await readValidatedBody(event, bodySchema.parseAsync);
 
   const orgId = generateId();
-  await db
+  const orgs = await db
     .insert(organizationSchema)
     .values({
       id: orgId,
@@ -28,18 +28,26 @@ export default defineEventHandler(async event => {
       updatedAt: new Date(),
       plan: 'personal',
     })
-    .execute();
+    .returning();
 
-  await db.insert(organizationMemberSchema).values({
-    id: generateId(),
-    organizationId: orgId,
-    userId: user.id,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
+  const org = orgs[0];
+  if (!org) {
+    throw createError({
+      message: 'Failed to create organization',
+      statusCode: 500,
+    });
+  }
 
-  // TODO: directly get returned org
-  const org = (await db.select().from(organizationSchema).where(eq(organizationSchema.id, orgId)))[0]!;
+  await db
+    .insert(organizationMemberSchema)
+    .values({
+      id: generateId(),
+      organizationId: orgId,
+      userId: user.id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+    .returning();
 
   return org;
 });

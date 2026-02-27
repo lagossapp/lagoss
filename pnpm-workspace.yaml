@@ -10,3 +10,4 @@ packages:
 onlyBuiltDependencies:
   - aws-crt
   - esbuild
+  - sharp
