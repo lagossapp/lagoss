@@ -2,5 +2,5 @@
   "packages/dashboard": "0.8.0",
   "crates/serverless": "0.7.0",
   "crates/cli": "0.14.0",
-  "crates/runtime": "0.4.1"
+  "crates/runtime": "0.4.2"
 }
