@@ -15,7 +15,7 @@
       "extra-files": [
         {
           "type": "toml",
-          "path": "crates/serverless/Cargo.toml",
+          "path": "Cargo.toml",
           "jsonpath": "$.package.version"
         }
       ]
@@ -26,7 +26,7 @@
       "extra-files": [
         {
           "type": "toml",
-          "path": "crates/cli/Cargo.toml",
+          "path": "Cargo.toml",
           "jsonpath": "$.package.version"
         }
       ]
@@ -38,7 +38,7 @@
       "extra-files": [
         {
           "type": "toml",
-          "path": "crates/runtime/Cargo.toml",
+          "path": "Cargo.toml",
           "jsonpath": "$.package.version"
         }
       ]
