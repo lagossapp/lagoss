@@ -23,7 +23,7 @@ jobs:
           script: |
             const images = []
 
-            if (context.eventName === 'pull_request') {
+            if (context.eventName === 'pull_request' || context.ref === 'refs/heads/main') {
               images.push('serverless', 'dashboard')
             }
 
@@ -35,14 +35,13 @@ jobs:
             }
 
             console.log(images)
-
             return images
 
   create-container-image:
     name: Create "${{matrix.image}}" container image
     needs: define-matrix
     runs-on: ubuntu-latest
-    if: ${{needs.define-matrix.outputs.images != '[]'}}
+    if: needs.define-matrix.outputs.images != '[]'
     strategy:
       matrix:
         image: ${{fromJson(needs.define-matrix.outputs.images)}}
@@ -67,7 +66,7 @@ jobs:
           tags: |
             type=match,pattern=@lagoss\/${{matrix.image}}@(\d+\.\d+\.\d+),enable=${{startsWith(github.ref, 'refs/tags/')}},group=1
             type=ref,event=pr
-          #  type=raw,value=next,enable={{is_default_branch}}
+            type=raw,value=next,enable={{is_default_branch}}
 
       - name: Login to ghcr.io registry
         if: github.event_name != 'pull_request'
@@ -86,6 +85,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: docker/Dockerfile.${{matrix.image}}
-          platforms: ${{ github.event_name == 'pull_request' && 'linux/amd64' || 'linux/amd64,linux/arm64' }} # only build for amd64 on PRs to speed up CI job
+          platforms: ${{ startsWith(github.ref, 'refs/tags/') && 'linux/amd64,linux/arm64' || 'linux/amd64' }} # only build for amd64 on PRs to speed up CI job
           cache-from: type=gha
           cache-to: type=gha,mode=max
