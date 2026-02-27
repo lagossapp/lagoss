@@ -9,5 +9,5 @@ packages:
 
 onlyBuiltDependencies:
   - aws-crt
-  - better-sqlite3
   - esbuild
+  - sharp

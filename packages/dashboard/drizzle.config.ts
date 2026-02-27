@@ -6,6 +6,6 @@ export default defineConfig({
   out: './server/db/migrations',
   dialect: 'sqlite',
   dbCredentials: {
-    url: process.env.NUXT_DATABASE_PATH || './data/lagoss.sqlite',
+    url: process.env.NUXT_DATABASE_URL || 'file:.data/lagoss.sqlite',
   },
 });

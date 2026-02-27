@@ -35,7 +35,7 @@ services:
   dashboard:
     image: ghcr.io/lagossapp/dashboard:${LAGOSS_VERSION:-latest}
     environment:
-      NUXT_DATABASE_PATH: /data/lagoss.sqlite
+      NUXT_DATABASE_URL: file:/data/lagoss.sqlite
       NUXT_REDIS_URL: redis://valkey:6379
       NUXT_S3_ENDPOINT: http://minio:9002
       NUXT_S3_REGION: unknown

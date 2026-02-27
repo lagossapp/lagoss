@@ -25,7 +25,7 @@ export default defineNuxtConfig({
       forcePathStyle: true,
     },
     database: {
-      path: '',
+      url: '',
     },
     redis: {
       url: '',
@@ -69,7 +69,7 @@ export default defineNuxtConfig({
         forcePathStyle: true,
       },
       database: {
-        path: './data/lagoss.sqlite',
+        url: 'file:.data/lagoss.sqlite',
       },
       redis: {
         url: 'redis://localhost:6379',
