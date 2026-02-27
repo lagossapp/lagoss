@@ -32,6 +32,8 @@
       ]
     },
     "crates/runtime": {
+      "initial-version": "0.4.1",
+      "bootstrap-sha": "6a862e0870439ae54ff0318a09180d2dafc67adc",
       "component": "@lagoss/runtime",
       "release-type": "node",
       "extra-files": [
