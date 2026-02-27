@@ -8,7 +8,7 @@ use crate::bindings::{BindingResult, PromiseResult};
 type Arg = KeyGenAlgorithm;
 
 pub fn generate_key_init(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     args: v8::FunctionCallbackArguments,
 ) -> Result<Arg> {
     extract_generate_key_algorithm(scope, args.get(0))

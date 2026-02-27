@@ -6,7 +6,7 @@ use lagoss_runtime_v8_utils::{extract_v8_uint8array, v8_exception};
 use crate::Isolate;
 
 pub fn pull_stream_binding(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     args: v8::FunctionCallbackArguments,
     mut _retval: v8::ReturnValue,
 ) {

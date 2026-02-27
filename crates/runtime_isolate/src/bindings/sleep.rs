@@ -8,7 +8,7 @@ use super::BindingResult;
 
 type Arg = u64;
 
-pub fn sleep_init(scope: &mut v8::HandleScope, args: v8::FunctionCallbackArguments) -> Result<Arg> {
+pub fn sleep_init(scope: &mut v8::PinScope<'_, '_>, args: v8::FunctionCallbackArguments) -> Result<Arg> {
     match args.get(0).to_int32(scope) {
         Some(delay) => Ok(delay.value() as u64),
         None => Err(anyhow!("Invalid delay")),

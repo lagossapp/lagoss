@@ -9,7 +9,7 @@ use crate::bindings::{BindingResult, PromiseResult};
 type Arg = (Algorithm, Vec<u8>, Vec<u8>);
 
 pub fn encrypt_init(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     args: v8::FunctionCallbackArguments,
 ) -> Result<Arg> {
     let algorithm = extract_algorithm_object(scope, args.get(0))?;

@@ -9,7 +9,7 @@ use crate::bindings::{BindingResult, PromiseResult};
 type Arg = (DeriveAlgorithm, Vec<u8>, u32);
 
 pub fn derive_bits_init(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     args: v8::FunctionCallbackArguments,
 ) -> Result<Arg> {
     let algorithm = extract_derive_algorithm(scope, args.get(0))?;

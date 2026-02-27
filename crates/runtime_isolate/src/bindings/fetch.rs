@@ -12,7 +12,7 @@ static CLIENT: OnceLock<Client> = OnceLock::new();
 
 type Arg = Request<String>;
 
-pub fn fetch_init(scope: &mut v8::HandleScope, args: v8::FunctionCallbackArguments) -> Result<Arg> {
+pub fn fetch_init(scope: &mut v8::PinScope<'_, '_>, args: v8::FunctionCallbackArguments) -> Result<Arg> {
     let id = scope
         .get_continuation_preserved_embedder_data()
         .to_uint32(scope)

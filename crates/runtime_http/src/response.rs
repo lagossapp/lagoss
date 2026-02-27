@@ -9,7 +9,7 @@ use lagoss_runtime_v8_utils::{
 
 pub fn response_to_v8<'a>(
     response: (u16, HeaderMap, Bytes),
-    scope: &mut v8::HandleScope<'a>,
+    scope: &mut v8::PinScope<'a, '_>,
 ) -> v8::Local<'a, v8::Object> {
     let len = 3;
     let mut names = Vec::with_capacity(len);
@@ -29,7 +29,7 @@ pub fn response_to_v8<'a>(
 }
 
 pub fn response_from_v8<'a>(
-    scope: &mut v8::HandleScope<'a>,
+    scope: &mut v8::PinScope<'a, '_>,
     response: v8::Local<'a, v8::Value>,
 ) -> Result<(Builder, Full<Bytes>, bool)> {
     let response = match response.to_object(scope) {

@@ -157,17 +157,15 @@ impl Isolate {
             },
         ];
 
-        let refs = v8::ExternalReferences::new(&references);
-        std::mem::forget(references);
-        let refs: &'static v8::ExternalReferences = Box::leak(Box::new(refs));
+        let refs = std::borrow::Cow::Owned(references);
 
         let mut isolate = match options.snapshot {
-            true => v8::Isolate::snapshot_creator(Some(refs)),
+            true => v8::Isolate::snapshot_creator(Some(refs), None),
             false => {
                 if let Some(snapshot_blob) = options.snapshot_blob {
                     params = params
-                        .external_references(&**refs)
-                        .snapshot_blob(snapshot_blob);
+                        .external_references(refs)
+                        .snapshot_blob(v8::StartupData::from(snapshot_blob));
                 }
 
                 v8::Isolate::new(params)
@@ -180,18 +178,19 @@ impl Isolate {
         let (stream_sender, stream_receiver) = flume::unbounded();
 
         let state: IsolateState = {
-            let isolate_scope = &mut v8::HandleScope::new(&mut isolate);
+            let mut hs_storage = std::pin::pin!(v8::HandleScope::new(&mut isolate));
+            let mut isolate_scope = hs_storage.as_mut().init();
             let global = if options.snapshot {
-                let context = bindings::bind(isolate_scope, bindings::BindStrategy::Sync);
-                let global = v8::Global::new(isolate_scope, context);
+                let context = bindings::bind(&mut isolate_scope, bindings::BindStrategy::Sync);
+                let global = v8::Global::new(&isolate_scope, context);
                 isolate_scope.set_default_context(context);
                 global
             } else if options.snapshot_blob.is_some() {
-                let context = bindings::bind(isolate_scope, bindings::BindStrategy::Async);
-                v8::Global::new(isolate_scope, context)
+                let context = bindings::bind(&mut isolate_scope, bindings::BindStrategy::Async);
+                v8::Global::new(&isolate_scope, context)
             } else {
-                let context = bindings::bind(isolate_scope, bindings::BindStrategy::All);
-                v8::Global::new(isolate_scope, context)
+                let context = bindings::bind(&mut isolate_scope, bindings::BindStrategy::All);
+                v8::Global::new(&isolate_scope, context)
             };
 
             IsolateState {
@@ -286,13 +285,18 @@ impl Isolate {
             state.global.as_ref().unwrap().0.clone()
         };
 
-        let scope =
-            &mut v8::HandleScope::with_context(self.isolate.as_mut().unwrap(), global.clone());
-        let try_catch = &mut v8::TryCatch::new(scope);
+        let mut hs = std::pin::pin!(v8::HandleScope::new(self.isolate.as_mut().unwrap()));
+        let mut hs = hs.as_mut().init();
+        let global_local = v8::Local::new(&hs, global.clone());
+        let mut cs = v8::ContextScope::new(&mut hs, global_local);
+        let mut hs2 = std::pin::pin!(v8::HandleScope::new(&mut cs));
+        let mut hs2 = hs2.as_mut().init();
+        let mut tc = std::pin::pin!(v8::TryCatch::new(&mut hs2));
+        let mut try_catch = tc.as_mut().init();
 
-        let (code, lines) = self.options.get_runtime_code(try_catch);
+        let (code, lines) = self.options.get_runtime_code(&mut try_catch);
         let resource_name = v8_string(
-            try_catch,
+            &mut try_catch,
             if self.options.snapshot {
                 RUNTIME_ONLY_SCRIPT_NAME
             } else if self.options.snapshot_blob.is_some() {
@@ -301,22 +305,23 @@ impl Isolate {
                 ISOLATE_SCRIPT_NAME
             },
         );
-        let source_map_url = v8_string(try_catch, "");
+        let source_map_url = v8_string(&mut try_catch, "");
         isolate_state.borrow_mut().lines = lines;
 
-        let source = v8::script_compiler::Source::new(
+        let mut source = v8::script_compiler::Source::new(
             code,
             Some(&v8::ScriptOrigin::new(
-                try_catch,
+                &try_catch,
                 resource_name.into(),
                 0,
                 0,
                 false,
                 i32::from(self.options.snapshot_blob.is_some()),
-                source_map_url.into(),
+                Some(source_map_url.into()),
                 false,
                 false,
                 true,
+                None,
             )),
         );
 
@@ -366,41 +371,41 @@ impl Isolate {
             }
         });
 
-        match v8::script_compiler::compile_module(try_catch, source) {
+        match v8::script_compiler::compile_module(&try_catch, &mut source) {
             Some(module) => {
                 if module
-                    .instantiate_module(try_catch, resolve_module_callback)
+                    .instantiate_module(&try_catch, resolve_module_callback)
                     .is_none()
                 {
-                    self.compilation_error = Some(handle_error(try_catch, lines).as_error());
+                    self.compilation_error = Some(handle_error(&mut try_catch, lines).as_error());
                     return;
                 }
 
-                if module.evaluate(try_catch).is_none() {
-                    self.compilation_error = Some(handle_error(try_catch, lines).as_error());
+                if module.evaluate(&try_catch).is_none() {
+                    self.compilation_error = Some(handle_error(&mut try_catch, lines).as_error());
                     return;
                 }
 
                 if !self.options.snapshot {
-                    let namespace = module.get_module_namespace().to_object(try_catch).unwrap();
-                    let handler_key = v8_string(try_catch, "handler");
-                    let handler = namespace.get(try_catch, handler_key.into()).unwrap();
-                    let handler = v8::Global::new(try_catch, handler);
+                    let namespace = module.get_module_namespace().to_object(&try_catch).unwrap();
+                    let handler_key = v8_string(&mut try_catch, "handler");
+                    let handler = namespace.get(&try_catch, handler_key.into()).unwrap();
+                    let handler = v8::Global::new(&try_catch, handler);
 
                     self.handler = Some(handler);
 
-                    let global = global.open(try_catch);
-                    let global = global.global(try_catch);
-                    let handler_key = v8_string(try_catch, "masterHandler");
-                    let handler = global.get(try_catch, handler_key.into()).unwrap();
+                    let global = global.open(&mut try_catch);
+                    let global = global.global(&try_catch);
+                    let handler_key = v8_string(&mut try_catch, "masterHandler");
+                    let handler = global.get(&try_catch, handler_key.into()).unwrap();
                     let handler = v8::Local::<v8::Function>::try_from(handler).unwrap();
-                    let handler = v8::Global::new(try_catch, handler);
+                    let handler = v8::Global::new(&try_catch, handler);
 
                     self.master_handler = Some(handler);
                 }
             }
             None => {
-                self.compilation_error = Some(handle_error(try_catch, lines).as_error());
+                self.compilation_error = Some(handle_error(&mut try_catch, lines).as_error());
             }
         };
     }
@@ -416,23 +421,26 @@ impl Isolate {
 
                     (global, isolate_state.requests_count)
                 };
-                let scope = &mut v8::HandleScope::with_context(
-                    self.isolate.as_mut().unwrap(),
-                    global.clone(),
-                );
-                let try_catch = &mut v8::TryCatch::new(scope);
+                let mut hs = std::pin::pin!(v8::HandleScope::new(self.isolate.as_mut().unwrap()));
+                let mut hs = hs.as_mut().init();
+                let global_local = v8::Local::new(&hs, global.clone());
+                let mut cs = v8::ContextScope::new(&mut hs, global_local);
+                let mut hs2 = std::pin::pin!(v8::HandleScope::new(&mut cs));
+                let mut hs2 = hs2.as_mut().init();
+                let mut tc = std::pin::pin!(v8::TryCatch::new(&mut hs2));
+                let mut try_catch = tc.as_mut().init();
 
                 let master_handler = self.master_handler.as_ref().unwrap();
-                let master_handler = master_handler.open(try_catch);
+                let master_handler = master_handler.open(&mut try_catch);
 
                 let handler = self.handler.as_ref().unwrap();
-                let handler = v8::Local::new(try_catch, handler);
+                let handler = v8::Local::new(&try_catch, handler);
 
-                let global = global.open(try_catch);
-                let global = global.global(try_catch);
+                let global = global.open(&mut try_catch);
+                let global = global.global(&try_catch);
 
-                let request = request_to_v8(request, try_catch);
-                let id = v8::Integer::new(try_catch, requests_count as i32);
+                let request = request_to_v8(request, &mut try_catch);
+                let id = v8::Integer::new(&try_catch, requests_count as i32);
                 try_catch.set_continuation_preserved_embedder_data(id.into());
 
                 state.borrow_mut().handler_results.insert(
@@ -448,14 +456,14 @@ impl Isolate {
                 );
 
                 match master_handler.call(
-                    try_catch,
+                    &try_catch,
                     global.into(),
                     &[id.into(), handler, request.into()],
                 ) {
                     Some(response) => {
                         let promise = v8::Local::<v8::Promise>::try_from(response)
                             .expect("Handler did not return a promise");
-                        let promise = v8::Global::new(try_catch, promise);
+                        let promise = v8::Global::new(&try_catch, promise);
 
                         if let Some(handler_result) =
                             state.borrow_mut().handler_results.get_mut(&requests_count)
@@ -469,7 +477,7 @@ impl Isolate {
                         self.termination_result
                             .write()
                             .unwrap()
-                            .get_or_insert_with(|| handle_error(try_catch, 0));
+                            .get_or_insert_with(|| handle_error(&mut try_catch, 0));
                     }
                 };
             }
@@ -480,10 +488,12 @@ impl Isolate {
     }
 
     fn poll_v8(&mut self, global: &v8::Global<v8::Context>) {
-        let scope = &mut v8::HandleScope::with_context(self.isolate.as_mut().unwrap(), global);
-
-        while v8::Platform::pump_message_loop(&v8::V8::get_current_platform(), scope, false) {}
-        scope.perform_microtask_checkpoint();
+        let mut hs = std::pin::pin!(v8::HandleScope::new(self.isolate.as_mut().unwrap()));
+        let mut hs = hs.as_mut().init();
+        let global_local = v8::Local::new(&hs, global.clone());
+        let mut cs = v8::ContextScope::new(&mut hs, global_local);
+        while v8::Platform::pump_message_loop(&v8::V8::get_current_platform(), &**cs, false) {}
+        cs.perform_microtask_checkpoint();
     }
 
     fn resolve_promises(
@@ -511,17 +521,22 @@ impl Isolate {
         }
 
         if let Some(promises) = promises {
-            let scope = &mut v8::HandleScope::with_context(self.isolate.as_mut().unwrap(), global);
+            let mut hs = std::pin::pin!(v8::HandleScope::new(self.isolate.as_mut().unwrap()));
+            let mut hs = hs.as_mut().init();
+            let global_local = v8::Local::new(&hs, global.clone());
+            let mut cs = v8::ContextScope::new(&mut hs, global_local);
+            let mut hs2 = std::pin::pin!(v8::HandleScope::new(&mut cs));
+            let mut scope = hs2.as_mut().init();
 
             for (result, promise) in promises {
-                let promise = promise.open(scope);
+                let promise = promise.open(&mut scope);
                 let should_reject = matches!(result, PromiseResult::Error(_));
-                let value = result.into_value(scope);
+                let value = result.into_value(&mut scope);
 
                 if should_reject {
-                    promise.reject(scope, value);
+                    promise.reject(&scope, value);
                 } else {
-                    promise.resolve(scope, value);
+                    promise.resolve(&scope, value);
                 }
             }
         }
@@ -626,8 +641,14 @@ impl Isolate {
             }
         }
 
-        let scope = &mut v8::HandleScope::with_context(self.isolate.as_mut().unwrap(), global);
-        let try_catch = &mut v8::TryCatch::new(scope);
+        let mut hs = std::pin::pin!(v8::HandleScope::new(self.isolate.as_mut().unwrap()));
+        let mut hs = hs.as_mut().init();
+        let global_local = v8::Local::new(&hs, global.clone());
+        let mut cs = v8::ContextScope::new(&mut hs, global_local);
+        let mut hs2 = std::pin::pin!(v8::HandleScope::new(&mut cs));
+        let mut hs2 = hs2.as_mut().init();
+        let mut tc = std::pin::pin!(v8::TryCatch::new(&mut hs2));
+        let mut try_catch = tc.as_mut().init();
         let lines = state.lines;
         let options = &self.options;
 
@@ -644,7 +665,7 @@ impl Isolate {
             if *handler_result.stream_response_sent.borrow() {
                 if handler_result.stream_status.borrow().is_done() {
                     if should_send_statistics {
-                        send_statistics(options, try_catch);
+                        send_statistics(options, &mut try_catch);
                     }
 
                     return false;
@@ -659,22 +680,23 @@ impl Isolate {
             }
 
             let promise = &handler_result.promise;
-            let promise = promise.as_ref().unwrap().open(try_catch);
+            let promise = promise.as_ref().unwrap().open(&mut try_catch);
 
             match promise.state() {
                 v8::PromiseState::Fulfilled => {
-                    let response = promise.result(try_catch);
-                    let (run_result, is_streaming) = match response_from_v8(try_catch, response) {
-                        Ok((response_builder, body, is_streaming)) => (
-                            RunResult::Response(
-                                response_builder,
-                                body,
-                                Some(handler_result.start_time.elapsed()),
+                    let response = promise.result(&try_catch);
+                    let (run_result, is_streaming) =
+                        match response_from_v8(&mut try_catch, response) {
+                            Ok((response_builder, body, is_streaming)) => (
+                                RunResult::Response(
+                                    response_builder,
+                                    body,
+                                    Some(handler_result.start_time.elapsed()),
+                                ),
+                                is_streaming,
                             ),
-                            is_streaming,
-                        ),
-                        Err(error) => (RunResult::Error(error.to_string()), false),
-                    };
+                            Err(error) => (RunResult::Error(error.to_string()), false),
+                        };
 
                     if is_streaming {
                         let (response_builder, _) = run_result.as_response();
@@ -692,23 +714,23 @@ impl Isolate {
                     handler_result.sender.send(run_result).unwrap_or(());
 
                     if should_send_statistics {
-                        send_statistics(options, try_catch);
+                        send_statistics(options, &mut try_catch);
                     }
 
                     false
                 }
                 v8::PromiseState::Rejected => {
-                    let exception = promise.result(try_catch);
+                    let exception = promise.result(&try_catch);
 
                     handler_result
                         .sender
                         .send(RunResult::Error(get_exception_message(
-                            try_catch, exception, lines,
+                            &try_catch, exception, lines,
                         )))
                         .unwrap_or(());
 
                     if should_send_statistics {
-                        send_statistics(options, try_catch);
+                        send_statistics(options, &mut try_catch);
                     }
 
                     false
@@ -762,15 +784,14 @@ impl Drop for Isolate {
 
 pub fn send_statistics(options: &IsolateOptions, isolate: &mut v8::Isolate) {
     if let Some(on_statistics) = &options.on_statistics {
-        let mut statistics = v8::HeapStatistics::default();
-        isolate.get_heap_statistics(&mut statistics);
+        let statistics = isolate.get_heap_statistics();
 
         on_statistics(Rc::clone(&options.metadata), statistics.used_heap_size())
     }
 }
 
 pub fn get_exception_message(
-    scope: &mut v8::TryCatch<v8::HandleScope>,
+    scope: &v8::PinScope<'_, '_>,
     exception: v8::Local<v8::Value>,
     lines: usize,
 ) -> String {
@@ -820,9 +841,12 @@ pub fn get_exception_message(
     message
 }
 
-fn handle_error(scope: &mut v8::TryCatch<v8::HandleScope>, lines: usize) -> RunResult {
+fn handle_error<'scope, 'obj>(
+    scope: &mut v8::PinnedRef<'_, v8::TryCatch<'scope, 'obj, v8::HandleScope<'_>>>,
+    lines: usize,
+) -> RunResult {
     if let Some(exception) = scope.exception() {
-        return RunResult::Error(get_exception_message(scope, exception, lines));
+        return RunResult::Error(get_exception_message(&**scope, exception, lines));
     }
 
     RunResult::Error("Unknown error".into())

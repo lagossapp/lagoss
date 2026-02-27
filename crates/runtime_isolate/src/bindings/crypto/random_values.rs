@@ -2,7 +2,7 @@ use lagoss_runtime_crypto::methods::random_values;
 use lagoss_runtime_v8_utils::{v8_exception, v8_integer};
 
 pub fn random_values_binding(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     args: v8::FunctionCallbackArguments,
     mut _retval: v8::ReturnValue,
 ) {
@@ -14,7 +14,7 @@ pub fn random_values_binding(
         return;
     }
 
-    let chunk = unsafe { v8::Local::<v8::TypedArray>::cast(value) };
+    let chunk: v8::Local<v8::TypedArray> = value.cast();
     let mut buf = vec![0; chunk.byte_length()];
     chunk.copy_contents(&mut buf);
 
