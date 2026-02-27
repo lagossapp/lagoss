@@ -55,7 +55,7 @@ export async function deleteDeployment(deployment: Deployment, event: H3Event) {
     cron: app.cron,
     cronRegion: app.cronRegion,
     env: envStringToObject(env),
-    isProduction: deployment.isProduction === 1,
+    isProduction: deployment.isProduction,
     assets: parseAssets(deployment.assets),
   });
 }

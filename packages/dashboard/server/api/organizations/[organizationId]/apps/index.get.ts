@@ -27,5 +27,5 @@ export default defineEventHandler(async event => {
     .orderBy(desc(appSchema.updatedAt))
     .execute();
 
-  return apps.map(app => app.Function);
+  return apps.map(app => app.apps);
 });
