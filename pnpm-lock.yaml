@@ -201,8 +201,8 @@ importers:
         specifier: ^9.0.0
         version: 9.0.0
       web-streams-polyfill:
-        specifier: ^3.2.1
-        version: 3.2.1
+        specifier: ^4.0.0
+        version: 4.2.0
     devDependencies:
       '@edge-runtime/vm':
         specifier: ^3.2.0
@@ -7654,8 +7654,8 @@ packages:
   web-namespaces@2.0.1:
     resolution: {integrity: sha512-bKr1DkiNa2krS7qxNtdrtHAmzuYGFQLiQ13TsorsdT6ULTkPLKuu5+GsFpDlg6JFjUTwX2DyhMPG2be8uPrqsQ==}
 
-  web-streams-polyfill@3.2.1:
-    resolution: {integrity: sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q==}
+  web-streams-polyfill@4.2.0:
+    resolution: {integrity: sha512-0rYDzGOh9EZpig92umN5g5D/9A1Kff7k0/mzPSSCY8jEQeYkgRMoY7LhbXtUCWzLCMX0TUE9aoHkjFNB7D9pfA==}
     engines: {node: '>= 8'}
 
   webidl-conversions@3.0.1:
@@ -16494,7 +16494,7 @@ snapshots:
 
   web-namespaces@2.0.1: {}
 
-  web-streams-polyfill@3.2.1: {}
+  web-streams-polyfill@4.2.0: {}
 
   webidl-conversions@3.0.1: {}
 
