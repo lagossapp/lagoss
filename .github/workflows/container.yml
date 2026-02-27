@@ -35,14 +35,13 @@ jobs:
             }
 
             console.log(images)
-
             return images
 
   create-container-image:
     name: Create "${{matrix.image}}" container image
     needs: define-matrix
     runs-on: ubuntu-latest
-    if: ${{needs.define-matrix.outputs.images != '[]'}}
+    if: needs.define-matrix.outputs.images != '[]'
     strategy:
       matrix:
         image: ${{fromJson(needs.define-matrix.outputs.images)}}
@@ -67,7 +66,7 @@ jobs:
           tags: |
             type=match,pattern=@lagoss\/${{matrix.image}}@(\d+\.\d+\.\d+),enable=${{startsWith(github.ref, 'refs/tags/')}},group=1
             type=ref,event=pr
-          #  type=raw,value=next,enable={{is_default_branch}}
+            type=raw,value=next,enable={{is_default_branch}}
 
       - name: Login to ghcr.io registry
         if: github.event_name != 'pull_request'
