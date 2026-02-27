@@ -1,45 +1,26 @@
-import { drizzle } from 'drizzle-orm/mysql2';
-import mysql from 'mysql2/promise';
+import { drizzle } from 'drizzle-orm/better-sqlite3';
+import Database from 'better-sqlite3';
 import * as schema from '~~/server/db/schema';
 import { randomBytes } from 'node:crypto';
+import { resolve } from 'node:path';
 
-async function getDB() {
-  const config = useRuntimeConfig();
+let _db: ReturnType<typeof drizzle> | undefined;
 
-  if (!config.database.url) {
-    throw new Error('NUXT_DATABASE_URL is not configured');
+export function useDB() {
+  if (!_db) {
+    const config = useRuntimeConfig();
+
+    if (!config.database.path) {
+      throw new Error('NUXT_DATABASE_PATH is not configured');
+    }
+
+    const sqlite = new Database(resolve(config.database.path));
+    sqlite.pragma('journal_mode = WAL');
+    sqlite.pragma('foreign_keys = ON');
+    _db = drizzle(sqlite, { schema });
   }
 
-  const pool = mysql.createPool({
-    uri: config.database.url,
-  });
-
-  return pool;
-
-  // if (config.db.turso.url && config.db.turso.authToken) {
-  //   const connection = createLibSQLClient({
-  //     url: config.db.turso.url,
-  //     authToken: config.db.turso.authToken,
-  //   });
-  //   return drizzleLibSQL(connection, { schema });
-  // }
-
-  // if (process.dev) {
-  //   const connection = new Database(config.db.file || path.join(process.cwd(), './db.sqlite'));
-  //   return drizzle(connection, { schema });
-  // }
-
-  // throw new Error('Missing database configuration');
-}
-
-let _connection: mysql.Pool | undefined;
-
-export async function useDB() {
-  if (!_connection) {
-    _connection = await getDB();
-  }
-
-  return drizzle(_connection, { schema, mode: 'default' });
+  return _db;
 }
 
 export async function getFirst<T>(query: Promise<T[]>): Promise<T | undefined> {

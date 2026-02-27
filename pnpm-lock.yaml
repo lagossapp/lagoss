@@ -72,13 +72,19 @@ importers:
         version: 1.2.6
       '@nuxt/ui':
         specifier: ^4.5.0
-        version: 4.5.0(@tiptap/extensions@3.20.0(@tiptap/core@3.20.0(@tiptap/pm@3.20.0))(@tiptap/pm@3.20.0))(@tiptap/y-tiptap@3.0.2(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.5)(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29))(axios@1.13.4)(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(embla-carousel@8.6.0)(focus-trap@7.6.6)(ioredis@5.9.2)(jwt-decode@4.0.0)(magicast@0.5.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@4.2.1)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue-router@4.6.4(vue@3.5.27(typescript@5.9.3)))(vue@3.5.27(typescript@5.9.3))(yjs@13.6.29)(zod@4.3.6)
+        version: 4.5.0(@tiptap/extensions@3.20.0(@tiptap/core@3.20.0(@tiptap/pm@3.20.0))(@tiptap/pm@3.20.0))(@tiptap/y-tiptap@3.0.2(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.5)(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29))(axios@1.13.4)(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(embla-carousel@8.6.0)(focus-trap@7.6.6)(ioredis@5.9.2)(jwt-decode@4.0.0)(magicast@0.5.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@4.2.1)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue-router@4.6.4(vue@3.5.27(typescript@5.9.3)))(vue@3.5.27(typescript@5.9.3))(yjs@13.6.29)(zod@4.3.6)
       '@scaleway/use-random-name':
         specifier: ^1.0.10
         version: 1.0.10(react@18.3.1)
+      '@types/better-sqlite3':
+        specifier: ^7.6.13
+        version: 7.6.13
       '@types/nodemailer':
         specifier: ^7.0.11
         version: 7.0.11
+      better-sqlite3:
+        specifier: ^11.10.0
+        version: 11.10.0
       cron-parser:
         specifier: ^5.5.0
         version: 5.5.0
@@ -96,22 +102,19 @@ importers:
         version: 0.31.9
       drizzle-orm:
         specifier: ^0.45.1
-        version: 0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0)
+        version: 0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0)
       is-in-subnet:
         specifier: ^4.0.1
         version: 4.0.1
       monaco-editor:
         specifier: ^0.55.1
         version: 0.55.1
-      mysql2:
-        specifier: ^3.18.0
-        version: 3.18.0(@types/node@25.3.0)
       nodemailer:
         specifier: ^8.0.1
         version: 8.0.1
       nuxt:
         specifier: ^4.3.1
-        version: 4.3.1(@parcel/watcher@2.5.6)(@types/node@25.3.0)(@vue/compiler-sfc@3.5.27)(cac@6.7.14)(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(ioredis@5.9.2)(less@4.1.3)(lightningcss@1.31.1)(magicast@0.5.2)(mysql2@3.18.0(@types/node@25.3.0))(optionator@0.9.4)(oxlint@1.50.0)(rolldown@1.0.0-rc.3)(rollup@4.57.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2)
+        version: 4.3.1(@parcel/watcher@2.5.6)(@types/node@25.3.0)(@vue/compiler-sfc@3.5.27)(better-sqlite3@11.10.0)(cac@6.7.14)(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(ioredis@5.9.2)(less@4.1.3)(lightningcss@1.31.1)(magicast@0.5.2)(mysql2@3.18.0(@types/node@25.3.0))(optionator@0.9.4)(oxlint@1.50.0)(rolldown@1.0.0-rc.3)(rollup@4.57.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2)
       nuxt-monaco-editor:
         specifier: ^1.3.2
         version: 1.4.0(magicast@0.5.2)(monaco-editor@0.55.1)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
@@ -145,7 +148,7 @@ importers:
     dependencies:
       astro:
         specifier: ^5.17.3
-        version: 5.17.3(@types/node@25.3.0)(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(rollup@4.57.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2)
+        version: 5.17.3(@types/node@25.3.0)(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(rollup@4.57.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2)
       esbuild:
         specifier: ^0.27.3
         version: 0.27.3
@@ -3572,6 +3575,9 @@ packages:
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
 
+  '@types/better-sqlite3@7.6.13':
+    resolution: {integrity: sha512-NMv9ASNARoKksWtsq/SHakpYAYnhBrQgGD8zkLYk/jaK8jUGn08CfEdTRgYhMypUQAfzSP8W6gNLe0q19/t4VA==}
+
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
 
@@ -4136,6 +4142,9 @@ packages:
     resolution: {integrity: sha512-ipDqC8FrAl/76p2SSWKSI+H9tFwm7vYqXQrItCuiVPt26Km0jS+NzSsBWAaBusvSbQcfJG+JitdMm+wZAgTYqg==}
     hasBin: true
 
+  better-sqlite3@11.10.0:
+    resolution: {integrity: sha512-EwhOpyXiOEL/lKzHz9AW1msWFNzGc/z+LzeB3/jnFJpxu+th2yqvzsSWas1v9jgs9+xiXJcD5A8CJxAG2TaghQ==}
+
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
@@ -4262,6 +4271,9 @@ packages:
   chokidar@5.0.0:
     resolution: {integrity: sha512-TQMmc3w+5AxjpL8iIiwebF73dRDF4fBIieAqGn9RGCWaEVwQ6Fb2cGe31Yns0RRIzii5goJ1Y7xbMwo1TxMplw==}
     engines: {node: '>= 20.19.0'}
+
+  chownr@1.1.4:
+    resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
 
   chownr@3.0.0:
     resolution: {integrity: sha512-+IxzY9BZOQd/XuYPRmrvEVjF/nqj5kgT4kEq7VofrDoM1MxoRjEWkrCC3EtLi59TVawxTAn+orJwFQcrqEN1+g==}
@@ -4530,6 +4542,10 @@ packages:
 
   decode-named-character-reference@1.0.2:
     resolution: {integrity: sha512-O8x12RzrUF8xyVcY0KJowWsmaJxQbmy0/EtnNtHRpsOcT7dFk5W598coHqBVpmWo1oQQfsCqfCmkZN5DJrZVdg==}
+
+  decompress-response@6.0.0:
+    resolution: {integrity: sha512-aW35yZM6Bb/4oJlZncMH2LCoZtJXTRxES17vE3hoRiowU2kWHaJKFkSBDnDR+cm9J+9QhXmREyIfv0pji9ejCQ==}
+    engines: {node: '>=10'}
 
   deep-extend@0.6.0:
     resolution: {integrity: sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==}
@@ -4953,6 +4969,10 @@ packages:
     resolution: {integrity: sha512-VyhnebXciFV2DESc+p6B+y0LjSm0krU4OgJN44qFAhBY0TJ+1V61tYD2+wHusZ6F9n5K+vl8k0sTy7PEfV4qpg==}
     engines: {node: '>=16.17'}
 
+  expand-template@2.0.3:
+    resolution: {integrity: sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==}
+    engines: {node: '>=6'}
+
   expect-type@1.3.0:
     resolution: {integrity: sha512-knvyeauYhqjOYvQ66MznSMs83wmHrCycNEN6Ao+2AeYEfxUIkuiVxdEa1qlGEPK+We3n0THiDciYSsCcgW/DoA==}
     engines: {node: '>=12.0.0'}
@@ -5064,6 +5084,9 @@ packages:
     resolution: {integrity: sha512-Rx/WycZ60HOaqLKAi6cHRKKI7zxWbJ31MhntmtwMoaTeF7XFH9hhBp8vITaMidfljRQ6eYWCKkaTK+ykVJHP2A==}
     engines: {node: '>= 0.8'}
 
+  fs-constants@1.0.0:
+    resolution: {integrity: sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==}
+
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
 
@@ -5122,6 +5145,9 @@ packages:
   giget@3.1.2:
     resolution: {integrity: sha512-T2qUpKBHeUTwHcIhydgnJzhL0Hj785ms+JkxaaWQH9SDM/llXeewnOkfJcFShAHjWI+26hOChwUfCoupaXLm8g==}
     hasBin: true
+
+  github-from-package@0.0.0:
+    resolution: {integrity: sha512-SyHy3T1v2NUXn29OsWdxmK6RwHD+vkj3v8en8AOBZ1wBQ/hCAQ5bAQTD02kW4W9tUp/3Qh6J8r9EvntiyCmOOw==}
 
   github-slugger@2.0.0:
     resolution: {integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==}
@@ -5870,6 +5896,10 @@ packages:
     resolution: {integrity: sha512-vqiC06CuhBTUdZH+RYl8sFrL096vA45Ok5ISO6sE/Mr1jRbGH4Csnhi8f3wKVl7x8mO4Au7Ir9D3Oyv1VYMFJw==}
     engines: {node: '>=12'}
 
+  mimic-response@3.1.0:
+    resolution: {integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==}
+    engines: {node: '>=10'}
+
   minimatch@10.1.2:
     resolution: {integrity: sha512-fu656aJ0n2kcXwsnwnv9g24tkU5uSmOlTjd6WyyaKm2Z+h1qmY6bAjrcaIxF/BslFqbZ8UBtbJi7KgQOZD2PTw==}
     engines: {node: 20 || >=22}
@@ -5901,6 +5931,9 @@ packages:
 
   mitt@3.0.1:
     resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
+
+  mkdirp-classic@0.5.3:
+    resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
 
   mlly@1.8.0:
     resolution: {integrity: sha512-l8D9ODSRWLe2KHJSifWGwBqpTZXIXTeo8mlKjY+E2HAakaTeNpqAyBZ8GSqLzHgw4XmHmC8whvpjJNMbFZN7/g==}
@@ -5964,6 +5997,9 @@ packages:
   nanotar@0.2.0:
     resolution: {integrity: sha512-9ca1h0Xjvo9bEkE4UOxgAzLV0jHKe6LMaxo37ND2DAhhAtd0j8pR1Wxz+/goMrZO8AEZTWCmyaOsFI/W5AdpCQ==}
 
+  napi-build-utils@2.0.0:
+    resolution: {integrity: sha512-GEbrYkbfF7MoNaoh2iGG84Mnf/WZfB0GdGEsM8wz7Expx/LlWf5U8t9nvJKXSp3qr5IsEbK04cBGhol/KwOsWA==}
+
   needle@3.3.1:
     resolution: {integrity: sha512-6k0YULvhpw+RoLNiQCRKOl09Rv1dPLr8hHnVjHqdolKwDrdNyk+Hmrthi4lIGPPz3r39dLx0hsF5s40sZ3Us4Q==}
     engines: {node: '>= 4.4.x'}
@@ -5985,6 +6021,10 @@ packages:
 
   nlcst-to-string@4.0.0:
     resolution: {integrity: sha512-YKLBCcUYKAg0FNlOBT6aI91qFmSiFKiluk655WzPF+DDMA02qIyy8uiRqI8QXtcFpEvll12LpL5MXqEmAZ+dcA==}
+
+  node-abi@3.87.0:
+    resolution: {integrity: sha512-+CGM1L1CgmtheLcBuleyYOn7NWPVu0s0EJH2C4puxgEZb9h8QpR9G2dBfZJOAUhi7VQxuBPMd0hiISWcTyiYyQ==}
+    engines: {node: '>=10'}
 
   node-addon-api@7.1.1:
     resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
@@ -6424,6 +6464,12 @@ packages:
   preact@10.27.2:
     resolution: {integrity: sha512-5SYSgFKSyhCbk6SrXyMpqjb5+MQBgfvEKE/OC+PujcY34sOpqtr+0AZQtPYx5IA6VxynQ7rUPCtKzyovpj9Bpg==}
 
+  prebuild-install@7.1.3:
+    resolution: {integrity: sha512-8Mf2cbV7x1cXPUILADGI3wuhfqWvtiLA1iclTDbFRZkgRQS0NqsPZphna9V+HyTEadheuPmjaJMsbzKQFOzLug==}
+    engines: {node: '>=10'}
+    deprecated: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
+    hasBin: true
+
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -6857,6 +6903,12 @@ packages:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
 
+  simple-concat@1.0.1:
+    resolution: {integrity: sha512-cSFtAPtRhljv69IK0hTVZQ+OfE9nePi/rtJmw5UjHeVyVroEqJXP1sFztKUy1qU+xvz3u/sfYJLa947b7nAN2Q==}
+
+  simple-get@4.0.1:
+    resolution: {integrity: sha512-brv7p5WgH0jmQJr1ZDDfKDOSeWWg+OVypG99A/5vYGPqJ6pxiaHLy8nxtFjBA7oMa01ebA9gfh1uMCFqOuXxvA==}
+
   simple-git@3.30.0:
     resolution: {integrity: sha512-q6lxyDsCmEal/MEGhP1aVyQ3oxnagGlBDOVSIB4XUVLl1iZh0Pah6ebC9V4xBap/RfgP2WlI8EKs0WS0rMEJHg==}
 
@@ -7052,6 +7104,13 @@ packages:
     resolution: {integrity: sha512-g9ljZiwki/LfxmQADO3dEY1CbpmXT5Hm2fJ+QaGKwSXUylMybePR7/67YW7jOrrvjEgL1Fmz5kzyAjWVWLlucg==}
     engines: {node: '>=6'}
 
+  tar-fs@2.1.4:
+    resolution: {integrity: sha512-mDAjwmZdh7LTT6pNleZ05Yt65HC3E+NiQzl672vQG38jIrehtJk/J3mNwIg+vShQPcLF/LV7CMnDW6vjj6sfYQ==}
+
+  tar-stream@2.2.0:
+    resolution: {integrity: sha512-ujeqbceABgwMZxEJnk2HDY2DlnUZ+9oEcb1KzTVfYHio0UE6dG71n60d8D2I4qNvleWrrXpmjpt7vZeF1LnMZQ==}
+    engines: {node: '>=6'}
+
   tar-stream@3.1.7:
     resolution: {integrity: sha512-qJj60CXt7IU1Ffyc3NJMjh6EkuCFej46zUqJ4J7pqYlThyd9bO0XBTmcOIhSzZJVWfsLks0+nle/j538YAW9RQ==}
 
@@ -7156,6 +7215,9 @@ packages:
     resolution: {integrity: sha512-5C1sg4USs1lfG0GFb2RLXsdpXqBSEhAaA/0kPL01wxzpMqLILNxIxIOKiILz+cdg/pLnOUxFYOR5yhHU666wbw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
+
+  tunnel-agent@0.6.0:
+    resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
 
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -9581,13 +9643,13 @@ snapshots:
       - utf-8-validate
       - vue
 
-  '@nuxt/fonts@0.14.0(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)(magicast@0.5.2)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))':
+  '@nuxt/fonts@0.14.0(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)(magicast@0.5.2)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))':
     dependencies:
       '@nuxt/devtools-kit': 3.2.1(magicast@0.5.2)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
       '@nuxt/kit': 4.3.1(magicast@0.5.2)
       consola: 3.4.2
       defu: 6.1.4
-      fontless: 0.2.1(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
+      fontless: 0.2.1(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
       h3: 1.15.5
       magic-regexp: 0.10.0
       ofetch: 1.5.1
@@ -9597,7 +9659,7 @@ snapshots:
       ufo: 1.6.3
       unifont: 0.7.4
       unplugin: 3.0.0
-      unstorage: 1.17.4(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)
+      unstorage: 1.17.4(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -9718,7 +9780,7 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/nitro-server@4.3.1(267269fbea456a2a470faed4a9a276ad)':
+  '@nuxt/nitro-server@4.3.1(8bf41ac0ca48f8e59cd21f1850551fd8)':
     dependencies:
       '@nuxt/devalue': 2.0.2
       '@nuxt/kit': 4.3.1(magicast@0.5.2)
@@ -9735,8 +9797,8 @@ snapshots:
       impound: 1.0.0
       klona: 2.0.6
       mocked-exports: 0.1.1
-      nitropack: 2.13.1(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(rolldown@1.0.0-rc.3)
-      nuxt: 4.3.1(@parcel/watcher@2.5.6)(@types/node@25.3.0)(@vue/compiler-sfc@3.5.27)(cac@6.7.14)(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(ioredis@5.9.2)(less@4.1.3)(lightningcss@1.31.1)(magicast@0.5.2)(mysql2@3.18.0(@types/node@25.3.0))(optionator@0.9.4)(oxlint@1.50.0)(rolldown@1.0.0-rc.3)(rollup@4.57.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2)
+      nitropack: 2.13.1(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(rolldown@1.0.0-rc.3)
+      nuxt: 4.3.1(@parcel/watcher@2.5.6)(@types/node@25.3.0)(@vue/compiler-sfc@3.5.27)(better-sqlite3@11.10.0)(cac@6.7.14)(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(ioredis@5.9.2)(less@4.1.3)(lightningcss@1.31.1)(magicast@0.5.2)(mysql2@3.18.0(@types/node@25.3.0))(optionator@0.9.4)(oxlint@1.50.0)(rolldown@1.0.0-rc.3)(rollup@4.57.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2)
       ohash: 2.0.11
       pathe: 2.0.3
       pkg-types: 2.3.0
@@ -9744,7 +9806,7 @@ snapshots:
       std-env: 3.10.0
       ufo: 1.6.3
       unctx: 2.5.0
-      unstorage: 1.17.4(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)
+      unstorage: 1.17.4(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)
       vue: 3.5.27(typescript@5.9.3)
       vue-bundle-renderer: 2.2.0
       vue-devtools-stub: 0.1.0
@@ -9800,13 +9862,13 @@ snapshots:
       rc9: 3.0.0
       std-env: 3.10.0
 
-  '@nuxt/ui@4.5.0(@tiptap/extensions@3.20.0(@tiptap/core@3.20.0(@tiptap/pm@3.20.0))(@tiptap/pm@3.20.0))(@tiptap/y-tiptap@3.0.2(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.5)(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29))(axios@1.13.4)(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(embla-carousel@8.6.0)(focus-trap@7.6.6)(ioredis@5.9.2)(jwt-decode@4.0.0)(magicast@0.5.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@4.2.1)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue-router@4.6.4(vue@3.5.27(typescript@5.9.3)))(vue@3.5.27(typescript@5.9.3))(yjs@13.6.29)(zod@4.3.6)':
+  '@nuxt/ui@4.5.0(@tiptap/extensions@3.20.0(@tiptap/core@3.20.0(@tiptap/pm@3.20.0))(@tiptap/pm@3.20.0))(@tiptap/y-tiptap@3.0.2(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.5)(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29))(axios@1.13.4)(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(embla-carousel@8.6.0)(focus-trap@7.6.6)(ioredis@5.9.2)(jwt-decode@4.0.0)(magicast@0.5.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@4.2.1)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue-router@4.6.4(vue@3.5.27(typescript@5.9.3)))(vue@3.5.27(typescript@5.9.3))(yjs@13.6.29)(zod@4.3.6)':
     dependencies:
       '@floating-ui/dom': 1.7.5
       '@iconify/vue': 5.0.0(vue@3.5.27(typescript@5.9.3))
       '@internationalized/date': 3.11.0
       '@internationalized/number': 3.6.5
-      '@nuxt/fonts': 0.14.0(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)(magicast@0.5.2)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
+      '@nuxt/fonts': 0.14.0(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)(magicast@0.5.2)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
       '@nuxt/icon': 2.2.1(magicast@0.5.2)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.27(typescript@5.9.3))
       '@nuxt/kit': 4.3.1(magicast@0.5.2)
       '@nuxt/schema': 4.3.1
@@ -9913,7 +9975,7 @@ snapshots:
       - vue
       - yjs
 
-  '@nuxt/vite-builder@4.3.1(9f7865fc18ee3820c42ba6e02792afc0)':
+  '@nuxt/vite-builder@4.3.1(63b3303eb2ee7d6586899594e86a01f4)':
     dependencies:
       '@nuxt/kit': 4.3.1(magicast@0.5.2)
       '@rollup/plugin-replace': 6.0.3(rollup@4.57.1)
@@ -9932,7 +9994,7 @@ snapshots:
       magic-string: 0.30.21
       mlly: 1.8.0
       mocked-exports: 0.1.1
-      nuxt: 4.3.1(@parcel/watcher@2.5.6)(@types/node@25.3.0)(@vue/compiler-sfc@3.5.27)(cac@6.7.14)(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(ioredis@5.9.2)(less@4.1.3)(lightningcss@1.31.1)(magicast@0.5.2)(mysql2@3.18.0(@types/node@25.3.0))(optionator@0.9.4)(oxlint@1.50.0)(rolldown@1.0.0-rc.3)(rollup@4.57.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2)
+      nuxt: 4.3.1(@parcel/watcher@2.5.6)(@types/node@25.3.0)(@vue/compiler-sfc@3.5.27)(better-sqlite3@11.10.0)(cac@6.7.14)(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(ioredis@5.9.2)(less@4.1.3)(lightningcss@1.31.1)(magicast@0.5.2)(mysql2@3.18.0(@types/node@25.3.0))(optionator@0.9.4)(oxlint@1.50.0)(rolldown@1.0.0-rc.3)(rollup@4.57.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2)
       pathe: 2.0.3
       pkg-types: 2.3.0
       postcss: 8.5.6
@@ -11568,6 +11630,10 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
+  '@types/better-sqlite3@7.6.13':
+    dependencies:
+      '@types/node': 25.3.0
+
   '@types/chai@5.2.3':
     dependencies:
       '@types/deep-eql': 4.0.2
@@ -12159,7 +12225,7 @@ snapshots:
       '@babel/parser': 7.29.0
       ast-kit: 2.2.0
 
-  astro@5.17.3(@types/node@25.3.0)(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(rollup@4.57.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2):
+  astro@5.17.3(@types/node@25.3.0)(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(rollup@4.57.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2):
     dependencies:
       '@astrojs/compiler': 2.13.1
       '@astrojs/internal-helpers': 0.7.5
@@ -12214,7 +12280,7 @@ snapshots:
       ultrahtml: 1.6.0
       unifont: 0.7.4
       unist-util-visit: 5.0.0
-      unstorage: 1.17.4(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)
+      unstorage: 1.17.4(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)
       vfile: 6.0.3
       vite: 6.4.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
       vitefu: 1.1.2(vite@6.4.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
@@ -12296,7 +12362,8 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  aws-ssl-profiles@1.1.2: {}
+  aws-ssl-profiles@1.1.2:
+    optional: true
 
   axios@1.13.4:
     dependencies:
@@ -12323,6 +12390,11 @@ snapshots:
   base64-js@1.5.1: {}
 
   baseline-browser-mapping@2.9.19: {}
+
+  better-sqlite3@11.10.0:
+    dependencies:
+      bindings: 1.5.0
+      prebuild-install: 7.1.3
 
   binary-extensions@2.3.0: {}
 
@@ -12475,6 +12547,8 @@ snapshots:
   chokidar@5.0.0:
     dependencies:
       readdirp: 5.0.0
+
+  chownr@1.1.4: {}
 
   chownr@3.0.0: {}
 
@@ -12719,9 +12793,10 @@ snapshots:
 
   dayjs@1.11.19: {}
 
-  db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)):
+  db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)):
     optionalDependencies:
-      drizzle-orm: 0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0)
+      better-sqlite3: 11.10.0
+      drizzle-orm: 0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0)
       mysql2: 3.18.0(@types/node@25.3.0)
 
   debug@4.4.3:
@@ -12731,6 +12806,10 @@ snapshots:
   decode-named-character-reference@1.0.2:
     dependencies:
       character-entities: 2.0.2
+
+  decompress-response@6.0.0:
+    dependencies:
+      mimic-response: 3.1.0
 
   deep-extend@0.6.0: {}
 
@@ -12821,10 +12900,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0):
+  drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0):
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
       '@prisma/client': 5.0.0(prisma@5.0.0)
+      '@types/better-sqlite3': 7.6.13
+      better-sqlite3: 11.10.0
       mysql2: 3.18.0(@types/node@25.3.0)
       prisma: 5.0.0
 
@@ -13112,6 +13193,8 @@ snapshots:
       signal-exit: 4.1.0
       strip-final-newline: 3.0.0
 
+  expand-template@2.0.3: {}
+
   expect-type@1.3.0: {}
 
   exsolve@1.0.8: {}
@@ -13177,7 +13260,7 @@ snapshots:
     dependencies:
       tiny-inflate: 1.0.3
 
-  fontless@0.2.1(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)):
+  fontless@0.2.1(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)):
     dependencies:
       consola: 3.4.2
       css-tree: 3.1.0
@@ -13191,7 +13274,7 @@ snapshots:
       pathe: 2.0.3
       ufo: 1.6.3
       unifont: 0.7.4
-      unstorage: 1.17.4(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)
+      unstorage: 1.17.4(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)
     optionalDependencies:
       vite: 7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
     transitivePeerDependencies:
@@ -13241,6 +13324,8 @@ snapshots:
 
   fresh@2.0.0: {}
 
+  fs-constants@1.0.0: {}
+
   fs.realpath@1.0.0: {}
 
   fsevents@2.3.3:
@@ -13255,6 +13340,7 @@ snapshots:
   generate-function@2.3.1:
     dependencies:
       is-property: 1.0.2
+    optional: true
 
   gensync@1.0.0-beta.2: {}
 
@@ -13298,6 +13384,8 @@ snapshots:
       pathe: 2.0.3
 
   giget@3.1.2: {}
+
+  github-from-package@0.0.0: {}
 
   github-slugger@2.0.0: {}
 
@@ -13511,6 +13599,7 @@ snapshots:
   iconv-lite@0.7.2:
     dependencies:
       safer-buffer: 2.1.2
+    optional: true
 
   ieee754@1.2.1: {}
 
@@ -13603,7 +13692,8 @@ snapshots:
 
   is-plain-obj@4.1.0: {}
 
-  is-property@1.0.2: {}
+  is-property@1.0.2:
+    optional: true
 
   is-reference@1.2.1:
     dependencies:
@@ -13817,7 +13907,8 @@ snapshots:
 
   lodash@4.17.23: {}
 
-  long@5.3.2: {}
+  long@5.3.2:
+    optional: true
 
   longest-streak@3.1.0: {}
 
@@ -13837,7 +13928,8 @@ snapshots:
     dependencies:
       yallist: 4.0.0
 
-  lru.min@1.1.4: {}
+  lru.min@1.1.4:
+    optional: true
 
   luxon@3.7.2: {}
 
@@ -14237,6 +14329,8 @@ snapshots:
 
   mimic-fn@4.0.0: {}
 
+  mimic-response@3.1.0: {}
+
   minimatch@10.1.2:
     dependencies:
       '@isaacs/brace-expansion': 5.0.1
@@ -14264,6 +14358,8 @@ snapshots:
       minipass: 7.1.2
 
   mitt@3.0.1: {}
+
+  mkdirp-classic@0.5.3: {}
 
   mlly@1.8.0:
     dependencies:
@@ -14346,16 +14442,20 @@ snapshots:
       lru.min: 1.1.4
       named-placeholders: 1.1.6
       sql-escaper: 1.3.3
+    optional: true
 
   named-placeholders@1.1.6:
     dependencies:
       lru.min: 1.1.4
+    optional: true
 
   nanoid@3.3.11: {}
 
   nanoid@5.1.6: {}
 
   nanotar@0.2.0: {}
+
+  napi-build-utils@2.0.0: {}
 
   needle@3.3.1:
     dependencies:
@@ -14365,7 +14465,7 @@ snapshots:
 
   neotraverse@0.6.18: {}
 
-  nitropack@2.13.1(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(rolldown@1.0.0-rc.3):
+  nitropack@2.13.1(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(rolldown@1.0.0-rc.3):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.2
       '@rollup/plugin-alias': 6.0.0(rollup@4.57.1)
@@ -14386,7 +14486,7 @@ snapshots:
       cookie-es: 2.0.0
       croner: 9.1.0
       crossws: 0.3.5
-      db0: 0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))
+      db0: 0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))
       defu: 6.1.4
       destr: 2.0.5
       dot-prop: 10.1.0
@@ -14432,7 +14532,7 @@ snapshots:
       unenv: 2.0.0-rc.24
       unimport: 5.6.0
       unplugin-utils: 0.3.1
-      unstorage: 1.17.4(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)
+      unstorage: 1.17.4(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2)
       untyped: 2.0.0
       unwasm: 0.5.3
       youch: 4.1.0-beta.13
@@ -14470,6 +14570,10 @@ snapshots:
   nlcst-to-string@4.0.0:
     dependencies:
       '@types/nlcst': 2.0.3
+
+  node-abi@3.87.0:
+    dependencies:
+      semver: 7.7.4
 
   node-addon-api@7.1.1: {}
 
@@ -14525,16 +14629,16 @@ snapshots:
       - magicast
       - vite
 
-  nuxt@4.3.1(@parcel/watcher@2.5.6)(@types/node@25.3.0)(@vue/compiler-sfc@3.5.27)(cac@6.7.14)(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(ioredis@5.9.2)(less@4.1.3)(lightningcss@1.31.1)(magicast@0.5.2)(mysql2@3.18.0(@types/node@25.3.0))(optionator@0.9.4)(oxlint@1.50.0)(rolldown@1.0.0-rc.3)(rollup@4.57.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2):
+  nuxt@4.3.1(@parcel/watcher@2.5.6)(@types/node@25.3.0)(@vue/compiler-sfc@3.5.27)(better-sqlite3@11.10.0)(cac@6.7.14)(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(ioredis@5.9.2)(less@4.1.3)(lightningcss@1.31.1)(magicast@0.5.2)(mysql2@3.18.0(@types/node@25.3.0))(optionator@0.9.4)(oxlint@1.50.0)(rolldown@1.0.0-rc.3)(rollup@4.57.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue-tsc@3.2.5(typescript@5.9.3))(yaml@2.8.2):
     dependencies:
       '@dxup/nuxt': 0.3.2(magicast@0.5.2)
       '@nuxt/cli': 3.33.0(@nuxt/schema@4.3.1)(cac@6.7.14)(magicast@0.5.2)
       '@nuxt/devtools': 3.1.1(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.27(typescript@5.9.3))
       '@nuxt/kit': 4.3.1(magicast@0.5.2)
-      '@nuxt/nitro-server': 4.3.1(267269fbea456a2a470faed4a9a276ad)
+      '@nuxt/nitro-server': 4.3.1(8bf41ac0ca48f8e59cd21f1850551fd8)
       '@nuxt/schema': 4.3.1
       '@nuxt/telemetry': 2.7.0(@nuxt/kit@4.3.1(magicast@0.5.2))
-      '@nuxt/vite-builder': 4.3.1(9f7865fc18ee3820c42ba6e02792afc0)
+      '@nuxt/vite-builder': 4.3.1(63b3303eb2ee7d6586899594e86a01f4)
       '@unhead/vue': 2.1.3(vue@3.5.27(typescript@5.9.3))
       '@vue/shared': 3.5.27
       c12: 3.3.3(magicast@0.5.2)
@@ -15079,6 +15183,21 @@ snapshots:
       source-map-js: 1.2.1
 
   preact@10.27.2: {}
+
+  prebuild-install@7.1.3:
+    dependencies:
+      detect-libc: 2.1.2
+      expand-template: 2.0.3
+      github-from-package: 0.0.0
+      minimist: 1.2.8
+      mkdirp-classic: 0.5.3
+      napi-build-utils: 2.0.0
+      node-abi: 3.87.0
+      pump: 3.0.3
+      rc: 1.2.8
+      simple-get: 4.0.1
+      tar-fs: 2.1.4
+      tunnel-agent: 0.6.0
 
   prelude-ls@1.2.1:
     optional: true
@@ -15712,6 +15831,14 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
+  simple-concat@1.0.1: {}
+
+  simple-get@4.0.1:
+    dependencies:
+      decompress-response: 6.0.0
+      once: 1.4.0
+      simple-concat: 1.0.1
+
   simple-git@3.30.0:
     dependencies:
       '@kwsites/file-exists': 1.1.1
@@ -15753,7 +15880,8 @@ snapshots:
     dependencies:
       readable-stream: 3.6.2
 
-  sql-escaper@1.3.3: {}
+  sql-escaper@1.3.3:
+    optional: true
 
   srvx@0.10.1: {}
 
@@ -15899,6 +16027,21 @@ snapshots:
 
   tapable@2.3.0: {}
 
+  tar-fs@2.1.4:
+    dependencies:
+      chownr: 1.1.4
+      mkdirp-classic: 0.5.3
+      pump: 3.0.3
+      tar-stream: 2.2.0
+
+  tar-stream@2.2.0:
+    dependencies:
+      bl: 4.1.0
+      end-of-stream: 1.4.5
+      fs-constants: 1.0.0
+      inherits: 2.0.4
+      readable-stream: 3.6.2
+
   tar-stream@3.1.7:
     dependencies:
       b4a: 1.7.3
@@ -16000,6 +16143,10 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
     optional: true
+
+  tunnel-agent@0.6.0:
+    dependencies:
+      safe-buffer: 5.2.1
 
   type-check@0.4.0:
     dependencies:
@@ -16221,7 +16368,7 @@ snapshots:
     dependencies:
       rolldown: 1.0.0-rc.3
 
-  unstorage@1.17.4(db0@0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2):
+  unstorage@1.17.4(db0@0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0)))(ioredis@5.9.2):
     dependencies:
       anymatch: 3.1.3
       chokidar: 5.0.0
@@ -16232,7 +16379,7 @@ snapshots:
       ofetch: 1.5.1
       ufo: 1.6.3
     optionalDependencies:
-      db0: 0.3.4(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))
+      db0: 0.3.4(better-sqlite3@11.10.0)(drizzle-orm@0.45.1(@opentelemetry/api@1.9.0)(@prisma/client@5.0.0(prisma@5.0.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)(mysql2@3.18.0(@types/node@25.3.0))(prisma@5.0.0))(mysql2@3.18.0(@types/node@25.3.0))
       ioredis: 5.9.2
 
   untun@0.1.3:
