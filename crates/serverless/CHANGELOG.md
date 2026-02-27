@@ -1,5 +1,14 @@
 # @lagoss/serverless
 
+## [0.7.1](https://github.com/lagossapp/lagoss/compare/@lagoss/serverless@0.7.0...@lagoss/serverless@0.7.1) (2026-02-27)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @lagoss/runtime bumped to 0.4.2
+
 ## [0.7.0](https://github.com/lagossapp/lagoss/compare/@lagoss/serverless@0.6.0...@lagoss/serverless@0.7.0) (2026-02-24)
 
 
