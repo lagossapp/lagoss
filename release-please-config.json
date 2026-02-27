@@ -1,7 +1,6 @@
 {
   "bootstrap-sha": "c7ea09570e7b2bb6ece58844874aa013bcf21a25",
   "include-component-in-tag": true,
-  "plugins": ["node-workspace", "cargo-workspace"],
   "include-v-in-tag": false,
   "tag-separator": "@",
   "separate-pull-requests": true,
@@ -12,12 +11,57 @@
     },
     "crates/serverless": {
       "component": "@lagoss/serverless",
-      "release-type": "node"
+      "release-type": "node",
+      "extra-files": [
+        {
+          "type": "toml",
+          "path": "crates/serverless/Cargo.toml",
+          "jsonpath": "$.package.version"
+        }
+      ]
     },
     "crates/cli": {
       "component": "@lagoss/cli",
-      "release-type": "node"
+      "release-type": "node",
+      "extra-files": [
+        {
+          "type": "toml",
+          "path": "crates/cli/Cargo.toml",
+          "jsonpath": "$.package.version"
+        }
+      ]
+    },
+    "crates/runtime": {
+      "component": "@lagoss/runtime",
+      "release-type": "node",
+      "extra-files": [
+        {
+          "type": "toml",
+          "path": "crates/runtime/Cargo.toml",
+          "jsonpath": "$.package.version"
+        }
+      ]
     }
   },
+  "plugins": [
+    {
+      "type": "node-workspace",
+      "merge": false
+    },
+    {
+      "type": "cargo-workspace",
+      "merge": false
+    },
+    {
+      "type": "linked-versions",
+      "groupName": "serverless",
+      "components": ["@lagoss/serverless", "@lagoss/runtime"]
+    },
+    {
+      "type": "linked-versions",
+      "groupName": "cli",
+      "components": ["@lagoss/cli", "@lagoss/runtime"]
+    }
+  ],
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json"
 }
