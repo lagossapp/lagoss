@@ -1,5 +1,19 @@
 # @lagoss/serverless
 
+## [0.4.2](https://github.com/lagossapp/lagoss/compare/@lagoss/serverless@0.7.0...@lagoss/serverless@0.4.2) (2026-02-27)
+
+
+### Miscellaneous Chores
+
+* **@lagoss/serverless:** Synchronize serverless versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @lagoss/runtime bumped to 0.15.0
+
 ## [0.7.0](https://github.com/lagossapp/lagoss/compare/@lagoss/serverless@0.6.0...@lagoss/serverless@0.7.0) (2026-02-24)
 
 

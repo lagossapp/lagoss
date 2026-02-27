@@ -1,6 +1,6 @@
 {
   "name": "@lagoss/serverless",
-  "version": "0.7.0",
+  "version": "0.4.2",
   "description": "Serverless software using Lagoss Runtime",
   "private": true,
   "scripts": {
