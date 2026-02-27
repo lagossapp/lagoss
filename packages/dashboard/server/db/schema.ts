@@ -74,7 +74,7 @@ export const organizationSchema = mysqlTable('Organization', {
   updatedAt: datetime('updatedAt').notNull(),
   name: varchar('name', { length: 64 }).notNull(),
   description: varchar('description', { length: 256 }),
-  ownerId: varchar('ownerId', { length: 191 }).notNull(),
+  ownerId: varchar('ownerId', { length: 191 }).notNull(), // TODO: drop and use members list instead
   // .references(() => userSchema.id),
   plan: varchar('plan', { length: 191 }).$type<'personal' | 'pro'>().notNull().default('personal'),
   planPeriodEnd: datetime('plan_period_end'),
