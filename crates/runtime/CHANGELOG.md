@@ -1,5 +1,13 @@
 # @lagoss/runtime
 
+## [0.4.2](https://github.com/lagossapp/lagoss/compare/@lagoss/runtime@0.4.1...@lagoss/runtime@0.4.2) (2026-02-27)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate flume to 0.11.0 ([#188](https://github.com/lagossapp/lagoss/issues/188)) ([4ee9ddb](https://github.com/lagossapp/lagoss/commit/4ee9ddb02b95ed7c1abc986f3cafa1ee25fc934b))
+* **deps:** update rust crate flume to 0.12.0 ([#333](https://github.com/lagossapp/lagoss/issues/333)) ([d7119a3](https://github.com/lagossapp/lagoss/commit/d7119a351c2de1c9ad8153f44bf4e4a178e17efb))
+
 ## 0.4.1
 
 ### Patch Changes
