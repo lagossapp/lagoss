@@ -78,7 +78,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         if: "!startsWith(github.ref, 'refs/tags/') || contains(github.ref, matrix.image)"
         with:
           context: .
