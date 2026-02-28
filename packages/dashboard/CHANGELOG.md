@@ -1,5 +1,22 @@
 # @lagoss/dashboard
 
+## [0.9.0](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard@0.8.0...@lagoss/dashboard@0.9.0) (2026-02-28)
+
+
+### Features
+
+* add request logs ([#280](https://github.com/lagossapp/lagoss/issues/280)) ([1f62ac8](https://github.com/lagossapp/lagoss/commit/1f62ac86415e14d3553ec7245085425f5d5d2ffb))
+* create new org ([#390](https://github.com/lagossapp/lagoss/issues/390)) ([6518ca4](https://github.com/lagossapp/lagoss/commit/6518ca4eda2d96495fe8851b09b2fa5162d73c01))
+* drop unused dependencies (monaco) ([#394](https://github.com/lagossapp/lagoss/issues/394)) ([927b320](https://github.com/lagossapp/lagoss/commit/927b320ee6eceadc1346efa81199c61c972d042e))
+* replace mysql with sqlite ([#393](https://github.com/lagossapp/lagoss/issues/393)) ([32ce30b](https://github.com/lagossapp/lagoss/commit/32ce30b1f3c970b979e15c1fb2c70fe40008636b))
+* support cli login ([d5e24c6](https://github.com/lagossapp/lagoss/commit/d5e24c6df86dee998b7f54b714d9845e0d0613dd))
+
+
+### Bug Fixes
+
+* **deps:** update dependency drizzle-orm to ^0.45.0 ([#331](https://github.com/lagossapp/lagoss/issues/331)) ([4355707](https://github.com/lagossapp/lagoss/commit/4355707dcf2ed2b3234770f01d167bdfb0c9d932))
+* drop unused dependency edge-runtime ([#392](https://github.com/lagossapp/lagoss/issues/392)) ([3d812fa](https://github.com/lagossapp/lagoss/commit/3d812fa487ad4bfcb094277b97ff5db9524ada5f))
+
 ## [0.8.0](https://github.com/lagossapp/lagoss/compare/@lagoss/dashboard@0.7.3...@lagoss/dashboard@0.8.0) (2025-11-03)
 
 
