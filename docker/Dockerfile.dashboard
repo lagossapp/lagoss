@@ -1,28 +1,18 @@
-FROM node:24.13.1-alpine AS base
-RUN corepack enable
+FROM node:24.13.1 AS builder
 WORKDIR /app
-
-FROM base AS builder
-# RUN apt-get update -y \
-#      && apt-get install -y libsqlite3-dev python3 build-essential
+RUN corepack enable
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY packages/dashboard/package.json ./packages/dashboard/
-RUN pnpm install
+RUN pnpm install --frozen-lockfile --filter @lagoss/dashboard
 COPY . .
 RUN pnpm --filter @lagoss/dashboard postinstall
 RUN pnpm --filter @lagoss/dashboard build
 
-FROM base AS runner
+FROM gcr.io/distroless/nodejs24-debian13 AS runner
+WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE 3000
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nodejs
-
 COPY packages/dashboard/public ./
-COPY --from=builder --chown=nodejs:nodejs /app/packages/dashboard/.output ./
-
-USER nodejs
-
-CMD ["node", "server/index.mjs"]
+COPY --from=builder /app/packages/dashboard/.output ./
+CMD ["server/index.mjs"]
