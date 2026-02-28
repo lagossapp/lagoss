@@ -1,5 +1,22 @@
 # @lagoss/cli
 
+## [0.15.0](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.14.0...@lagoss/cli@0.15.0) (2026-02-28)
+
+
+### Features
+
+* add request logs ([#280](https://github.com/lagossapp/lagoss/issues/280)) ([1f62ac8](https://github.com/lagossapp/lagoss/commit/1f62ac86415e14d3553ec7245085425f5d5d2ffb))
+* rename project to app ([#274](https://github.com/lagossapp/lagoss/issues/274)) ([4acc892](https://github.com/lagossapp/lagoss/commit/4acc892cb8ec8361e1246472717e6de8f88438ea))
+
+
+### Bug Fixes
+
+* **deps:** update dependency esbuild to ^0.27.0 ([#332](https://github.com/lagossapp/lagoss/issues/332)) ([a4a2a86](https://github.com/lagossapp/lagoss/commit/a4a2a86db1ac42b4e20d536419d6a4076de53a98))
+* **deps:** update rust crate dirs to v6 ([#377](https://github.com/lagossapp/lagoss/issues/377)) ([cd80037](https://github.com/lagossapp/lagoss/commit/cd80037f0d67be76a0a8c7cf71d740d9175f42da))
+* **deps:** update rust crate flume to 0.12.0 ([#333](https://github.com/lagossapp/lagoss/issues/333)) ([d7119a3](https://github.com/lagossapp/lagoss/commit/d7119a351c2de1c9ad8153f44bf4e4a178e17efb))
+* **deps:** update rust crate notify to v8 ([#378](https://github.com/lagossapp/lagoss/issues/378)) ([b50cdf2](https://github.com/lagossapp/lagoss/commit/b50cdf25daf2aa5539ca67d72c0d569f34e90ae4))
+* **deps:** update rust crate webbrowser to v1 ([#381](https://github.com/lagossapp/lagoss/issues/381)) ([65da35b](https://github.com/lagossapp/lagoss/commit/65da35bdef93482610984b66bde051cb90049cc3))
+
 ## [0.14.0](https://github.com/lagossapp/lagoss/compare/@lagoss/cli@0.13.0...@lagoss/cli@0.14.0) (2025-10-31)
 
 
