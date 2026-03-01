@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
 
   clickhouse:
-    image: clickhouse/clickhouse-server:25.12.5-alpine
+    image: clickhouse/clickhouse-server:26.1.2-alpine
     ulimits:
       nofile:
         soft: 262144
