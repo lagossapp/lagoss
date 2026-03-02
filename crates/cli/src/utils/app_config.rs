@@ -130,21 +130,24 @@ impl ApplicationConfig {
     }
 
     pub fn write(&self) -> Result<()> {
-        if !self.path.exists() {
-            fs::create_dir_all(self.path.join(".lagoss"))?;
+        let config_dir = self.path.join(".lagoss");
+        if !config_dir.exists() {
+            fs::create_dir_all(&config_dir)?;
         }
 
         let content = serde_json::to_string(self)?;
-        fs::write(self.path.clone(), content)?;
+        let config_path = config_dir.join("config.json");
+        fs::write(config_path, content)?;
         Ok(())
     }
 
     pub fn delete(&self) -> Result<()> {
-        if !self.path.exists() {
+        let config_path = self.path.join(".lagoss").join("config.json");
+        if !config_path.exists() {
             return Err(anyhow!("No configuration found in this directory.",));
         }
 
-        fs::remove_file(self.path.clone())?;
+        fs::remove_file(config_path)?;
         Ok(())
     }
 
