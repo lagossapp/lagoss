@@ -23,8 +23,8 @@ export default defineEventHandler(async event => {
     .get();
   if (!deployment) {
     throw createError({
-      status: 500,
-      message: 'Failed to create deployment',
+      status: 404,
+      message: 'Deployment not found',
     });
   }
 
