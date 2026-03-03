@@ -2,25 +2,15 @@
   <div class="flex min-h-0 flex-col p-2">
     <!-- Filters -->
     <div class="mb-4 flex flex-wrap items-center gap-2">
-      <USelect v-model="timeframe" :items="timeframes" class="w-40" />
       <USelect v-model="statusFilter" :items="statusFilters" class="w-32" />
       <USelect v-model="methodFilter" :items="methodFilters" class="w-28" />
-      <UButton
-        v-if="selectedRequest"
-        variant="ghost"
-        color="neutral"
-        size="sm"
-        icon="i-heroicons-x-mark"
-        @click="selectedRequest = null"
-      >
-        Clear selection
-      </UButton>
+      <USelect v-model="timeframe" :items="timeframes" class="w-40 ml-auto" />
     </div>
 
     <div class="flex flex-1 gap-4 overflow-hidden">
       <!-- Requests List -->
       <div class="flex min-w-0 flex-1 flex-col">
-        <Card class="flex flex-1 flex-col overflow-hidden !p-0">
+        <Card class="flex flex-1 flex-col overflow-hidden p-0!">
           <div v-if="pending" class="flex h-32 items-center justify-center">
             <UIcon name="i-heroicons-arrow-path" class="h-6 w-6 animate-spin text-neutral-400" />
           </div>
@@ -107,7 +97,7 @@
         leave-to-class="opacity-0 translate-x-4"
       >
         <div v-if="selectedRequest" class="flex w-96 shrink-0 flex-col">
-          <Card class="flex flex-1 flex-col overflow-hidden !p-0">
+          <Card class="flex flex-1 flex-col overflow-hidden p-0!">
             <!-- Request Header -->
             <div class="border-b border-neutral-200 p-4 dark:border-neutral-700">
               <div class="mb-2 flex items-center gap-2">
@@ -123,6 +113,14 @@
                 >
                   {{ selectedRequest.http_method }}
                 </span>
+
+                <UButton
+                  variant="ghost"
+                  color="neutral"
+                  icon="i-heroicons-x-mark"
+                  class="ml-auto"
+                  @click="selectedRequest = null"
+                />
               </div>
               <p class="mb-3 break-all font-mono text-sm">{{ selectedRequest.url }}</p>
 
@@ -159,7 +157,9 @@
 
             <!-- Logs Section -->
             <div class="flex flex-1 flex-col overflow-hidden">
-              <div class="flex items-center justify-between border-b border-neutral-200 px-4 py-2 dark:border-neutral-700">
+              <div
+                class="flex items-center justify-between border-b border-neutral-200 px-4 py-2 dark:border-neutral-700"
+              >
                 <h3 class="font-semibold">Logs</h3>
                 <span v-if="requestLogs?.length" class="text-xs text-neutral-500">
                   {{ requestLogs.length }} {{ requestLogs.length === 1 ? 'entry' : 'entries' }}
@@ -203,7 +203,7 @@
 
 <script setup lang="ts">
 import { dayjs } from '~~/lib/dayjs';
-import type { App } from '~~/server/db/schema';
+import type { App } from '~/types';
 
 interface RequestData {
   id: string;
@@ -260,16 +260,13 @@ const methodFilters = [
 ];
 
 // Fetch requests
-const { data: requests, pending } = await useFetch<RequestData[]>(
-  () => `/api/apps/${props.app.id}/requests`,
-  {
-    query: computed(() => ({
-      timeframe: timeframe.value,
-      status: statusFilter.value,
-      method: methodFilter.value,
-    })),
-  },
-);
+const { data: requests, pending } = await useFetch<RequestData[]>(() => `/api/apps/${props.app.id}/requests`, {
+  query: computed(() => ({
+    timeframe: timeframe.value,
+    status: statusFilter.value,
+    method: methodFilter.value,
+  })),
+});
 
 // Selected request and its logs
 const selectedRequest = ref<RequestData | null>(null);
