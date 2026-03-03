@@ -7,8 +7,5 @@ export default defineEventHandler(async event => {
 
   const deployments = await db.select().from(deploymentSchema).where(eq(deploymentSchema.appId, app.id)).execute();
 
-  return deployments.map(deployment => ({
-    ...deployment,
-    isProduction: deployment.isProduction === 1,
-  }));
+  return deployments;
 });

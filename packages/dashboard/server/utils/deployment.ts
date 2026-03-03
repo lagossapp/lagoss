@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3';
-import { Deployment, deploymentSchema, domainSchema, envVariableSchema } from '~~/server/db/schema';
+import { type Deployment, deploymentSchema, domainSchema, envVariableSchema } from '~~/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { useRedis } from '~~/server/lib/redis';
 import { envStringToObject } from '~~/app/composables/utils';
@@ -55,7 +55,7 @@ export async function deleteDeployment(deployment: Deployment, event: H3Event) {
     cron: app.cron,
     cronRegion: app.cronRegion,
     env: envStringToObject(env),
-    isProduction: deployment.isProduction === 1,
+    isProduction: deployment.isProduction,
     assets: parseAssets(deployment.assets),
   });
 }

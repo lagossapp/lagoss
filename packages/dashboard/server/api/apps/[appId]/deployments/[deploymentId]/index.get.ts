@@ -14,13 +14,11 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const deployment = await getFirst(
-    db
-      .select()
-      .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.appId, app.id)))
-      .execute(),
-  );
+  const deployment = await db
+    .select()
+    .from(deploymentSchema)
+    .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.appId, app.id)))
+    .get();
   if (!deployment) {
     throw createError({
       status: 404,

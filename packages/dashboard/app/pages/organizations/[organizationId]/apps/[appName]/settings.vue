@@ -135,24 +135,29 @@ function deepCopy<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
 
-const app = ref<typeof dbApp.value>();
+type App = typeof dbApp.value & {
+  envVariables: { key: string; value: string }[];
+  domains: string[];
+};
+
+const app = ref<App>();
 watch(
   dbApp,
   () => {
-    app.value = deepCopy(dbApp.value);
+    app.value = deepCopy(dbApp.value as App);
   },
   { immediate: true },
 );
 
 function addEnvVariable() {
-  app.value?.envVariables.push({ key: '', value: '' });
+  app.value?.envVariables?.push({ key: '', value: '' });
 }
 
 function removeEnvVariable(index: number) {
   if (!app.value) return;
   app.value = {
     ...app.value,
-    envVariables: app.value.envVariables.filter((_, i) => i !== index),
+    envVariables: app.value.envVariables?.filter((_, i) => i !== index),
   };
 }
 
@@ -178,7 +183,7 @@ function addPastedEnvVariables(event: ClipboardEvent) {
 
     app.value = {
       ...app.value,
-      envVariables: app.value.envVariables.filter(({ key, value }) => !pastedEnv[key] && key && value),
+      envVariables: app.value.envVariables?.filter(({ key, value }) => !pastedEnv[key] && key && value),
     };
     app.value?.envVariables?.push(...Object.entries(pastedEnv).map(([key, value]) => ({ key, value })));
   }

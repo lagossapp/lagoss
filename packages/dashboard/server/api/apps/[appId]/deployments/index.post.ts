@@ -26,9 +26,11 @@ export default defineEventHandler(async event => {
     })
     .parseAsync(await readBody(event));
 
-  const organization = await getFirst(
-    db.select().from(organizationSchema).where(eq(organizationSchema.id, app.organizationId)).execute(),
-  );
+  const organization = await db
+    .select()
+    .from(organizationSchema)
+    .where(eq(organizationSchema.id, app.organizationId))
+    .get();
   if (!organization) {
     throw createError({
       status: 404,
@@ -54,14 +56,12 @@ export default defineEventHandler(async event => {
       createdAt: new Date(),
       updatedAt: new Date(),
       triggerer: user.email,
-      isProduction: 0,
+      isProduction: false,
       assets: JSON.stringify(input.assets.map(({ name }) => name)),
     })
     .execute();
 
-  const deployment = await getFirst(
-    db.select().from(deploymentSchema).where(eq(deploymentSchema.id, deploymentId)).execute(),
-  );
+  const deployment = await db.select().from(deploymentSchema).where(eq(deploymentSchema.id, deploymentId)).get();
   if (!deployment) {
     throw createError({
       status: 500,

@@ -106,7 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import type { App, Organization } from '~~/server/db/schema';
+import type { App, Organization } from '~/types';
 import { getPlanOfOrganization } from '~~/server/lib/plans';
 import type { AnalyticsTimeframe } from '~~/server/lib/types';
 
@@ -149,7 +149,7 @@ function formatNumber(number = 0) {
 }
 
 // TODO: allow to select timeframe
-const timeframe = ref('Last 24 hours');
+const timeframe = ref<AnalyticsTimeframe>('Last 24 hours');
 
 // TODO: refresh data every 10 seconds
 const { data: usage } = await useFetch(() => `/api/apps/${app.value.id}/usage`, {

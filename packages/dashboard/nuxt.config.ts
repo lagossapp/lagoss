@@ -69,7 +69,7 @@ export default defineNuxtConfig({
         forcePathStyle: true,
       },
       database: {
-        url: 'mysql://root:lagoss@localhost:3306/lagoss',
+        url: 'file:.data/lagoss.sqlite',
       },
       redis: {
         url: 'redis://localhost:6379',
@@ -108,10 +108,6 @@ export default defineNuxtConfig({
       collections: ['heroicons', 'ion'],
       externalizeIconsJson: true,
     },
-  },
-
-  future: {
-    compatibilityVersion: 4,
   },
 
   compatibilityDate: '2025-05-15',

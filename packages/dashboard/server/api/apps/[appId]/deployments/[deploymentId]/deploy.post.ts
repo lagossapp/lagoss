@@ -17,13 +17,11 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const deployment = await getFirst(
-    db
-      .select()
-      .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.appId, app.id)))
-      .execute(),
-  );
+  const deployment = await db
+    .select()
+    .from(deploymentSchema)
+    .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.appId, app.id)))
+    .get();
   if (!deployment) {
     throw createError({
       status: 404,
@@ -37,18 +35,16 @@ export default defineEventHandler(async event => {
     })
     .parseAsync(await readBody(event));
 
-  const hasProductionDeployment = await getFirst(
-    db
-      .select()
-      .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.appId, app.id), eq(deploymentSchema.isProduction, 1)))
-      .execute(),
-  );
+  const hasProductionDeployment = await db
+    .select()
+    .from(deploymentSchema)
+    .where(and(eq(deploymentSchema.appId, app.id), eq(deploymentSchema.isProduction, true)))
+    .get();
 
   if (input.isProduction && hasProductionDeployment) {
     await db
       .update(deploymentSchema)
-      .set({ isProduction: 0 })
+      .set({ isProduction: false })
       .where(eq(deploymentSchema.appId, deployment.appId))
       .execute();
   }
@@ -56,7 +52,7 @@ export default defineEventHandler(async event => {
   await db
     .update(deploymentSchema)
     .set({
-      isProduction: !hasProductionDeployment || input.isProduction ? 1 : 0,
+      isProduction: !hasProductionDeployment || input.isProduction,
     })
     .where(eq(deploymentSchema.id, deploymentId))
     .execute();
@@ -75,7 +71,7 @@ export default defineEventHandler(async event => {
     cron: app.cron,
     cronRegion: app.cronRegion,
     env: envStringToObject(env),
-    isProduction: deployment.isProduction === 1,
+    isProduction: deployment.isProduction,
     assets: parseAssets(deployment.assets),
   });
 

@@ -20,7 +20,7 @@
           icon="i-ion-ios-play"
           label="Save & Deploy"
           size="lg"
-          :color="changed ? 'blue' : 'white'"
+          :color="changed ? 'primary' : 'neutral'"
           :disabled="!changed"
           :loading="isDeploying"
           @click="saveAndDeploy"

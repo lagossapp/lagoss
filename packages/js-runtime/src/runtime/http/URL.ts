@@ -148,8 +148,8 @@
 
     static canParse(url: string | URL, base?: string | URL): boolean {
       try {
-        new URL(url, base);
-        return true;
+        const u = new URL(url, base);
+        return !!u;
       } catch {
         return false;
       }

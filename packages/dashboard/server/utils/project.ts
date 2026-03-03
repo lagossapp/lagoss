@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3';
-import { Organization, organizationMemberSchema, organizationSchema, appSchema } from '~~/server/db/schema';
+import { type Organization, organizationMemberSchema, organizationSchema, appSchema } from '~~/server/db/schema';
 import { and, eq, or, SQL } from 'drizzle-orm';
 import type { Plan } from '~~/server/lib/plans';
 import { APP_NAME_REGEX } from '~~/server/lib/constants';
@@ -28,16 +28,13 @@ export async function requireApp(event: H3Event) {
     });
   }
 
-  const app = await getFirst(
-    db
-      .select()
-      .from(appSchema)
-      .leftJoin(organizationSchema, eq(appSchema.organizationId, organizationSchema.id))
-      .leftJoin(organizationMemberSchema, eq(appSchema.organizationId, organizationMemberSchema.organizationId))
-      .where(and(appIdSql, or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id))))
-      .execute(),
-  );
-
+  const app = await db
+    .select()
+    .from(appSchema)
+    .leftJoin(organizationSchema, eq(appSchema.organizationId, organizationSchema.id))
+    .leftJoin(organizationMemberSchema, eq(appSchema.organizationId, organizationMemberSchema.organizationId))
+    .where(and(appIdSql, or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id))))
+    .get();
   if (!app) {
     throw createError({
       message: 'App not found',
@@ -45,13 +42,12 @@ export async function requireApp(event: H3Event) {
     });
   }
 
-  return app.Function;
+  return app.apps;
 }
 
 async function isAppNameUnique(name: string): Promise<boolean> {
   const db = await useDB();
-  const result = await getFirst(db.select().from(appSchema).where(eq(appSchema.name, name)).execute());
-
+  const result = await db.select().from(appSchema).where(eq(appSchema.name, name)).get();
   return result === undefined;
 }
 

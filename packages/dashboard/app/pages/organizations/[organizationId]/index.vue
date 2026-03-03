@@ -62,7 +62,7 @@
                 <span :title="dayjs(app.updatedAt).format('DD.MM.YYYY HH:mm')"
                   >Updated {{ dayjs().to(app.updatedAt) }}</span
                 >
-                <UBadge class="ml-2" color="primary" variant="soft">{{ app.playground ? 'Playground' : 'App' }}</UBadge>
+                <UBadge class="ml-2" color="primary" variant="soft">App</UBadge>
               </div>
             </div>
           </Card>

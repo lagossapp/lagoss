@@ -5,11 +5,11 @@ export function createExports(manifest: SSRManifest) {
   const app = new App(manifest, false);
 
   const handler = async (request: Request) => {
-    const routeData = app.match(request, { matchNotFound: true });
+    const routeData = app.match(request);
 
     if (routeData) {
       Reflect.set(request, Symbol.for('astro.clientAddress'), request.headers.get('x-forwarded-for'));
-      return app.render(request, routeData);
+      return app.render(request, { routeData });
     }
 
     return new Response(null, {

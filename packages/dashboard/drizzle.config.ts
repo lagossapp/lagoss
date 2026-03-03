@@ -4,8 +4,8 @@ import { defineConfig } from 'drizzle-kit';
 export default defineConfig({
   schema: './server/db/schema.ts',
   out: './server/db/migrations',
-  dialect: 'mysql',
+  dialect: 'sqlite',
   dbCredentials: {
-    url: process.env.NUXT_DATABASE_URL || 'mysql://root:root@localhost:3306/drizzle',
+    url: process.env.NUXT_DATABASE_URL || 'file:.data/lagoss.sqlite',
   },
 });

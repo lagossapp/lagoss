@@ -49,13 +49,13 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui';
+import type { Deployment } from '~/types';
 import { dayjs } from '~~/lib/dayjs';
-import type { Deployment } from '~~/server/db/schema';
 
 const app = typedInject('app');
 const toast = useToast();
 
-const { data: deployments, refresh: refreshDeployments } = await useFetch(
+const { data: deployments, refresh: refreshDeployments } = await useFetch<Deployment[]>(
   () => `/api/apps/${app.value.id}/deployments`,
 );
 

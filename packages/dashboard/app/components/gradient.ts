@@ -20,7 +20,7 @@ export function scaleGradient(
   let maxStopIdx;
 
   for (let i = 0; i < scaleStops.length; i++) {
-    const stopVal = scaleStops[i][0];
+    const stopVal = scaleStops[i]?.[0];
 
     // @ts-expect-error should not be undefined
     if (stopVal <= scale.min || minStopIdx == null) minStopIdx = i;
@@ -39,9 +39,9 @@ export function scaleGradient(
   // @ts-expect-error should not be undefined
   let maxStopVal = scaleStops[maxStopIdx][0];
 
-  if (minStopVal == -Infinity) minStopVal = scale.min;
+  if (minStopVal == -Infinity) minStopVal = scale?.min;
 
-  if (maxStopVal == Infinity) maxStopVal = scale.max;
+  if (maxStopVal == Infinity) maxStopVal = scale?.max;
 
   const minStopPos = u.valToPos(minStopVal, scaleKey, true);
   const maxStopPos = u.valToPos(maxStopVal, scaleKey, true);

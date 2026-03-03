@@ -71,6 +71,7 @@
       });
     } catch (error) {
       if (typeof error === 'string') {
+        // oxlint-disable-next-line preserve-caught-error
         throw new Error(error);
       }
 

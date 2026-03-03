@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import type { App } from '~~/server/db/schema';
+import type { App } from '~/types';
 
 defineProps<{
   app: App;

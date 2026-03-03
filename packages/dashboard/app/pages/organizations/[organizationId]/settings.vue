@@ -31,11 +31,12 @@
 
             <UFormField label="Description">
               <UInput
-                v-model="organization.description"
+                :model-value="organization.description ?? undefined"
                 placeholder="A brief description of your organization"
                 size="md"
                 aria-label="Organization description"
                 class="w-full"
+                @update:model-value="val => (organization.description = val)"
               />
             </UFormField>
 

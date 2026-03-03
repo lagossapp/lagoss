@@ -62,9 +62,9 @@ onMounted(() => {
             const transform = props.datasets[i - 1]?.transform;
 
             if (transform) {
-              finalValue = transform(plot.data[i][idx] ?? 0) ?? 0;
+              finalValue = transform(plot.data[i]?.[idx] ?? 0) ?? 0;
             } else {
-              finalValue = String(plot.data[i][idx] ?? 0);
+              finalValue = String(plot.data[i]?.[idx] ?? 0);
             }
 
             const children = document.createElement('div');
@@ -74,9 +74,9 @@ onMounted(() => {
             label.className = 'flex gap-1 items-center';
             const color = document.createElement('span');
             color.className = 'w-2 h-2 rounded-full';
-            color.style.backgroundColor = props.datasets[i - 1].color;
+            color.style.backgroundColor = props.datasets[i - 1]?.color ?? colors.stone[500];
             label.appendChild(color);
-            label.appendChild(document.createTextNode(String(plot.series[i].label)));
+            label.appendChild(document.createTextNode(String(plot.series[i]?.label)));
 
             const value = document.createElement('p');
             value.innerText = finalValue;
@@ -100,7 +100,7 @@ onMounted(() => {
               tooltip.style.top = `${Math.round(top - (plot.data.length - 1) * 10)}px`;
               // @ts-expect-error _size does exist
               tooltip.style.left = `${Math.round(left + 10 + plot.axes[1]._size)}px`;
-              tooltipDate.textContent = new Date(props.labels[idx] * 1000).toLocaleDateString('en-US', {
+              tooltipDate.textContent = new Date(props.labels[idx] ?? 1 * 1000).toLocaleDateString('en-US', {
                 hour: 'numeric',
                 minute: 'numeric',
                 day: 'numeric',
@@ -137,7 +137,7 @@ onMounted(() => {
 
             // get in-view y range for this scale
             u.series.forEach(ser => {
-              if (ser.show && ser.scale == s.scale) {
+              if (ser.show && ser.scale == s?.scale) {
                 // @ts-expect-error shouldn't be undefined
                 min = Math.min(min, ser.min);
                 // @ts-expect-error shouldn't be undefined
@@ -152,7 +152,7 @@ onMounted(() => {
               min = sc.min;
             }
 
-            return scaleGradient(u, s.scale ?? '', 1, [
+            return scaleGradient(u, s?.scale ?? '', 1, [
               [min + range * 0.0, `${dataset.color}20`],
               [min + range * 1.0, `${dataset.color}A0`],
             ]);
@@ -189,7 +189,7 @@ onMounted(() => {
             const longestVal = (values ?? []).reduce((acc, val) => (val.length > acc.length ? val : acc), '');
 
             if (longestVal != '') {
-              self.ctx.font = axis.font?.[0] ?? '';
+              self.ctx.font = axis?.font?.[0] ?? '';
               axisSize += self.ctx.measureText(longestVal).width / devicePixelRatio;
             }
 
