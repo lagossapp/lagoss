@@ -2,7 +2,7 @@
   <aside
     role="navigation"
     aria-label="Main navigation"
-    class="flex h-screen w-60 shrink-0 flex-col bg-neutral-50 dark:bg-neutral-800 border-r border-neutral-200 dark:border-neutral-700/10"
+    class="flex h-screen w-60 shrink-0 flex-col bg-neutral-50 dark:bg-neutral-900 border-r border-neutral-200 dark:border-white/8"
     style="box-shadow: 1px 0 0 0 rgb(0 0 0 / 0.08)"
   >
     <!-- Logo -->
@@ -13,7 +13,7 @@
         class="flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
       >
         <div
-          class="flex h-7 w-7 items-center justify-center rounded-lg bg-linear-to-br from-teal-400 to-teal-600 shadow-sm"
+          class="flex h-7 w-7 items-center justify-center rounded-lg bg-linear-to-br from-teal-600 to-teal-900 shadow-sm"
         >
           <img src="/icon-white.png" alt="" aria-hidden="true" class="w-4" />
         </div>
@@ -320,7 +320,7 @@
             v-if="user.image"
             :src="user.image"
             :alt="user.name || ''"
-            class="h-7 w-7 shrink-0 rounded-full object-cover ring-2 ring-white dark:ring-gray-800"
+            class="h-7 w-7 shrink-0 rounded-full object-cover ring-2 ring-white dark:ring-neutral-900"
           />
           <span
             v-else

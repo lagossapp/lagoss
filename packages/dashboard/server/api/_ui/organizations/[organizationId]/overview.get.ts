@@ -11,19 +11,17 @@ export default defineEventHandler(async event => {
   }
 
   // Verify the user is a member or owner of this org
-  const orgRow = await getFirst(
-    db
-      .select({ org: organizationSchema })
-      .from(organizationSchema)
-      .leftJoin(organizationMemberSchema, eq(organizationSchema.id, organizationMemberSchema.organizationId))
-      .where(
-        and(
-          eq(organizationSchema.id, organizationId),
-          or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id)),
-        ),
-      )
-      .execute(),
-  );
+  const orgRow = await db
+    .select({ org: organizationSchema })
+    .from(organizationSchema)
+    .leftJoin(organizationMemberSchema, eq(organizationSchema.id, organizationMemberSchema.organizationId))
+    .where(
+      and(
+        eq(organizationSchema.id, organizationId),
+        or(eq(organizationSchema.ownerId, user.id), eq(organizationMemberSchema.userId, user.id)),
+      ),
+    )
+    .get();
 
   if (!orgRow?.org) {
     throw createError({ statusCode: 404, message: 'Organization not found' });
@@ -34,10 +32,9 @@ export default defineEventHandler(async event => {
     .select({ app: appSchema })
     .from(appSchema)
     .where(eq(appSchema.organizationId, organizationId))
-    .orderBy(desc(appSchema.updatedAt))
-    .execute();
+    .orderBy(desc(appSchema.updatedAt));
 
-  const apps = appRows.map(r => r.app);
+  const apps = (appRows ?? []).map(r => r.app);
   const appIds = apps.map(a => a.id);
 
   // Recent deployments for this org's apps
@@ -49,14 +46,13 @@ export default defineEventHandler(async event => {
           .where(inArray(deploymentSchema.appId, appIds))
           .orderBy(desc(deploymentSchema.createdAt))
           .limit(8)
-          .execute()
       : [];
 
   const appById = Object.fromEntries(apps.map(a => [a.id, a]));
 
   const recentDeployments = recentDeploymentRows.map(dep => ({
     ...dep,
-    isProduction: dep.isProduction === 1,
+    isProduction: dep.isProduction === true,
     appName: appById[dep.appId]?.name ?? '',
   }));
 
