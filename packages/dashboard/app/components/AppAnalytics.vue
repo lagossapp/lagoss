@@ -1,45 +1,84 @@
 <template>
-  <div class="flex w-full justify-between gap-4">
-    <div class="flex flex-col gap-2">
-      <span class="text-neutral-500">Requests</span>
-      <p>
-        <span class="text-2xl font-bold">{{ formatNumber(requests) }}</span>
-        <span class="text-neutral-500"> / {{ formatNumber(plan.freeRequests) }}</span>
-      </p>
+  <!-- Stats card -->
+  <div class="rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
+    <!-- Usage row -->
+    <div class="flex items-center gap-2 border-b border-neutral-200 px-4 py-2.5 dark:border-neutral-800">
+      <UIcon name="i-heroicons-chart-bar" class="h-4 w-4 text-neutral-400" />
+      <span class="text-xs font-semibold uppercase tracking-wider text-neutral-400">Usage</span>
+    </div>
+    <div class="grid grid-cols-4 divide-x divide-neutral-200 dark:divide-neutral-800">
+      <div class="flex flex-col gap-1 px-5 py-4">
+        <span class="text-xs text-neutral-500 dark:text-neutral-400">Requests</span>
+        <span class="text-2xl font-bold tabular-nums">{{ formatNumber(requests) }}</span>
+        <span class="text-xs text-neutral-400">/ {{ formatNumber(plan.freeRequests) }} free</span>
+      </div>
+
+      <div class="flex flex-col gap-1 px-5 py-4">
+        <span class="text-xs text-neutral-500 dark:text-neutral-400">Avg. CPU Time</span>
+        <span class="text-2xl font-bold tabular-nums">{{ formatSeconds(cpuTimeAvg) }}</span>
+        <span class="text-xs text-neutral-400">/ {{ formatSeconds(plan.totalTimeout / 1000) }} limit</span>
+      </div>
+
+      <div class="flex flex-col gap-1 px-5 py-4">
+        <span class="text-xs text-neutral-500 dark:text-neutral-400">Avg. IN</span>
+        <span class="text-2xl font-bold tabular-nums">
+          {{
+            formatBytes(
+              requests && requests > 0 && usage?.length
+                ? usage.reduce((acc, { bytesIn }) => acc + bytesIn, 0) / requests
+                : 0,
+            )
+          }}
+        </span>
+        <span class="text-xs text-neutral-400">per request</span>
+      </div>
+
+      <div class="flex flex-col gap-1 px-5 py-4">
+        <span class="text-xs text-neutral-500 dark:text-neutral-400">Avg. OUT</span>
+        <span class="text-2xl font-bold tabular-nums">
+          {{
+            formatBytes(
+              requests && requests > 0 && usage?.length
+                ? usage.reduce((acc, { bytesOut }) => acc + bytesOut, 0) / requests
+                : 0,
+            )
+          }}
+        </span>
+        <span class="text-xs text-neutral-400">per request</span>
+      </div>
     </div>
 
-    <div class="flex flex-col gap-2">
-      <span class="text-neutral-500">Avg. CPU Time</span>
-      <p>
-        <span class="text-2xl font-bold">{{ formatSeconds(cpuTimeAvg) }}</span>
-        <span class="text-neutral-500"> / {{ formatSeconds(plan.totalTimeout / 1000) }}</span>
-      </p>
-    </div>
+    <!-- Performance row -->
+    <div
+      class="grid grid-cols-4 divide-x divide-neutral-200 dark:divide-neutral-800 border-y border-neutral-200 dark:border-neutral-800"
+    >
+      <div class="flex flex-col gap-1 px-5 py-4">
+        <span class="text-xs text-neutral-500 dark:text-neutral-400">Error Rate</span>
+        <span class="text-2xl font-bold tabular-nums" :class="errorRateColor">
+          {{ metrics ? `${metrics.error_rate.toFixed(1)}%` : '—' }}
+        </span>
+      </div>
 
-    <div class="flex flex-col gap-2">
-      <span class="text-neutral-500">Avg. IN bytes</span>
-      <span class="text-2xl font-bold"
-        >{{
-          formatBytes(
-            requests && requests > 0 && usage?.length
-              ? usage.reduce((acc, { bytesIn }) => acc + bytesIn, 0) / requests
-              : 0,
-          )
-        }}
-      </span>
-    </div>
+      <div class="flex flex-col gap-1 px-5 py-4">
+        <span class="text-xs text-neutral-500 dark:text-neutral-400">p50 Latency</span>
+        <span class="text-2xl font-bold tabular-nums">
+          {{ metrics?.p50 != null ? formatSeconds(metrics.p50 / 1_000_000) : '—' }}
+        </span>
+      </div>
 
-    <div class="flex flex-col gap-2">
-      <span class="text-neutral-500">Avg. OUT bytes</span>
-      <span class="text-2xl font-bold"
-        >{{
-          formatBytes(
-            requests && requests > 0 && usage?.length
-              ? usage.reduce((acc, { bytesOut }) => acc + bytesOut, 0) / requests
-              : 0,
-          )
-        }}
-      </span>
+      <div class="flex flex-col gap-1 px-5 py-4">
+        <span class="text-xs text-neutral-500 dark:text-neutral-400">p95 Latency</span>
+        <span class="text-2xl font-bold tabular-nums">
+          {{ metrics?.p95 != null ? formatSeconds(metrics.p95 / 1_000_000) : '—' }}
+        </span>
+      </div>
+
+      <div class="flex flex-col gap-1 px-5 py-4">
+        <span class="text-xs text-neutral-500 dark:text-neutral-400">p99 Latency</span>
+        <span class="text-2xl font-bold tabular-nums">
+          {{ metrics?.p99 != null ? formatSeconds(metrics.p99 / 1_000_000) : '—' }}
+        </span>
+      </div>
     </div>
   </div>
 
@@ -154,6 +193,18 @@ const timeframe = ref<AnalyticsTimeframe>('Last 24 hours');
 // TODO: refresh data every 10 seconds
 const { data: usage } = await useFetch(() => `/api/apps/${app.value.id}/usage`, {
   query: computed(() => ({ timeframe: timeframe.value })),
+});
+
+// TODO: refresh data every 10 seconds
+const { data: metrics } = await useFetch(() => `/api/apps/${app.value.id}/metrics`, {
+  query: computed(() => ({ timeframe: timeframe.value })),
+});
+
+const errorRateColor = computed(() => {
+  const rate = metrics.value?.error_rate ?? 0;
+  if (rate >= 5) return 'text-red-500 dark:text-red-400';
+  if (rate >= 1) return 'text-yellow-500 dark:text-yellow-400';
+  return 'text-emerald-500 dark:text-emerald-400';
 });
 
 const requests = computed(() => usage.value?.reduce((acc, { requests }) => acc + requests, 0));
