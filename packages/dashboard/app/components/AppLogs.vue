@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-0 flex-col p-2">
+  <div class="flex min-h-0 flex-col">
     <!-- Filters -->
     <div class="mb-4 flex items-center gap-2">
       <USelect v-model="level" :items="logLevels" class="w-36" />
@@ -26,7 +26,7 @@
           </p>
           <p class="mt-1 text-sm text-neutral-500">
             Then visit
-            <a :href="getFullCurrentDomain({ name: app.name })" target="_blank" class="text-blue-500 hover:underline"
+            <a :href="getFullCurrentDomain({ name: app.name })" target="_blank" class="text-teal-500 hover:underline"
               >your app</a
             >
             to generate some traffic.
@@ -136,7 +136,7 @@ function getLogPillColor(level: string): string {
     error: 'bg-red-500 text-white dark:bg-red-600',
     warn: 'bg-yellow-500 text-white dark:bg-yellow-600',
     warning: 'bg-yellow-500 text-white dark:bg-yellow-600',
-    info: 'bg-blue-500 text-white dark:bg-blue-600',
+    info: 'bg-teal-500 text-white dark:bg-teal-600',
     debug: 'bg-neutral-400 text-white dark:bg-neutral-600',
   };
   return map[level] ?? 'bg-neutral-500 text-white';

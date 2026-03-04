@@ -1,8 +1,8 @@
 <template>
   <div
-    class="ring-accented bg-default w-full rounded-md p-4 ring ring-inset"
+    class="w-full rounded-xl border border-neutral-200 bg-white p-4 shadow-xs dark:border-white/8 dark:bg-neutral-900 dark:shadow-xs"
     :class="{
-      'hover:bg-elevated cursor-pointer': clickable,
+      'cursor-pointer transition-colors hover:border-neutral-300 hover:bg-neutral-50 dark:hover:bg-white/5': clickable,
     }"
   >
     <slot />

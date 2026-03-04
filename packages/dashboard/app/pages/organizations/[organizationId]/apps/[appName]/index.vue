@@ -2,7 +2,7 @@
   <div v-if="app" class="w-full">
     <AppHeader :app="app" />
 
-    <div class="mx-auto flex w-full max-w-4xl flex-col gap-4 p-2">
+    <div class="mx-auto flex w-full max-w-4xl flex-col gap-4">
       <AppAnalytics :app :org show-graphs />
     </div>
   </div>

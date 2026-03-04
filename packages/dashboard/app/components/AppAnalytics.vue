@@ -1,107 +1,194 @@
 <template>
-  <div class="flex w-full justify-between gap-4">
-    <div class="flex flex-col gap-2">
-      <span class="text-neutral-500">Requests</span>
-      <p>
-        <span class="text-2xl font-bold">{{ formatNumber(requests) }}</span>
-        <span class="text-neutral-500"> / {{ formatNumber(plan.freeRequests) }}</span>
-      </p>
+  <!-- Stats & Performance card -->
+  <Card class="p-0!">
+    <!-- Usage section -->
+    <div class="px-5 pt-5 pb-5">
+      <div class="mb-4 flex items-center gap-2">
+        <span class="flex h-5 w-5 items-center justify-center rounded-md bg-teal-100 dark:bg-teal-500/15">
+          <UIcon name="i-heroicons-chart-bar" class="h-3 w-3 text-teal-600 dark:text-teal-400" />
+        </span>
+        <span class="text-[11px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500"
+          >Usage</span
+        >
+      </div>
+      <div class="grid grid-cols-4 divide-x divide-neutral-100 dark:divide-neutral-800">
+        <div class="flex flex-col gap-1 pr-5">
+          <span class="text-[11px] uppercase tracking-wide text-neutral-400 dark:text-neutral-500">Requests</span>
+          <span class="text-2xl font-semibold tabular-nums tracking-tight text-neutral-900 dark:text-neutral-100">{{
+            formatNumber(requests)
+          }}</span>
+          <span class="text-[11px] text-neutral-400 dark:text-neutral-500"
+            >of {{ formatNumber(plan.freeRequests) }} free</span
+          >
+        </div>
+        <div class="flex flex-col gap-1 px-5">
+          <span class="text-[11px] uppercase tracking-wide text-neutral-400 dark:text-neutral-500">Avg CPU Time</span>
+          <span class="text-2xl font-semibold tabular-nums tracking-tight text-neutral-900 dark:text-neutral-100">{{
+            formatSeconds(cpuTimeAvg)
+          }}</span>
+          <span class="text-[11px] text-neutral-400 dark:text-neutral-500"
+            >/ {{ formatSeconds(plan.totalTimeout / 1000) }} limit</span
+          >
+        </div>
+        <div class="flex flex-col gap-1 px-5">
+          <span class="text-[11px] uppercase tracking-wide text-neutral-400 dark:text-neutral-500">Avg IN</span>
+          <span class="text-2xl font-semibold tabular-nums tracking-tight text-neutral-900 dark:text-neutral-100">
+            {{
+              formatBytes(
+                requests && requests > 0 && usage?.length
+                  ? usage.reduce((acc, { bytesIn }) => acc + bytesIn, 0) / requests
+                  : 0,
+              )
+            }}
+          </span>
+          <span class="text-[11px] text-neutral-400 dark:text-neutral-500">per request</span>
+        </div>
+        <div class="flex flex-col gap-1 pl-5">
+          <span class="text-[11px] uppercase tracking-wide text-neutral-400 dark:text-neutral-500">Avg OUT</span>
+          <span class="text-2xl font-semibold tabular-nums tracking-tight text-neutral-900 dark:text-neutral-100">
+            {{
+              formatBytes(
+                requests && requests > 0 && usage?.length
+                  ? usage.reduce((acc, { bytesOut }) => acc + bytesOut, 0) / requests
+                  : 0,
+              )
+            }}
+          </span>
+          <span class="text-[11px] text-neutral-400 dark:text-neutral-500">per request</span>
+        </div>
+      </div>
     </div>
 
-    <div class="flex flex-col gap-2">
-      <span class="text-neutral-500">Avg. CPU Time</span>
-      <p>
-        <span class="text-2xl font-bold">{{ formatSeconds(cpuTimeAvg) }}</span>
-        <span class="text-neutral-500"> / {{ formatSeconds(plan.totalTimeout / 1000) }}</span>
-      </p>
-    </div>
+    <div class="mx-5 h-px bg-neutral-100 dark:bg-neutral-800" />
 
-    <div class="flex flex-col gap-2">
-      <span class="text-neutral-500">Avg. IN bytes</span>
-      <span class="text-2xl font-bold"
-        >{{
-          formatBytes(
-            requests && requests > 0 && usage?.length
-              ? usage.reduce((acc, { bytesIn }) => acc + bytesIn, 0) / requests
-              : 0,
-          )
-        }}
-      </span>
+    <!-- Performance section -->
+    <div class="px-5 pb-5 pt-5">
+      <div class="mb-4 flex items-center gap-2">
+        <span class="flex h-5 w-5 items-center justify-center rounded-md bg-violet-100 dark:bg-violet-500/15">
+          <UIcon name="i-heroicons-bolt" class="h-3 w-3 text-violet-600 dark:text-violet-400" />
+        </span>
+        <span class="text-[11px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500"
+          >Performance</span
+        >
+      </div>
+      <div class="grid grid-cols-4 divide-x divide-neutral-100 dark:divide-neutral-800">
+        <div class="flex flex-col gap-1 pr-5">
+          <span class="text-[11px] uppercase tracking-wide text-neutral-400 dark:text-neutral-500">Error Rate</span>
+          <span class="text-2xl font-semibold tabular-nums tracking-tight" :class="errorRateColor">
+            {{ metrics ? `${metrics.error_rate.toFixed(1)}%` : '—' }}
+          </span>
+        </div>
+        <div class="flex flex-col gap-1 px-5">
+          <span class="text-[11px] uppercase tracking-wide text-neutral-400 dark:text-neutral-500">p50 Latency</span>
+          <span class="text-2xl font-semibold tabular-nums tracking-tight text-neutral-900 dark:text-neutral-100">
+            {{ metrics?.p50 != null ? formatSeconds(metrics.p50 / 1_000_000) : '—' }}
+          </span>
+        </div>
+        <div class="flex flex-col gap-1 px-5">
+          <span class="text-[11px] uppercase tracking-wide text-neutral-400 dark:text-neutral-500">p95 Latency</span>
+          <span class="text-2xl font-semibold tabular-nums tracking-tight text-neutral-900 dark:text-neutral-100">
+            {{ metrics?.p95 != null ? formatSeconds(metrics.p95 / 1_000_000) : '—' }}
+          </span>
+        </div>
+        <div class="flex flex-col gap-1 pl-5">
+          <span class="text-[11px] uppercase tracking-wide text-neutral-400 dark:text-neutral-500">p99 Latency</span>
+          <span class="text-2xl font-semibold tabular-nums tracking-tight text-neutral-900 dark:text-neutral-100">
+            {{ metrics?.p99 != null ? formatSeconds(metrics.p99 / 1_000_000) : '—' }}
+          </span>
+        </div>
+      </div>
     </div>
-
-    <div class="flex flex-col gap-2">
-      <span class="text-neutral-500">Avg. OUT bytes</span>
-      <span class="text-2xl font-bold"
-        >{{
-          formatBytes(
-            requests && requests > 0 && usage?.length
-              ? usage.reduce((acc, { bytesOut }) => acc + bytesOut, 0) / requests
-              : 0,
-          )
-        }}
-      </span>
-    </div>
-  </div>
+  </Card>
 
   <template v-if="showGraphs">
-    <div>
-      <h2>Requests</h2>
-      <Chart
-        v-if="result && chartLabels"
-        :labels="chartLabels"
-        :datasets="[
-          {
-            label: 'Requests',
-            color: '#3B82F6',
-            data: result.map(({ requests }) => requests),
-            transform: formatNumber,
-          },
-        ]"
-        class="h-72"
-      />
-    </div>
+    <!-- Requests chart -->
+    <Card class="p-0! overflow-hidden">
+      <div class="flex items-center gap-2 border-b border-neutral-100 px-5 py-3.5 dark:border-neutral-800">
+        <span class="flex h-5 w-5 items-center justify-center rounded-md bg-teal-100 dark:bg-teal-500/15">
+          <UIcon name="i-heroicons-arrow-trending-up" class="h-3 w-3 text-teal-600 dark:text-teal-400" />
+        </span>
+        <span class="text-[11px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500"
+          >Requests</span
+        >
+      </div>
+      <div class="p-5">
+        <Chart
+          v-if="result && chartLabels"
+          :labels="chartLabels"
+          :datasets="[
+            {
+              label: 'Requests',
+              color: '#14b8a6',
+              data: result.map(({ requests }) => requests),
+              transform: formatNumber,
+            },
+          ]"
+          class="h-64"
+        />
+      </div>
+    </Card>
 
-    <div>
-      <h2>CPU Time</h2>
-      <Chart
-        v-if="result && chartLabels"
-        :labels="chartLabels"
-        :datasets="[
-          {
-            label: 'CPU Time',
-            color: '#F59E0B',
-            data: result.map(({ cpuTime }) => cpuTime / 1_000_000),
-            transform: formatSeconds,
-          },
-        ]"
-        :axisTransform="(self, ticks) => ticks.map(formatSeconds)"
-        class="h-72"
-      />
-    </div>
+    <!-- CPU Time chart -->
+    <Card class="p-0! overflow-hidden">
+      <div class="flex items-center gap-2 border-b border-neutral-100 px-5 py-3.5 dark:border-neutral-800">
+        <span class="flex h-5 w-5 items-center justify-center rounded-md bg-amber-100 dark:bg-amber-500/15">
+          <UIcon name="i-heroicons-cpu-chip" class="h-3 w-3 text-amber-600 dark:text-amber-400" />
+        </span>
+        <span class="text-[11px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500"
+          >CPU Time</span
+        >
+      </div>
+      <div class="p-5">
+        <Chart
+          v-if="result && chartLabels"
+          :labels="chartLabels"
+          :datasets="[
+            {
+              label: 'CPU Time',
+              color: '#f59e0b',
+              data: result.map(({ cpuTime }) => cpuTime / 1_000_000),
+              transform: formatSeconds,
+            },
+          ]"
+          :axisTransform="(self, ticks) => ticks.map(formatSeconds)"
+          class="h-64"
+        />
+      </div>
+    </Card>
 
-    <div>
-      <h2 class="text-xl">Network</h2>
-      <Chart
-        v-if="result && chartLabels"
-        :labels="chartLabels"
-        :datasets="[
-          {
-            label: 'IN bytes',
-            color: '#10B981',
-            data: result.map(({ bytesIn }) => bytesIn),
-            transform: formatBytes,
-          },
-          {
-            label: 'OUT bytes',
-            color: '#3B82F6',
-            data: result.map(({ bytesOut }) => bytesOut),
-            transform: formatBytes,
-          },
-        ]"
-        :axisTransform="(self, ticks) => ticks.map(formatBytes)"
-        class="h-72"
-      />
-    </div>
+    <!-- Network chart -->
+    <Card class="p-0! overflow-hidden">
+      <div class="flex items-center gap-2 border-b border-neutral-100 px-5 py-3.5 dark:border-neutral-800">
+        <span class="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-100 dark:bg-emerald-500/15">
+          <UIcon name="i-heroicons-signal" class="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+        </span>
+        <span class="text-[11px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500"
+          >Network</span
+        >
+      </div>
+      <div class="p-5">
+        <Chart
+          v-if="result && chartLabels"
+          :labels="chartLabels"
+          :datasets="[
+            {
+              label: 'IN bytes',
+              color: '#10b981',
+              data: result.map(({ bytesIn }) => bytesIn),
+              transform: formatBytes,
+            },
+            {
+              label: 'OUT bytes',
+              color: '#14b8a6',
+              data: result.map(({ bytesOut }) => bytesOut),
+              transform: formatBytes,
+            },
+          ]"
+          :axisTransform="(self, ticks) => ticks.map(formatBytes)"
+          class="h-64"
+        />
+      </div>
+    </Card>
   </template>
 </template>
 
@@ -154,6 +241,18 @@ const timeframe = ref<AnalyticsTimeframe>('Last 24 hours');
 // TODO: refresh data every 10 seconds
 const { data: usage } = await useFetch(() => `/api/apps/${app.value.id}/usage`, {
   query: computed(() => ({ timeframe: timeframe.value })),
+});
+
+// TODO: refresh data every 10 seconds
+const { data: metrics } = await useFetch(() => `/api/apps/${app.value.id}/metrics`, {
+  query: computed(() => ({ timeframe: timeframe.value })),
+});
+
+const errorRateColor = computed(() => {
+  const rate = metrics.value?.error_rate ?? 0;
+  if (rate >= 5) return 'text-red-500 dark:text-red-400';
+  if (rate >= 1) return 'text-yellow-500 dark:text-yellow-400';
+  return 'text-emerald-500 dark:text-emerald-400';
 });
 
 const requests = computed(() => usage.value?.reduce((acc, { requests }) => acc + requests, 0));
