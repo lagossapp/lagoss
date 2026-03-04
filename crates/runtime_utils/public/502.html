@@ -1,35 +1,149 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Function resources reached</title>
+    <title>502 — Resource Limit Reached</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg:           #ffffff;
+        --grid:         rgba(0,0,0,0.04);
+        --text:         #0a0a0a;
+        --text-sub:     #6b6b6b;
+        --accent:       #c2410c;
+        --accent-dim:   rgba(194,65,12,0.09);
+        --logo-show:    block;
+        --logo-hide:    none;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg:           #0a0a0a;
+          --grid:         rgba(255,255,255,0.03);
+          --text:         #f0f0f0;
+          --text-sub:     #888888;
+          --accent:       #fb923c;
+          --accent-dim:   rgba(251,146,60,0.08);
+          --logo-show:    none;
+          --logo-hide:    block;
+        }
+      }
+
+      html, body { height: 100%; }
+
+      body {
+        background-color: var(--bg);
+        background-image:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+        background-size: 48px 48px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100dvh;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .wm {
+        position: absolute;
+        font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Menlo', monospace;
+        font-size: clamp(8rem, 28vw, 22rem);
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        color: var(--accent-dim);
+        user-select: none;
+        pointer-events: none;
+        line-height: 1;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        white-space: nowrap;
+      }
+
+      .box {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .label {
+        font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Menlo', monospace;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 0.75rem;
+      }
+
+      .code {
+        font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Menlo', monospace;
+        font-size: clamp(2.75rem, 6vw, 4.5rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: var(--text);
+        line-height: 1;
+        margin-bottom: 1.5rem;
+      }
+
+      .rule {
+        width: 2rem;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        border: none;
+        margin-bottom: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        font-size: 0.9375rem;
+        color: var(--text-sub);
+        line-height: 1.65;
+        max-width: 24rem;
+      }
+
+      footer {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      footer a { display: block; opacity: 0.35; transition: opacity 0.15s; }
+      footer a:hover { opacity: 0.65; }
+      .ll { display: var(--logo-show); height: 1.125rem; }
+      .ld { display: var(--logo-hide); height: 1.125rem; }
+    </style>
   </head>
-
   <body>
-    <section class="flex h-screen w-screen flex-col items-center justify-center dark:bg-stone-800">
-      <h1 class="mb-1 text-3xl font-semibold text-gray-900 dark:text-gray-200">Function resources reached</h1>
-      <span class="mb-6 text-lg uppercase text-blue-500">502</span>
-      <p class="text-center text-base text-gray-800 dark:text-gray-300">
-        Resources have been reached for this
-        <br />
-        Function. Please try again.
-      </p>
-    </section>
-
-    <footer class="absolute bottom-4 left-[50%] -translate-x-[50%] transform">
-      <a href="https://lagoss.com" target="_blank">
-        <img
-          class="h-6 dark:hidden"
-          alt="Lagoss logo"
-          src="https://github.com/lagossapp/lagoss/blob/main/assets/logo-black.png?raw=true"
-        />
-        <img
-          class="hidden h-6 dark:block"
-          alt="Lagoss logo for dark mode"
-          src="https://github.com/lagossapp/lagoss/blob/main/assets/logo-white.png?raw=true"
-        />
+    <div class="wm" aria-hidden="true">502</div>
+    <div class="box">
+      <span class="label">HTTP&thinsp;502</span>
+      <span class="code">502</span>
+      <hr class="rule" />
+      <h1>Resource Limit Reached</h1>
+      <p>This function has exceeded its resource limits. Please try again in a moment.</p>
+    </div>
+    <footer>
+      <a href="https://lagoss.com" target="_blank" rel="noopener">
+        <img class="ll" alt="Lagoss" src="https://github.com/lagossapp/lagoss/blob/main/assets/logo-black.png?raw=true" />
+        <img class="ld" alt="Lagoss" src="https://github.com/lagossapp/lagoss/blob/main/assets/logo-white.png?raw=true" />
       </a>
     </footer>
   </body>
