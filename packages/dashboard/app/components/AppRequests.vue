@@ -146,6 +146,28 @@
                   >
                     {{ selectedRequest.http_method }}
                   </span>
+
+                  <div
+                    class="flex items-center gap-2 rounded-lg px-3 py-1.5"
+                    :class="
+                      selectedRequest.cpu_time_micros
+                        ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200'
+                        : 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300'
+                    "
+                    :title="
+                      selectedRequest.cpu_time_micros
+                        ? 'Dynamic request processed by JS runtime'
+                        : 'Static asset served directly'
+                    "
+                  >
+                    <UIcon
+                      :name="selectedRequest.cpu_time_micros ? 'i-heroicons-bolt' : 'i-heroicons-document'"
+                      class="h-4 w-4"
+                    />
+                    <span class="text-sm font-semibold">
+                      {{ selectedRequest.cpu_time_micros ? 'Dynamic Request' : 'Static Asset' }}
+                    </span>
+                  </div>
                 </div>
 
                 <UButton
@@ -158,33 +180,6 @@
               </div>
 
               <p class="mb-4 break-all font-mono text-base font-medium leading-relaxed">{{ selectedRequest.url }}</p>
-
-              <!-- Request Type Badge -->
-              <div class="mb-4 flex items-center gap-2">
-                <div
-                  class="flex items-center gap-2 rounded-lg px-3 py-1.5"
-                  :class="
-                    selectedRequest.cpu_time_micros
-                      ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200'
-                      : 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300'
-                  "
-                >
-                  <UIcon
-                    :name="selectedRequest.cpu_time_micros ? 'i-heroicons-bolt' : 'i-heroicons-document'"
-                    class="h-4 w-4"
-                  />
-                  <span class="text-sm font-semibold">
-                    {{ selectedRequest.cpu_time_micros ? 'Dynamic Request' : 'Static Asset' }}
-                  </span>
-                </div>
-                <span class="text-xs text-neutral-500">
-                  {{
-                    selectedRequest.cpu_time_micros
-                      ? 'Executed by JavaScript runtime'
-                      : 'Served directly without execution'
-                  }}
-                </span>
-              </div>
 
               <!-- Quick stats -->
               <div class="grid gap-4" :class="selectedRequest.cpu_time_micros ? 'grid-cols-4' : 'grid-cols-3'">
@@ -257,41 +252,6 @@
               <!-- Overview Tab -->
               <div v-if="activeTab === 'overview'" class="p-6">
                 <div class="space-y-6">
-                  <!-- Request Type Info -->
-                  <div
-                    v-if="selectedRequest.cpu_time_micros"
-                    class="rounded-lg border border-purple-200 bg-purple-50 p-4 dark:border-purple-800 dark:bg-purple-950/20"
-                  >
-                    <div class="flex items-start gap-3">
-                      <UIcon name="i-heroicons-bolt" class="mt-0.5 h-5 w-5 text-purple-600 dark:text-purple-400" />
-                      <div>
-                        <h4 class="font-semibold text-purple-900 dark:text-purple-200">Dynamic Request</h4>
-                        <p class="mt-1 text-sm text-purple-700 dark:text-purple-300">
-                          This request was processed by your JavaScript runtime. CPU time and console logs are
-                          available.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    v-else
-                    class="rounded-lg border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-neutral-800"
-                  >
-                    <div class="flex items-start gap-3">
-                      <UIcon
-                        name="i-heroicons-document"
-                        class="mt-0.5 h-5 w-5 text-neutral-500 dark:text-neutral-400"
-                      />
-                      <div>
-                        <h4 class="font-semibold text-neutral-900 dark:text-neutral-200">Static Asset</h4>
-                        <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-                          This file was served directly without JavaScript execution, resulting in fast delivery and
-                          minimal resource usage.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
                   <div>
                     <label class="mb-2 block text-xs font-semibold uppercase tracking-wide text-neutral-500">
                       Request ID
@@ -466,10 +426,10 @@ const { data: requests, pending } = await useFetch<RequestData[]>(() => `/api/ap
 const selectedRequest = ref<RequestData | null>(null);
 const activeTab = ref('overview');
 
-const tabs = [
+const tabs = computed(() => [
   { id: 'overview', label: 'Overview', icon: 'i-heroicons-information-circle' },
-  { id: 'logs', label: 'Logs', icon: 'i-heroicons-document-text' },
-];
+  ...(selectedRequest.value?.cpu_time_micros ? [{ id: 'logs', label: 'Logs', icon: 'i-heroicons-document-text' }] : []),
+]);
 
 const { data: requestLogs, pending: logsPending } = await useFetch<LogData[]>(
   () => `/api/apps/${props.app.id}/requests/${selectedRequest.value?.id}/logs`,
