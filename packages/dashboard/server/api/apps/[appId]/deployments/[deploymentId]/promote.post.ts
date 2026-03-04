@@ -16,36 +16,32 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const deployment = await getFirst(
-    db
-      .select()
-      .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.appId, app.id)))
-      .execute(),
-  );
+  const deployment = await db
+    .select()
+    .from(deploymentSchema)
+    .where(and(eq(deploymentSchema.id, deploymentId), eq(deploymentSchema.appId, app.id)))
+    .get();
   if (!deployment) {
     throw createError({
-      status: 500,
-      message: 'Failed to create deployment',
+      status: 404,
+      message: 'Deployment not found',
     });
   }
 
-  const previousProductionDeployment = await getFirst(
-    db
-      .select()
-      .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.appId, app.id), eq(deploymentSchema.isProduction, 1)))
-      .execute(),
-  );
+  const previousProductionDeployment = await db
+    .select()
+    .from(deploymentSchema)
+    .where(and(eq(deploymentSchema.appId, app.id), eq(deploymentSchema.isProduction, true)))
+    .get();
   if (previousProductionDeployment) {
     await db
       .update(deploymentSchema)
-      .set({ isProduction: 0 })
+      .set({ isProduction: false })
       .where(eq(deploymentSchema.id, previousProductionDeployment.id))
       .execute();
   }
 
-  await db.update(deploymentSchema).set({ isProduction: 1 }).where(eq(deploymentSchema.id, deploymentId)).execute();
+  await db.update(deploymentSchema).set({ isProduction: true }).where(eq(deploymentSchema.id, deploymentId)).execute();
 
   const domains = await db.select().from(domainSchema).where(eq(domainSchema.appId, app.id)).execute();
   const env = await db.select().from(envVariableSchema).where(eq(envVariableSchema.appId, app.id)).execute();

@@ -18,19 +18,17 @@ export async function getUser(event: H3Event): Promise<User | undefined> {
 
   const token = getHeader(event, 'x-lagoss-token');
   if (token) {
-    const user = await getFirst(
-      db
-        .select()
-        .from(userSchema)
-        .leftJoin(tokenSchema, eq(userSchema.id, tokenSchema.userId))
-        .where(eq(tokenSchema.value, token))
-        .execute(),
-    );
-    if (!user?.User) {
+    const user = await db
+      .select()
+      .from(userSchema)
+      .leftJoin(tokenSchema, eq(userSchema.id, tokenSchema.userId))
+      .where(eq(tokenSchema.value, token))
+      .get();
+    if (!user?.users) {
       return undefined;
     }
 
-    return user.User;
+    return user.users;
   }
 
   const session = await useAuthSession(event);
@@ -38,7 +36,7 @@ export async function getUser(event: H3Event): Promise<User | undefined> {
     return undefined;
   }
 
-  return await getFirst(db.select().from(userSchema).where(eq(userSchema.id, session.data.userId)).execute());
+  return await db.select().from(userSchema).where(eq(userSchema.id, session.data.userId)).get();
 }
 
 export async function requireUser(event: H3Event): Promise<User> {

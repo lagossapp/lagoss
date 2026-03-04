@@ -26,25 +26,24 @@ export default defineEventHandler(async event => {
   }
 
   const organization = (
-    await getFirst(
-      db
-        .select()
-        .from(organizationSchema)
-        .leftJoin(organizationMemberSchema, eq(organizationMemberSchema.organizationId, organizationSchema.id))
-        .where(
-          and(
-            eq(organizationSchema.id, organizationId),
-            or(
-              eq(organizationSchema.ownerId, user.id),
-              and(
-                eq(organizationMemberSchema.userId, user.id),
-                eq(organizationMemberSchema.organizationId, organizationSchema.id),
-              ),
+    await db
+      .select()
+      .from(organizationSchema)
+      .leftJoin(organizationMemberSchema, eq(organizationMemberSchema.organizationId, organizationSchema.id))
+      .where(
+        and(
+          eq(organizationSchema.id, organizationId),
+          or(
+            eq(organizationSchema.ownerId, user.id),
+            and(
+              eq(organizationMemberSchema.userId, user.id),
+              eq(organizationMemberSchema.organizationId, organizationSchema.id),
             ),
           ),
         ),
-    )
-  )?.Organization;
+      )
+      .get()
+  )?.organizations;
 
   if (!organization) {
     throw createError({
@@ -66,6 +65,7 @@ export default defineEventHandler(async event => {
   const res = await db
     .insert(appSchema)
     .values({
+      id: generateId(),
       organizationId,
       // playground: input.playground, // TODO: set playground
       name,
@@ -77,17 +77,15 @@ export default defineEventHandler(async event => {
       tickTimeout: plan.tickTimeout,
       totalTimeout: plan.totalTimeout,
     })
-    .$returningId();
+    .returning();
 
-  const appId = res.at(0)?.id;
-  if (!appId) {
+  const app = res.at(0);
+  if (!app) {
     throw createError({
       message: 'Failed to create app',
       statusCode: 500,
     });
   }
-
-  const app = await getFirst(db.select().from(appSchema).where(eq(appSchema.id, appId)).execute());
 
   // TODO: create first deployment (at least for playground apps) with default code
 

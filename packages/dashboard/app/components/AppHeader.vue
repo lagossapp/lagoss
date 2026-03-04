@@ -55,6 +55,10 @@ const tabs = computed(() => [
     exact: false,
   },
   {
+    to: `/organizations/${props.app.organizationId}/apps/${props.app.name}/requests`,
+    label: 'Requests',
+  },
+  {
     to: `/organizations/${props.app.organizationId}/apps/${props.app.name}/logs`,
     label: 'Logs',
     exact: false,

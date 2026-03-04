@@ -79,12 +79,11 @@ export default defineEventHandler(async event => {
   const app = await requireApp(event);
 
   // return favicon of the latest deployment
-  const deployment = await getFirst(
-    db
-      .select()
-      .from(deploymentSchema)
-      .where(and(eq(deploymentSchema.appId, app.id), eq(deploymentSchema.isProduction, 1))),
-  );
+  const deployment = await db
+    .select()
+    .from(deploymentSchema)
+    .where(and(eq(deploymentSchema.appId, app.id), eq(deploymentSchema.isProduction, true)))
+    .get();
   if (!deployment) {
     throw createError({ statusCode: 404, statusMessage: 'Deployment not found' });
   }

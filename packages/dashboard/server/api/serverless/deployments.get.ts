@@ -29,7 +29,7 @@ export default defineEventHandler(async event => {
     .where(cronRegion ? or(isNull(appSchema.cron), eq(appSchema.cronRegion, cronRegion)) : undefined);
 
   return Promise.all(
-    deployments.map(async ({ Deployment: deployment, Function: app }) => {
+    deployments.map(async ({ deployments: deployment, apps: app }) => {
       if (!app) {
         throw new Error(`App ${deployment.appId} not found`);
       }
@@ -39,7 +39,7 @@ export default defineEventHandler(async event => {
 
       return {
         id: deployment.id,
-        isProduction: deployment.isProduction === 1,
+        isProduction: deployment.isProduction,
         assets: parseAssets(deployment.assets),
         functionId: app.id,
         functionName: app.name,

@@ -107,6 +107,7 @@ export default defineEventHandler(async event => {
 
   // create user organization member
   await db.insert(organizationMemberSchema).values({
+    id: generateId(),
     organizationId: orgId,
     userId: userId,
     createdAt: new Date(),

@@ -88,10 +88,6 @@
                   ? 'bg-teal-50 text-teal-700 dark:bg-teal-500/10 dark:text-teal-300'
                   : 'text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-white/5 hover:text-neutral-900 dark:hover:text-neutral-100'
               "
-              @click="
-                selectOrganization(organization.id);
-                orgSelectOpen = false;
-              "
             >
               <span
                 class="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-teal-100 text-[10px] font-bold uppercase text-teal-600 dark:bg-teal-500/20 dark:text-teal-400"
@@ -440,7 +436,7 @@ const isDark = computed({
   },
 });
 
-const { user, logout, selectOrganization } = await useAuth();
+const { user, logout } = await useAuth();
 
 const { data: organizations } = await useFetch('/api/organizations');
 
