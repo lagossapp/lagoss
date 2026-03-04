@@ -16,15 +16,18 @@ export default defineEventHandler(async event => {
     timeframe: _timeframe,
     status: _status,
     method: _method,
+    requestType: _requestType,
   } = getQuery<{
     timeframe?: string;
     status?: string;
     method?: string;
+    requestType?: string;
   }>(event);
 
   const timeframe = _timeframe ? timeframes[_timeframe] : timeframes['Last hour'];
   const status = _status && statusFilters.includes(_status as (typeof statusFilters)[number]) ? _status : 'all';
   const method = _method && _method !== 'all' ? _method : null;
+  const requestType = _requestType && _requestType !== 'all' ? _requestType : null;
 
   let statusFilter = '';
   if (status === '2xx') statusFilter = 'AND response_status_code >= 200 AND response_status_code < 300';
@@ -33,6 +36,10 @@ export default defineEventHandler(async event => {
   else if (status === '5xx') statusFilter = 'AND response_status_code >= 500';
 
   const methodFilter = method ? `AND http_method = '${method}'` : '';
+
+  let requestTypeFilter = '';
+  if (requestType === 'dynamic') requestTypeFilter = 'AND cpu_time_micros IS NOT NULL';
+  else if (requestType === 'static') requestTypeFilter = 'AND cpu_time_micros IS NULL';
 
   const result = await clickhouse.query({
     query: `
@@ -54,6 +61,7 @@ AND
   timestamp >= toDateTime(now() - INTERVAL ${timeframe})
   ${statusFilter}
   ${methodFilter}
+  ${requestTypeFilter}
 ORDER BY timestamp DESC
 LIMIT 200
 `.trim(),
