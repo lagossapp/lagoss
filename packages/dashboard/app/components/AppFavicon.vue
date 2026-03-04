@@ -23,6 +23,5 @@ const props = defineProps<{
 // HEAD request: lightweight check — no image body transferred.
 const { error: faviconMissing } = await useFetch(`/api/apps/${props.app.id}/favicon`, {
   method: 'HEAD' as 'GET', // workaround for useFetch not supporting HEAD method
-  // ignoreResponseError: true,
 });
 </script>
