@@ -85,14 +85,14 @@ export default defineEventHandler(async event => {
     .where(and(eq(deploymentSchema.appId, app.id), eq(deploymentSchema.isProduction, true)))
     .get();
   if (!deployment) {
-    throw createError({ statusCode: 404, statusMessage: 'Deployment not found' });
+    throw createError({ statusCode: 404, statusMessage: 'No production deployment' });
   }
 
   const deploymentUrl = getDeploymentDomain({ name: deployment.id });
 
   const faviconData = await tryToFetchFavicon(deploymentUrl);
   if (!faviconData) {
-    return sendRedirect(event, '/icon-black.png');
+    throw createError({ statusCode: 404, statusMessage: 'Favicon not found' });
   }
 
   return new Response(faviconData.body, {

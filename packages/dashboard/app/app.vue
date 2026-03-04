@@ -25,10 +25,6 @@ onErrorCaptured(err => {
 @import 'tailwindcss';
 @import '@nuxt/ui';
 
-html {
-  scrollbar-gutter: stable;
-}
-
 @layer base {
   button:not(:disabled),
   [role='button']:not(:disabled) {
