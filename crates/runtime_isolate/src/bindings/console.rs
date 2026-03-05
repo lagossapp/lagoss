@@ -3,7 +3,7 @@ use log::error;
 use crate::Isolate;
 
 pub fn console_binding(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     args: v8::FunctionCallbackArguments,
     mut _retval: v8::ReturnValue,
 ) {

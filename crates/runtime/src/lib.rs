@@ -17,7 +17,7 @@ impl Runtime {
     pub fn new(options: RuntimeOptions) -> Self {
         // Load ICU data to enable i18n, similar to Deno:
         // https://github.com/denoland/deno/blob/a55b194638bcaace38917703b7d9233fb1989d44/core/runtime.rs#L223
-        v8::icu::set_common_data_72(&ICU_DATA.0).expect("Failed to load ICU data");
+        v8::icu::set_common_data_77(&ICU_DATA.0).expect("Failed to load ICU data");
 
         let mut flags = FLAGS.join(" ");
 

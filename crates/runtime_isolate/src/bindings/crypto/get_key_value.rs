@@ -2,7 +2,7 @@ use lagoss_runtime_crypto::methods::get_key;
 use lagoss_runtime_v8_utils::v8_uint8array;
 
 pub fn get_key_value_binding(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     _args: v8::FunctionCallbackArguments,
     mut retval: v8::ReturnValue,
 ) {

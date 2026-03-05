@@ -8,7 +8,7 @@ use crate::bindings::{BindingResult, PromiseResult};
 
 type Arg = (Algorithm, Vec<u8>, Vec<u8>);
 
-pub fn sign_init(scope: &mut v8::HandleScope, args: v8::FunctionCallbackArguments) -> Result<Arg> {
+pub fn sign_init(scope: &mut v8::PinScope<'_, '_>, args: v8::FunctionCallbackArguments) -> Result<Arg> {
     let algorithm = extract_sign_verify_algorithm(scope, args.get(0))?;
     let key_value = extract_cryptokey_key_value(scope, args.get(1))?;
     let data = extract_v8_uint8array(args.get(2))?;

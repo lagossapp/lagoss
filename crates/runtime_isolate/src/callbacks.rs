@@ -17,19 +17,19 @@ where
 }
 
 pub extern "C" fn promise_reject_callback(message: v8::PromiseRejectMessage) {
-    let scope = &mut unsafe { v8::CallbackScope::new(&message) };
+    let scope_storage = unsafe { v8::CallbackScope::new(&message) };
+    let mut scope_pin = std::pin::pin!(scope_storage);
+    let scope = scope_pin.as_mut().init();
     let promise = message.get_promise();
-    let promise = v8::Global::new(scope, promise);
+    let promise = v8::Global::new(&scope, promise);
 
-    let isolate = Isolate::state(scope);
+    let isolate = Isolate::state(&scope);
     let mut state = isolate.borrow_mut();
 
     match message.get_event() {
         v8::PromiseRejectEvent::PromiseRejectWithNoHandler => {
-            let try_catch = &mut v8::TryCatch::new(scope);
-
             let exception_message = match message.get_value() {
-                Some(exception) => get_exception_message(try_catch, exception, state.lines),
+                Some(exception) => get_exception_message(&*scope, exception, state.lines),
                 None => "Unknown error".to_string(),
             };
 
@@ -51,14 +51,16 @@ pub fn resolve_module_callback<'a>(
     _: v8::Local<'a, v8::FixedArray>,
     _: v8::Local<'a, v8::Module>,
 ) -> Option<v8::Local<'a, v8::Module>> {
-    let scope = &mut unsafe { v8::CallbackScope::new(context) };
+    let scope_storage = unsafe { v8::CallbackScope::new(context) };
+    let mut scope_pin = std::pin::pin!(scope_storage);
+    let mut scope = scope_pin.as_mut().init();
 
     let message = v8_string(
-        scope,
+        &mut **scope,
         "Can't import modules, everything should be bundled in a single file",
     );
 
-    let exception = v8::Exception::error(scope, message);
+    let exception = v8::Exception::error(&*scope, message);
     scope.throw_exception(exception);
 
     None
