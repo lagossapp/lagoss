@@ -1,7 +1,11 @@
 import { defineNuxtConfig } from 'nuxt/config';
 
 export default defineNuxtConfig({
-  modules: ['@nuxt/ui'],
+  modules: ['@nuxt/ui', '@sentry/nuxt/module'],
+
+  sentry: {
+    dsn: process.env.SENTRY_DSN,
+  },
 
   runtimeConfig: {
     auth: {
