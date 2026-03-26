@@ -55,9 +55,22 @@ services:
     entrypoint: sh
     command: -c 'mkdir -p /data/lagoss && minio server /data --console-address ":9001" --address ":9002"'
 
+  bugsink:
+    image: bugsink/bugsink:latest
+    ports:
+      - 8989:8000
+    environment:
+      SECRET_KEY: ${BUGSINK_SECRET_KEY:-change-me-in-production}
+      ALLOWED_HOSTS: localhost
+      SINGLE_USER: "${BUGSINK_EMAIL:-admin@example.com}:${BUGSINK_PASSWORD:-admin}"
+    volumes:
+      - bugsink:/var/lib/bugsink
+    restart: unless-stopped
+
 volumes:
   valkey:
   prometheus:
   grafana:
   clickhouse:
   minio:
+  bugsink:
