@@ -9,11 +9,14 @@
 <script setup lang="ts">
 const route = useRoute();
 const appName = computed(() => route.params.appName as string);
-const { data: app, pending, refresh: refreshApp } = await useFetch(() => `/api/apps/by-name/${appName.value}`);
 
-typedProvide(
-  'app',
-  computed(() => app.value!),
-);
+// Start the fetch and provide the reactive refs synchronously before any await,
+// so Vue's provide/inject context is properly established for child pages during SSR.
+const fetchResult = useFetch(() => `/api/apps/by-name/${appName.value}`);
+const { data: app, pending, refresh: refreshApp } = fetchResult;
+
+typedProvide('app', computed(() => app.value!));
 typedProvide('refreshApp', refreshApp);
+
+await fetchResult;
 </script>
