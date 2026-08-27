@@ -7,7 +7,7 @@ use lagoss_runtime_v8_utils::{
 
 pub fn request_to_v8<'a>(
     request: (Parts, Bytes),
-    scope: &mut v8::HandleScope<'a>,
+    scope: &mut v8::PinScope<'a, '_>,
 ) -> v8::Local<'a, v8::Object> {
     let body_empty = request.1.is_empty();
     let len = if body_empty { 3 } else { 4 };
@@ -49,7 +49,7 @@ pub fn request_to_v8<'a>(
 }
 
 pub fn request_from_v8<'a>(
-    scope: &mut v8::HandleScope<'a>,
+    scope: &mut v8::PinScope<'a, '_>,
     request: v8::Local<'a, v8::Value>,
 ) -> Result<Request<String>> {
     let request = match request.to_object(scope) {

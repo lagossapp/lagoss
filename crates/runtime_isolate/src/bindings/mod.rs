@@ -41,7 +41,7 @@ pub enum PromiseResult {
 }
 
 impl PromiseResult {
-    pub fn into_value<'a>(self, scope: &mut v8::HandleScope<'a>) -> v8::Local<'a, v8::Value> {
+    pub fn into_value<'a>(self, scope: &mut v8::PinScope<'a, '_>) -> v8::Local<'a, v8::Value> {
         match self {
             PromiseResult::Response(response) => response_to_v8(response, scope).into(),
             PromiseResult::ArrayBuffer(bytes) => v8_uint8array(scope, bytes).into(),
@@ -70,7 +70,7 @@ macro_rules! binding {
 
 macro_rules! async_binding {
     ($scope: ident, $lagoss_object: ident, $name: literal, $init: expr, $binding: expr) => {
-        let binding = |scope: &mut v8::HandleScope,
+        let binding = |scope: &mut v8::PinScope<'_, '_>,
                        args: v8::FunctionCallbackArguments,
                        mut retval: v8::ReturnValue| {
             let promise = v8::PromiseResolver::new(scope).unwrap();
@@ -108,7 +108,7 @@ macro_rules! async_binding {
 }
 
 pub fn bind<'a>(
-    scope: &mut v8::HandleScope<'a, ()>,
+    scope: &mut v8::PinScope<'a, '_, ()>,
     bind_strategy: BindStrategy,
 ) -> v8::Local<'a, v8::Context> {
     let global = v8::ObjectTemplate::new(scope);
@@ -192,5 +192,11 @@ pub fn bind<'a>(
         global.set(v8_string(scope, "LagossAsync").into(), lagoss_object.into());
     }
 
-    v8::Context::new_from_template(scope, global)
+    v8::Context::new(
+        scope,
+        v8::ContextOptions {
+            global_template: Some(global),
+            ..Default::default()
+        },
+    )
 }

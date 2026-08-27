@@ -100,7 +100,7 @@ impl IsolateOptions {
 
     pub fn get_runtime_code<'a>(
         &self,
-        scope: &mut v8::HandleScope<'a>,
+        scope: &mut v8::PinScope<'a, '_>,
     ) -> (v8::Local<'a, v8::String>, usize) {
         let IsolateOptions {
             code,

@@ -4,7 +4,7 @@ use anyhow::Result;
 use lagoss_runtime_v8_utils::{v8_exception, v8_uint8array};
 
 fn compression_finish(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     args: v8::FunctionCallbackArguments,
 ) -> Result<Vec<u8>> {
     let id = args.get(0).to_rust_string_lossy(scope);
@@ -32,7 +32,7 @@ fn compression_finish(
 }
 
 pub fn compression_finish_binding(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     args: v8::FunctionCallbackArguments,
     mut retval: v8::ReturnValue,
 ) {

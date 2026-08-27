@@ -3,7 +3,7 @@ use lagoss_runtime_crypto::methods::uuid;
 use lagoss_runtime_v8_utils::v8_string;
 
 pub fn uuid_binding(
-    scope: &mut v8::HandleScope,
+    scope: &mut v8::PinScope<'_, '_>,
     _args: v8::FunctionCallbackArguments,
     mut retval: v8::ReturnValue,
 ) {
