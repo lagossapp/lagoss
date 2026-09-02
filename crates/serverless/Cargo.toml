@@ -25,7 +25,7 @@ log = { version = "0.4.19", features = ["std", "kv_unstable", "kv_unstable_serde
 anyhow = "1.0.72"
 tokio-cron-scheduler = "0.15.0"
 # TODO: use a specific version of dashmap when the inline feature is released
-dashmap = { git = "https://github.com/xacrimon/dashmap.git", rev = "7f9522c5286cfbbb78df15f00f87b8331cb875d6", features = ["inline"] }
+dashmap = { git = "https://github.com/xacrimon/dashmap.git", rev = "366ce7e7872866a06de66eb95002fa6cf2c117a7", features = ["inline"] }
 futures = "0.3.28"
 clickhouse = { version = "0.14.2", features = ["inserter", "rustls-tls"] }
 bytes = "1.4.0"
